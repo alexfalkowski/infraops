@@ -1,0 +1,34 @@
+version: 2.1
+
+orbs:
+  pulumi: pulumi/pulumi@2.1.0
+
+jobs:
+  build:
+    docker:
+      - image: alexfalkowski/go:1.21-ruby
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - pulumi/login
+    resource_class: large
+  release:
+    docker:
+      - image: alexfalkowski/release:3.1
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: release
+    resource_class: large
+
+workflows:
+  infraops:
+    jobs:
+      - build
+      - release:
+          context: gh
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
