@@ -44,11 +44,10 @@ workflows:
     jobs:
       - preview:
           context: gh
-          filters:
-            branches:
-              ignore: master
       - update:
           context: gh
+          requires:
+            - preview
           filters:
             branches:
               only: master
