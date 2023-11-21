@@ -9,6 +9,6 @@ updates:
       prefix-development: "build"
       include: "scope"
     groups:
-      otel:
+      pulumi:
         patterns:
         - "*pulumi*"
