@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.1.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.1.0) - 2023-11-21
+
+- [`1b976f7`](https://github.com/alexfalkowski/infraops/commit/1b976f7898fdf0f24ffe5d2d559446e787da46ee) feat(gh): add pipeline (#6)
+
 ## [v0.0.1](https://github.com/alexfalkowski/infraops/releases/tag/v0.0.1) - 2023-11-21
 
 - [`688905d`](https://github.com/alexfalkowski/infraops/commit/688905d43afca75d8d4b5a4bf04fec0afe06f933) fix: remove github (#4)
