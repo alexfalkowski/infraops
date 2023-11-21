@@ -8,6 +8,7 @@ import (
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		args := &github.RepositoryArgs{
+			Name:        pulumi.String("demo-repo"),
 			Description: pulumi.String("Demo Repository for GitHub"),
 		}
 
