@@ -7,14 +7,17 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		repository, err := github.NewRepository(ctx, "demo-repo", &github.RepositoryArgs{
+		args := &github.RepositoryArgs{
 			Description: pulumi.String("Demo Repository for GitHub"),
-		})
+		}
+
+		repository, err := github.NewRepository(ctx, "demo-repo", args)
 		if err != nil {
 			return err
 		}
 
 		ctx.Export("repository", repository.Name)
+
 		return nil
 	})
 }
