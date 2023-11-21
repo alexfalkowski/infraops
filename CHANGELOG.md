@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.1.1](https://github.com/alexfalkowski/infraops/releases/tag/v0.1.1) - 2023-11-21
+
+- [`9c40c41`](https://github.com/alexfalkowski/infraops/commit/9c40c41564fabe1e40f8827cee3d1f95b985ac9d) fix(gh): pass name (#12)
+- [`91e8e3d`](https://github.com/alexfalkowski/infraops/commit/91e8e3d055aa9ed89390f5fe08b1e7e5c0ee0969) ci: fix group name (#11)
+- [`cb28403`](https://github.com/alexfalkowski/infraops/commit/cb284035906d0f4938a13e1dd8886d354acd81e5) ci: use gomod in root (#10)
+- [`b637698`](https://github.com/alexfalkowski/infraops/commit/b6376989cb6185d5081607b9c5dce1eca19e3be8) build(deps): add bin (#9)
+
 ## [v0.1.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.1.0) - 2023-11-21
 
 - [`1b976f7`](https://github.com/alexfalkowski/infraops/commit/1b976f7898fdf0f24ffe5d2d559446e787da46ee) feat(gh): add pipeline (#6)
