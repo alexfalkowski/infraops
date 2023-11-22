@@ -26,9 +26,7 @@ func createDocker(ctx *pulumi.Context) error {
 			},
 		},
 		Topics: pulumi.StringArray{
-			pulumi.String("hbase"),
 			pulumi.String("docker"),
-			pulumi.String("kubernetes"),
 			pulumi.String("ruby"),
 			pulumi.String("golang"),
 		},
