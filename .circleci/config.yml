@@ -4,7 +4,7 @@ orbs:
   pulumi: pulumi/pulumi@2.1.0
 
 jobs:
-  preview:
+  build:
     docker:
       - image: alexfalkowski/go:1.21-ruby
     working_directory: ~/infraops
@@ -19,6 +19,16 @@ jobs:
       - run: make goveralls
       - store_artifacts:
           path: test/reports
+    resource_class: large
+  preview:
+    docker:
+      - image: alexfalkowski/go:1.21-ruby
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make dep
       - pulumi/login
       - pulumi/preview:
           stack: alexfalkowski/gh/prod
@@ -32,6 +42,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make dep
       - pulumi/login
       - pulumi/update:
           stack: alexfalkowski/gh/prod
@@ -42,12 +53,16 @@ jobs:
 workflows:
   infraops:
     jobs:
+      - build
       - preview:
           context: gh
+          filters:
+            branches:
+              ignore: master
       - update:
           context: gh
           requires:
-            - preview
+            - build
           filters:
             branches:
               only: master
