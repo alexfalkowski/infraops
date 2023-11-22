@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.2.1](https://github.com/alexfalkowski/infraops/releases/tag/v0.2.1) - 2023-11-22
+
+- [`2c9401c`](https://github.com/alexfalkowski/infraops/commit/2c9401c7288ee6b529764a72441c414bcef39f46) fix(gh): remove unused tags (#18)
+- [`3b4b4fa`](https://github.com/alexfalkowski/infraops/commit/3b4b4fa03b82af44ab386b8e6ce717f863d4eb9f) ci: use path-filtering (#17)
+- [`e9fcdb9`](https://github.com/alexfalkowski/infraops/commit/e9fcdb98c98a50cc36a3df702fe12c4dc293cb80) test(gh): verify docker repo (#16)
+- [`cdbbf5d`](https://github.com/alexfalkowski/infraops/commit/cdbbf5dbcbf3ec09b3fabd7f67ad43e5976d3174) ci: wait for build (#15)
+
 ## [v0.2.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.2.0) - 2023-11-22
 
 - [`32c2bb5`](https://github.com/alexfalkowski/infraops/commit/32c2bb5ec2f2a8623540a65f959705ccfceb134a) ci: use infraops context (#14)
