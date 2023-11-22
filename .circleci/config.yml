@@ -55,12 +55,12 @@ workflows:
     jobs:
       - build
       - preview:
-          context: gh
+          context: infraops
           filters:
             branches:
               ignore: master
       - update:
-          context: gh
+          context: infraops
           requires:
             - build
           filters:
