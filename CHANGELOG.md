@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.2.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.2.0) - 2023-11-22
+
+- [`32c2bb5`](https://github.com/alexfalkowski/infraops/commit/32c2bb5ec2f2a8623540a65f959705ccfceb134a) ci: use infraops context (#14)
+- [`80790d3`](https://github.com/alexfalkowski/infraops/commit/80790d3c76cb4de679fed8009151dba614b12a17) feat(gh): import docker (#13)
+
 ## [v0.1.1](https://github.com/alexfalkowski/infraops/releases/tag/v0.1.1) - 2023-11-21
 
 - [`9c40c41`](https://github.com/alexfalkowski/infraops/commit/9c40c41564fabe1e40f8827cee3d1f95b985ac9d) fix(gh): pass name (#12)
