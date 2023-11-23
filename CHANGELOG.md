@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.5.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.5.0) - 2023-11-23
+
+- [`6c6396b`](https://github.com/alexfalkowski/infraops/commit/6c6396b07633a2a039cd102ec220807f3ae0dc6e) feat(gh): add bin (#21)
+
 ## [v0.4.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.4.0) - 2023-11-23
 
 - [`4fbe016`](https://github.com/alexfalkowski/infraops/commit/4fbe016708308537cd6fc015c1d93ba2171dfc68) feat(gh): add go-template (#20)
