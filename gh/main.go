@@ -15,6 +15,8 @@ func main() {
 			createNonnative,
 			createGoHealth, createGoService,
 			createTemplate, createStatus,
+			createStandort, createAuth,
+			createKonfig, createMigrieren,
 		}
 
 		for _, fn := range fns {
