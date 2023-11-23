@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v0.7.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.7.0) - 2023-11-23
+
+- [`8e220b8`](https://github.com/alexfalkowski/infraops/commit/8e220b8c83cf23c6224db49b006d66ceaca92e5d) feat(gh): add go-health (#23)
+
 ## [v0.6.0](https://github.com/alexfalkowski/infraops/releases/tag/v0.6.0) - 2023-11-23
 
 - [`624ad8d`](https://github.com/alexfalkowski/infraops/commit/624ad8d49f511f6e736c5e164c9d533110ddd90a) feat(gh): add nonnative (#22)
