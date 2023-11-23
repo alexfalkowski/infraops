@@ -17,3 +17,14 @@ func TestTemplate(t *testing.T) {
 
 	assert.NoError(t, err)
 }
+
+func TestStatus(t *testing.T) {
+	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
+		err := createStatus(ctx)
+		assert.NoError(t, err)
+
+		return nil
+	}, pulumi.WithMocks("project", "stack", mocks(0)))
+
+	assert.NoError(t, err)
+}
