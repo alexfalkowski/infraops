@@ -9,6 +9,7 @@ func createDocker(ctx *pulumi.Context) error {
 	_, err := github.NewRepository(ctx, "docker", &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
+		AllowUpdateBranch:   pulumi.Bool(true),
 		DefaultBranch:       pulumi.String("master"),
 		DeleteBranchOnMerge: pulumi.Bool(true),
 		Description:         pulumi.String("Common setup used for my projects."),

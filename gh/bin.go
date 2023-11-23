@@ -9,6 +9,7 @@ func createBin(ctx *pulumi.Context) error {
 	_, err := github.NewRepository(ctx, "bin", &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
+		AllowUpdateBranch:   pulumi.Bool(true),
 		DefaultBranch:       pulumi.String("master"),
 		DeleteBranchOnMerge: pulumi.Bool(true),
 		Description:         pulumi.String("A place for common executables."),

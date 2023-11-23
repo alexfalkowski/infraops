@@ -1,3 +1,4 @@
+//nolint:dupl
 package main
 
 import (
@@ -9,6 +10,7 @@ func createNonnative(ctx *pulumi.Context) error {
 	_, err := github.NewRepository(ctx, "nonnative", &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
+		AllowUpdateBranch:   pulumi.Bool(true),
 		DefaultBranch:       pulumi.String("master"),
 		DeleteBranchOnMerge: pulumi.Bool(true),
 		Description:         pulumi.String("Allows you to keep using the power of ruby to test other systems."),
