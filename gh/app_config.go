@@ -7,6 +7,8 @@ import (
 
 func createAppConfig(ctx *pulumi.Context) error {
 	_, err := github.NewRepository(ctx, "app-config", &github.RepositoryArgs{
+		AllowMergeCommit:    pulumi.Bool(false),
+		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
 		DefaultBranch:       pulumi.String("master"),
 		DeleteBranchOnMerge: pulumi.Bool(true),
