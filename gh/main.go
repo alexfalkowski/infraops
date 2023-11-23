@@ -14,6 +14,10 @@ func main() {
 			return err
 		}
 
+		if err := createTemplate(ctx); err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
