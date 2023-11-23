@@ -11,11 +11,10 @@ func main() {
 		fns := []createFn{
 			createDocker,
 			createAppConfig,
-			createTemplate,
 			createBin,
 			createNonnative,
-			createGoHealth,
-			createGoService,
+			createGoHealth, createGoService,
+			createTemplate,
 		}
 
 		for _, fn := range fns {
