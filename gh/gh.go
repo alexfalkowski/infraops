@@ -33,7 +33,7 @@ func createLibrary(ctx *pulumi.Context, name, description string) error {
 	return err
 }
 
-func createService(ctx *pulumi.Context, name, description string) error {
+func createService(ctx *pulumi.Context, name, description string, template bool) error {
 	_, err := github.NewRepository(ctx, name, &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
@@ -45,7 +45,7 @@ func createService(ctx *pulumi.Context, name, description string) error {
 		HasIssues:           pulumi.Bool(true),
 		HasProjects:         pulumi.Bool(true),
 		HasWiki:             pulumi.Bool(true),
-		IsTemplate:          pulumi.Bool(true),
+		IsTemplate:          pulumi.Bool(template),
 		Name:                pulumi.String(name),
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
