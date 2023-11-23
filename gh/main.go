@@ -18,6 +18,10 @@ func main() {
 			return err
 		}
 
+		if err := createBin(ctx); err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
