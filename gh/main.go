@@ -10,6 +10,10 @@ func main() {
 			return err
 		}
 
+		if err := createAppConfig(ctx); err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
