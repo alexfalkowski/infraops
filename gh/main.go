@@ -22,6 +22,10 @@ func main() {
 			return err
 		}
 
+		if err := createNonnative(ctx); err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
