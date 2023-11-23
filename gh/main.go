@@ -26,6 +26,10 @@ func main() {
 			return err
 		}
 
+		if err := createHealth(ctx); err != nil {
+			return err
+		}
+
 		return nil
 	})
 }
