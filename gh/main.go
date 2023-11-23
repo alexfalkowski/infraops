@@ -4,30 +4,23 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+type createFn func(ctx *pulumi.Context) error
+
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		if err := createDocker(ctx); err != nil {
-			return err
+		fns := []createFn{
+			createDocker,
+			createAppConfig,
+			createTemplate,
+			createBin,
+			createNonnative,
+			createHealth,
 		}
 
-		if err := createAppConfig(ctx); err != nil {
-			return err
-		}
-
-		if err := createTemplate(ctx); err != nil {
-			return err
-		}
-
-		if err := createBin(ctx); err != nil {
-			return err
-		}
-
-		if err := createNonnative(ctx); err != nil {
-			return err
-		}
-
-		if err := createHealth(ctx); err != nil {
-			return err
+		for _, fn := range fns {
+			if err := fn(ctx); err != nil {
+				return err
+			}
 		}
 
 		return nil
