@@ -15,6 +15,7 @@ func main() {
 			createBin,
 			createNonnative,
 			createHealth,
+			createService,
 		}
 
 		for _, fn := range fns {
