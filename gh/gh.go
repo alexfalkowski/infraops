@@ -1,4 +1,4 @@
-package main
+package gh
 
 import (
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
