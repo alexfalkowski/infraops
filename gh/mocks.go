@@ -1,16 +1,17 @@
-package main
+package gh
 
 import (
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-type mocks int
+// Mocks for gh.
+type Mocks int
 
-func (mocks) Call(_ pulumi.MockCallArgs) (resource.PropertyMap, error) {
+func (Mocks) Call(_ pulumi.MockCallArgs) (resource.PropertyMap, error) {
 	return resource.PropertyMap{}, nil
 }
 
-func (mocks) NewResource(_ pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
+func (Mocks) NewResource(_ pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
 	return "", resource.PropertyMap{}, nil
 }
