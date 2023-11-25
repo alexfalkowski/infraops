@@ -10,6 +10,7 @@ workflows:
     jobs:
       - path_filtering/filter:
           mapping: |
+            infra/gh/.* gh true
             gh/.* gh true
             go.* gh true
           base-revision: origin/master

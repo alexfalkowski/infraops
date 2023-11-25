@@ -45,7 +45,7 @@ jobs:
       - pulumi/login
       - pulumi/preview:
           stack: alexfalkowski/gh/prod
-          working_directory: ~/infraops/gh
+          working_directory: ~/infraops/infra/gh
     resource_class: large
   gh_update:
     docker:
@@ -59,7 +59,7 @@ jobs:
       - pulumi/login
       - pulumi/update:
           stack: alexfalkowski/gh/prod
-          working_directory: ~/infraops/gh
+          working_directory: ~/infraops/infra/gh
     resource_class: large
 
 workflows:
