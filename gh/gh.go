@@ -5,36 +5,16 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createLibrary(ctx *pulumi.Context, name, description string) error {
-	_, err := github.NewRepository(ctx, name, &github.RepositoryArgs{
-		AllowMergeCommit:    pulumi.Bool(false),
-		AllowRebaseMerge:    pulumi.Bool(false),
-		AllowUpdateBranch:   pulumi.Bool(true),
-		DefaultBranch:       pulumi.String("master"),
-		DeleteBranchOnMerge: pulumi.Bool(true),
-		Description:         pulumi.String(description),
-		HasDownloads:        pulumi.Bool(true),
-		HasIssues:           pulumi.Bool(true),
-		HasProjects:         pulumi.Bool(true),
-		HasWiki:             pulumi.Bool(true),
-		Name:                pulumi.String(name),
-		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
-			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
-				Status: pulumi.String("enabled"),
-			},
-			SecretScanningPushProtection: &github.RepositorySecurityAndAnalysisSecretScanningPushProtectionArgs{
-				Status: pulumi.String("enabled"),
-			},
-		},
-		Visibility:          pulumi.String("public"),
-		VulnerabilityAlerts: pulumi.Bool(true),
-	})
-
-	return err
+// RepositoryArgs for gh.
+type RepositoryArgs struct {
+	HomepageURL string
+	IsTemplate  bool
+	Topics      []string
 }
 
-func createService(ctx *pulumi.Context, name, description string, template bool) error {
-	_, err := github.NewRepository(ctx, name, &github.RepositoryArgs{
+// CreateRepository for gh.
+func CreateRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
+	return github.NewRepository(ctx, name, &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
@@ -45,7 +25,8 @@ func createService(ctx *pulumi.Context, name, description string, template bool)
 		HasIssues:           pulumi.Bool(true),
 		HasProjects:         pulumi.Bool(true),
 		HasWiki:             pulumi.Bool(true),
-		IsTemplate:          pulumi.Bool(template),
+		HomepageUrl:         pulumi.String(args.HomepageURL),
+		IsTemplate:          pulumi.Bool(args.IsTemplate),
 		Name:                pulumi.String(name),
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
@@ -56,9 +37,8 @@ func createService(ctx *pulumi.Context, name, description string, template bool)
 			},
 		},
 		SquashMergeCommitTitle: pulumi.String("PR_TITLE"),
+		Topics:                 pulumi.ToStringArray(args.Topics),
 		Visibility:             pulumi.String("public"),
 		VulnerabilityAlerts:    pulumi.Bool(true),
 	})
-
-	return err
 }

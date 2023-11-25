@@ -5,5 +5,7 @@ import (
 )
 
 func createNonnative(ctx *pulumi.Context) error {
-	return createLibrary(ctx, "nonnative", "Allows you to keep using the power of ruby to test other systems.")
+	_, err := CreateRepository(ctx, "nonnative", "Allows you to keep using the power of ruby to test other systems.", &RepositoryArgs{})
+
+	return err
 }

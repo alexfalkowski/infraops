@@ -5,9 +5,13 @@ import (
 )
 
 func createGoHealth(ctx *pulumi.Context) error {
-	return createLibrary(ctx, "go-health", "Health monitoring pattern in Go.")
+	_, err := CreateRepository(ctx, "go-health", "Health monitoring pattern in Go.", &RepositoryArgs{})
+
+	return err
 }
 
 func createGoService(ctx *pulumi.Context) error {
-	return createLibrary(ctx, "go-service", "A framework to build services in go.")
+	_, err := CreateRepository(ctx, "go-service", "A framework to build services in go.", &RepositoryArgs{})
+
+	return err
 }
