@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.1.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.1.2) - 2023-12-08
+
+- [`da16da0`](https://github.com/alexfalkowski/infraops/commit/da16da018757ceafee419a00b589d98ec0bdb0a4) fix(deps): bump the pulumi group with 1 update (#37)
+- [`dfa7d43`](https://github.com/alexfalkowski/infraops/commit/dfa7d434fa78b1b22820c49dc547097f299b90e1) build(deps): bump bin from `e8ef37a` to `e6271f5` (#36)
+
 ## [v1.1.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.1.1) - 2023-12-04
 
 - [`9f009f4`](https://github.com/alexfalkowski/infraops/commit/9f009f4a76854244e44e6ed9464f59c2f957d323) fix(deps): bump the pulumi group with 1 update (#35)
