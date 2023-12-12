@@ -8,10 +8,6 @@ updates:
       prefix: "fix"
       prefix-development: "build"
       include: "scope"
-    groups:
-      pulumi:
-        patterns:
-        - "*pulumi*"
   - package-ecosystem: "gitsubmodule"
     directory: "/"
     schedule:
