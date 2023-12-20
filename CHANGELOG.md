@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.1.6](https://github.com/alexfalkowski/infraops/releases/tag/v1.1.6) - 2023-12-20
+
+- [`53b32db`](https://github.com/alexfalkowski/infraops/commit/53b32db7b8ea718c5bcb43e6989b37bb2712ba4f) fix(deps): bump golang.org/x/crypto from 0.14.0 to 0.17.0 (#42)
+
 ## [v1.1.5](https://github.com/alexfalkowski/infraops/releases/tag/v1.1.5) - 2023-12-18
 
 - [`aac3c84`](https://github.com/alexfalkowski/infraops/commit/aac3c84eae98daaa821034af7c78c7bc005c92f4) fix(deps): bump github.com/pulumi/pulumi-github/sdk/v5 (#41)
