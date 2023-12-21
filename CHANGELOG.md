@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.1.8](https://github.com/alexfalkowski/infraops/releases/tag/v1.1.8) - 2023-12-21
+
+- [`dae4d34`](https://github.com/alexfalkowski/infraops/commit/dae4d344f46689a15c1a3a0bc001c08731093a3f) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.98.0 to 3.99.0 (#44)
+
 ## [v1.1.7](https://github.com/alexfalkowski/infraops/releases/tag/v1.1.7) - 2023-12-20
 
 - [`3d56741`](https://github.com/alexfalkowski/infraops/commit/3d56741a57f1b142609aa89519ff4aa22b3279d8) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.97.0 to 3.98.0 (#43)
