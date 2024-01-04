@@ -19,7 +19,7 @@ var fns = []createFn{
 
 func createPages(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://alexfalkowski.github.io"}
-	_, err := gh.CreateMainRepository(ctx, "alexfalkowski.github.io", "A site for my profile.", args)
+	_, err := gh.CreateMasterRepository(ctx, "alexfalkowski.github.io", "A site for my profile.", args)
 
 	return err
 }
