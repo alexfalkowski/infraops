@@ -18,7 +18,7 @@ func CreateRepository(ctx *pulumi.Context, name, description string, args *Repos
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
-		DefaultBranch:       pulumi.String("master"),
+		DefaultBranch:       pulumi.String("main"),
 		DeleteBranchOnMerge: pulumi.Bool(true),
 		Description:         pulumi.String(description),
 		HasDownloads:        pulumi.Bool(true),
