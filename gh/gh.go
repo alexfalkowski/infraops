@@ -12,13 +12,22 @@ type RepositoryArgs struct {
 	Topics      []string
 }
 
-// CreateRepository for gh.
-func CreateRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
+// CreateMasterRepository for gh.
+func CreateMasterRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
+	return createRepository(ctx, name, description, "master", args)
+}
+
+// CreateMainRepository for gh.
+func CreateMainRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
+	return createRepository(ctx, name, description, "main", args)
+}
+
+func createRepository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
 	return github.NewRepository(ctx, name, &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
-		DefaultBranch:       pulumi.String("main"),
+		DefaultBranch:       pulumi.String(branch),
 		DeleteBranchOnMerge: pulumi.Bool(true),
 		Description:         pulumi.String(description),
 		HasDownloads:        pulumi.Bool(true),

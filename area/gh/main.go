@@ -19,91 +19,91 @@ var fns = []createFn{
 
 func createPages(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://alexfalkowski.github.io"}
-	_, err := gh.CreateRepository(ctx, "alexfalkowski.github.io", "A site for my profile.", args)
+	_, err := gh.CreateMainRepository(ctx, "alexfalkowski.github.io", "A site for my profile.", args)
 
 	return err
 }
 
 func createDocker(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{Topics: []string{"docker", "ruby", "golang"}}
-	_, err := gh.CreateRepository(ctx, "docker", "Common setup used for my projects.", args)
+	_, err := gh.CreateMasterRepository(ctx, "docker", "Common setup used for my projects.", args)
 
 	return err
 }
 
 func createAppConfig(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/app-config"}
-	_, err := gh.CreateRepository(ctx, "app-config", "A place for all of my application configuration.", args)
+	_, err := gh.CreateMasterRepository(ctx, "app-config", "A place for all of my application configuration.", args)
 
 	return err
 }
 
 func createBin(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/bin"}
-	_, err := gh.CreateRepository(ctx, "bin", "A place for common executables.", args)
+	_, err := gh.CreateMasterRepository(ctx, "bin", "A place for common executables.", args)
 
 	return err
 }
 
 func createNonnative(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/nonnative"}
-	_, err := gh.CreateRepository(ctx, "nonnative", "Allows you to keep using the power of ruby to test other systems.", args)
+	_, err := gh.CreateMasterRepository(ctx, "nonnative", "Allows you to keep using the power of ruby to test other systems.", args)
 
 	return err
 }
 
 func createGoHealth(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/go-health"}
-	_, err := gh.CreateRepository(ctx, "go-health", "Health monitoring pattern in Go.", args)
+	_, err := gh.CreateMasterRepository(ctx, "go-health", "Health monitoring pattern in Go.", args)
 
 	return err
 }
 
 func createGoService(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/go-service"}
-	_, err := gh.CreateRepository(ctx, "go-service", "A framework to build services in go.", args)
+	_, err := gh.CreateMasterRepository(ctx, "go-service", "A framework to build services in go.", args)
 
 	return err
 }
 
 func createGoServiceTemplate(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/go-service-template", IsTemplate: true}
-	_, err := gh.CreateRepository(ctx, "go-service-template", "A template for go services.", args)
+	_, err := gh.CreateMasterRepository(ctx, "go-service-template", "A template for go services.", args)
 
 	return err
 }
 
 func createStatus(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/status"}
-	_, err := gh.CreateRepository(ctx, "status", "An alternative to https://httpstat.us/", args)
+	_, err := gh.CreateMasterRepository(ctx, "status", "An alternative to https://httpstat.us/", args)
 
 	return err
 }
 
 func createStandort(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/standort"}
-	_, err := gh.CreateRepository(ctx, "standort", "Standort provides location based information.", args)
+	_, err := gh.CreateMasterRepository(ctx, "standort", "Standort provides location based information.", args)
 
 	return err
 }
 
 func createAuth(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/auth"}
-	_, err := gh.CreateRepository(ctx, "auth", "Auth provides all your authn and authz needs.", args)
+	_, err := gh.CreateMasterRepository(ctx, "auth", "Auth provides all your authn and authz needs.", args)
 
 	return err
 }
 
 func createKonfig(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/konfig"}
-	_, err := gh.CreateRepository(ctx, "konfig", "Konfig is a configuration system for application configuration.", args)
+	_, err := gh.CreateMasterRepository(ctx, "konfig", "Konfig is a configuration system for application configuration.", args)
 
 	return err
 }
 
 func createMigrieren(ctx *pulumi.Context) error {
 	args := &gh.RepositoryArgs{HomepageURL: "https://github.com/alexfalkowski/migrieren"}
-	_, err := gh.CreateRepository(ctx, "migrieren", "Migrieren provides a way to migrate your databases.", args)
+	_, err := gh.CreateMasterRepository(ctx, "migrieren", "Migrieren provides a way to migrate your databases.", args)
 
 	return err
 }
