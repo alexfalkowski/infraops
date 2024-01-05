@@ -8,13 +8,20 @@ import (
 type createFn func(ctx *pulumi.Context) error
 
 var fns = []createFn{
-	createPages,
+	createPages, createInfraOps,
 	createDocker, createAppConfig,
 	createBin, createNonnative,
 	createGoHealth, createGoService,
 	createGoServiceTemplate, createStatus,
 	createStandort, createAuth,
 	createKonfig, createMigrieren,
+}
+
+func createInfraOps(ctx *pulumi.Context) error {
+	args := &gh.RepositoryArgs{HomepageURL: "https://alexfalkowski.github.io/infraops"}
+	_, err := gh.CreateMasterRepository(ctx, "infraops", "A place where all infrastructure is taken care of.", args)
+
+	return err
 }
 
 func createPages(ctx *pulumi.Context) error {
