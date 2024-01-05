@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.5.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.5.1) - 2024-01-05
+
+- [`75c04d9`](https://github.com/alexfalkowski/infraops/commit/75c04d9471f950f87b743311ca9891104b0d6d39) fix(gh): use generated url (#53)
+
 ## [v1.5.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.5.0) - 2024-01-05
 
 - [`c34f574`](https://github.com/alexfalkowski/infraops/commit/c34f574dec6167f4a8b3813ae4984d27d7de6b24) feat(gh): use pages (#52)
