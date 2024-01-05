@@ -24,24 +24,27 @@ func CreateMainRepository(ctx *pulumi.Context, name, description string, args *R
 }
 
 func createRepository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
-	r, err := repository(ctx, name, description, branch, args)
+	r, err := newRepository(ctx, name, description, branch, args)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := branchProtection(ctx, name, branch, r.NodeId, args); err != nil {
+	if err := newBranch(ctx, name, branch, r); err != nil {
+		return nil, err
+	}
+
+	if err := newBranchProtection(ctx, name, branch, r.NodeId, args); err != nil {
 		return nil, err
 	}
 
 	return r, nil
 }
 
-func repository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
+func newRepository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
 	return github.NewRepository(ctx, name, &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
-		DefaultBranch:       pulumi.String(branch),
 		DeleteBranchOnMerge: pulumi.Bool(true),
 		Description:         pulumi.String(description),
 		HasDownloads:        pulumi.Bool(true),
@@ -71,7 +74,24 @@ func repository(ctx *pulumi.Context, name, description, branch string, args *Rep
 	})
 }
 
-func branchProtection(ctx *pulumi.Context, name, branch string, id pulumi.StringInput, args *RepositoryArgs) error {
+func newBranch(ctx *pulumi.Context, name, branch string, repo *github.Repository) error {
+	master, err := github.NewBranch(ctx, name, &github.BranchArgs{
+		Repository: repo.Name,
+		Branch:     pulumi.String(branch),
+	})
+	if err != nil {
+		return err
+	}
+
+	_, err = github.NewBranchDefault(ctx, name, &github.BranchDefaultArgs{
+		Repository: repo.Name,
+		Branch:     master.Branch,
+	})
+
+	return err
+}
+
+func newBranchProtection(ctx *pulumi.Context, name, branch string, id pulumi.StringInput, args *RepositoryArgs) error {
 	_, err := github.NewBranchProtection(ctx, name, &github.BranchProtectionArgs{
 		Pattern:               pulumi.String(branch),
 		RepositoryId:          id,
