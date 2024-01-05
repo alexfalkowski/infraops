@@ -37,6 +37,11 @@ func createRepository(ctx *pulumi.Context, name, description, branch string, arg
 		HomepageUrl:         pulumi.String(args.HomepageURL),
 		IsTemplate:          pulumi.Bool(args.IsTemplate),
 		Name:                pulumi.String(name),
+		Pages: &github.RepositoryPagesArgs{
+			Source: &github.RepositoryPagesSourceArgs{
+				Branch: pulumi.String(branch),
+			},
+		},
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
 				Status: pulumi.String("enabled"),
