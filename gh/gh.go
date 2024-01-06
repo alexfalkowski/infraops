@@ -13,23 +13,14 @@ type RepositoryArgs struct {
 	Checks      []string
 }
 
-// CreateMasterRepository for gh.
-func CreateMasterRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
+// CreateRepository for gh.
+func CreateRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
 	return createRepository(ctx, name, description, "master", args)
-}
-
-// CreateMainRepository for gh.
-func CreateMainRepository(ctx *pulumi.Context, name, description string, args *RepositoryArgs) (*github.Repository, error) {
-	return createRepository(ctx, name, description, "main", args)
 }
 
 func createRepository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
 	r, err := newRepository(ctx, name, description, branch, args)
 	if err != nil {
-		return nil, err
-	}
-
-	if err := newBranch(ctx, name, branch, r); err != nil {
 		return nil, err
 	}
 
@@ -73,23 +64,6 @@ func newRepository(ctx *pulumi.Context, name, description, branch string, args *
 		Visibility:             pulumi.String("public"),
 		VulnerabilityAlerts:    pulumi.Bool(true),
 	})
-}
-
-func newBranch(ctx *pulumi.Context, name, branch string, repo *github.Repository) error {
-	b, err := github.NewBranch(ctx, name, &github.BranchArgs{
-		Repository: repo.Name,
-		Branch:     pulumi.String(branch),
-	})
-	if err != nil {
-		return err
-	}
-
-	_, err = github.NewBranchDefault(ctx, name, &github.BranchDefaultArgs{
-		Repository: repo.Name,
-		Branch:     b.Branch,
-	})
-
-	return err
 }
 
 func newBranchProtection(ctx *pulumi.Context, name, branch string, id pulumi.StringInput, args *RepositoryArgs) error {
