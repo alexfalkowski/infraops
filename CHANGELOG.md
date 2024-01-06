@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.8.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.8.2) - 2024-01-06
+
+- [`a21d88f`](https://github.com/alexfalkowski/infraops/commit/a21d88f16799389802035f85e3dbaae80775bb6a) fix(gh): remove creating branch as auto init does it (#59)
+- [`2c46cb2`](https://github.com/alexfalkowski/infraops/commit/2c46cb2f8afc5b1a1b6bfd9fe5d8f5cd1e2cabe6) refactor(gh): rename variable (#58)
+
 ## [v1.8.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.8.1) - 2024-01-06
 
 - [`0b04988`](https://github.com/alexfalkowski/infraops/commit/0b0498829ed3685f563f24b58e8f35556de90a13) fix(gh): add auto init (#57)
