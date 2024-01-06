@@ -76,7 +76,7 @@ func newRepository(ctx *pulumi.Context, name, description, branch string, args *
 }
 
 func newBranch(ctx *pulumi.Context, name, branch string, repo *github.Repository) error {
-	master, err := github.NewBranch(ctx, name, &github.BranchArgs{
+	b, err := github.NewBranch(ctx, name, &github.BranchArgs{
 		Repository: repo.Name,
 		Branch:     pulumi.String(branch),
 	})
@@ -86,7 +86,7 @@ func newBranch(ctx *pulumi.Context, name, branch string, repo *github.Repository
 
 	_, err = github.NewBranchDefault(ctx, name, &github.BranchDefaultArgs{
 		Repository: repo.Name,
-		Branch:     master.Branch,
+		Branch:     b.Branch,
 	})
 
 	return err
