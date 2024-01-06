@@ -5,9 +5,20 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// TemplateArgs for gh.
+type TemplateArgs struct {
+	Owner      string
+	Repository string
+}
+
+func (t TemplateArgs) IsValid() bool {
+	return t.Owner != "" && t.Repository != ""
+}
+
 // RepositoryArgs for gh.
 type RepositoryArgs struct {
 	HomepageURL string
+	Template    TemplateArgs
 	IsTemplate  bool
 	Topics      []string
 	Checks      []string
@@ -19,20 +30,20 @@ func CreateRepository(ctx *pulumi.Context, name, description string, args *Repos
 }
 
 func createRepository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
-	r, err := newRepository(ctx, name, description, branch, args)
+	r, err := repository(ctx, name, description, branch, args)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := newBranchProtection(ctx, name, branch, r.NodeId, args); err != nil {
+	if err := branchProtection(ctx, name, branch, r.NodeId, args); err != nil {
 		return nil, err
 	}
 
 	return r, nil
 }
 
-func newRepository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
-	return github.NewRepository(ctx, name, &github.RepositoryArgs{
+func repository(ctx *pulumi.Context, name, description, branch string, args *RepositoryArgs) (*github.Repository, error) {
+	a := &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
@@ -63,10 +74,19 @@ func newRepository(ctx *pulumi.Context, name, description, branch string, args *
 		Topics:                 pulumi.ToStringArray(args.Topics),
 		Visibility:             pulumi.String("public"),
 		VulnerabilityAlerts:    pulumi.Bool(true),
-	})
+	}
+
+	if args.Template.IsValid() {
+		a.Template = github.RepositoryTemplateArgs{
+			Owner:      pulumi.String(args.Template.Owner),
+			Repository: pulumi.String(args.Template.Repository),
+		}
+	}
+
+	return github.NewRepository(ctx, name, a)
 }
 
-func newBranchProtection(ctx *pulumi.Context, name, branch string, id pulumi.StringInput, args *RepositoryArgs) error {
+func branchProtection(ctx *pulumi.Context, name, branch string, id pulumi.StringInput, args *RepositoryArgs) error {
 	_, err := github.NewBranchProtection(ctx, name, &github.BranchProtectionArgs{
 		Pattern:               pulumi.String(branch),
 		RepositoryId:          id,
