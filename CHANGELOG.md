@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.9.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.9.0) - 2024-01-06
+
+- [`1b311a2`](https://github.com/alexfalkowski/infraops/commit/1b311a2f84eb952eaf9743e4a7a1a443ad46c939) feat(gh): add template (#60)
+
 ## [v1.8.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.8.2) - 2024-01-06
 
 - [`a21d88f`](https://github.com/alexfalkowski/infraops/commit/a21d88f16799389802035f85e3dbaae80775bb6a) fix(gh): remove creating branch as auto init does it (#59)
