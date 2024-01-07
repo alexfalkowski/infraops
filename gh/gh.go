@@ -29,17 +29,13 @@ type Repository struct {
 }
 
 // CreateRepository for gh.
-func CreateRepository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
+func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if err := branchProtection(ctx, r.NodeId, repo); err != nil {
-		return nil, err
-	}
-
-	return r, nil
+	return branchProtection(ctx, r.NodeId, repo)
 }
 
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
