@@ -3,7 +3,7 @@ module github.com/alexfalkowski/infraops
 go 1.21.4
 
 require (
-	github.com/pulumi/pulumi-github/sdk/v5 v5.23.0
+	github.com/pulumi/pulumi-github/sdk/v5 v5.24.0
 	github.com/pulumi/pulumi/sdk/v3 v3.100.0
 	github.com/stretchr/testify v1.8.4
 )
