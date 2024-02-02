@@ -4,7 +4,7 @@ go 1.21.4
 
 require (
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
-	github.com/pulumi/pulumi/sdk/v3 v3.104.1
+	github.com/pulumi/pulumi/sdk/v3 v3.104.2
 	github.com/stretchr/testify v1.8.4
 )
 
