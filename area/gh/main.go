@@ -8,7 +8,7 @@ import (
 type createFn func(ctx *pulumi.Context) error
 
 var fns = []createFn{
-	createFizzBuzz, createTest,
+	createFizzBuzz,
 	createPages, createInfraOps,
 	createDocker, createAppConfig,
 	createBin, createNonnative,
@@ -16,18 +16,6 @@ var fns = []createFn{
 	createGoServiceTemplate, createStatus,
 	createStandort, createAuth,
 	createKonfig, createMigrieren,
-}
-
-func createTest(ctx *pulumi.Context) error {
-	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker"}
-	repo := &gh.Repository{
-		Name: "test", Description: "This is a test.",
-		HomepageURL: "https://alexfalkowski.github.io/test",
-		Checks:      checks,
-		Template:    gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
-	}
-
-	return gh.CreateRepository(ctx, repo)
 }
 
 func createFizzBuzz(ctx *pulumi.Context) error {
