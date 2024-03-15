@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.12.9](https://github.com/alexfalkowski/infraops/releases/tag/v1.12.9) - 2024-03-15
+
+- [`2e8bd89`](https://github.com/alexfalkowski/infraops/commit/2e8bd892cb541870730cbe46ac19a15a3c8f43c4) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.109.0 to 3.110.0 (#91)
+- [`3c833ad`](https://github.com/alexfalkowski/infraops/commit/3c833ad702002c29c7f8eb9b0e59265d0c4b59c7) build(deps): bump bin from `66f6a24` to `355347a` (#90)
+
 ## [v1.12.8](https://github.com/alexfalkowski/infraops/releases/tag/v1.12.8) - 2024-03-14
 
 - [`e401c25`](https://github.com/alexfalkowski/infraops/commit/e401c25cffab2457c562f095aa494f4ab0d4bd9a) fix(deps): bump google.golang.org/protobuf from 1.31.0 to 1.33.0 (#89)
