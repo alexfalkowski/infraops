@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.12.11](https://github.com/alexfalkowski/infraops/releases/tag/v1.12.11) - 2024-03-28
+
+- [`405cbbf`](https://github.com/alexfalkowski/infraops/commit/405cbbfdf732a296441584bd67fb915305f2f020) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.111.1 to 3.112.0 (#99)
+- [`ad77574`](https://github.com/alexfalkowski/infraops/commit/ad775744b6fcc8e3a37abbfbee65b3a0d5d33c20) build(deps): bump bin from `a19d7ca` to `8cbc2d5` (#100)
+- [`fa38b49`](https://github.com/alexfalkowski/infraops/commit/fa38b493f9fe0a2c1840ad332fbfa35777930d73) build(deps): bump bin from `b9b6ae3` to `a19d7ca` (#98)
+- [`4f1e64e`](https://github.com/alexfalkowski/infraops/commit/4f1e64e3cb6db98fd52379d915a745ad93a99933) build(deps): bump bin from `06726b5` to `b9b6ae3` (#97)
+- [`9c30900`](https://github.com/alexfalkowski/infraops/commit/9c30900d3372f17a6f8d1dd59eb04f734536100e) build(make): add git commands (#95)
+- [`9998563`](https://github.com/alexfalkowski/infraops/commit/9998563450886e447dc08e4b785cca25bc66f53e) build(deps): bump bin from `355347a` to `06726b5` (#94)
+
 ## [v1.12.10](https://github.com/alexfalkowski/infraops/releases/tag/v1.12.10) - 2024-03-18
 
 - [`5956a6d`](https://github.com/alexfalkowski/infraops/commit/5956a6dba05fedc2fcc8323d3f725c3ff886d4ac) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.110.0 to 3.111.1 (#92)
