@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.13.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.13.0) - 2024-04-04
+
+- [`d30dd3a`](https://github.com/alexfalkowski/infraops/commit/d30dd3a21fbc4da1d0f10640d041e43c0b177924) feat(gh): remove fizzbuzz (#105)
+- [`949e923`](https://github.com/alexfalkowski/infraops/commit/949e923029a4ab3c9f202531176c6e6d41b7a10a) build(deps): bump bin from `ed17684` to `13a7302` (#104)
+- [`abcdca0`](https://github.com/alexfalkowski/infraops/commit/abcdca05cd0251a64b102b766c83e3440bba6c2c) build(deps): bump bin from `024be7f` to `ed17684` (#103)
+- [`4dfb2d0`](https://github.com/alexfalkowski/infraops/commit/4dfb2d081611c4b898200a5304e3d0bd73b18533) build(deps): bump bin from `608889f` to `024be7f` (#102)
+- [`7f4ed8e`](https://github.com/alexfalkowski/infraops/commit/7f4ed8eea4ed9baf26e01932eb7c1788da080481) build(deps): bump bin from `8cbc2d5` to `608889f` (#101)
+
 ## [v1.12.11](https://github.com/alexfalkowski/infraops/releases/tag/v1.12.11) - 2024-03-28
 
 - [`405cbbf`](https://github.com/alexfalkowski/infraops/commit/405cbbfdf732a296441584bd67fb915305f2f020) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.111.1 to 3.112.0 (#99)
