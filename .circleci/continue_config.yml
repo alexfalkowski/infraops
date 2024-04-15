@@ -17,7 +17,16 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-cache-{{ checksum "go.sum" }}
       - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
       - run: make lint
       - run: make sec
       - run: make specs
@@ -41,7 +50,16 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-cache-{{ checksum "go.sum" }}
       - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
       - pulumi/login
       - pulumi/preview:
           stack: alexfalkowski/gh/prod
@@ -55,7 +73,16 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-cache-{{ checksum "go.sum" }}
       - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
       - pulumi/login
       - pulumi/update:
           stack: alexfalkowski/gh/prod
