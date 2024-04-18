@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.17.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.17.0) - 2024-04-18
+
+- [`a205590`](https://github.com/alexfalkowski/infraops/commit/a205590a3319cdc2d37513d43e0c1ffdb56a817a) feat(gh): remove migrator service (#119)
+
 ## [v1.16.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.16.0) - 2024-04-18
 
 - [`ec991c3`](https://github.com/alexfalkowski/infraops/commit/ec991c3fe920f57a16c63f98817db3b4a16c1104) feat(gh): add migrator service (#118)
