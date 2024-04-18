@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.14.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.14.0) - 2024-04-18
+
+- [`76f5ef9`](https://github.com/alexfalkowski/infraops/commit/76f5ef96c237f04a7b71a6b7db77a6e882bc8867) feat(gh): add test repository (#116)
+- [`58a6c30`](https://github.com/alexfalkowski/infraops/commit/58a6c30affeca93d1ad4a7a40177f88e2c502d72) build(ci): find the most recently generated cache (#115)
+- [`8e57894`](https://github.com/alexfalkowski/infraops/commit/8e57894c8d0eb98f23c54dca300abeb8a9e3eab2) build(ci): store tests (#114)
+- [`bda8e6f`](https://github.com/alexfalkowski/infraops/commit/bda8e6fcb083174ea42ff0009889c01fe449d65c) build(deps): bump bin from `f01b719` to `d5f116d` (#113)
+- [`7715808`](https://github.com/alexfalkowski/infraops/commit/77158085018733dc1a7c5b8578da3f8268c4e87f) build(ci): change cache key (#112)
+
 ## [v1.13.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.13.1) - 2024-04-16
 
 - [`1dd0c81`](https://github.com/alexfalkowski/infraops/commit/1dd0c81e846e2772596284ec3c54f3320a59ccb8) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.112.0 to 3.113.0 (#111)
