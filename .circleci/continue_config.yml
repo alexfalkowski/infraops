@@ -21,6 +21,7 @@ jobs:
           name: restore deps
           keys:
             - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
       - run: make dep
       - save_cache:
           name: save deps
@@ -31,6 +32,7 @@ jobs:
           name: restore go build cache
           keys:
             - infraops-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-go-build-cache-
       - run: make lint
       - run: make sec
       - run: make specs
@@ -64,11 +66,12 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-cache-{{ checksum "go.sum" }}
+          key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
       - pulumi/login
@@ -87,11 +90,12 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-cache-{{ checksum "go.sum" }}
+          key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
       - pulumi/login
