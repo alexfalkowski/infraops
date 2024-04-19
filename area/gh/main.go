@@ -23,6 +23,7 @@ func createSuperService(ctx *pulumi.Context) error {
 		Name: "superservice", Description: "A super service.",
 		HomepageURL: "https://alexfalkowski.github.io/superservice",
 		Template:    gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
+		EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
