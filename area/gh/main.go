@@ -8,6 +8,7 @@ import (
 type createFn func(ctx *pulumi.Context) error
 
 var fns = []createFn{
+	createSuperService,
 	createPages, createInfraOps,
 	createDocker, createAppConfig,
 	createBin, createNonnative,
@@ -15,6 +16,17 @@ var fns = []createFn{
 	createGoServiceTemplate, createStatus,
 	createStandort, createAuth,
 	createKonfig, createMigrieren,
+}
+
+func createSuperService(ctx *pulumi.Context) error {
+	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker"}
+	repo := &gh.Repository{
+		Name: "superservice", Description: "A super service.",
+		HomepageURL: "https://alexfalkowski.github.io/superservice", Checks: checks,
+		Template: gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
+	}
+
+	return gh.CreateRepository(ctx, repo)
 }
 
 func createInfraOps(ctx *pulumi.Context) error {
