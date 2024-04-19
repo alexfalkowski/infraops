@@ -26,6 +26,7 @@ type Repository struct {
 	IsTemplate  bool
 	Topics      []string
 	Checks      []string
+	EnablePages bool
 }
 
 // CreateRepository for gh.
@@ -53,11 +54,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		HomepageUrl:         pulumi.String(repo.HomepageURL),
 		IsTemplate:          pulumi.Bool(repo.IsTemplate),
 		Name:                pulumi.String(repo.Name),
-		Pages: &github.RepositoryPagesArgs{
-			Source: &github.RepositoryPagesSourceArgs{
-				Branch: pulumi.String(master),
-			},
-		},
+		Pages:               pages(repo),
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
 				Status: pulumi.String("enabled"),
@@ -67,16 +64,10 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 			},
 		},
 		SquashMergeCommitTitle: pulumi.String("PR_TITLE"),
+		Template:               template(repo),
 		Topics:                 pulumi.ToStringArray(repo.Topics),
 		Visibility:             pulumi.String("public"),
 		VulnerabilityAlerts:    pulumi.Bool(true),
-	}
-
-	if repo.Template.IsValid() {
-		a.Template = github.RepositoryTemplateArgs{
-			Owner:      pulumi.String(repo.Template.Owner),
-			Repository: pulumi.String(repo.Template.Repository),
-		}
 	}
 
 	return github.NewRepository(ctx, repo.Name, a)
@@ -102,4 +93,20 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 	})
 
 	return err
+}
+
+func template(repo *Repository) *github.RepositoryTemplateArgs {
+	if !repo.Template.IsValid() {
+		return nil
+	}
+
+	return &github.RepositoryTemplateArgs{Owner: pulumi.String(repo.Template.Owner), Repository: pulumi.String(repo.Template.Repository)}
+}
+
+func pages(repo *Repository) *github.RepositoryPagesArgs {
+	if !repo.EnablePages {
+		return nil
+	}
+
+	return &github.RepositoryPagesArgs{Source: &github.RepositoryPagesSourceArgs{Branch: pulumi.String(master)}}
 }
