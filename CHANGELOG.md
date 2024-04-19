@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.22.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.22.1) - 2024-04-19
+
+- [`37e3d8d`](https://github.com/alexfalkowski/infraops/commit/37e3d8d0dbad1f59e8f2ebdc94f9c803893d95ce) fix(gh): pages for go client template (#129)
+
 ## [v1.22.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.22.0) - 2024-04-19
 
 - [`1baaf46`](https://github.com/alexfalkowski/infraops/commit/1baaf46a857ce8a998ac8908ddb8f3caa9d45b91) feat(gh): add go client template (#128)
