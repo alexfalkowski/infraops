@@ -8,13 +8,11 @@ import (
 type createFn func(ctx *pulumi.Context) error
 
 var fns = []createFn{
-	createSite, createInfraOps,
-	createDocker, createAppConfig,
-	createBin, createNonnative,
-	createGoHealth, createGoService,
-	createGoServiceTemplate, createStatus,
-	createStandort, createAuth,
-	createKonfig, createMigrieren,
+	createSite, createAppConfig,
+	createInfraOps, createDocker, createBin,
+	createNonnative, createGoHealth, createGoService,
+	createGoServiceTemplate, createGoClientTemplate,
+	createStatus, createStandort, createAuth, createKonfig, createMigrieren,
 }
 
 func createInfraOps(ctx *pulumi.Context) error {
@@ -103,6 +101,18 @@ func createGoServiceTemplate(ctx *pulumi.Context) error {
 		Name: "go-service-template", Description: "A template for go services.",
 		HomepageURL: "https://alexfalkowski.github.io/go-service-template", Checks: checks, IsTemplate: true,
 		EnablePages: true,
+	}
+
+	return gh.CreateRepository(ctx, repo)
+}
+
+func createGoClientTemplate(ctx *pulumi.Context) error {
+	checks := []string{"ci/circleci: build-client", "ci/circleci: build-docker"}
+	repo := &gh.Repository{
+		Name: "go-client-template", Description: "A template for go clients.",
+		HomepageURL: "https://alexfalkowski.github.io/go-service-template", Checks: checks,
+		IsTemplate: true, Template: gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
+		EnablePages: false,
 	}
 
 	return gh.CreateRepository(ctx, repo)
