@@ -110,9 +110,9 @@ func createGoClientTemplate(ctx *pulumi.Context) error {
 	checks := []string{"ci/circleci: build-client", "ci/circleci: build-docker"}
 	repo := &gh.Repository{
 		Name: "go-client-template", Description: "A template for go clients.",
-		HomepageURL: "https://alexfalkowski.github.io/go-service-template", Checks: checks,
+		HomepageURL: "https://alexfalkowski.github.io/go-client-template", Checks: checks,
 		IsTemplate: true, Template: gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
-		EnablePages: false,
+		EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
