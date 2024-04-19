@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.19.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.19.0) - 2024-04-19
+
+- [`4de9699`](https://github.com/alexfalkowski/infraops/commit/4de96998a2e8fcf803a281a57b52b3fed8a84277) feat(gh): remove super service (#122)
+
 ## [v1.18.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.18.0) - 2024-04-19
 
 - [`78bcd19`](https://github.com/alexfalkowski/infraops/commit/78bcd19cb3bf3fab1505794d8116f75c53f0d017) feat(gh): add super service (#121)
