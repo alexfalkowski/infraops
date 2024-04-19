@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.21.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.21.0) - 2024-04-19
+
+- [`4937a8c`](https://github.com/alexfalkowski/infraops/commit/4937a8cd2a7a3d86ec7a4c6c2251ad8fba36b977) feat(gh): remove super service (#126)
+
 ## [v1.20.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.20.1) - 2024-04-19
 
 - [`f110c65`](https://github.com/alexfalkowski/infraops/commit/f110c6535bda5ac9262b5012d0c619488e806186) fix(gh): enable pages for super service (#125)
