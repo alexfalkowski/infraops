@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.19.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.19.1) - 2024-04-19
+
+- [`a2e0d7a`](https://github.com/alexfalkowski/infraops/commit/a2e0d7a4836d81f317c76700cb6d1b4834c33525) fix(gh): split page creation (#123)
+
 ## [v1.19.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.19.0) - 2024-04-19
 
 - [`4de9699`](https://github.com/alexfalkowski/infraops/commit/4de96998a2e8fcf803a281a57b52b3fed8a84277) feat(gh): remove super service (#122)
