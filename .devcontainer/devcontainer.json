@@ -1,0 +1,5 @@
+gh pr checkout 123{refactor_googlePay
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {area/gh/main.go
+  }
+}
