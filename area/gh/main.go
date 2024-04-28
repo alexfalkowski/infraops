@@ -130,7 +130,7 @@ func createStatus(ctx *pulumi.Context) error {
 }
 
 func createStandort(ctx *pulumi.Context) error {
-	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coveralls"}
+	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coverage"}
 	repo := &gh.Repository{
 		Name: "standort", Description: "Standort provides location based information.",
 		HomepageURL: "https://alexfalkowski.github.io/standort", Checks: checks,
@@ -152,7 +152,7 @@ func createAuth(ctx *pulumi.Context) error {
 }
 
 func createKonfig(ctx *pulumi.Context) error {
-	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coveralls"}
+	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coverage"}
 	repo := &gh.Repository{
 		Name: "konfig", Description: "Konfig is a configuration system for application configuration.",
 		HomepageURL: "https://alexfalkowski.github.io/konfig", Checks: checks,
