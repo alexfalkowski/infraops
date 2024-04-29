@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.22.4](https://github.com/alexfalkowski/infraops/releases/tag/v1.22.4) - 2024-04-29
+
+- [`a506659`](https://github.com/alexfalkowski/infraops/commit/a506659f8cb6b8b9931e35844305de6de4af50ac) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.113.3 to 3.114.0 (#140)
+- [`a8d9108`](https://github.com/alexfalkowski/infraops/commit/a8d91081a62c5f09bc2266543f65e38f454ccbac) build(ci): cover all (#139)
+- [`b7f9022`](https://github.com/alexfalkowski/infraops/commit/b7f902219cf572b94313fa902be121e5a3311347) build(deps): bump bin from `3976e45` to `e47704b` (#138)
+- [`d284844`](https://github.com/alexfalkowski/infraops/commit/d284844327ddfa34d6e65200ea22aa9e2c36179c) build(ci): html coverage (#137)
+- [`ac69169`](https://github.com/alexfalkowski/infraops/commit/ac69169a807110a67498fcf690eef566a71f138c) build(deps): bump bin from `1755d45` to `3976e45` (#136)
+- [`1db1680`](https://github.com/alexfalkowski/infraops/commit/1db16805dc1b8dd58d69b23df28674c2123c1afc) build(deps): bump bin from `62c9b8d` to `1755d45` (#135)
+
 ## [v1.22.3](https://github.com/alexfalkowski/infraops/releases/tag/v1.22.3) - 2024-04-28
 
 - [`a6bf882`](https://github.com/alexfalkowski/infraops/commit/a6bf882698a3a13108851d07b3cc8370c3857220) fix(gh): change checks (#134)
