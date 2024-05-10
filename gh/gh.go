@@ -19,13 +19,13 @@ func (t Template) IsValid() bool {
 
 // Repository for gh.
 type Repository struct {
+	Template    Template
 	Name        string
 	Description string
 	HomepageURL string
-	Template    Template
-	IsTemplate  bool
 	Topics      []string
 	Checks      []string
+	IsTemplate  bool
 	EnablePages bool
 }
 
