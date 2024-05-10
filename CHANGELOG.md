@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.24.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.24.0) - 2024-05-10
+
+- [`3442a61`](https://github.com/alexfalkowski/infraops/commit/3442a61182fe17256a54057d2cf156ae51906931) feat(gh): add servicectl (#152)
+- [`a422904`](https://github.com/alexfalkowski/infraops/commit/a422904a2dd5006a91a43aae8a7927fad71fe744) build(ci): remove deprecatd linter (#151)
+- [`12f76f5`](https://github.com/alexfalkowski/infraops/commit/12f76f54bdd5f604ec0be8ad7cf870c6a7d046e0) build(deps): bump bin from `5a811c8` to `9e5c4b7` (#150)
+- [`698c773`](https://github.com/alexfalkowski/infraops/commit/698c7734bcca922cac8f2b93510474a560ad1c36) build(ci): prefix bin (#149)
+
 ## [v1.23.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.23.0) - 2024-05-10
 
 - [`c851789`](https://github.com/alexfalkowski/infraops/commit/c851789a379ba8c2a74b70ad10b79c8cd946caa9) feat(field): align with tool (#148)
