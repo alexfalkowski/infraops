@@ -23,7 +23,7 @@ func createServiceControl(ctx *pulumi.Context) error {
 		Name: "servicectl", Description: "A tool for go-service and go-service-templates.",
 		HomepageURL: "https://alexfalkowski.github.io/servicectl", Checks: checks,
 		IsTemplate: false, Template: gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
-		EnablePages: false,
+		EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
