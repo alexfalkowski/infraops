@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.24.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.24.1) - 2024-05-10
+
+- [`08819c0`](https://github.com/alexfalkowski/infraops/commit/08819c0f95b5e9f70ea9d024164678d708a0be77) fix(gh): enable pages to servicectl (#153)
+
 ## [v1.24.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.24.0) - 2024-05-10
 
 - [`3442a61`](https://github.com/alexfalkowski/infraops/commit/3442a61182fe17256a54057d2cf156ae51906931) feat(gh): add servicectl (#152)
