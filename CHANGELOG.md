@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.26.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.26.1) - 2024-05-13
+
+- [`0bac9e3`](https://github.com/alexfalkowski/infraops/commit/0bac9e3563c80a282ca7efb4da25a89673296854) fix(cf): change account name (#157)
+
 ## [v1.26.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.26.0) - 2024-05-13
 
 - [`b01fc07`](https://github.com/alexfalkowski/infraops/commit/b01fc07760352d31ee18bc74c5df6433ea7b093a) feat(cf): import from clouldflare (#156)
