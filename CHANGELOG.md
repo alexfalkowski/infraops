@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.25.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.25.0) - 2024-05-13
+
+- [`61b3284`](https://github.com/alexfalkowski/infraops/commit/61b3284a624c15217a0f1e049073c6e833ec6af5) feat(cf): add support for cloudflare (#155)
+- [`f0f3f3d`](https://github.com/alexfalkowski/infraops/commit/f0f3f3db9c5e8709d77d74108b667dcb4e224617) build(deps): bump bin from `9e5c4b7` to `93c02b7` (#154)
+
 ## [v1.24.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.24.1) - 2024-05-10
 
 - [`08819c0`](https://github.com/alexfalkowski/infraops/commit/08819c0f95b5e9f70ea9d024164678d708a0be77) fix(gh): enable pages to servicectl (#153)
