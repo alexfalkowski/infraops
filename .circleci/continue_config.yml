@@ -4,6 +4,9 @@ parameters:
   gh:
     type: boolean
     default: false
+  cf:
+    type: boolean
+    default: false
 
 orbs:
   pulumi: pulumi/pulumi@2.1.0
@@ -103,6 +106,54 @@ jobs:
           stack: alexfalkowski/gh/prod
           working_directory: ~/infraops/area/gh
     resource_class: large
+  cf_preview:
+    docker:
+      - image: alexfalkowski/go:1.22-ruby
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-go-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
+      - pulumi/login
+      - pulumi/preview:
+          stack: alexfalkowski/cf/prod
+          working_directory: ~/infraops/area/cf
+    resource_class: large
+  cf_update:
+    docker:
+      - image: alexfalkowski/release:3.1
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-go-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
+      - pulumi/login
+      - pulumi/update:
+          stack: alexfalkowski/cf/prod
+          working_directory: ~/infraops/area/cf
+    resource_class: large
 
 workflows:
   infraops:
@@ -123,6 +174,20 @@ workflows:
             branches:
               ignore: master
       - gh_update:
+          context: infraops
+          filters:
+            branches:
+              only: master
+
+  cf:
+    when: << pipeline.parameters.cf >>
+    jobs:
+      - cf_preview:
+          context: infraops
+          filters:
+            branches:
+              ignore: master
+      - cf_update:
           context: infraops
           filters:
             branches:
