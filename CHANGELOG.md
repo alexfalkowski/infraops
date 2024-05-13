@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.26.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.26.0) - 2024-05-13
+
+- [`b01fc07`](https://github.com/alexfalkowski/infraops/commit/b01fc07760352d31ee18bc74c5df6433ea7b093a) feat(cf): import from clouldflare (#156)
+
 ## [v1.25.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.25.0) - 2024-05-13
 
 - [`61b3284`](https://github.com/alexfalkowski/infraops/commit/61b3284a624c15217a0f1e049073c6e833ec6af5) feat(cf): add support for cloudflare (#155)
