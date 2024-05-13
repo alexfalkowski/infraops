@@ -40,7 +40,7 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 }
 
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
-	a := &github.RepositoryArgs{
+	args := &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
 		AllowUpdateBranch:   pulumi.Bool(true),
@@ -70,11 +70,11 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		VulnerabilityAlerts:    pulumi.Bool(true),
 	}
 
-	return github.NewRepository(ctx, repo.Name, a)
+	return github.NewRepository(ctx, repo.Name, args)
 }
 
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
-	_, err := github.NewBranchProtection(ctx, repo.Name, &github.BranchProtectionArgs{
+	args := &github.BranchProtectionArgs{
 		Pattern:               pulumi.String(master),
 		RepositoryId:          id,
 		RequiredLinearHistory: pulumi.Bool(true),
@@ -90,7 +90,8 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 				Strict:   pulumi.Bool(true),
 			},
 		},
-	})
+	}
+	_, err := github.NewBranchProtection(ctx, repo.Name, args)
 
 	return err
 }
@@ -100,7 +101,10 @@ func template(repo *Repository) *github.RepositoryTemplateArgs {
 		return nil
 	}
 
-	return &github.RepositoryTemplateArgs{Owner: pulumi.String(repo.Template.Owner), Repository: pulumi.String(repo.Template.Repository)}
+	return &github.RepositoryTemplateArgs{
+		Owner:      pulumi.String(repo.Template.Owner),
+		Repository: pulumi.String(repo.Template.Repository),
+	}
 }
 
 func pages(repo *Repository) *github.RepositoryPagesArgs {
@@ -108,5 +112,9 @@ func pages(repo *Repository) *github.RepositoryPagesArgs {
 		return nil
 	}
 
-	return &github.RepositoryPagesArgs{Source: &github.RepositoryPagesSourceArgs{Branch: pulumi.String(master)}}
+	return &github.RepositoryPagesArgs{
+		Source: &github.RepositoryPagesSourceArgs{
+			Branch: pulumi.String(master),
+		},
+	}
 }
