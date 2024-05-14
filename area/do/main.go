@@ -13,16 +13,6 @@ func main() {
 		}
 
 		err := do.CreateProject(ctx, lt)
-		if err != nil {
-			return err
-		}
-
-		t := &do.Project{
-			Name:        "test-project",
-			Description: "The test project",
-		}
-
-		err = do.CreateProject(ctx, t)
 
 		return err
 	})
