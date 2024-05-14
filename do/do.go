@@ -20,7 +20,22 @@ func CreateProject(ctx *pulumi.Context, project *Project) error {
 		Purpose:     pulumi.String("Service or API"),
 		IsDefault:   pulumi.Bool(false),
 	}
+
 	_, err := digitalocean.NewProject(ctx, project.Name, args)
+	if err != nil {
+		return err
+	}
+
+	_, err = createVPC(ctx, project)
 
 	return err
+}
+
+func createVPC(ctx *pulumi.Context, p *Project) (*digitalocean.Vpc, error) {
+	args := &digitalocean.VpcArgs{
+		Region:      pulumi.String("fra1"),
+		Description: pulumi.String(p.Description),
+	}
+
+	return digitalocean.NewVpc(ctx, p.Name, args)
 }
