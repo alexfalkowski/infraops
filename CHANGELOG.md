@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.30.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.30.1) - 2024-05-14
+
+- [`849ada7`](https://github.com/alexfalkowski/infraops/commit/849ada7383aa24bf425c37df58e2e7fe4ad43576) fix(do): only specify info that is needed (#167)
+
 ## [v1.30.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.30.0) - 2024-05-14
 
 - [`2c54bef`](https://github.com/alexfalkowski/infraops/commit/2c54befbbcb6aa731cbaf29748abd6fe7f0ef5de) feat(do): add kubernetes cluster (#166)
