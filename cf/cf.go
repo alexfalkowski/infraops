@@ -22,7 +22,6 @@ func CreateZone(ctx *pulumi.Context, name string) error {
 	return err
 }
 
-// Account for cf.
 func account(ctx *pulumi.Context) (*cloudflare.Account, error) {
 	args := &cloudflare.AccountArgs{
 		Name: pulumi.String("main account"),
