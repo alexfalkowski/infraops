@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.27.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.27.0) - 2024-05-14
+
+- [`b6fccdd`](https://github.com/alexfalkowski/infraops/commit/b6fccdddc0dedb1565f65c6cb06732004c83ae0f) feat(do): create project for digital ocean (#159)
+- [`6a4eb1e`](https://github.com/alexfalkowski/infraops/commit/6a4eb1ee72bd440dbf7290384488fa2ce5b2570b) docs(area): add cloudflare (#158)
+
 ## [v1.26.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.26.1) - 2024-05-13
 
 - [`0bac9e3`](https://github.com/alexfalkowski/infraops/commit/0bac9e3563c80a282ca7efb4da25a89673296854) fix(cf): change account name (#157)
