@@ -1,13 +1,16 @@
 version: 2.1
 
 parameters:
-  gh:
-    type: boolean
-    default: false
   cf:
     type: boolean
     default: false
   do:
+    type: boolean
+    default: false
+  gh:
+    type: boolean
+    default: false
+  k8s:
     type: boolean
     default: false
 
@@ -88,7 +91,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/release:3.1
+      - image: alexfalkowski/go:1.22-ruby
     working_directory: ~/infraops
     steps:
       - checkout
@@ -137,7 +140,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/release:3.1
+      - image: alexfalkowski/go:1.22-ruby
     working_directory: ~/infraops
     steps:
       - checkout
@@ -186,7 +189,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/release:3.1
+      - image: alexfalkowski/go:1.22-ruby
     working_directory: ~/infraops
     steps:
       - checkout
@@ -207,6 +210,57 @@ jobs:
       - pulumi/update:
           stack: alexfalkowski/gh/prod
           working_directory: ~/infraops/area/gh
+    resource_class: large
+
+  k8s_preview:
+    docker:
+      - image: alexfalkowski/go:1.22-ruby
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-go-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
+      - run: doctl kubernetes cluster kubeconfig save $DIGITALOCEAN_CLUSTER_ID
+      - pulumi/login
+      - pulumi/preview:
+          stack: alexfalkowski/k8s/prod
+          working_directory: ~/infraops/area/k8s
+    resource_class: large
+  k8s_update:
+    docker:
+      - image: alexfalkowski/go:1.22-ruby
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-go-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
+      - run: doctl kubernetes cluster kubeconfig save $DIGITALOCEAN_CLUSTER_ID
+      - pulumi/login
+      - pulumi/update:
+          stack: alexfalkowski/k8s/prod
+          working_directory: ~/infraops/area/k8s
     resource_class: large
 
 workflows:
@@ -254,6 +308,20 @@ workflows:
             branches:
               ignore: master
       - gh_update:
+          context: infraops
+          filters:
+            branches:
+              only: master
+
+  k8s:
+    when: << pipeline.parameters.k8s >>
+    jobs:
+      - k8s_preview:
+          context: infraops
+          filters:
+            branches:
+              ignore: master
+      - k8s_update:
           context: infraops
           filters:
             branches:

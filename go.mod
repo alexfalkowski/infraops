@@ -6,6 +6,7 @@ require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.28.0
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.29.0
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
+	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.11.0
 	github.com/pulumi/pulumi/sdk/v3 v3.116.0
 	github.com/stretchr/testify v1.9.0
 )
@@ -69,7 +70,7 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v5 v5.0.0 // indirect
 	github.com/sergi/go-diff v1.3.2-0.20230802210424-5b0b94c5c0d3 // indirect
 	github.com/skeema/knownhosts v1.2.2 // indirect
-	github.com/spf13/cobra v1.7.0 // indirect
+	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/texttheater/golang-levenshtein v1.0.1 // indirect
 	github.com/tweekmonster/luser v0.0.0-20161003172636-3fa38070dbd7 // indirect
