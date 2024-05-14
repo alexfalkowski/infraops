@@ -50,23 +50,19 @@ func createVPC(ctx *pulumi.Context, p *Project) (*digitalocean.Vpc, error) {
 
 func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Project) (*digitalocean.KubernetesCluster, error) {
 	args := &digitalocean.KubernetesClusterArgs{
-		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
-			Name:      pulumi.String(p.Name),
-			Size:      digitalocean.DropletSlugDropletS1VCPU2GB,
-			AutoScale: pulumi.Bool(false),
-			MaxNodes:  pulumi.Int(1),
-			MinNodes:  pulumi.Int(1),
-			NodeCount: pulumi.Int(1),
+		MaintenancePolicy: &digitalocean.KubernetesClusterMaintenancePolicyArgs{
+			Day:       pulumi.String("any"),
+			StartTime: pulumi.String("23:00"),
 		},
-		Region:                        digitalocean.RegionFRA1,
-		Version:                       pulumi.String("1.29.1-do.0"),
-		AutoUpgrade:                   pulumi.Bool(false),
-		DestroyAllAssociatedResources: pulumi.Bool(true),
-		Ha:                            pulumi.Bool(false),
 		Name:                          pulumi.String(p.Name),
-		RegistryIntegration:           pulumi.Bool(false),
-		SurgeUpgrade:                  pulumi.Bool(false),
-		VpcUuid:                       v.VpcUrn,
+		DestroyAllAssociatedResources: pulumi.Bool(true),
+		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
+			Name: pulumi.String(p.Name),
+			Size: digitalocean.DropletSlugDropletS1VCPU2GB,
+		},
+		Region:  pulumi.String(digitalocean.RegionFRA1),
+		Version: pulumi.String("1.29.1-do.0"),
+		VpcUuid: v.ID(),
 	}
 
 	return digitalocean.NewKubernetesCluster(ctx, p.Name, args)
