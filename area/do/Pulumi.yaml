@@ -1,0 +1,3 @@
+name: do
+runtime: go
+description: A place to manage DigitalOcean
