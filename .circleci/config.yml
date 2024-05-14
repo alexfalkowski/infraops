@@ -13,8 +13,13 @@ workflows:
             area/gh/.* gh true
             gh/.* gh true
             go.* gh true
+
             area/cf/.* cf true
             cf/.* cf true
             go.* cf true
+
+            area/do/.* do true
+            do/.* do true
+            go.* do true
           base-revision: origin/master
           resource_class: large
