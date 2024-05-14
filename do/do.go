@@ -32,6 +32,7 @@ func CreateProject(ctx *pulumi.Context, project *Project) error {
 
 func createVPC(ctx *pulumi.Context, p *Project) (*digitalocean.Vpc, error) {
 	args := &digitalocean.VpcArgs{
+		Name:        pulumi.String(p.Name),
 		Region:      pulumi.String("fra1"),
 		Description: pulumi.String(p.Description),
 	}
