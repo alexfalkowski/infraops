@@ -25,32 +25,6 @@ The code is based on the package https://www.pulumi.com/registry/packages/github
 ## Setup
 
 To setup a new area follow the following:
-
-```bash
-❯ pulumi new
- Would you like to create a project from a template or using a Pulumi AI prompt? template
-Please choose a template (227 total):
- go                                 A minimal Go Pulumi program
-This command will walk you through creating a new Pulumi project.
-
-Enter a value or leave blank to accept the (default), and press <ENTER>.
-Press ^C at any time to quit.
-
-project name (cwd): # This will default to the current working directory we are running it from.
-project description (A minimal Go Pulumi program): A place to manage <Name of the provider>
-Created project 'cwd'
-
-Please enter your desired stack name.
-To create a stack in an organization, use the format <org-name>/<stack-name> (e.g. `acmecorp/dev`).
-stack name (dev): prod
-Created stack 'prod'
-
-Installing dependencies...
-
-Finished installing dependencies
-
-Your new project is ready to go!
-
-To perform an initial deployment, run `pulumi up`
-
-```
+- Run `pulumi new`.
+- Choose the template you need, if in doubt choose `go`.
+- The stack name should always be `prod`.
