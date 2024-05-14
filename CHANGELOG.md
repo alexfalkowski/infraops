@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.28.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.28.0) - 2024-05-14
+
+- [`94f0fa6`](https://github.com/alexfalkowski/infraops/commit/94f0fa62b600a5623adc101c145e5f10203a7055) feat(do): add lean thoughts project (#160)
+
 ## [v1.27.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.27.0) - 2024-05-14
 
 - [`b6fccdd`](https://github.com/alexfalkowski/infraops/commit/b6fccdddc0dedb1565f65c6cb06732004c83ae0f) feat(do): create project for digital ocean (#159)
