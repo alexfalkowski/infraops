@@ -21,5 +21,9 @@ workflows:
             area/do/.* do true
             do/.* do true
             go.* do true
+
+            area/k8s/.* k8s true
+            k8s/.* k8s true
+            go.* k8s true
           base-revision: origin/master
           resource_class: large
