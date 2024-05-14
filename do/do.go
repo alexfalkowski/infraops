@@ -13,20 +13,22 @@ type Project struct {
 
 // CreateProject for do.
 func CreateProject(ctx *pulumi.Context, project *Project) error {
+	v, err := createVPC(ctx, project)
+	if err != nil {
+		return err
+	}
+
 	args := &digitalocean.ProjectArgs{
 		Name:        pulumi.String(project.Name),
 		Description: pulumi.String(project.Description),
 		Environment: pulumi.String("Production"),
 		Purpose:     pulumi.String("Service or API"),
 		IsDefault:   pulumi.Bool(false),
+		Resources: pulumi.StringArray{
+			v.VpcUrn,
+		},
 	}
-
-	_, err := digitalocean.NewProject(ctx, project.Name, args)
-	if err != nil {
-		return err
-	}
-
-	_, err = createVPC(ctx, project)
+	_, err = digitalocean.NewProject(ctx, project.Name, args)
 
 	return err
 }
