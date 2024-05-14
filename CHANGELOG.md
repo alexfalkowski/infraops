@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.35.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.35.0) - 2024-05-14
+
+- [`c41e0d0`](https://github.com/alexfalkowski/infraops/commit/c41e0d08bb4d400ecee9b89152028c79363e93d2) feat(k8s): generate default project (#173)
+
 ## [v1.34.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.34.0) - 2024-05-14
 
 - [`4c380b3`](https://github.com/alexfalkowski/infraops/commit/4c380b330de636281fe03f22b7fdca0db08c6cc3) feat(do): add lean-thoughts (#172)
