@@ -11,11 +11,6 @@ func main() {
 			return err
 		}
 
-		lt := &do.Project{
-			Name:        "lean-thoughts",
-			Description: "The lean thoughts domain",
-		}
-
-		return do.CreateProject(ctx, lt)
+		return nil
 	})
 }
