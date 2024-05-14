@@ -11,6 +11,22 @@ type Project struct {
 	Description string
 }
 
+// Configure for do.
+func Configure(ctx *pulumi.Context) error {
+	// We need a default VPC, or the first one created becomes the default one.
+	r := string(digitalocean.RegionFRA1)
+	n := "default-" + r
+	args := &digitalocean.VpcArgs{
+		Name:        pulumi.String(n),
+		Region:      digitalocean.RegionFRA1,
+		Description: pulumi.String("The default vpc for " + r),
+	}
+
+	_, err := digitalocean.NewVpc(ctx, n, args)
+
+	return err
+}
+
 // CreateProject for do.
 func CreateProject(ctx *pulumi.Context, project *Project) error {
 	v, err := createVPC(ctx, project)
