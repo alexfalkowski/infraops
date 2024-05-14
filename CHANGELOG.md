@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.29.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.29.1) - 2024-05-14
+
+- [`d1df36e`](https://github.com/alexfalkowski/infraops/commit/d1df36e6223148d57e05c01f963276827ab5ae78) fix(do): add vpc to project urns (#162)
+
 ## [v1.29.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.29.0) - 2024-05-14
 
 - [`e25f0a1`](https://github.com/alexfalkowski/infraops/commit/e25f0a1b09ec9c2a4b101c90b1096fd1f7900d9d) feat(do): add vpc (#161)
