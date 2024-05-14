@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.35.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.35.1) - 2024-05-14
+
+- [`56c9d77`](https://github.com/alexfalkowski/infraops/commit/56c9d77720ec9e198de4e35fc8716d944fb149ca) fix(k8s): add service (#175)
+- [`5d77e9f`](https://github.com/alexfalkowski/infraops/commit/5d77e9f9b92c5b0e100ffa9bb29cbb4fcf0228ee) docs(pulumi): simplify setup (#174)
+
 ## [v1.35.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.35.0) - 2024-05-14
 
 - [`c41e0d0`](https://github.com/alexfalkowski/infraops/commit/c41e0d08bb4d400ecee9b89152028c79363e93d2) feat(k8s): generate default project (#173)
