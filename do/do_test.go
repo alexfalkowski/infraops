@@ -10,13 +10,10 @@ import (
 
 func TestCreateProject(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		p := &do.Project{
-			Name:        "test",
-			Description: "test",
-		}
+		require.NoError(t, do.Configure(ctx))
 
-		err := do.CreateProject(ctx, p)
-		require.NoError(t, err)
+		p := &do.Project{Name: "test", Description: "test"}
+		require.NoError(t, do.CreateProject(ctx, p))
 
 		return nil
 	}, pulumi.WithMocks("project", "stack", do.Mocks(0)))
