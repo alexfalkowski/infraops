@@ -9,11 +9,15 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
+		appName := "nginx"
 		appLabels := pulumi.StringMap{
-			"app": pulumi.String("nginx"),
+			"app": pulumi.String(appName),
 		}
 
-		deployment, err := appsv1.NewDeployment(ctx, "app-dep", &appsv1.DeploymentArgs{
+		_, err := appsv1.NewDeployment(ctx, appName, &appsv1.DeploymentArgs{
+			Metadata: metav1.ObjectMetaArgs{
+				Name: pulumi.String(appName),
+			},
 			Spec: appsv1.DeploymentSpecArgs{
 				Selector: &metav1.LabelSelectorArgs{
 					MatchLabels: appLabels,
@@ -38,8 +42,24 @@ func main() {
 			return err
 		}
 
-		ctx.Export("name", deployment.Metadata.Name())
+		_, err = corev1.NewService(ctx, appName, &corev1.ServiceArgs{
+			Metadata: &metav1.ObjectMetaArgs{
+				Name:   pulumi.String(appName),
+				Labels: appLabels,
+			},
+			Spec: &corev1.ServiceSpecArgs{
+				Type: pulumi.String("LoadBalancer"),
+				Ports: &corev1.ServicePortArray{
+					&corev1.ServicePortArgs{
+						Port:       pulumi.Int(80),
+						TargetPort: pulumi.Int(80),
+						Protocol:   pulumi.String("TCP"),
+					},
+				},
+				Selector: appLabels,
+			},
+		})
 
-		return nil
+		return err
 	})
 }
