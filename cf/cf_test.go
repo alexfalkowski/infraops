@@ -10,7 +10,13 @@ import (
 
 func TestCreateZone(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		err := cf.CreateZone(ctx, "test")
+		z := &cf.Zone{
+			Name:      "test",
+			Addresses: []string{"test"},
+			Balancer:  "127.0.0.1",
+		}
+
+		err := cf.CreateZone(ctx, z)
 		require.NoError(t, err)
 
 		return nil
