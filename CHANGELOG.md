@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.42.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.42.0) - 2024-05-15
+
+- [`1b15e3e`](https://github.com/alexfalkowski/infraops/commit/1b15e3e4dbb6df3696b989f4663e01390103050d) feat(k8s): add cert-manager (#186)
+
 ## [v1.41.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.41.1) - 2024-05-15
 
 - [`af3ad1e`](https://github.com/alexfalkowski/infraops/commit/af3ad1ef9d5921d124b39928d0a829f766b76aa9) fix(cf): error validating record standort-http: ttl must be set to 1 when  is true (#185)
