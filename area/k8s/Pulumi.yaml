@@ -1,7 +1,0 @@
-name: k8s
-runtime: go
-description: A place to manage Kubernetes
-config:
-  pulumi:tags:
-    value:
-      pulumi:template: ""
