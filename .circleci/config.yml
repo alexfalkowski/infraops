@@ -23,7 +23,6 @@ workflows:
             go.* do true
 
             area/k8s/.* k8s true
-            k8s/.* k8s true
-            go.* k8s true
+            area/apps/.* apps true
           base-revision: origin/master
           resource_class: large

@@ -1,6 +1,9 @@
 version: 2.1
 
 parameters:
+  apps:
+    type: boolean
+    default: false
   cf:
     type: boolean
     default: false
@@ -63,6 +66,29 @@ jobs:
     steps:
       - checkout
       - run: release
+    resource_class: large
+
+  apps_preview:
+    docker:
+      - image: alexfalkowski/k8s:1.0
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make -C area/apps save-config
+      - run: make -C area/apps preview-standort
+    resource_class: large
+  apps_update:
+    docker:
+      - image: alexfalkowski/k8s:1.0
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make -C area/apps save-config
+      - run: make -C area/apps update-standort
     resource_class: large
 
   cf_preview:
@@ -247,6 +273,20 @@ workflows:
           filters:
             branches:
               only: master
+  apps:
+    when: << pipeline.parameters.apps >>
+    jobs:
+      - apps_preview:
+          context: infraops
+          filters:
+            branches:
+              ignore: master
+      - apps_update:
+          context: infraops
+          filters:
+            branches:
+              only: master
+
   cf:
     when: << pipeline.parameters.cf >>
     jobs:
