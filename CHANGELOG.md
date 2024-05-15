@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.41.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.41.1) - 2024-05-15
+
+- [`af3ad1e`](https://github.com/alexfalkowski/infraops/commit/af3ad1ef9d5921d124b39928d0a829f766b76aa9) fix(cf): error validating record standort-http: ttl must be set to 1 when  is true (#185)
+
 ## [v1.41.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.41.0) - 2024-05-15
 
 - [`5878654`](https://github.com/alexfalkowski/infraops/commit/58786542a0db41e43674d8716bdad5385ffa65da) feat(cf): add addresses (#184)
