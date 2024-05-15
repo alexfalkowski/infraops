@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.43.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.43.0) - 2024-05-15
+
+- [`2c5d1b1`](https://github.com/alexfalkowski/infraops/commit/2c5d1b1c47b9e59b2554f75e25f278b96cece3f6) feat(k8s): add origin-ca-issuer (#189)
+
 ## [v1.42.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.42.1) - 2024-05-15
 
 - [`23bcf35`](https://github.com/alexfalkowski/infraops/commit/23bcf3531b6d499fa0f83c8303417b18b07ead78) fix(k8s): use helm upgrade --install (#188)
