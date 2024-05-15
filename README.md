@@ -4,17 +4,31 @@ A place where all infrastructure is taken care of.
 
 ## Background
 
-The code is based on https://www.pulumi.com/.
+The following tools are used:
+- https://www.pulumi.com/
+- https://kubernetes.io/docs/reference/kubectl/
+- https://helm.sh/
 
 ## Areas
 
 Each folder takes care of an area of infrastructure. Each area has a package that is used as the entry point, so it is a [facade](https://en.wikipedia.org/wiki/Facade_pattern).
 
-### Cloudflare (CF)
+### Setup
+
+To setup a new area follow the following:
+- Run `pulumi new`.
+- Choose the template you need, if in doubt choose `go`.
+- The stack name should always be `prod`.
+
+### Applications (apps)
+
+This consists of my open source projects https://github.com/alexfalkowski being deployed to kubernetes.
+
+### Cloudflare (cf)
 
 The code is bases on the package https://www.pulumi.com/registry/packages/cloudflare/.
 
-### DigitalOcean (DO)
+### DigitalOcean (do)
 
 The code is bases on the package https://www.pulumi.com/registry/packages/digitalocean/.
 
@@ -22,9 +36,6 @@ The code is bases on the package https://www.pulumi.com/registry/packages/digita
 
 The code is based on the package https://www.pulumi.com/registry/packages/github/.
 
-## Setup
+### Kubernetes (k8s)
 
-To setup a new area follow the following:
-- Run `pulumi new`.
-- Choose the template you need, if in doubt choose `go`.
-- The stack name should always be `prod`.
+This contains all the packages our cluster needs.
