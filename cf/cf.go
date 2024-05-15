@@ -37,7 +37,7 @@ func CreateZone(ctx *pulumi.Context, zone *Zone) error {
 			Value:   pulumi.String(zone.Balancer),
 			ZoneId:  z.ID(),
 			Proxied: pulumi.Bool(true),
-			Ttl:     pulumi.Int(3600),
+			Ttl:     pulumi.Int(1),
 		}
 
 		_, err := cloudflare.NewRecord(ctx, a, args)
