@@ -13,5 +13,5 @@ preview-standort:
 
 # Update standort.
 update-standort:
-	kubectl create namespace standort
+	kubectl create namespace standort || true
 	kubectl apply -f standort.yml
