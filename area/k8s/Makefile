@@ -15,4 +15,8 @@ preview:
 # Update deps.
 update:
 	helm install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace
+<<<<<<< Updated upstream
+=======
+	helm install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true
+>>>>>>> Stashed changes
 
