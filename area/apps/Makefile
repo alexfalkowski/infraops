@@ -8,8 +8,10 @@ encode-config:
 
 # Preview standort.
 preview-standort:
+	kubectl create namespace standort --dry-run=client
 	kubectl apply -f standort.yml --dry-run=client
 
 # Update standort.
 update-standort:
+	kubectl create namespace standort
 	kubectl apply -f standort.yml
