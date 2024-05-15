@@ -10,12 +10,12 @@ setup:
 
 # Preview deps.
 preview:
-	helm install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace --dry-run
-	helm install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true --dry-run
+	helm upgrade --install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace --dry-run
+	helm upgrade --install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true --dry-run
 
 
 # Update deps.
 update:
-	helm install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace
-	helm install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true
+	helm upgrade --install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace
+	helm upgrade --install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true
 
