@@ -13,16 +13,22 @@ spec:
       labels:
         app: standort
     spec:
+      volumes:
+        - name: standort-volume
+          configMap:
+            name: standort-config
       containers:
       - name: standort
         image: docker.io/alexfalkowski/standort:latest
         imagePullPolicy: Always
         args: ["server"]
+        volumeMounts:
+          - name: standort-volume
+            mountPath: /etc/standort/server.yaml
+            subPath: server.yaml
         env:
           - name: STANDORT_CONFIG_FILE
-            value: "yml:CONFIG"
-          - name: CONFIG
-            value: "ZW52aXJvbm1lbnQ6IHByb2R1Y3Rpb24KY2xpZW50OgogIHYxOgogICAgaG9zdDogbG9jYWxob3N0OjkwOTAKICAgIHVzZXJfYWdlbnQ6ICJTdGFuZG9ydC8xLjAiCiAgICByZXRyeToKICAgICAgdGltZW91dDogMTBzCiAgICAgIGF0dGVtcHRzOiAzCiAgdjI6CiAgICBob3N0OiBsb2NhbGhvc3Q6OTA5MAogICAgdXNlcl9hZ2VudDogIlN0YW5kb3J0LzIuMCIKICAgIHJldHJ5OgogICAgICB0aW1lb3V0OiAxMHMKICAgICAgYXR0ZW1wdHM6IDMKaGVhbHRoOgogIGR1cmF0aW9uOiAxcwogIHRpbWVvdXQ6IDFzCmxpbWl0ZXI6CiAga2luZDogdXNlci1hZ2VudAogIHBhdHRlcm46IDEwMDAtUwpsb2NhdGlvbjoKICBpcDoKICAgIGtpbmQ6IGlwMmxvY2F0aW9uCnRlbGVtZXRyeToKICBsb2dnZXI6CiAgICBsZXZlbDogaW5mbwogIG1ldHJpY3M6CiAgICBraW5kOiBwcm9tZXRoZXVzCnRyYW5zcG9ydDoKICBodHRwOgogICAgcG9ydDogODA4MAogICAgdXNlcl9hZ2VudDogIlN0YW5kb3J0LzIuMCIKICAgIHJldHJ5OgogICAgICB0aW1lb3V0OiAycwogICAgICBhdHRlbXB0czogMwogIGdycGM6CiAgICBwb3J0OiA5MDkwCiAgICB1c2VyX2FnZW50OiAiU3RhbmRvcnQvMi4wIgogICAgcmV0cnk6CiAgICAgIHRpbWVvdXQ6IDJzCiAgICAgIGF0dGVtcHRzOiAzCg=="
+            value: "/etc/standort/server.yaml"
         ports:
           - containerPort: 8080
           - containerPort: 9090
