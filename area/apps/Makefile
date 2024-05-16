@@ -21,7 +21,7 @@ preview-standort:
 # Update standort.
 update-standort:
 	kubectl create namespace standort || true
-	kubectl create secret generic -n standort service-key --from-literal key=$(CLOUDFLARE_ORIGIN_CA_KEY)
+	kubectl create secret generic -n standort service-key --from-literal key=$(CLOUDFLARE_ORIGIN_CA_KEY) || true
 	kubectl apply -f standort/cert.yaml -n standort
 	kubectl apply -f standort/service.yaml -n standort
 	kubectl apply -f standort/ingress.yaml -n standort
