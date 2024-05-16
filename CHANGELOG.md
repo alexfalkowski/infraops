@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.44.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.44.0) - 2024-05-16
+
+- [`bb221bc`](https://github.com/alexfalkowski/infraops/commit/bb221bcdfec1e3cd3f6237070690ac52e5477e7b) feat(k8s): setup origin-issuer (#190)
+
 ## [v1.43.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.43.0) - 2024-05-15
 
 - [`2c5d1b1`](https://github.com/alexfalkowski/infraops/commit/2c5d1b1c47b9e59b2554f75e25f278b96cece3f6) feat(k8s): add origin-ca-issuer (#189)
