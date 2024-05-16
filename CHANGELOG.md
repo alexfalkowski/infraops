@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.45.4](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.4) - 2024-05-16
+
+- [`7b45031`](https://github.com/alexfalkowski/infraops/commit/7b4503126556ed4527c52f6c48c7bad7c8e6a51e) fix(apps): add backend-protocol for grpc (#197)
+
 ## [v1.45.3](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.3) - 2024-05-16
 
 - [`b940f5f`](https://github.com/alexfalkowski/infraops/commit/b940f5f112e66132e809d5eb80341d3691418d58) fix(cf): update balancer ip (#196)
