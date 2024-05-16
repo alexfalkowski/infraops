@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.45.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.1) - 2024-05-16
+
+- [`ff6a984`](https://github.com/alexfalkowski/infraops/commit/ff6a9845d23b47c0b6cc15bbe126a8126a717678) fix(k8s): ignore already created (#194)
+
 ## [v1.45.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.0) - 2024-05-16
 
 - [`c3ce41d`](https://github.com/alexfalkowski/infraops/commit/c3ce41d35b3849453ee2ffee1f8bcf2be0970abd) feat(k8s): move hosts (#193)
