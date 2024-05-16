@@ -19,7 +19,7 @@ spec:
             name: standort-config
       containers:
       - name: standort
-        image: docker.io/alexfalkowski/standort:latest
+        image: docker.io/alexfalkowski/standort:v2.79.4
         imagePullPolicy: Always
         args: ["server"]
         volumeMounts:
