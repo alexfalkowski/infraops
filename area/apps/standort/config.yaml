@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: standort-config
+  namespace: standort
+data:
+  server.yaml: |
+    environment: production
+    client:
+      v1:
+        host: localhost:9090
+        user_agent: "Standort/1.0"
+        retry:
+          timeout: 10s
+          attempts: 3
+      v2:
+        host: localhost:9090
+        user_agent: "Standort/2.0"
+        retry:
+          timeout: 10s
+          attempts: 3
+    health:
+      duration: 1s
+      timeout: 1s
+    limiter:
+      kind: user-agent
+      pattern: 1000-S
+    location:
+      ip:
+        kind: ip2location
+    telemetry:
+      logger:
+        level: info
+      metrics:
+        kind: prometheus
+    transport:
+      http:
+        port: 8080
+        user_agent: "Standort/2.0"
+        retry:
+          timeout: 2s
+          attempts: 3
+      grpc:
+        port: 9090
+        user_agent: "Standort/2.0"
+        retry:
+          timeout: 2s
+          attempts: 3
