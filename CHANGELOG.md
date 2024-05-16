@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.45.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.2) - 2024-05-16
+
+- [`794c32f`](https://github.com/alexfalkowski/infraops/commit/794c32fed6a4befc0c02eb9b66fd7b0bb7407556) fix(k8s): remove cf origin ca (#195)
+
 ## [v1.45.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.1) - 2024-05-16
 
 - [`ff6a984`](https://github.com/alexfalkowski/infraops/commit/ff6a9845d23b47c0b6cc15bbe126a8126a717678) fix(k8s): ignore already created (#194)
