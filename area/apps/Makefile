@@ -4,14 +4,24 @@ save-config:
 
 # Encode a config.
 encode-config:
-	cat $(kind)/server.yml | base64 -w 0 | cat ; echo
+	cat $(kind)/server.yaml | base64 -w 0 | cat ; echo
 
+# Delete all.
+delete:
+	kubectl delete namespaces standort
+douma
 # Preview standort.
 preview-standort:
 	kubectl create namespace standort --dry-run=client
-	kubectl apply -f standort.yml --dry-run=client
+	kubectl create secret generic -n standort service-key --from-literal key=$(CLOUDFLARE_ORIGIN_CA_KEY) --dry-run=client
+	kubectl apply -f standort/cert.yaml -n standort --dry-run=client
+	kubectl apply -f standort/service.yaml -n standort --dry-run=client
+	kubectl apply -f standort/ingress.yaml -n standort --dry-run=client
 
 # Update standort.
 update-standort:
 	kubectl create namespace standort || true
-	kubectl apply -f standort.yml
+	kubectl create secret generic -n standort service-key --from-literal key=$(CLOUDFLARE_ORIGIN_CA_KEY)
+	kubectl apply -f standort/cert.yaml -n standort
+	kubectl apply -f standort/service.yaml -n standort
+	kubectl apply -f standort/ingress.yaml -n standort
