@@ -22,6 +22,8 @@ kind: Ingress
 metadata:
   name: standort-grpc
   namespace: standort
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
 spec:
   ingressClassName: nginx
   rules:
