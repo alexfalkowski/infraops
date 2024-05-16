@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.46.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.46.0) - 2024-05-16
+
+- [`00f2166`](https://github.com/alexfalkowski/infraops/commit/00f2166a606c4d8b9d84bfb7a2d64fd1402223fc) feat(apps): add resources standort (#199)
+
 ## [v1.45.5](https://github.com/alexfalkowski/infraops/releases/tag/v1.45.5) - 2024-05-16
 
 - [`8b6e3c1`](https://github.com/alexfalkowski/infraops/commit/8b6e3c12cfe4e064e7a1cf41f7ace498b1b7ed4b) fix(apps): do not expose grpc (#198)
