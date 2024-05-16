@@ -14,6 +14,8 @@ preview:
 	helm upgrade --install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true --dry-run
 	kubectl apply -f https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/v0.7.0/deploy/crds/cert-manager.k8s.cloudflare.com_originissuers.yaml -n cert-manager --dry-run=server
 	helm upgrade --install origin-ca-issuer-release oci://ghcr.io/cloudflare/origin-ca-issuer-charts/origin-ca-issuer --namespace cert-manager --version 0.5.2 --dry-run
+	kubectl create secret generic -n cert-manager service-key --from-literal key=$(CLOUDFLARE_ORIGIN_CA_KEY) --dry-run=server
+	kubectl apply -f issuer.yaml -n cert-manager --dry-run=server
 
 
 # Update deps.
@@ -22,3 +24,5 @@ update:
 	helm upgrade --install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true
 	kubectl apply -f https://raw.githubusercontent.com/cloudflare/origin-ca-issuer/v0.7.0/deploy/crds/cert-manager.k8s.cloudflare.com_originissuers.yaml -n cert-manager
 	helm upgrade --install origin-ca-issuer-release oci://ghcr.io/cloudflare/origin-ca-issuer-charts/origin-ca-issuer --namespace cert-manager --version 0.5.2
+	kubectl create secret generic -n cert-manager service-key --from-literal key=$(CLOUDFLARE_ORIGIN_CA_KEY)
+	kubectl apply -f issuer.yaml -n cert-manager
