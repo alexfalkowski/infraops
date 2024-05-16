@@ -9,7 +9,7 @@ func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		z := &cf.Zone{
 			Name:      "lean-thoughts",
-			Addresses: []string{"api-standort", "grpc-standort"},
+			Addresses: []string{"standort"},
 			Balancer:  "138.68.115.134",
 		}
 

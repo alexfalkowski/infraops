@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: api-standort.lean-thoughts.com
+    - host: standort.lean-thoughts.com
       http:
         paths:
         - path: /
@@ -16,24 +16,3 @@ spec:
               name: standort
               port:
                 number: 8080
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: standort-grpc
-  namespace: standort
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: grpc-standort.lean-thoughts.com
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: standort
-              port:
-                number: 9090
