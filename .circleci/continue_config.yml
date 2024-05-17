@@ -247,7 +247,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: make -C area/k8s save-config
-      - run: make -C area/k8s setup
+      - run: make -C area/k8s setup-helm
       - run: make -C area/k8s preview
     resource_class: large
   k8s_update:
@@ -259,7 +259,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: make -C area/k8s save-config
-      - run: make -C area/k8s setup
+      - run: make -C area/k8s setup-helm
       - run: make -C area/k8s update
     resource_class: large
 
