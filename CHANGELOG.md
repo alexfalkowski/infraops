@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.48.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.48.1) - 2024-05-17
+
+- [`ec59fdf`](https://github.com/alexfalkowski/infraops/commit/ec59fdf7a57884b323132dc15e972b003a47e676) fix(k8s): remove separator (#205)
+
 ## [v1.48.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.48.0) - 2024-05-17
 
 - [`59c3ad5`](https://github.com/alexfalkowski/infraops/commit/59c3ad5c80aa3f09d7fe87e9000bb21d91a5a3b3) feat(k8s): add grafana v0.3.22 (#203)
