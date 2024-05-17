@@ -33,11 +33,11 @@ data:
         level: info
       metrics:
         kind: otlp
-        host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp
+        host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
         key: env:STANDORT_OTLP_KEY
       tracer:
         kind: otlp
-        host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp
+        host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
         key: env:STANDORT_OTLP_KEY
     transport:
       http:
