@@ -23,17 +23,11 @@ setup-grafana:
 
 # Preview grafana.
 preview-grafana:
-	kubectl apply -f grafana/kube.yaml --namespace grafana --dry-run=server
-	kubectl apply -f grafana/cluster.yaml --namespace grafana --dry-run=server
-	kubectl apply -f grafana/metrics.yaml --namespace grafana --dry-run=server
-	kubectl apply -f grafana/logs.yaml --namespace grafana --dry-run=server
+	kubectl apply -f grafana --namespace grafana --dry-run=server
 
 # Update grafana.
 update-grafana:
-	kubectl apply -f grafana/kube.yaml --namespace grafana
-	kubectl apply -f grafana/cluster.yaml --namespace grafana
-	kubectl apply -f grafana/metrics.yaml --namespace grafana
-	kubectl apply -f grafana/logs.yaml --namespace grafana
+	kubectl apply -f grafana --namespace grafana
 
 # Preview helm.
 preview-helm:

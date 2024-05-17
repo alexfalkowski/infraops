@@ -18,12 +18,8 @@ setup-standort:
 
 # Preview standort.
 preview-standort:
-	kubectl apply -f standort/config.yaml -n standort --dry-run=server
-	kubectl apply -f standort/service.yaml -n standort --dry-run=server
-	kubectl apply -f standort/ingress.yaml -n standort --dry-run=server
+	kubectl apply -f standort -n standort --dry-run=server
 
 # Update standort.
 update-standort:
-	kubectl apply -f standort/config.yaml -n standort
-	kubectl apply -f standort/service.yaml -n standort
-	kubectl apply -f standort/ingress.yaml -n standort
+	kubectl apply -f standort -n standort
