@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.51.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.51.0) - 2024-05-18
+
+- [`5af9dd6`](https://github.com/alexfalkowski/infraops/commit/5af9dd63683a3297e3a3ad1c7f51cbd3ceb6ac32) feat(gh): add check for app-config (#211)
+
 ## [v1.50.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.50.1) - 2024-05-18
 
 - [`f0881be`](https://github.com/alexfalkowski/infraops/commit/f0881be8003320fa7874f7db2b2dda66e2bfd62d) fix(apps): konfig server.yaml missing v1 (#210)
