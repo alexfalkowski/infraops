@@ -29,7 +29,6 @@ spec:
             - name: konfig-volume
               mountPath: /etc/konfig/client.yaml
               subPath: client.yaml
-          volumeMounts:
             - name: standort-volume
               mountPath: /etc/standort
           env:
