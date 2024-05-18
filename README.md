@@ -45,6 +45,8 @@ The code is bases on the package https://www.pulumi.com/registry/packages/digita
 
 The code is based on the package https://www.pulumi.com/registry/packages/github/.
 
+The original idea was inspired from https://github.com/dirien/pulumi-github.
+
 ### Kubernetes (k8s)
 
 This contains all the packages our cluster needs.

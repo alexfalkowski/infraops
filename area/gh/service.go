@@ -70,3 +70,14 @@ func createMigrieren(ctx *pulumi.Context) error {
 
 	return gh.CreateRepository(ctx, repo)
 }
+
+func createBezeichner(ctx *pulumi.Context) error {
+	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker"}
+	repo := &gh.Repository{
+		Name: "bezeichner", Description: "Bezeichner takes care of identifiers used in your services.",
+		HomepageURL: "https://alexfalkowski.github.io/bezeichner", Checks: checks,
+		EnablePages: true,
+	}
+
+	return gh.CreateRepository(ctx, repo)
+}
