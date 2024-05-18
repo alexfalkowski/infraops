@@ -46,6 +46,9 @@ spec:
         image: docker.io/alexfalkowski/standort:v2.82.0
         imagePullPolicy: Always
         args: ["server"]
+        volumeMounts:
+          - name: standort-volume
+            mountPath: /etc/standort
         env:
           - name: STANDORT_CONFIG_FILE
             value: "/etc/standort/server.yaml"
