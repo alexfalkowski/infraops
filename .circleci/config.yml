@@ -10,19 +10,25 @@ workflows:
     jobs:
       - path_filtering/filter:
           mapping: |
+            .circleci/.* gh true
             area/gh/.* gh true
             gh/.* gh true
             go.* gh true
 
+            .circleci/.* cf true
             area/cf/.* cf true
             cf/.* cf true
             go.* cf true
 
+            .circleci/.* do true
             area/do/.* do true
             do/.* do true
             go.* do true
 
+            .circleci/.* k8s true
             area/k8s/.* k8s true
+
+            .circleci/.* apps true
             area/apps/.* apps true
           base-revision: origin/master
           resource_class: large
