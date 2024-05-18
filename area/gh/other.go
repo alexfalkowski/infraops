@@ -38,7 +38,7 @@ func createDocker(ctx *pulumi.Context) error {
 func createAppConfig(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "app-config", Description: "A place for all of my application configuration.",
-		HomepageURL: "https://alexfalkowski.github.io/app-config",
+		HomepageURL: "https://alexfalkowski.github.io/app-config", Checks: []string{"ci/circleci: verify-config"},
 		EnablePages: true,
 	}
 
