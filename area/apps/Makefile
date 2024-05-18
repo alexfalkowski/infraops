@@ -2,6 +2,7 @@ otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
 
 include standort/include.mk
 include konfig/include.mk
+include bezeichner/include.mk
 
 # Save kubeconfig.
 save-config:
