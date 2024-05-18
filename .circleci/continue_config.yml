@@ -76,7 +76,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps save-config preview-standort preview-konfig preview-bezeichner
+      - run: make -C area/apps save-config preview
     resource_class: large
   apps_update:
     docker:
@@ -86,7 +86,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps save-config update-standort update-konfig update-bezeichner
+      - run: make -C area/apps save-config update
     resource_class: large
 
   cf_preview:
