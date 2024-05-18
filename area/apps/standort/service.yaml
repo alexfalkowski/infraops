@@ -24,7 +24,7 @@ spec:
       initContainers:
         - name: standort-init
           image: docker.io/alexfalkowski/konfig:v1.121.0
-          command: ["client"]
+          args: ["client"]
           volumeMounts:
             - name: konfig-volume
               mountPath: /etc/konfig/client.yaml
