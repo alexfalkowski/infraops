@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.53.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.53.2) - 2024-05-18
+
+- [`9f9f095`](https://github.com/alexfalkowski/infraops/commit/9f9f0957a59e06fa3fba7cb63cb2ba4e10655c42) fix(gh): import bezeichner (#220)
+- [`601dd8d`](https://github.com/alexfalkowski/infraops/commit/601dd8d55be82bd7078d73195800654511a97dda) build(ci): move to makefile (#219)
+- [`ded61fb`](https://github.com/alexfalkowski/infraops/commit/ded61fbdc2b575d48f74219a87a52609e064ae74) build(ci): check config (#218)
+
 ## [v1.53.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.53.1) - 2024-05-18
 
 - [`540879c`](https://github.com/alexfalkowski/infraops/commit/540879c213645fb3ee7f100b2a62e33cb44588d9) fix(bezeichner): make sure we release (#217)
