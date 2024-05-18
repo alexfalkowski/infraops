@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.52.3](https://github.com/alexfalkowski/infraops/releases/tag/v1.52.3) - 2024-05-18
+
+- [`e3e574f`](https://github.com/alexfalkowski/infraops/commit/e3e574ff9e5ab7bf6e2db48a1e8df8dfbecb52d1) fix(apps): add volumeMounts for standort (#215)
+
 ## [v1.52.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.52.2) - 2024-05-18
 
 - [`691730c`](https://github.com/alexfalkowski/infraops/commit/691730ce12650600978984b54f312aaa6500f2e4) fix(apps): remove multiple volumeMounts for standort-init (#214)
