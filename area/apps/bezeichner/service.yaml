@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bezeichner
+  namespace: bezeichner
+spec:
+  selector:
+    matchLabels:
+      app: bezeichner
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: bezeichner
+    spec:
+      volumes:
+        - name: konfig-volume
+          configMap:
+            name: konfig-config
+        - name: bezeichner-volume
+          hostPath:
+            path: /etc/bezeichner
+            type: DirectoryOrCreate
+      initContainers:
+        - name: bezeichner-init
+          image: docker.io/alexfalkowski/konfig:v1.121.0
+          args: ["client"]
+          volumeMounts:
+            - name: konfig-volume
+              mountPath: /etc/konfig/client.yaml
+              subPath: client.yaml
+            - name: bezeichner-volume
+              mountPath: /etc/bezeichner
+          env:
+          - name: KONFIG_CONFIG_FILE
+            value: "/etc/konfig/client.yaml"
+          - name: KONFIG_APP_CONFIG_FILE
+            value: "/etc/bezeichner/server.yaml"
+          - name: KONFIG_OTLP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: otlp-secret
+                key: token
+      containers:
+      - name: bezeichner
+        image: docker.io/alexfalkowski/bezeichner:v1.84.1
+        imagePullPolicy: Always
+        args: ["server"]
+        volumeMounts:
+          - name: bezeichner-volume
+            mountPath: /etc/bezeichner
+        env:
+          - name: BEZEICHNER_CONFIG_FILE
+            value: "/etc/bezeichner/server.yaml"
+          - name: BEZEICHNER_OTLP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: otlp-secret
+                key: token
+        ports:
+          - containerPort: 8080
+          - containerPort: 9090
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        resources:
+          requests:
+            cpu: 125m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bezeichner
+  namespace: bezeichner
+  labels:
+    app: bezeichner
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: grpc
+    port: 9090
+    targetPort: 9090
+    protocol: TCP
+  selector:
+    app: bezeichner
+  type: ClusterIP

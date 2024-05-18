@@ -26,11 +26,11 @@ This consists of my open source projects https://github.com/alexfalkowski being 
 
 #### Setup
 
-To have an app ready as an example we will use `konfig`, you need to run the following:
+To have an app ready as an example we will use `example`, you need to run the following:
 
 ```bash
-❯ make -C area/apps setup-konfig
-❯ make -C area/apps namespace=konfig setup-otlp
+❯ make -C area/apps setup-example
+❯ make -C area/apps namespace=example setup-otlp
 ```
 
 ### Cloudflare (cf)
