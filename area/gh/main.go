@@ -10,8 +10,10 @@ var fns = []createFn{
 	createSite, createAppConfig,
 	createInfraOps, createDocker, createBin,
 	createNonnative, createGoHealth, createGoService,
-	createGoServiceTemplate, createStatus, createStandort, createAuth, createKonfig, createMigrieren,
-	createGoClientTemplate, createServiceControl,
+	createGoServiceTemplate, createGoClientTemplate,
+	createStatus, createStandort, createAuth,
+	createKonfig, createMigrieren, createBezeichner,
+	createServiceControl,
 }
 
 func main() {
