@@ -24,6 +24,15 @@ To setup a new area follow the following:
 
 This consists of my open source projects https://github.com/alexfalkowski being deployed to kubernetes.
 
+#### Setup
+
+To have an app ready as an example we will use `konfig`, you need to run the following:
+
+```bash
+❯ make -C area/apps setup-konfig
+❯ make -C area/apps namespace=konfig setup-otlp
+```
+
 ### Cloudflare (cf)
 
 The code is bases on the package https://www.pulumi.com/registry/packages/cloudflare/.
