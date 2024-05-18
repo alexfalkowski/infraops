@@ -14,18 +14,39 @@ spec:
         app: standort
     spec:
       volumes:
-        - name: standort-volume
+        - name: konfig-volume
           configMap:
-            name: standort-config
+            name: konfig-config
+        - name: standort-volume
+          hostPath:
+            path: /etc/standort
+            type: DirectoryOrCreate
+      initContainers:
+        - name: standort-init
+          image: docker.io/alexfalkowski/konfig:v1.121.0
+          command: ["client"]
+          volumeMounts:
+            - name: konfig-volume
+              mountPath: /etc/konfig/client.yaml
+              subPath: client.yaml
+          volumeMounts:
+            - name: standort-volume
+              mountPath: /etc/standort
+          env:
+          - name: KONFIG_CONFIG_FILE
+            value: "/etc/konfig/client.yaml"
+          - name: KONFIG_APP_CONFIG_FILE
+            value: "/etc/standort/server.yaml"
+          - name: KONFIG_OTLP_KEY
+            valueFrom:
+              secretKeyRef:
+                name: otlp-secret
+                key: token
       containers:
       - name: standort
         image: docker.io/alexfalkowski/standort:v2.82.0
         imagePullPolicy: Always
         args: ["server"]
-        volumeMounts:
-          - name: standort-volume
-            mountPath: /etc/standort/server.yaml
-            subPath: server.yaml
         env:
           - name: STANDORT_CONFIG_FILE
             value: "/etc/standort/server.yaml"
