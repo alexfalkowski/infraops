@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.53.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.53.0) - 2024-05-18
+
+- [`2a3ce50`](https://github.com/alexfalkowski/infraops/commit/2a3ce5066328d66eee9c1fafad343fbfcd16b6e0) feat(bezeichner): add app (#216)
+
 ## [v1.52.3](https://github.com/alexfalkowski/infraops/releases/tag/v1.52.3) - 2024-05-18
 
 - [`e3e574f`](https://github.com/alexfalkowski/infraops/commit/e3e574ff9e5ab7bf6e2db48a1e8df8dfbecb52d1) fix(apps): add volumeMounts for standort (#215)
