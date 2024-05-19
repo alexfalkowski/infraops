@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.56.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.56.1) - 2024-05-19
+
+- [`dc2a42b`](https://github.com/alexfalkowski/infraops/commit/dc2a42bbf63e2b557eed862f8fb60d10e6bad05b) fix(apps): lower cpu (#224)
+
 ## [v1.56.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.56.0) - 2024-05-19
 
 - [`9444bae`](https://github.com/alexfalkowski/infraops/commit/9444bae0ec95ee4d54d7a9b0ceb303b4026d1814) feat(apps): add kube-linter (#223)
