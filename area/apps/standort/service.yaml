@@ -7,12 +7,16 @@ spec:
   selector:
     matchLabels:
       app: standort
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
         app: standort
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
       volumes:
         - name: konfig-volume
           configMap:
@@ -32,53 +36,55 @@ spec:
             - name: standort-volume
               mountPath: /etc/standort
           env:
-          - name: KONFIG_CONFIG_FILE
-            value: "/etc/konfig/client.yaml"
-          - name: KONFIG_APP_CONFIG_FILE
-            value: "/etc/standort/server.yaml"
-          - name: KONFIG_OTLP_KEY
-            valueFrom:
-              secretKeyRef:
-                name: otlp-secret
-                key: token
+            - name: KONFIG_CONFIG_FILE
+              value: "/etc/konfig/client.yaml"
+            - name: KONFIG_APP_CONFIG_FILE
+              value: "/etc/standort/server.yaml"
+            - name: KONFIG_OTLP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: otlp-secret
+                  key: token
       containers:
-      - name: standort
-        image: docker.io/alexfalkowski/standort:v2.83.0
-        imagePullPolicy: Always
-        args: ["server"]
-        volumeMounts:
-          - name: standort-volume
-            mountPath: /etc/standort
-        env:
-          - name: STANDORT_CONFIG_FILE
-            value: "/etc/standort/server.yaml"
-          - name: STANDORT_OTLP_KEY
-            valueFrom:
-              secretKeyRef:
-                name: otlp-secret
-                key: token
-        ports:
-          - containerPort: 8080
-          - containerPort: 9090
-        livenessProbe:
-          httpGet:
-            path: /livez
-            port: 8080
-          initialDelaySeconds: 3
-          periodSeconds: 3
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8080
-          initialDelaySeconds: 3
-          periodSeconds: 3
-        resources:
-          requests:
-            cpu: 125m
-            memory: 64Mi
-          limits:
-            cpu: 250m
-            memory: 128Mi
+        - name: standort
+          image: docker.io/alexfalkowski/standort:v2.83.0
+          imagePullPolicy: Always
+          args: ["server"]
+          volumeMounts:
+            - name: standort-volume
+              mountPath: /etc/standort
+          env:
+            - name: STANDORT_CONFIG_FILE
+              value: "/etc/standort/server.yaml"
+            - name: STANDORT_OTLP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: otlp-secret
+                  key: token
+          ports:
+            - containerPort: 8080
+            - containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          resources:
+            requests:
+              cpu: 125m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
 ---
 apiVersion: v1
 kind: Service

@@ -7,12 +7,16 @@ spec:
   selector:
     matchLabels:
       app: bezeichner
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
         app: bezeichner
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
       volumes:
         - name: konfig-volume
           configMap:
@@ -32,53 +36,57 @@ spec:
             - name: bezeichner-volume
               mountPath: /etc/bezeichner
           env:
-          - name: KONFIG_CONFIG_FILE
-            value: "/etc/konfig/client.yaml"
-          - name: KONFIG_APP_CONFIG_FILE
-            value: "/etc/bezeichner/server.yaml"
-          - name: KONFIG_OTLP_KEY
-            valueFrom:
-              secretKeyRef:
-                name: otlp-secret
-                key: token
+            - name: KONFIG_CONFIG_FILE
+              value: "/etc/konfig/client.yaml"
+            - name: KONFIG_APP_CONFIG_FILE
+              value: "/etc/bezeichner/server.yaml"
+            - name: KONFIG_OTLP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: otlp-secret
+                  key: token
+          securityContext:
+            allowPrivilegeEscalation: false
       containers:
-      - name: bezeichner
-        image: docker.io/alexfalkowski/bezeichner:v1.85.0
-        imagePullPolicy: Always
-        args: ["server"]
-        volumeMounts:
-          - name: bezeichner-volume
-            mountPath: /etc/bezeichner
-        env:
-          - name: BEZEICHNER_CONFIG_FILE
-            value: "/etc/bezeichner/server.yaml"
-          - name: BEZEICHNER_OTLP_KEY
-            valueFrom:
-              secretKeyRef:
-                name: otlp-secret
-                key: token
-        ports:
-          - containerPort: 8080
-          - containerPort: 9090
-        livenessProbe:
-          httpGet:
-            path: /livez
-            port: 8080
-          initialDelaySeconds: 3
-          periodSeconds: 3
-        readinessProbe:
-          httpGet:
-            path: /readyz
-            port: 8080
-          initialDelaySeconds: 3
-          periodSeconds: 3
-        resources:
-          requests:
-            cpu: 125m
-            memory: 64Mi
-          limits:
-            cpu: 250m
-            memory: 128Mi
+        - name: bezeichner
+          image: docker.io/alexfalkowski/bezeichner:v1.85.0
+          imagePullPolicy: Always
+          args: ["server"]
+          volumeMounts:
+            - name: bezeichner-volume
+              mountPath: /etc/bezeichner
+          env:
+            - name: BEZEICHNER_CONFIG_FILE
+              value: "/etc/bezeichner/server.yaml"
+            - name: BEZEICHNER_OTLP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: otlp-secret
+                  key: token
+          ports:
+            - containerPort: 8080
+            - containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          resources:
+            requests:
+              cpu: 125m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
 ---
 apiVersion: v1
 kind: Service
