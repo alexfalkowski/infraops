@@ -13,38 +13,37 @@ spec:
       labels:
         app: standort
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 3000
+        fsGroup: 2000
       volumes:
         - name: konfig-volume
           configMap:
             name: konfig-config
         - name: standort-volume
-          hostPath:
-            path: /tmp/standort
-            type: DirectoryOrCreate
+          emptyDir: {}
       initContainers:
         - name: standort-init
           image: docker.io/alexfalkowski/konfig:v1.122.0
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
-              mountPath: /tmp/konfig/client.yaml
+              mountPath: /etc/konfig/client.yaml
               subPath: client.yaml
             - name: standort-volume
-              mountPath: /tmp/standort
+              mountPath: /etc/standort
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/tmp/konfig/client.yaml"
+              value: "/etc/konfig/client.yaml"
             - name: KONFIG_APP_CONFIG_FILE
-              value: "/tmp/standort/server.yaml"
+              value: "/etc/standort/server.yaml"
             - name: KONFIG_OTLP_KEY
               valueFrom:
                 secretKeyRef:
                   name: otlp-secret
                   key: token
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 10001
       containers:
         - name: standort
           image: docker.io/alexfalkowski/standort:v2.83.0
@@ -52,10 +51,10 @@ spec:
           args: ["server"]
           volumeMounts:
             - name: standort-volume
-              mountPath: /tmp/standort
+              mountPath: /etc/standort
           env:
             - name: STANDORT_CONFIG_FILE
-              value: "/tmp/standort/server.yaml"
+              value: "/etc/standort/server.yaml"
             - name: STANDORT_OTLP_KEY
               valueFrom:
                 secretKeyRef:
@@ -83,10 +82,6 @@ spec:
             limits:
               cpu: 250m
               memory: 128Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 10001
 ---
 apiVersion: v1
 kind: Service
