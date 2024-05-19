@@ -31,7 +31,7 @@ checks:
     - "no-extensions-v1beta"
     - "no-liveness-probe"
     #- "no-node-affinity"
-    #- "no-read-only-root-fs"
+    - "no-read-only-root-fs"
     - "no-readiness-probe"
     #- "no-rolling-update-strategy"
     - "non-existent-service-account"
@@ -56,5 +56,5 @@ checks:
     #- "unset-memory-requirements"
     - "use-namespace"
     - "wildcard-in-rules"
-    #- "writable-host-mount"
+    - "writable-host-mount"
 
