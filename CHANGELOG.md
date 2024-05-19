@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.58.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.58.0) - 2024-05-19
+
+- [`e24f508`](https://github.com/alexfalkowski/infraops/commit/e24f508f0256d1515458c968d103387e429f9e31) feat(apps): increase node count to 3 (#227)
+
 ## [v1.57.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.57.0) - 2024-05-19
 
 - [`e751504`](https://github.com/alexfalkowski/infraops/commit/e751504a519c62e3dd48fc538d4c3f63394aee10) feat(k8s): increase node count to 2 (#226)
