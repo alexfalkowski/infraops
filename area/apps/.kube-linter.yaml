@@ -45,7 +45,7 @@ checks:
     - "readiness-port"
     #- "required-annotation-email"
     #- "required-label-owner"
-    #- "run-as-non-root"
+    - "run-as-non-root"
     - "scc-deny-privileged-container"
     - "sensitive-host-mounts"
     - "ssh-port"
