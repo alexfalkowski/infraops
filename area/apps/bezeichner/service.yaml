@@ -23,7 +23,7 @@ spec:
             type: DirectoryOrCreate
       initContainers:
         - name: bezeichner-init
-          image: docker.io/alexfalkowski/konfig:v1.121.0
+          image: docker.io/alexfalkowski/konfig:v1.122.0
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
@@ -43,7 +43,7 @@ spec:
                 key: token
       containers:
       - name: bezeichner
-        image: docker.io/alexfalkowski/bezeichner:v1.84.1
+        image: docker.io/alexfalkowski/bezeichner:v1.85.0
         imagePullPolicy: Always
         args: ["server"]
         volumeMounts:

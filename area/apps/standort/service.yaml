@@ -23,7 +23,7 @@ spec:
             type: DirectoryOrCreate
       initContainers:
         - name: standort-init
-          image: docker.io/alexfalkowski/konfig:v1.121.0
+          image: docker.io/alexfalkowski/konfig:v1.122.0
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
@@ -43,7 +43,7 @@ spec:
                 key: token
       containers:
       - name: standort
-        image: docker.io/alexfalkowski/standort:v2.82.0
+        image: docker.io/alexfalkowski/standort:v2.83.0
         imagePullPolicy: Always
         args: ["server"]
         volumeMounts:
