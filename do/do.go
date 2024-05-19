@@ -73,7 +73,7 @@ func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Project) (*digit
 		Name:                          pulumi.String(p.Name),
 		DestroyAllAssociatedResources: pulumi.Bool(true),
 		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
-			NodeCount: pulumi.Int(1),
+			NodeCount: pulumi.Int(2),
 			Name:      pulumi.String(p.Name),
 			Size:      digitalocean.DropletSlugDropletS2VCPU4GB,
 		},
