@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.56.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.56.0) - 2024-05-19
+
+- [`9444bae`](https://github.com/alexfalkowski/infraops/commit/9444bae0ec95ee4d54d7a9b0ceb303b4026d1814) feat(apps): add kube-linter (#223)
+
 ## [v1.55.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.55.0) - 2024-05-19
 
 - [`24485c9`](https://github.com/alexfalkowski/infraops/commit/24485c93456c9e6d7dd576068ca03f0c767754ff) feat(apps): update versions (#222)
