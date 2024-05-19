@@ -4,6 +4,10 @@ include standort/include.mk
 include konfig/include.mk
 include bezeichner/include.mk
 
+# Lint config.
+lint:
+	kube-linter lint .
+
 # Save kubeconfig.
 save-config:
 	doctl kubernetes cluster kubeconfig save f7a7f2b2-f562-49fe-93e7-2b6ef3038fa5
