@@ -24,11 +24,11 @@ spec:
           args: ["server"]
           volumeMounts:
             - name: konfig-volume
-              mountPath: /etc/konfig/server.yaml
+              mountPath: /tmp/konfig/server.yaml
               subPath: server.yaml
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/etc/konfig/server.yaml"
+              value: "/tmp/konfig/server.yaml"
             - name: KONFIG_OTLP_KEY
               valueFrom:
                 secretKeyRef:

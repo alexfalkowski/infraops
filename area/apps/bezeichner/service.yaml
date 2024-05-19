@@ -19,7 +19,7 @@ spec:
             name: konfig-config
         - name: bezeichner-volume
           hostPath:
-            path: /etc/bezeichner
+            path: /tmp/bezeichner
             type: DirectoryOrCreate
       initContainers:
         - name: bezeichner-init
@@ -27,15 +27,15 @@ spec:
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
-              mountPath: /etc/konfig/client.yaml
+              mountPath: /tmp/konfig/client.yaml
               subPath: client.yaml
             - name: bezeichner-volume
-              mountPath: /etc/bezeichner
+              mountPath: /tmp/bezeichner
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/etc/konfig/client.yaml"
+              value: "/tmp/konfig/client.yaml"
             - name: KONFIG_APP_CONFIG_FILE
-              value: "/etc/bezeichner/server.yaml"
+              value: "/tmp/bezeichner/server.yaml"
             - name: KONFIG_OTLP_KEY
               valueFrom:
                 secretKeyRef:
@@ -52,10 +52,10 @@ spec:
           args: ["server"]
           volumeMounts:
             - name: bezeichner-volume
-              mountPath: /etc/bezeichner
+              mountPath: /tmp/bezeichner
           env:
             - name: BEZEICHNER_CONFIG_FILE
-              value: "/etc/bezeichner/server.yaml"
+              value: "/tmp/bezeichner/server.yaml"
             - name: BEZEICHNER_OTLP_KEY
               valueFrom:
                 secretKeyRef:

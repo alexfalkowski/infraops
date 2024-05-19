@@ -19,7 +19,7 @@ spec:
             name: konfig-config
         - name: standort-volume
           hostPath:
-            path: /etc/standort
+            path: /tmp/standort
             type: DirectoryOrCreate
       initContainers:
         - name: standort-init
@@ -27,15 +27,15 @@ spec:
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
-              mountPath: /etc/konfig/client.yaml
+              mountPath: /tmp/konfig/client.yaml
               subPath: client.yaml
             - name: standort-volume
-              mountPath: /etc/standort
+              mountPath: /tmp/standort
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/etc/konfig/client.yaml"
+              value: "/tmp/konfig/client.yaml"
             - name: KONFIG_APP_CONFIG_FILE
-              value: "/etc/standort/server.yaml"
+              value: "/tmp/standort/server.yaml"
             - name: KONFIG_OTLP_KEY
               valueFrom:
                 secretKeyRef:
@@ -52,10 +52,10 @@ spec:
           args: ["server"]
           volumeMounts:
             - name: standort-volume
-              mountPath: /etc/standort
+              mountPath: /tmp/standort
           env:
             - name: STANDORT_CONFIG_FILE
-              value: "/etc/standort/server.yaml"
+              value: "/tmp/standort/server.yaml"
             - name: STANDORT_OTLP_KEY
               valueFrom:
                 secretKeyRef:
