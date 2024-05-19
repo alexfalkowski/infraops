@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.59.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.59.0) - 2024-05-19
+
+- [`a07397d`](https://github.com/alexfalkowski/infraops/commit/a07397d080edb7abe73c30c7242878188cf267ec) feat(apps): make sure we enable run-as-non-root (#229)
+
 ## [v1.58.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.58.0) - 2024-05-19
 
 - [`e24f508`](https://github.com/alexfalkowski/infraops/commit/e24f508f0256d1515458c968d103387e429f9e31) feat(apps): increase node count to 3 (#227)
