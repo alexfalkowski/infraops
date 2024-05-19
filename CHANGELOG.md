@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.59.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.59.1) - 2024-05-19
+
+- [`0cd8956`](https://github.com/alexfalkowski/infraops/commit/0cd895602ea7466c5ff7784b24a35b235cbeb8b9) fix(apps): use tmp (#230)
+
 ## [v1.59.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.59.0) - 2024-05-19
 
 - [`a07397d`](https://github.com/alexfalkowski/infraops/commit/a07397d080edb7abe73c30c7242878188cf267ec) feat(apps): make sure we enable run-as-non-root (#229)
