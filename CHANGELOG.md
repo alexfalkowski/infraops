@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.60.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.60.0) - 2024-05-19
+
+- [`2e0c9f4`](https://github.com/alexfalkowski/infraops/commit/2e0c9f46aca6db1ba15cf077b1b85de88abe1ae1) feat(apps): use readOnlyRootFilesystem (#232)
+
 ## [v1.59.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.59.2) - 2024-05-19
 
 - [`5aaefc5`](https://github.com/alexfalkowski/infraops/commit/5aaefc516548c735e5c5a3362d937ee620214a12) fix(apps): use emptyDir (#231)
