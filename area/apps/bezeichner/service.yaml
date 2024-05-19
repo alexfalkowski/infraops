@@ -44,6 +44,13 @@ spec:
                 secretKeyRef:
                   name: otlp-secret
                   key: token
+          resources:
+            requests:
+              cpu: 125m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
           securityContext:
             readOnlyRootFilesystem: true
       containers:
