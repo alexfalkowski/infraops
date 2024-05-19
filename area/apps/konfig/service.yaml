@@ -13,6 +13,11 @@ spec:
       labels:
         app: konfig
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 3000
+        fsGroup: 2000
       volumes:
         - name: konfig-volume
           configMap:
@@ -24,11 +29,11 @@ spec:
           args: ["server"]
           volumeMounts:
             - name: konfig-volume
-              mountPath: /tmp/konfig/server.yaml
+              mountPath: /etc/konfig/server.yaml
               subPath: server.yaml
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/tmp/konfig/server.yaml"
+              value: "/etc/konfig/server.yaml"
             - name: KONFIG_OTLP_KEY
               valueFrom:
                 secretKeyRef:
@@ -61,10 +66,6 @@ spec:
             limits:
               cpu: 250m
               memory: 128Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 10001
 ---
 apiVersion: v1
 kind: Service
