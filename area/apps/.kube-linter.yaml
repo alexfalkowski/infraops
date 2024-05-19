@@ -33,7 +33,7 @@ checks:
     #- "no-node-affinity"
     - "no-read-only-root-fs"
     - "no-readiness-probe"
-    #- "no-rolling-update-strategy"
+    - "no-rolling-update-strategy"
     - "non-existent-service-account"
     #- "non-isolated-pod"
     - "pdb-max-unavailable"
