@@ -23,17 +23,18 @@ data:
       kind: git
       git:
         url: https://github.com/alexfalkowski/app-config
+        token: /etc/secrets/gh/token
     telemetry:
       logger:
         level: info
       metrics:
         kind: otlp
         host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
-        key: env:KONFIG_OTLP_KEY
+        key: /etc/secrets/otlp/token
       tracer:
         kind: otlp
         host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
-        key: env:KONFIG_OTLP_KEY
+        key: /etc/secrets/otlp/token
     transport:
       http:
         port: 8080

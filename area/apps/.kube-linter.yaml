@@ -41,7 +41,7 @@ checks:
     - "privilege-escalation-container"
     - "privileged-container"
     - "privileged-ports"
-    #- "read-secret-from-env-var"
+    - "read-secret-from-env-var"
     - "readiness-port"
     - "run-as-non-root"
     - "scc-deny-privileged-container"

@@ -29,9 +29,12 @@ spec:
             name: konfig-config
         - name: bezeichner-volume
           emptyDir: {}
+        - name: otlp-volume
+          secret:
+            secretName: otlp-secret
       initContainers:
         - name: bezeichner-init
-          image: docker.io/alexfalkowski/konfig:v1.122.0
+          image: docker.io/alexfalkowski/konfig:v1.125.1
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
@@ -39,16 +42,14 @@ spec:
               subPath: client.yaml
             - name: bezeichner-volume
               mountPath: /etc/bezeichner
+            - name: otlp-volume
+              mountPath: /etc/secrets/otlp
+              readOnly: true
           env:
             - name: KONFIG_CONFIG_FILE
               value: "/etc/konfig/client.yaml"
             - name: KONFIG_APP_CONFIG_FILE
               value: "/etc/bezeichner/server.yaml"
-            - name: KONFIG_OTLP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: otlp-secret
-                  key: token
           resources:
             requests:
               cpu: 125m
@@ -60,20 +61,18 @@ spec:
             readOnlyRootFilesystem: true
       containers:
         - name: bezeichner
-          image: docker.io/alexfalkowski/bezeichner:v1.85.0
+          image: docker.io/alexfalkowski/bezeichner:v1.88.0
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
             - name: bezeichner-volume
               mountPath: /etc/bezeichner
+            - name: otlp-volume
+              mountPath: /etc/secrets/otlp
+              readOnly: true
           env:
             - name: BEZEICHNER_CONFIG_FILE
               value: "/etc/bezeichner/server.yaml"
-            - name: BEZEICHNER_OTLP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: otlp-secret
-                  key: token
           ports:
             - containerPort: 8080
             - containerPort: 9090
