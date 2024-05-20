@@ -14,7 +14,7 @@ data:
           timeout: 10s
           attempts: 3
         application: bezeichner
-        version: v1.0.0
+        version: v1.3.0
         environment: production
         continent: '*'
         country: '*'
@@ -28,8 +28,8 @@ data:
       metrics:
         kind: otlp
         host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
-        key: env:KONFIG_OTLP_KEY
+        key: /etc/secrets/otlp/token
       tracer:
         kind: otlp
         host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
-        key: env:KONFIG_OTLP_KEY
+        key: /etc/secrets/otlp/token

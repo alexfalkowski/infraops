@@ -27,28 +27,30 @@ spec:
         - name: konfig-volume
           configMap:
             name: konfig-config
+        - name: otlp-volume
+          secret:
+            secretName: otlp-secret
+        - name: gh-volume
+          secret:
+            secretName: gh-secret
       containers:
         - name: konfig
-          image: docker.io/alexfalkowski/konfig:v1.122.0
+          image: docker.io/alexfalkowski/konfig:v1.125.1
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
             - name: konfig-volume
               mountPath: /etc/konfig/server.yaml
               subPath: server.yaml
+            - name: otlp-volume
+              mountPath: /etc/secrets/otlp
+              readOnly: true
+            - name: gh-volume
+              mountPath: /etc/secrets/gh
+              readOnly: true
           env:
             - name: KONFIG_CONFIG_FILE
               value: "/etc/konfig/server.yaml"
-            - name: KONFIG_OTLP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: otlp-secret
-                  key: token
-            - name: KONFIG_GIT_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: gh-secret
-                  key: token
           ports:
             - containerPort: 8080
             - containerPort: 9090
