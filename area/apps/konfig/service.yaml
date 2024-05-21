@@ -18,6 +18,7 @@ spec:
       labels:
         app: konfig
     spec:
+      serviceAccountName: konfig
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
