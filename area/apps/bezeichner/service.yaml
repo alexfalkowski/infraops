@@ -34,7 +34,7 @@ spec:
             secretName: otlp-secret
       initContainers:
         - name: bezeichner-init
-          image: docker.io/alexfalkowski/konfig:v1.125.1
+          image: docker.io/alexfalkowski/konfig:v1.126.0
           args: ["client"]
           volumeMounts:
             - name: konfig-volume
@@ -61,7 +61,7 @@ spec:
             readOnlyRootFilesystem: true
       containers:
         - name: bezeichner
-          image: docker.io/alexfalkowski/bezeichner:v1.88.0
+          image: docker.io/alexfalkowski/bezeichner:v1.89.0
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
