@@ -35,7 +35,7 @@ spec:
             secretName: gh-secret
       containers:
         - name: konfig
-          image: docker.io/alexfalkowski/konfig:v1.126.0
+          image: docker.io/alexfalkowski/konfig:v1.128.0
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
@@ -50,7 +50,7 @@ spec:
               readOnly: true
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/etc/konfig/server.yaml"
+              value: /etc/konfig/server.yaml
           ports:
             - containerPort: 8080
             - containerPort: 9090

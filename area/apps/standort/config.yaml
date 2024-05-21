@@ -13,14 +13,13 @@ data:
         retry:
           timeout: 10s
           attempts: 3
-        application: standort
-        version: v1.3.0
-        environment: production
-        continent: '*'
-        country: '*'
-        command: server
-        kind: yaml
-        mode: 0o600
+        config:
+          application: standort
+          version: v1.3.0
+          environment: production
+          command: server
+          kind: yaml
+          mode: 0o600
     environment: production
     telemetry:
       logger:

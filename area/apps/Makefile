@@ -33,7 +33,7 @@ update-namespace:
 	kubectl apply -f $(namespace) -n $(namespace)
 
 # Preview all apps.
-preview: preview-standort preview-konfig preview-bezeichner
+preview: preview-konfig preview-standort preview-bezeichner
 
 # Update all apps.
-update: update-standort update-konfig update-bezeichner
+update: update-konfig update-standort update-bezeichner
