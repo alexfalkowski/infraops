@@ -34,8 +34,8 @@ spec:
             secretName: otlp-secret
       initContainers:
         - name: standort-init
-          image: docker.io/alexfalkowski/konfig:v1.126.0
-          args: ["client"]
+          image: docker.io/alexfalkowski/konfig:v1.128.0
+          args: ["config"]
           volumeMounts:
             - name: konfig-volume
               mountPath: /etc/konfig/client.yaml
@@ -47,9 +47,9 @@ spec:
               readOnly: true
           env:
             - name: KONFIG_CONFIG_FILE
-              value: "/etc/konfig/client.yaml"
+              value: /etc/konfig/client.yaml
             - name: KONFIG_APP_CONFIG_FILE
-              value: "/etc/standort/server.yaml"
+              value: /etc/standort/server.yaml
           resources:
             requests:
               cpu: 125m
@@ -61,7 +61,7 @@ spec:
             readOnlyRootFilesystem: true
       containers:
         - name: standort
-          image: docker.io/alexfalkowski/standort:v2.87.0
+          image: docker.io/alexfalkowski/standort:v2.88.0
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
@@ -72,7 +72,7 @@ spec:
               readOnly: true
           env:
             - name: STANDORT_CONFIG_FILE
-              value: "/etc/standort/server.yaml"
+              value: /etc/standort/server.yaml
           ports:
             - containerPort: 8080
             - containerPort: 9090

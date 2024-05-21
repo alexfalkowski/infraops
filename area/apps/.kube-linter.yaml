@@ -12,7 +12,6 @@ checks:
     - "dangling-servicemonitor"
     #- "default-service-account"
     - "deprecated-service-account-field"
-    #- "dnsconfig-options"
     - "docker-sock"
     - "drop-net-raw-capability"
     - "duplicate-env-var"
