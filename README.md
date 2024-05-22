@@ -8,6 +8,9 @@ The following tools are used:
 - https://www.pulumi.com/
 - https://kubernetes.io/docs/reference/kubectl/
 - https://helm.sh/
+- https://docs.kubelinter.io/
+- https://kube-score.com/
+
 
 ## Areas
 

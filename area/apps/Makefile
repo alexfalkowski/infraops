@@ -42,7 +42,7 @@ rollout-namespace:
 
 # Run kube-score for a namespace.
 kube-score-namespace:
-	kube-score score --ignore-test pod-networkpolicy --ignore-test deployment-has-host-podantiaffinity $(namespace)/*.yaml
+	kube-score score --ignore-test deployment-has-host-podantiaffinity $(namespace)/*.yaml
 
 # Preview all apps.
 preview: preview-konfig preview-standort preview-bezeichner
