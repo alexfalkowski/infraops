@@ -10,6 +10,7 @@ data:
       v1:
         host: localhost:9090
         user_agent: "Konfig/1.0"
+        timeout: 5s
         retry:
           timeout: 10s
           attempts: 3
