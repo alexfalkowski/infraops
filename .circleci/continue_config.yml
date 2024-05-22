@@ -76,7 +76,8 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps lint save-config preview
+      - run: make -C area/apps lint
+      - run: make -C area/apps save-config preview
     resource_class: large
   apps_update:
     docker:
@@ -86,7 +87,8 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps lint save-config update rollout
+      - run: make -C area/apps lint
+      - run: make -C area/apps save-config update rollout
     resource_class: large
 
   cf_preview:
