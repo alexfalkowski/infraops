@@ -1,3 +1,7 @@
+# Run kubescore for standort.
+kube-score-standort:
+	$(MAKE) namespace=standort kube-score-namespace
+
 # Delete standort.
 delete-standort:
 	$(MAKE) namespace=standort delete-namespace

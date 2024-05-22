@@ -1,3 +1,7 @@
+# Run kubescore for konfig.
+kube-score-konfig:
+	$(MAKE) namespace=konfig kube-score-namespace
+
 # Delete konfig.
 delete-konfig:
 	$(MAKE) namespace=konfig delete-namespace

@@ -4,9 +4,13 @@ include standort/include.mk
 include konfig/include.mk
 include bezeichner/include.mk
 
-# Lint config.
-lint:
+kube-linter:
 	kube-linter lint .
+
+kube-score: kube-score-konfig kube-score-standort kube-score-bezeichner
+
+# Lint config.
+lint: kube-linter
 
 # Save kubeconfig.
 save-config:
@@ -35,6 +39,10 @@ update-namespace:
 # Rollout a namespace.
 rollout-namespace:
 	kubectl rollout restart deployment/$(namespace) -n $(namespace)
+
+# Run kube-score for a namespace.
+kube-score-namespace:
+	kube-score score $(namespace)/*.yaml
 
 # Preview all apps.
 preview: preview-konfig preview-standort preview-bezeichner

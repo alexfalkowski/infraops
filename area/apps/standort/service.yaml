@@ -22,7 +22,7 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
-        runAsGroup: 3000
+        runAsGroup: 10001
         fsGroup: 2000
       volumes:
         - name: konfig-volume
@@ -36,7 +36,7 @@ spec:
       initContainers:
         - name: standort-init
           image: docker.io/alexfalkowski/konfig:v1.129.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args: ["config"]
           volumeMounts:
             - name: konfig-volume
@@ -64,7 +64,7 @@ spec:
       containers:
         - name: standort
           image: docker.io/alexfalkowski/standort:v2.89.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
             - name: standort-volume

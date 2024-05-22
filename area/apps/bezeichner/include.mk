@@ -1,3 +1,7 @@
+# Run kubescore for bezeichner.
+kube-score-bezeichner:
+	$(MAKE) namespace=bezeichner kube-score-namespace
+
 # Delete bezeichner.
 delete-bezeichner:
 	$(MAKE) namespace=bezeichner delete-namespace
