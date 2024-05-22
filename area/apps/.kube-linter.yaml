@@ -32,6 +32,7 @@ checks:
     - "no-readiness-probe"
     - "no-rolling-update-strategy"
     - "non-existent-service-account"
+    - "non-isolated-pod"
     - "pdb-max-unavailable"
     - "pdb-min-available"
     - "privilege-escalation-container"
