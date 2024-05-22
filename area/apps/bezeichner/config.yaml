@@ -15,7 +15,7 @@ data:
           attempts: 3
         config:
           application: bezeichner
-          version: v1.3.0
+          version: v1.4.0
           environment: production
           command: server
           kind: yaml
