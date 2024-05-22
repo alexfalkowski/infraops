@@ -7,19 +7,20 @@ data:
   client.yaml: |
     client:
       v1:
-        host: konfig.konfig.svc.cluster.local:9090
-        user_agent: "Bezeichner/1.0"
-        timeout: 5s
-        retry:
-          timeout: 10s
-          attempts: 3
         config:
           application: bezeichner
-          version: v1.4.0
+          version: v1.5.0
           environment: production
           command: server
           kind: yaml
           mode: 0o600
+        host: konfig.konfig.svc.cluster.local:9090
+        retry:
+          attempts: 3
+          backoff: 100ms
+          timeout: 10s
+        timeout: 5s
+        user_agent: "Bezeichner/1.0"
     environment: production
     telemetry:
       logger:
