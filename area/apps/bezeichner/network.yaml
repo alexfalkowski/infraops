@@ -4,14 +4,10 @@ metadata:
   name: bezeichner-np
   namespace: bezeichner
 spec:
-  egress:
-    - to:
-      - ipBlock:
-          cidr: 0.0.0.0/0
+  podSelector:
+    matchLabels:
+      app: bezeichner
   ingress:
-    - from:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-  policyTypes:
-    - Ingress
-    - Egress
+    - {}
+  egress:
+    - {}
