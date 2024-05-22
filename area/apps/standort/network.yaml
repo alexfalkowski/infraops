@@ -4,14 +4,10 @@ metadata:
   name: standort-np
   namespace: standort
 spec:
-  egress:
-    - to:
-      - ipBlock:
-          cidr: 0.0.0.0/0
+  podSelector:
+    matchLabels:
+      app: standort
   ingress:
-    - from:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-  policyTypes:
-    - Ingress
-    - Egress
+    - {}
+  egress:
+    - {}
