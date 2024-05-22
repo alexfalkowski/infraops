@@ -14,3 +14,7 @@ preview-konfig:
 # Update konfig.
 update-konfig:
 	$(MAKE) namespace=konfig update-namespace
+
+# Rollout konfig.
+rollout-konfig:
+	$(MAKE) namespace=konfig rollout-namespace
