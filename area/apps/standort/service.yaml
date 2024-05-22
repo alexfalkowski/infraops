@@ -35,7 +35,7 @@ spec:
             secretName: otlp-secret
       initContainers:
         - name: standort-init
-          image: docker.io/alexfalkowski/konfig:v1.128.0
+          image: docker.io/alexfalkowski/konfig:v1.129.0
           args: ["config"]
           volumeMounts:
             - name: konfig-volume
@@ -62,7 +62,7 @@ spec:
             readOnlyRootFilesystem: true
       containers:
         - name: standort
-          image: docker.io/alexfalkowski/standort:v2.88.0
+          image: docker.io/alexfalkowski/standort:v2.89.0
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
