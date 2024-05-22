@@ -15,5 +15,5 @@ update-standort:
 	$(MAKE) namespace=standort update-namespace
 
 # Rollout standort.
-rollout-konfig:
+rollout-standort:
 	$(MAKE) namespace=standort rollout-namespace
