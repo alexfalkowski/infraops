@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.71.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.71.0) - 2024-05-22
+
+- [`8e8ffff`](https://github.com/alexfalkowski/infraops/commit/8e8ffff10902310dc3d53f719f479dd9a7d74ba2) feat(apps): add NetworkPolicy (#247)
+- [`ce682f3`](https://github.com/alexfalkowski/infraops/commit/ce682f3c06307d62d787b0c5af4a426623270332) build(apps): (#246)
+
 ## [v1.70.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.70.0) - 2024-05-22
 
 - [`912194d`](https://github.com/alexfalkowski/infraops/commit/912194df03ad4aeacedd87d0a2cd7697c34ee8df) feat(apps): add ephemeral-storage (#245)
