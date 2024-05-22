@@ -13,3 +13,7 @@ preview-bezeichner:
 # Update bezeichner.
 update-bezeichner:
 	$(MAKE) namespace=bezeichner update-namespace
+
+# Rollout bezeichner.
+rollout-bezeichner:
+	$(MAKE) namespace=bezeichner rollout-namespace

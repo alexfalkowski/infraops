@@ -37,7 +37,7 @@ spec:
       containers:
         - name: konfig
           image: docker.io/alexfalkowski/konfig:v1.129.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           args: ["server"]
           volumeMounts:
             - name: konfig-volume

@@ -37,6 +37,7 @@ spec:
       initContainers:
         - name: bezeichner-init
           image: docker.io/alexfalkowski/konfig:v1.129.0
+          imagePullPolicy: IfNotPresent
           args: ["config"]
           volumeMounts:
             - name: konfig-volume
@@ -64,7 +65,7 @@ spec:
       containers:
         - name: bezeichner
           image: docker.io/alexfalkowski/bezeichner:v1.91.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           args: ["server"]
           volumeMounts:
             - name: bezeichner-volume

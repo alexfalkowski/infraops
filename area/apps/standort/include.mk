@@ -13,3 +13,7 @@ preview-standort:
 # Update standort.
 update-standort:
 	$(MAKE) namespace=standort update-namespace
+
+# Rollout standort.
+rollout-konfig:
+	$(MAKE) namespace=standort rollout-namespace

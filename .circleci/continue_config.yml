@@ -86,7 +86,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps lint save-config update
+      - run: make -C area/apps lint save-config update rollout
     resource_class: large
 
   cf_preview:
