@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.68.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.68.0) - 2024-05-22
+
+- [`af5e3dd`](https://github.com/alexfalkowski/infraops/commit/af5e3dd021172454eb95fe5770c36a68a1151455) feat(apps): add imagePullPolicy: IfNotPresent (#242)
+
 ## [v1.67.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.67.1) - 2024-05-22
 
 - [`3e9bc75`](https://github.com/alexfalkowski/infraops/commit/3e9bc75b08c8b6c9c18dd1543aa953f2ba712f9f) fix(apps): (#241)
