@@ -35,7 +35,7 @@ func createCDECtl(ctx *pulumi.Context) error {
 		Name: "cdectl", Description: "A client for https://cdevents.dev/.",
 		HomepageURL: "https://alexfalkowski.github.io/cdectl", Checks: checks,
 		Template:    gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
-		EnablePages: false,
+		EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)

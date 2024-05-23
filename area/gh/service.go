@@ -88,7 +88,7 @@ func createCDED(ctx *pulumi.Context) error {
 		Name: "cded", Description: "A service for https://cdevents.dev/.",
 		HomepageURL: "https://alexfalkowski.github.io/cded", Checks: checks,
 		Template:    gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
-		EnablePages: false,
+		EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
