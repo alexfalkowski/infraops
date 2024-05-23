@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.75.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.75.0) - 2024-05-23
+
+- [`4117392`](https://github.com/alexfalkowski/infraops/commit/4117392ab72033db9d6386209417c42381b85f27) feat(apps): updated versions (#252)
+
 ## [v1.74.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.74.0) - 2024-05-23
 
 - [`9c68308`](https://github.com/alexfalkowski/infraops/commit/9c68308d3ff24e0e97ac03557ae5e421a67fd9b8) feat(gh): add cdevents (#251)
