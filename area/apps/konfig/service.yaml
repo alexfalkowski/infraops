@@ -36,7 +36,7 @@ spec:
             secretName: gh-secret
       containers:
         - name: konfig
-          image: docker.io/alexfalkowski/konfig:v1.130.0
+          image: docker.io/alexfalkowski/konfig:v1.131.0
           imagePullPolicy: Always
           args: ["server"]
           volumeMounts:
