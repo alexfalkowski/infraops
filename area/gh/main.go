@@ -13,7 +13,7 @@ var fns = []createFn{
 	createGoServiceTemplate, createGoClientTemplate,
 	createStatus, createStandort, createAuth,
 	createKonfig, createMigrieren, createBezeichner,
-	createServiceControl,
+	createServiceControl, createCDED, createCDECtl,
 }
 
 func main() {
