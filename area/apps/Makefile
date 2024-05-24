@@ -44,6 +44,9 @@ rollout-namespace:
 kube-score-namespace:
 	kube-score score --ignore-test deployment-has-host-podantiaffinity $(namespace)/*.yaml
 
+# Delete all apps.
+delete: delete-konfig delete-standort delete-bezeichner
+
 # Preview all apps.
 preview: preview-konfig preview-standort preview-bezeichner
 

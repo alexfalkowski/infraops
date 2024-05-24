@@ -4,15 +4,14 @@ save-config:
 
 # Delete all.
 delete:
-	kubectl delete namespaces nginx-ingress cert-manager grafana
+	kubectl delete namespaces nginx-ingress grafana
 
 # Setup everything.
-setup: setup-helm setup-grafana
+setup: setup-helm install-helm setup-grafana
 
 # Setup helm repos.
 setup-helm:
 	helm repo add nginx-stable https://helm.nginx.com/stable
-	helm repo add jetstack https://charts.jetstack.io
 	helm repo add grafana https://grafana.github.io/helm-charts
 	helm repo update
 
@@ -21,28 +20,18 @@ setup-grafana:
 	kubectl create secret generic metrics-secret --from-literal=username=1289421 --from-literal=password=$(GRAFANA_METRICS_TOKEN) --namespace grafana
 	kubectl create secret generic logs-secret --from-literal=username=743756 --from-literal=password=$(GRAFANA_LOGS_TOKEN) --namespace grafana
 
-# Preview grafana.
-preview-grafana:
-	kubectl apply -f grafana --namespace grafana --dry-run=server
-
 # Update grafana.
 update-grafana:
 	kubectl apply -f grafana --namespace grafana
 
-# Preview helm.
-preview-helm:
-	helm upgrade --install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace --version 1.2.1 --dry-run
-	helm upgrade --install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true --dry-run
-	helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.3.22 --dry-run
-
-# Update helm.
-update-helm:
-	helm upgrade --install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace --version 1.2.1
-	helm upgrade --install cert-manager-release jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.14.5 --set installCRDs=true
-	helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.3.22
-
-# Preview deps.
-preview: preview-helm preview-grafana
+# Install helm.
+install-helm:
+	helm install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace --version 1.2.1
+	helm install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.3.22
 
 # Update deps.
-update: update-helm update-grafana
+update: update-grafana
+
+# All pods.
+pods:
+	kubectl get pods --all-namespaces

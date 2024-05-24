@@ -10,7 +10,7 @@ func main() {
 		z := &cf.Zone{
 			Name:      "lean-thoughts",
 			Addresses: []string{"standort", "bezeichner"},
-			Balancer:  "138.68.115.134",
+			Balancer:  "46.101.69.137",
 		}
 
 		return cf.CreateZone(ctx, z)
