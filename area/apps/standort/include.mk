@@ -21,3 +21,7 @@ update-standort:
 # Rollout standort.
 rollout-standort:
 	$(MAKE) namespace=standort rollout-namespace
+
+# Verify standort.
+verify-standort:
+	curl -sf https://standort.lean-thoughts.com/v2/location
