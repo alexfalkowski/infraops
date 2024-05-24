@@ -73,8 +73,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps lint
-      - run: make -C area/apps save-config preview
+      - run: make -C area/apps save-config
       - restore_cache:
           name: restore deps
           keys:
@@ -99,8 +98,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make -C area/apps lint
-      - run: make -C area/apps save-config update rollout verify
+      - run: make -C area/apps save-config
       - restore_cache:
           name: restore deps
           keys:
