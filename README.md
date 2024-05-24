@@ -36,6 +36,29 @@ To have an app ready as an example we will use `example`, you need to run the fo
 ❯ make -C area/apps namespace=example setup-otlp
 ```
 
+#### Install
+
+The above is for a new application. If you want to setup all current apps, run the following.
+
+```bash
+❯ make -C area/apps setup-konfig
+❯ make -C area/apps namespace=konfig setup-otlp
+
+❯ make -C area/apps setup-standort
+❯ make -C area/apps namespace=standort setup-otlp
+
+❯ make -C area/apps setup-bezeichner
+❯ make -C area/apps namespace=bezeichner setup-otlp
+```
+
+#### Delete
+
+To remove all the apps, you need to run the following:
+
+```bash
+❯ make -C area/apps delete
+```
+
 ### Cloudflare (cf)
 
 The code is bases on the package https://www.pulumi.com/registry/packages/cloudflare/.
@@ -53,3 +76,19 @@ The original idea was inspired from https://github.com/dirien/pulumi-github.
 ### Kubernetes (k8s)
 
 This contains all the packages our cluster needs.
+
+#### Setup
+
+To ge the cluster ready, you need to run the following:
+
+```bash
+❯ make -C area/k8s setup update
+```
+
+#### Delete
+
+To remove all the apps, you need to run the following:
+
+```bash
+❯ make -C area/k8s delete
+```

@@ -13,9 +13,6 @@ parameters:
   gh:
     type: boolean
     default: false
-  k8s:
-    type: boolean
-    default: false
 
 orbs:
   pulumi: pulumi/pulumi@2.1.0
@@ -238,31 +235,6 @@ jobs:
           working_directory: ~/infraops/area/gh
     resource_class: large
 
-  k8s_preview:
-    docker:
-      - image: alexfalkowski/k8s:1.0
-    working_directory: ~/infraops
-    steps:
-      - checkout
-      - run: git submodule sync
-      - run: git submodule update --init
-      - run: make -C area/k8s save-config
-      - run: make -C area/k8s setup-helm
-      - run: make -C area/k8s preview
-    resource_class: large
-  k8s_update:
-    docker:
-      - image: alexfalkowski/k8s:1.0
-    working_directory: ~/infraops
-    steps:
-      - checkout
-      - run: git submodule sync
-      - run: git submodule update --init
-      - run: make -C area/k8s save-config
-      - run: make -C area/k8s setup-helm
-      - run: make -C area/k8s update
-    resource_class: large
-
 workflows:
   infraops:
     jobs:
@@ -322,20 +294,6 @@ workflows:
             branches:
               ignore: master
       - gh_update:
-          context: infraops
-          filters:
-            branches:
-              only: master
-
-  k8s:
-    when: << pipeline.parameters.k8s >>
-    jobs:
-      - k8s_preview:
-          context: infraops
-          filters:
-            branches:
-              ignore: master
-      - k8s_update:
           context: infraops
           filters:
             branches:
