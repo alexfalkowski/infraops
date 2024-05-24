@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.76.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.76.0) - 2024-05-24
+
+- [`cd1a7b9`](https://github.com/alexfalkowski/infraops/commit/cd1a7b99c967f4c64b3ac8d3359ad028e07aded4) feat(apps): remove k8s creation (#254)
+
 ## [v1.75.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.75.1) - 2024-05-24
 
 - [`c5c5935`](https://github.com/alexfalkowski/infraops/commit/c5c59352acac049f822c9739b38980f902cf0e56) fix(gh): remove unused checks for standort (#253)
