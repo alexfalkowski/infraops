@@ -75,6 +75,21 @@ jobs:
       - run: git submodule update --init
       - run: make -C area/apps lint
       - run: make -C area/apps save-config preview
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-go-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
+      - pulumi/login
+      - pulumi/preview:
+          stack: alexfalkowski/apps/prod
+          working_directory: ~/infraops/area/apps
     resource_class: large
   apps_update:
     docker:
@@ -86,6 +101,21 @@ jobs:
       - run: git submodule update --init
       - run: make -C area/apps lint
       - run: make -C area/apps save-config update rollout verify
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-go-cache-{{ checksum "go.sum" }}
+            - infraops-go-cache-
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-go-cache-{{ checksum "go.sum" }}
+          paths:
+            - /home/circleci/go/pkg/mod
+      - pulumi/login
+      - pulumi/update:
+          stack: alexfalkowski/apps/prod
+          working_directory: ~/infraops/area/apps
     resource_class: large
 
   cf_preview:
