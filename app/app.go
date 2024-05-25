@@ -11,7 +11,6 @@ import (
 // App to be created.
 type App struct {
 	Name          string
-	Config        string
 	Version       string
 	SecretVolumes []string
 }
@@ -77,7 +76,11 @@ func secretVolumeMount(name string) cv1.VolumeMountArgs {
 }
 
 func configPath(app *App) pulumi.String {
-	return pulumi.String(fmt.Sprintf("/etc/%s/%s", app.Name, app.Config))
+	return pulumi.String(fmt.Sprintf("/etc/apps/%s", configFile(app)))
+}
+
+func configFile(app *App) string {
+	return app.Name + ".yaml"
 }
 
 func podSecurity() cv1.PodSecurityContextArgs {
