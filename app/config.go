@@ -23,7 +23,7 @@ func createConfigMap(ctx *pulumi.Context, app *App) error {
 
 	args := &cv1.ConfigMapArgs{
 		Metadata: metadata(app),
-		Data:     pulumi.StringMap{app.Config: pulumi.String(string(d))},
+		Data:     pulumi.StringMap{configFile(app): pulumi.String(string(d))},
 	}
 	_, err = cv1.NewConfigMap(ctx, app.Name, args)
 
