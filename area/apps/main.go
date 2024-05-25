@@ -6,7 +6,7 @@ import (
 
 type createFn func(ctx *pulumi.Context) error
 
-var fns = []createFn{createKonfig, createStandort}
+var fns = []createFn{createKonfig, createStandort, createBezeichner}
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
