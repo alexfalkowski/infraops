@@ -11,14 +11,6 @@ setup-standort:
 	$(MAKE) namespace=standort setup-namespace
 	$(MAKE) namespace=standort setup-otlp
 
-# Preview standort.
-preview-standort:
-	$(MAKE) namespace=standort preview-namespace
-
-# Update standort.
-update-standort:
-	$(MAKE) namespace=standort update-namespace
-
 # Rollout standort.
 rollout-standort:
 	$(MAKE) namespace=standort rollout-namespace
