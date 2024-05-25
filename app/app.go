@@ -6,7 +6,7 @@ import (
 )
 
 // KonfigVersion used by apps.
-const KonfigVersion = "v1.131.3"
+const KonfigVersion = "1.131.3"
 
 // App to be created.
 type App struct {

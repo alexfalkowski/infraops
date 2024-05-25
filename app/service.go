@@ -187,7 +187,7 @@ func containers(app *App) cv1.ContainerArray {
 }
 
 func image(name, version string) pulumi.String {
-	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:%s", name, version))
+	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", name, version))
 }
 
 func secretVolume(name string) cv1.VolumeArgs {
