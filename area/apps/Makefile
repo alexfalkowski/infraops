@@ -1,6 +1,6 @@
 include secrets.mk
 include konfig.mk
-include standort/include.mk
+include standort.mk
 include bezeichner/include.mk
 
 kube-linter:
@@ -23,14 +23,6 @@ delete-namespace:
 setup-namespace:
 	kubectl create namespace $(namespace)
 
-# Preview namespace.
-preview-namespace:
-	kubectl apply -f $(namespace) -n $(namespace) --dry-run=server
-
-# Update namespace.
-update-namespace:
-	kubectl apply -f $(namespace) -n $(namespace)
-
 # Rollout a namespace.
 rollout-namespace:
 	kubectl rollout restart deployment/$(namespace) -n $(namespace)
@@ -41,12 +33,6 @@ kube-score-namespace:
 
 # Delete all apps.
 delete: delete-konfig delete-standort delete-bezeichner
-
-# Preview all apps.
-preview: preview-konfig preview-standort preview-bezeichner
-
-# Update all apps.
-update: update-konfig update-standort update-bezeichner
 
 # Rollout all apps.
 rollout: rollout-konfig rollout-standort rollout-bezeichner

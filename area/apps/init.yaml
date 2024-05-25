@@ -1,0 +1,28 @@
+client:
+  v1:
+    config:
+      application: <app>
+      version: <ver>
+      environment: production
+      command: server
+      kind: yaml
+      mode: 0o600
+    host: konfig.konfig.svc.cluster.local:9090
+    retry:
+      attempts: 3
+      backoff: 100ms
+      timeout: 10s
+    timeout: 5s
+    user_agent: "<ua>"
+environment: production
+telemetry:
+  logger:
+    level: info
+  metrics:
+    kind: otlp
+    host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
+    key: /etc/secrets/otlp/token
+  tracer:
+    kind: otlp
+    host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
+    key: /etc/secrets/otlp/token
