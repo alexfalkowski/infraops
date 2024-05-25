@@ -9,6 +9,7 @@ delete-standort:
 # Setup standort.
 setup-standort:
 	$(MAKE) namespace=standort setup-namespace
+	$(MAKE) namespace=standort setup-otlp
 
 # Preview standort.
 preview-standort:

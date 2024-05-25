@@ -33,7 +33,6 @@ To have an app ready as an example we will use `example`, you need to run the fo
 
 ```bash
 ❯ make -C area/apps setup-example
-❯ make -C area/apps namespace=example setup-otlp
 ```
 
 #### Install
@@ -42,13 +41,10 @@ The above is for a new application. If you want to setup all current apps, run t
 
 ```bash
 ❯ make -C area/apps setup-konfig
-❯ make -C area/apps namespace=konfig setup-otlp
 
 ❯ make -C area/apps setup-standort
-❯ make -C area/apps namespace=standort setup-otlp
 
 ❯ make -C area/apps setup-bezeichner
-❯ make -C area/apps namespace=bezeichner setup-otlp
 ```
 
 #### Delete

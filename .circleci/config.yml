@@ -27,5 +27,7 @@ workflows:
 
             .circleci/.* apps true
             area/apps/.* apps true
+            app/.* apps true
+            go.* apps true
           base-revision: origin/master
           resource_class: large

@@ -1,7 +1,6 @@
-otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
-
+include secrets.mk
+include konfig.mk
 include standort/include.mk
-include konfig/include.mk
 include bezeichner/include.mk
 
 kube-linter:
@@ -15,10 +14,6 @@ lint: kube-linter kube-score
 # Save kubeconfig.
 save-config:
 	doctl kubernetes cluster kubeconfig save f7a7f2b2-f562-49fe-93e7-2b6ef3038fa5
-
-# Setup otlp.
-setup-otlp:
-	kubectl create secret generic otlp-secret --from-literal=token=$(otlp_secret) --namespace $(namespace)
 
 # Delete namespace.
 delete-namespace:
