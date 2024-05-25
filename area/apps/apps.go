@@ -17,3 +17,9 @@ func createStandort(ctx *pulumi.Context) error {
 		Name: "standort", Version: "v2.92.1", ConfigVersion: "v1.7.0",
 	})
 }
+
+func createBezeichner(ctx *pulumi.Context) error {
+	return app.CreateApp(ctx, &app.App{
+		Name: "bezeichner", Version: "v1.93.3", ConfigVersion: "v1.6.0",
+	})
+}

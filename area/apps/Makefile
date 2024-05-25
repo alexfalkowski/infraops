@@ -1,7 +1,7 @@
 include secrets.mk
 include konfig.mk
 include standort.mk
-include bezeichner/include.mk
+include bezeichner.mk
 
 kube-linter:
 	kube-linter lint .
