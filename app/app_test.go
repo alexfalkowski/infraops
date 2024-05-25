@@ -11,7 +11,7 @@ import (
 func TestApp(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
 		a := &app.App{
-			Name: "test", Config: "test.yaml", Version: "v1.0.0",
+			Name: "test", Version: "v1.0.0", ConfigVersion: "v1.0.0",
 			SecretVolumes: []string{"test"},
 		}
 
