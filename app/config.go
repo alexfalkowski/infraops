@@ -3,6 +3,7 @@ package app
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
@@ -10,36 +11,71 @@ import (
 )
 
 func createConfigMap(ctx *pulumi.Context, app *App) error {
+	var (
+		args *cv1.ConfigMapArgs
+		err  error
+	)
+
 	if app.ConfigVersion != "" {
-		d, err := initConfig(app)
-		if err != nil {
-			return err
-		}
+		args, err = initConfigMap(app)
+	} else {
+		args, err = configMap(app)
+	}
 
-		args := &cv1.ConfigMapArgs{
-			Metadata: mv1.ObjectMetaArgs{
-				Name:      pulumi.String("konfig"),
-				Namespace: pulumi.String(app.Name),
-			},
-			Data: pulumi.StringMap{configFile("konfig"): pulumi.String(d)},
-		}
-		_, err = cv1.NewConfigMap(ctx, app.Name, args)
-
+	if err != nil {
 		return err
 	}
 
+	_, err = cv1.NewConfigMap(ctx, app.Name, args)
+
+	return err
+}
+
+func initConfigMap(app *App) (*cv1.ConfigMapArgs, error) {
+	d, err := initConfig(app)
+	if err != nil {
+		return nil, err
+	}
+
+	args := &cv1.ConfigMapArgs{
+		Metadata: mv1.ObjectMetaArgs{
+			Name:      pulumi.String("konfig"),
+			Namespace: pulumi.String(app.Name),
+		},
+		Data: pulumi.StringMap{configFile("konfig"): pulumi.String(d)},
+	}
+
+	return args, nil
+}
+
+func initConfig(app *App) (string, error) {
+	cfg, err := readFile("init.yaml")
+	if err != nil {
+		return "", err
+	}
+
+	on := []string{
+		"<app>", app.Name,
+		"<ver>", app.ConfigVersion,
+		"<ua>", app.Name + "/" + app.Version,
+	}
+	r := strings.NewReplacer(on...)
+
+	return r.Replace(cfg), nil
+}
+
+func configMap(app *App) (*cv1.ConfigMapArgs, error) {
 	d, err := readFile(app.Name + ".yaml")
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	args := &cv1.ConfigMapArgs{
 		Metadata: metadata(app),
 		Data:     pulumi.StringMap{configFile(app.Name): pulumi.String(d)},
 	}
-	_, err = cv1.NewConfigMap(ctx, app.Name, args)
 
-	return err
+	return args, nil
 }
 
 func configFullFilePath(name string) pulumi.String {
