@@ -17,22 +17,7 @@ func createIngress(ctx *pulumi.Context, app *App) error {
 			Rules: nv1.IngressRuleArray{
 				nv1.IngressRuleArgs{
 					Host: pulumi.String(app.Name + ".lean-thoughts.com"),
-					Http: nv1.HTTPIngressRuleValueArgs{
-						Paths: nv1.HTTPIngressPathArray{
-							nv1.HTTPIngressPathArgs{
-								Path:     pulumi.String("/"),
-								PathType: pulumi.String("Prefix"),
-								Backend: nv1.IngressBackendArgs{
-									Service: nv1.IngressServiceBackendArgs{
-										Name: pulumi.String(app.Name),
-										Port: nv1.ServiceBackendPortArgs{
-											Number: pulumi.Int(8080),
-										},
-									},
-								},
-							},
-						},
-					},
+					Http: httpIngressRule(app),
 				},
 			},
 		},
@@ -40,4 +25,21 @@ func createIngress(ctx *pulumi.Context, app *App) error {
 	_, err := nv1.NewIngress(ctx, app.Name, args)
 
 	return err
+}
+
+func httpIngressRule(app *App) nv1.HTTPIngressRuleValueArgs {
+	return nv1.HTTPIngressRuleValueArgs{
+		Paths: nv1.HTTPIngressPathArray{
+			nv1.HTTPIngressPathArgs{
+				Path:     pulumi.String("/"),
+				PathType: pulumi.String("Prefix"),
+				Backend: nv1.IngressBackendArgs{
+					Service: nv1.IngressServiceBackendArgs{
+						Name: pulumi.String(app.Name),
+						Port: nv1.ServiceBackendPortArgs{Number: pulumi.Int(8080)},
+					},
+				},
+			},
+		},
+	}
 }
