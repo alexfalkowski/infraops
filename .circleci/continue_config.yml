@@ -114,6 +114,7 @@ jobs:
       - pulumi/update:
           stack: alexfalkowski/apps/prod
           working_directory: ~/infraops/area/apps
+      - run: make -C area/apps rollout
     resource_class: large
 
   cf_preview:
