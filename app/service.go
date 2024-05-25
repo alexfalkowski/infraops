@@ -23,7 +23,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 		cv1.VolumeMountArgs{
 			MountPath: configPath(app),
 			Name:      pulumi.String(app.Name),
-			SubPath:   pulumi.String(app.Config),
+			SubPath:   pulumi.String(configFile(app)),
 		},
 		secretVolumeMount("otlp"),
 	}

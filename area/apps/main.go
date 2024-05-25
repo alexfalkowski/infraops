@@ -11,7 +11,7 @@ var fns = []createFn{createKonfig}
 
 func createKonfig(ctx *pulumi.Context) error {
 	return app.CreateApp(ctx, &app.App{
-		Name: "konfig", Config: "server.yaml", Version: "v1.131.1",
+		Name: "konfig", Version: "v1.131.3",
 		SecretVolumes: []string{"gh"},
 	})
 }
