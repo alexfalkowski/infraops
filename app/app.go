@@ -8,44 +8,30 @@ import (
 // KonfigVersion used by apps.
 const KonfigVersion = "1.131.3"
 
-// App to be created.
-type App struct {
-	Name          string
-	Version       string
-	ConfigVersion string
-	SecretVolumes []string
-}
+type (
+	// App to be created.
+	App struct {
+		Name          string
+		Version       string
+		ConfigVersion string
+		SecretVolumes []string
+	}
+
+	createFn func(ctx *pulumi.Context, app *App) error
+)
 
 // CreateApp in the cluster.
 func CreateApp(ctx *pulumi.Context, app *App) error {
-	err := createServiceAccount(ctx, app)
-	if err != nil {
-		return err
+	fns := []createFn{
+		createServiceAccount, createNetworkPolicy,
+		createConfigMap, createPodDisruptionBudget,
+		createDeployment, createService, createIngress,
 	}
 
-	err = createNetworkPolicy(ctx, app)
-	if err != nil {
-		return err
-	}
-
-	err = createConfigMap(ctx, app)
-	if err != nil {
-		return err
-	}
-
-	err = createDeployment(ctx, app)
-	if err != nil {
-		return err
-	}
-
-	err = createService(ctx, app)
-	if err != nil {
-		return err
-	}
-
-	err = createIngress(ctx, app)
-	if err != nil {
-		return err
+	for _, fn := range fns {
+		if err := fn(ctx, app); err != nil {
+			return err
+		}
 	}
 
 	return nil
