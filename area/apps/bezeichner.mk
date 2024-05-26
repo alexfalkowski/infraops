@@ -9,7 +9,8 @@ delete-bezeichner:
 # Setup bezeichner.
 setup-bezeichner:
 	$(MAKE) namespace=bezeichner setup-namespace
-	$(MAKE) namespace=bezeichner setup-otlp
+	$(MAKE) namespace=bezeichner setup-otlp-secret
+	$(MAKE) namespace=bezeichner setup-konfig-secret
 
 # Preview bezeichner.
 preview-bezeichner:
