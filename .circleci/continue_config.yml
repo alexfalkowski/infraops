@@ -116,6 +116,7 @@ jobs:
           working_directory: ~/infraops/area/apps
       - run: make -C area/apps rollout
       - run: make -C area/apps verify
+      - run: make -C area/apps kube-score
     resource_class: large
 
   cf_preview:

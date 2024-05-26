@@ -29,7 +29,9 @@ rollout-namespace:
 
 # Run kube-score for a namespace.
 kube-score-namespace:
-	kube-score score --ignore-test deployment-has-host-podantiaffinity $(namespace)/*.yaml
+	kubectl api-resources --verbs=list --namespaced -o name \
+		| xargs -I{} bash -c "kubectl get {} --namespace $(namespace) -oyaml && echo ---" \
+		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
 
 # Delete all apps.
 delete: delete-konfig delete-standort delete-bezeichner

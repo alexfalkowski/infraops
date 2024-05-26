@@ -1,25 +1,23 @@
 package app
 
 import (
-	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
-	nv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/networking/v1"
+	v1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
+	pv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/policy/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
-	args := &nv1.NetworkPolicyArgs{
+func createPodDisruptionBudget(ctx *pulumi.Context, app *App) error {
+	args := &pv1.PodDisruptionBudgetArgs{
 		Metadata: metadata(app),
-		Spec: nv1.NetworkPolicySpecArgs{
-			PodSelector: mv1.LabelSelectorArgs{MatchLabels: labels(app)},
-			Ingress: nv1.NetworkPolicyIngressRuleArray{
-				nv1.NetworkPolicyIngressRuleArgs{},
-			},
-			Egress: nv1.NetworkPolicyEgressRuleArray{
-				nv1.NetworkPolicyEgressRuleArgs{},
+		Spec: pv1.PodDisruptionBudgetSpecArgs{
+			MaxUnavailable: pulumi.Int(1),
+			Selector: v1.LabelSelectorArgs{
+				MatchLabels: labels(app),
 			},
 		},
 	}
-	_, err := nv1.NewNetworkPolicy(ctx, app.Name, args)
+
+	_, err := pv1.NewPodDisruptionBudget(ctx, app.Name, args)
 
 	return err
 }
