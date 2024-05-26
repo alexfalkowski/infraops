@@ -3,9 +3,6 @@ include konfig.mk
 include standort.mk
 include bezeichner.mk
 
-kube-linter:
-	kube-linter lint .
-
 kube-score: kube-score-konfig kube-score-standort kube-score-bezeichner
 
 # Lint config.
