@@ -28,15 +28,3 @@ func createServiceControl(ctx *pulumi.Context) error {
 
 	return gh.CreateRepository(ctx, repo)
 }
-
-func createCDECtl(ctx *pulumi.Context) error {
-	checks := []string{"ci/circleci: build-client", "ci/circleci: build-docker"}
-	repo := &gh.Repository{
-		Name: "cdectl", Description: "A client for https://cdevents.dev/.",
-		HomepageURL: "https://alexfalkowski.github.io/cdectl", Checks: checks,
-		Template:    gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
-		EnablePages: true,
-	}
-
-	return gh.CreateRepository(ctx, repo)
-}
