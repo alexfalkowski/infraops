@@ -178,8 +178,8 @@ func containers(app *App) cv1.ContainerArray {
 			ReadinessProbe: httpProbe("/readyz"),
 			StartupProbe:   tcpProbe(),
 			Resources: cv1.ResourceRequirementsArgs{
-				Requests: resourceRequirement("125m", "1Gi", "64Mi"),
-				Limits:   resourceRequirement("250m", "2Gi", "128Mi"),
+				Requests: resourceRequirement("125m", "1Gi", app.Memory.Min),
+				Limits:   resourceRequirement("250m", "2Gi", app.Memory.Max),
 			},
 			SecurityContext: cv1.SecurityContextArgs{
 				ReadOnlyRootFilesystem: pulumi.Bool(true),

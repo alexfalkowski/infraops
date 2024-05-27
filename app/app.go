@@ -12,7 +12,14 @@ type (
 		Version       string
 		ConfigVersion string
 		InitVersion   string
+		Memory        Memory
 		SecretVolumes []string
+	}
+
+	// Memory for apps.
+	Memory struct {
+		Min string
+		Max string
 	}
 
 	createFn func(ctx *pulumi.Context, app *App) error
