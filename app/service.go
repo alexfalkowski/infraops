@@ -174,9 +174,9 @@ func containers(app *App) cv1.ContainerArray {
 				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
 				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(9090)},
 			},
-			LivenessProbe:  probe("/livez"),
-			ReadinessProbe: probe("/readyz"),
-			StartupProbe:   probe("/healthz"),
+			LivenessProbe:  httpProbe("/livez"),
+			ReadinessProbe: httpProbe("/readyz"),
+			StartupProbe:   tcpProbe(),
 			Resources: cv1.ResourceRequirementsArgs{
 				Requests: resourceRequirement("125m", "1Gi", "64Mi"),
 				Limits:   resourceRequirement("250m", "2Gi", "128Mi"),
@@ -235,10 +235,20 @@ func resourceRequirement(cpu, storage, memory string) pulumi.StringMap {
 	}
 }
 
-func probe(path string) cv1.ProbeArgs {
+func httpProbe(path string) cv1.ProbeArgs {
 	return cv1.ProbeArgs{
 		HttpGet: cv1.HTTPGetActionArgs{
 			Path: pulumi.String(path),
+			Port: pulumi.Int(8080),
+		},
+		InitialDelaySeconds: pulumi.Int(5),
+		PeriodSeconds:       pulumi.Int(5),
+	}
+}
+
+func tcpProbe() cv1.ProbeArgs {
+	return cv1.ProbeArgs{
+		TcpSocket: cv1.TCPSocketActionArgs{
 			Port: pulumi.Int(8080),
 		},
 		InitialDelaySeconds: pulumi.Int(5),
