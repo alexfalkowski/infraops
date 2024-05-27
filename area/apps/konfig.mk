@@ -9,7 +9,7 @@ delete-konfig:
 # Setup konfig.
 setup-konfig:
 	$(MAKE) namespace=konfig setup-namespace
-	$(MAKE) namespace=konfig setup-otlp
+	$(MAKE) namespace=konfig setup-otlp-secret
 	kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace konfig
 
 # Rollout konfig.

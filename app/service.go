@@ -22,7 +22,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 			Name:     pulumi.String(app.Name),
 			EmptyDir: cv1.EmptyDirVolumeSourceArgs{},
 		}
-		volumes = append(volumes, k, s)
+		volumes = append(volumes, k, s, secretVolume("konfig"))
 	} else {
 		v := cv1.VolumeArgs{
 			Name:      pulumi.String(app.Name),
@@ -101,6 +101,7 @@ func initContainers(app *App) cv1.ContainerArray {
 			Name:      pulumi.String(app.Name),
 			MountPath: pulumi.String(configPath(app.Name)),
 		},
+		secretVolumeMount("konfig"),
 		secretVolumeMount("otlp"),
 	}
 
@@ -191,15 +192,17 @@ func image(name, version string) pulumi.String {
 }
 
 func secretVolume(name string) cv1.VolumeArgs {
+	n := pulumi.String(name + "-secret")
+
 	return cv1.VolumeArgs{
-		Name:   pulumi.String(name),
-		Secret: cv1.SecretVolumeSourceArgs{SecretName: pulumi.String(name + "-secret")},
+		Name:   n,
+		Secret: cv1.SecretVolumeSourceArgs{SecretName: n},
 	}
 }
 
 func secretVolumeMount(name string) cv1.VolumeMountArgs {
 	return cv1.VolumeMountArgs{
-		Name:      pulumi.String(name),
+		Name:      pulumi.String(name + "-secret"),
 		MountPath: pulumi.String("/etc/secrets/" + name),
 		ReadOnly:  pulumi.Bool(true),
 	}

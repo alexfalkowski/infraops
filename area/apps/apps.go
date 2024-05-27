@@ -6,13 +6,22 @@ import (
 )
 
 func createKonfig(ctx *pulumi.Context) error {
-	return app.CreateApp(ctx, &app.App{Name: "konfig", Version: app.KonfigVersion, SecretVolumes: []string{"gh"}})
+	a := &app.App{
+		Name: "konfig", Version: app.KonfigVersion,
+		SecretVolumes: []string{"gh"},
+	}
+
+	return app.CreateApp(ctx, a)
 }
 
 func createStandort(ctx *pulumi.Context) error {
-	return app.CreateApp(ctx, &app.App{Name: "standort", Version: "2.92.1", ConfigVersion: "1.7.0"})
+	a := &app.App{Name: "standort", Version: "2.94.0", ConfigVersion: "1.7.0"}
+
+	return app.CreateApp(ctx, a)
 }
 
 func createBezeichner(ctx *pulumi.Context) error {
-	return app.CreateApp(ctx, &app.App{Name: "bezeichner", Version: "1.93.3", ConfigVersion: "1.6.0"})
+	a := &app.App{Name: "bezeichner", Version: "1.95.0", ConfigVersion: "1.6.0"}
+
+	return app.CreateApp(ctx, a)
 }

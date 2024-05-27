@@ -9,7 +9,8 @@ delete-standort:
 # Setup standort.
 setup-standort:
 	$(MAKE) namespace=standort setup-namespace
-	$(MAKE) namespace=standort setup-otlp
+	$(MAKE) namespace=standort setup-otlp-secret
+	$(MAKE) namespace=standort setup-konfig-secret
 
 # Rollout standort.
 rollout-standort:

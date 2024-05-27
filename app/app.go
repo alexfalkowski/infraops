@@ -6,7 +6,7 @@ import (
 )
 
 // KonfigVersion used by apps.
-const KonfigVersion = "1.131.3"
+const KonfigVersion = "1.132.0"
 
 type (
 	// App to be created.
