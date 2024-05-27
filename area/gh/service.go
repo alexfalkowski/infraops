@@ -81,15 +81,3 @@ func createBezeichner(ctx *pulumi.Context) error {
 
 	return gh.CreateRepository(ctx, repo)
 }
-
-func createCDED(ctx *pulumi.Context) error {
-	checks := []string{"ci/circleci: build-service", "ci/circleci: build-docker"}
-	repo := &gh.Repository{
-		Name: "cded", Description: "A service for https://cdevents.dev/.",
-		HomepageURL: "https://alexfalkowski.github.io/cded", Checks: checks,
-		Template:    gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
-		EnablePages: true,
-	}
-
-	return gh.CreateRepository(ctx, repo)
-}
