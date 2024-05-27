@@ -176,6 +176,7 @@ func containers(app *App) cv1.ContainerArray {
 			},
 			LivenessProbe:  probe("/livez"),
 			ReadinessProbe: probe("/readyz"),
+			StartupProbe:   probe("/healthz"),
 			Resources: cv1.ResourceRequirementsArgs{
 				Requests: resourceRequirement("125m", "1Gi", "64Mi"),
 				Limits:   resourceRequirement("250m", "2Gi", "128Mi"),
@@ -240,7 +241,7 @@ func probe(path string) cv1.ProbeArgs {
 			Path: pulumi.String(path),
 			Port: pulumi.Int(8080),
 		},
-		InitialDelaySeconds: pulumi.Int(3),
-		PeriodSeconds:       pulumi.Int(3),
+		InitialDelaySeconds: pulumi.Int(5),
+		PeriodSeconds:       pulumi.Int(5),
 	}
 }
