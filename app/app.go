@@ -5,15 +5,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// KonfigVersion used by apps.
-const KonfigVersion = "1.132.0"
-
 type (
 	// App to be created.
 	App struct {
 		Name          string
 		Version       string
 		ConfigVersion string
+		InitVersion   string
 		SecretVolumes []string
 	}
 
