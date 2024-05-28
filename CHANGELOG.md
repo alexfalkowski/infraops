@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.84.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.84.0) - 2024-05-28
+
+- [`e221367`](https://github.com/alexfalkowski/infraops/commit/e221367af6a42ec40b3ff08648ca1c1d6fdee03c) feat(apps): update versions (#277)
+- [`8d51d94`](https://github.com/alexfalkowski/infraops/commit/8d51d94b74de2ca881cbaf23b8e4f75bdc57d8c8) build(deps): bump bin from `93c02b7` to `c4fd841` (#276)
+
 ## [v1.83.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.83.0) - 2024-05-27
 
 - [`a062179`](https://github.com/alexfalkowski/infraops/commit/a062179e5858136c21d84987984e3b330c09ce41) feat(gh): remove cdevents projects (#275)
