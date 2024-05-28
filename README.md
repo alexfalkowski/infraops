@@ -10,7 +10,6 @@ The following tools are used:
 - https://helm.sh/
 - https://kube-score.com/
 
-
 ## Areas
 
 Each folder takes care of an area of infrastructure. Each area has a package that is used as the entry point, so it is a [facade](https://en.wikipedia.org/wiki/Facade_pattern).
@@ -87,3 +86,7 @@ To remove all the apps, you need to run the following:
 ```bash
 ❯ make -C area/k8s delete
 ```
+
+### Dependencies
+
+![Dependencies](./assets/..png)
