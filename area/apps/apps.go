@@ -9,7 +9,7 @@ func createKonfig(ctx *pulumi.Context) error {
 	a := &app.App{
 		Name:          "konfig",
 		Version:       "1.133.0",
-		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
+		Memory:        app.Memory{Min: "128Mi", Max: "256Mi"},
 		SecretVolumes: []string{"gh"},
 	}
 
