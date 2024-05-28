@@ -8,8 +8,8 @@ import (
 func createKonfig(ctx *pulumi.Context) error {
 	a := &app.App{
 		Name:          "konfig",
-		Version:       "1.132.1",
-		Memory:        app.Memory{Min: "128Mi", Max: "256Mi"},
+		Version:       "1.133.0",
+		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 		SecretVolumes: []string{"gh"},
 	}
 
@@ -19,8 +19,8 @@ func createKonfig(ctx *pulumi.Context) error {
 func createStandort(ctx *pulumi.Context) error {
 	a := &app.App{
 		Name:          "standort",
-		InitVersion:   "1.132.1",
-		Version:       "2.94.1",
+		InitVersion:   "1.133.0",
+		Version:       "2.95.0",
 		ConfigVersion: "1.7.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
@@ -31,8 +31,8 @@ func createStandort(ctx *pulumi.Context) error {
 func createBezeichner(ctx *pulumi.Context) error {
 	a := &app.App{
 		Name:          "bezeichner",
-		InitVersion:   "1.132.1",
-		Version:       "1.95.1",
+		InitVersion:   "1.133.0",
+		Version:       "1.96.0",
 		ConfigVersion: "1.6.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
