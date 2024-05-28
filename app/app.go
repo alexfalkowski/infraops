@@ -8,6 +8,7 @@ import (
 type (
 	// App to be created.
 	App struct {
+		ID            string
 		Name          string
 		Version       string
 		ConfigVersion string
@@ -50,5 +51,7 @@ func metadata(app *App) mv1.ObjectMetaArgs {
 }
 
 func labels(app *App) pulumi.StringMap {
-	return pulumi.StringMap{"app": pulumi.String(app.Name)}
+	return pulumi.StringMap{
+		"app": pulumi.String(app.Name),
+	}
 }

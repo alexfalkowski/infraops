@@ -11,34 +11,18 @@ import (
 )
 
 func createDeployment(ctx *pulumi.Context, app *App) error {
-	volumes := cv1.VolumeArray{}
-
-	if app.ConfigVersion != "" {
-		k := cv1.VolumeArgs{
-			Name:      pulumi.String("konfig"),
-			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String("konfig")},
-		}
-		s := cv1.VolumeArgs{
-			Name:     pulumi.String(app.Name),
-			EmptyDir: cv1.EmptyDirVolumeSourceArgs{},
-		}
-		volumes = append(volumes, k, s, secretVolume("konfig"))
-	} else {
-		v := cv1.VolumeArgs{
-			Name:      pulumi.String(app.Name),
-			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String(app.Name)},
-		}
-		volumes = append(volumes, v)
-	}
-
-	volumes = append(volumes, secretVolume("otlp"))
-
-	for _, v := range app.SecretVolumes {
-		volumes = append(volumes, secretVolume(v))
-	}
-
 	args := &av1.DeploymentArgs{
-		Metadata: metadata(app),
+		Metadata: mv1.ObjectMetaArgs{
+			Name:      pulumi.String(app.Name),
+			Namespace: pulumi.String(app.Name),
+			Annotations: pulumi.StringMap{
+				"circleci.com/project-id": pulumi.String(app.ID),
+			},
+			Labels: pulumi.StringMap{
+				"circleci.com/component-name": pulumi.String(app.Name),
+				"circleci.com/version":        pulumi.String(app.Version),
+			},
+		},
 		Spec: av1.DeploymentSpecArgs{
 			Selector: mv1.LabelSelectorArgs{MatchLabels: labels(app)},
 			Replicas: pulumi.Int(3),
@@ -49,11 +33,17 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 				},
 			},
 			Template: cv1.PodTemplateSpecArgs{
-				Metadata: mv1.ObjectMetaArgs{Labels: labels(app)},
+				Metadata: mv1.ObjectMetaArgs{
+					Labels: pulumi.StringMap{
+						"app":                         pulumi.String(app.Name),
+						"circleci.com/component-name": pulumi.String(app.Name),
+						"circleci.com/version":        pulumi.String(app.Version),
+					},
+				},
 				Spec: cv1.PodSpecArgs{
 					ServiceAccountName: pulumi.String(app.Name),
 					SecurityContext:    podSecurity(),
-					Volumes:            volumes,
+					Volumes:            createVolumes(app),
 					InitContainers:     initContainers(app),
 					Containers:         containers(app),
 				},
@@ -188,8 +178,34 @@ func containers(app *App) cv1.ContainerArray {
 	}
 }
 
-func image(name, version string) pulumi.String {
-	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", name, version))
+func createVolumes(app *App) cv1.VolumeArray {
+	volumes := cv1.VolumeArray{}
+
+	if app.ConfigVersion != "" {
+		k := cv1.VolumeArgs{
+			Name:      pulumi.String("konfig"),
+			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String("konfig")},
+		}
+		s := cv1.VolumeArgs{
+			Name:     pulumi.String(app.Name),
+			EmptyDir: cv1.EmptyDirVolumeSourceArgs{},
+		}
+		volumes = append(volumes, k, s, secretVolume("konfig"))
+	} else {
+		v := cv1.VolumeArgs{
+			Name:      pulumi.String(app.Name),
+			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String(app.Name)},
+		}
+		volumes = append(volumes, v)
+	}
+
+	volumes = append(volumes, secretVolume("otlp"))
+
+	for _, v := range app.SecretVolumes {
+		volumes = append(volumes, secretVolume(v))
+	}
+
+	return volumes
 }
 
 func secretVolume(name string) cv1.VolumeArgs {
@@ -207,6 +223,10 @@ func secretVolumeMount(name string) cv1.VolumeMountArgs {
 		MountPath: pulumi.String("/etc/secrets/" + name),
 		ReadOnly:  pulumi.Bool(true),
 	}
+}
+
+func image(name, version string) pulumi.String {
+	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", name, version))
 }
 
 func podSecurity() cv1.PodSecurityContextArgs {
