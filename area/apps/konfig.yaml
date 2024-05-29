@@ -7,7 +7,6 @@ client:
       backoff: 100ms
       timeout: 10s
     timeout: 5s
-    user_agent: "Konfig/1.0"
 health:
   duration: 1s
   timeout: 1s
@@ -42,7 +41,6 @@ transport:
       backoff: 100ms
       timeout: 10s
     timeout: 5s
-    user_agent: "Konfig/1.0"
   grpc:
     port: 9090
     retry:
@@ -50,4 +48,3 @@ transport:
       backoff: 100ms
       timeout: 10s
     timeout: 5s
-    user_agent: "Konfig/1.0"

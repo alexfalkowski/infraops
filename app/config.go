@@ -57,7 +57,6 @@ func initConfig(app *App) (string, error) {
 	on := []string{
 		"<app>", app.Name,
 		"<ver>", app.ConfigVersion,
-		"<ua>", app.Name + "/" + app.Version,
 	}
 	r := strings.NewReplacer(on...)
 

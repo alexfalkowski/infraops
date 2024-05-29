@@ -9,7 +9,7 @@ func createKonfig(ctx *pulumi.Context) error {
 	a := &app.App{
 		ID:            "1115c470-ccc9-4daf-8459-ef1e19c40afe",
 		Name:          "konfig",
-		Version:       "1.134.0",
+		Version:       "1.135.0",
 		Memory:        app.Memory{Min: "128Mi", Max: "256Mi"},
 		SecretVolumes: []string{"gh"},
 	}
@@ -21,9 +21,9 @@ func createStandort(ctx *pulumi.Context) error {
 	a := &app.App{
 		ID:            "28c679dc-5924-47e8-ac48-73cd842ba5cd",
 		Name:          "standort",
-		InitVersion:   "1.134.0",
-		Version:       "2.95.1",
-		ConfigVersion: "1.7.0",
+		InitVersion:   "1.135.0",
+		Version:       "2.96.0",
+		ConfigVersion: "1.8.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
 
@@ -34,9 +34,9 @@ func createBezeichner(ctx *pulumi.Context) error {
 	a := &app.App{
 		ID:            "98968ca0-4ada-4856-8547-210f92b838ea",
 		Name:          "bezeichner",
-		InitVersion:   "1.134.0",
-		Version:       "1.97.0",
-		ConfigVersion: "1.6.0",
+		InitVersion:   "1.135.0",
+		Version:       "1.98.0",
+		ConfigVersion: "1.7.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
 
