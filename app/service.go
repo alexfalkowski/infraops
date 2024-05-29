@@ -13,11 +13,9 @@ import (
 func createDeployment(ctx *pulumi.Context, app *App) error {
 	args := &av1.DeploymentArgs{
 		Metadata: mv1.ObjectMetaArgs{
-			Name:      pulumi.String(app.Name),
-			Namespace: pulumi.String(app.Name),
-			Annotations: pulumi.StringMap{
-				"circleci.com/project-id": pulumi.String(app.ID),
-			},
+			Name:        pulumi.String(app.Name),
+			Namespace:   pulumi.String(app.Name),
+			Annotations: annotations(app),
 			Labels: pulumi.StringMap{
 				"circleci.com/component-name": pulumi.String(app.Name),
 				"circleci.com/version":        pulumi.String(app.Version),

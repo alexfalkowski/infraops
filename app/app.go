@@ -1,7 +1,6 @@
 package app
 
 import (
-	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -41,17 +40,4 @@ func CreateApp(ctx *pulumi.Context, app *App) error {
 	}
 
 	return nil
-}
-
-func metadata(app *App) mv1.ObjectMetaArgs {
-	return mv1.ObjectMetaArgs{
-		Name:      pulumi.String(app.Name),
-		Namespace: pulumi.String(app.Name),
-	}
-}
-
-func labels(app *App) pulumi.StringMap {
-	return pulumi.StringMap{
-		"app": pulumi.String(app.Name),
-	}
 }
