@@ -13,7 +13,6 @@ client:
       backoff: 100ms
       timeout: 10s
     timeout: 5s
-    user_agent: "<ua>"
 environment: production
 telemetry:
   logger:
