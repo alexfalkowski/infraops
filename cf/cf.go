@@ -7,9 +7,10 @@ import (
 
 // Zone for cf.
 type Zone struct {
-	Name      string
-	Balancer  string
-	Addresses []string
+	Name        string
+	Domain      string
+	Balancer    string
+	RecordNames []string
 }
 
 // CreateZone for cf.
@@ -22,7 +23,7 @@ func CreateZone(ctx *pulumi.Context, zone *Zone) error {
 	args := &cloudflare.ZoneArgs{
 		AccountId: a.ID(),
 		Plan:      pulumi.String("free"),
-		Zone:      pulumi.String(zone.Name + ".com"),
+		Zone:      pulumi.String(zone.Domain),
 	}
 
 	z, err := cloudflare.NewZone(ctx, zone.Name, args)
@@ -30,17 +31,17 @@ func CreateZone(ctx *pulumi.Context, zone *Zone) error {
 		return err
 	}
 
-	for _, a := range zone.Addresses {
+	for _, n := range zone.RecordNames {
 		args := &cloudflare.RecordArgs{
 			Type:    pulumi.String("A"),
-			Name:    pulumi.String(a),
+			Name:    pulumi.String(n),
 			Value:   pulumi.String(zone.Balancer),
 			ZoneId:  z.ID(),
 			Proxied: pulumi.Bool(true),
 			Ttl:     pulumi.Int(1),
 		}
 
-		_, err := cloudflare.NewRecord(ctx, a, args)
+		_, err := cloudflare.NewRecord(ctx, n, args)
 		if err != nil {
 			return err
 		}

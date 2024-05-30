@@ -7,12 +7,13 @@ import (
 type (
 	// App to be created.
 	App struct {
+		Memory        Memory
 		ID            string
 		Name          string
+		Domain        string
 		Version       string
 		ConfigVersion string
 		InitVersion   string
-		Memory        Memory
 		SecretVolumes []string
 	}
 

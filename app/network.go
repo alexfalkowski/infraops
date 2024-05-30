@@ -35,7 +35,7 @@ func createIngress(ctx *pulumi.Context, app *App) error {
 			IngressClassName: pulumi.String("nginx"),
 			Rules: nv1.IngressRuleArray{
 				nv1.IngressRuleArgs{
-					Host: pulumi.String(app.Name + ".lean-thoughts.com"),
+					Host: pulumi.String(app.Name + "." + app.Domain),
 					Http: httpIngressRule(app),
 				},
 			},

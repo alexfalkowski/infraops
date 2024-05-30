@@ -11,9 +11,10 @@ import (
 func TestCreateZone(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
 		z := &cf.Zone{
-			Name:      "test",
-			Addresses: []string{"test"},
-			Balancer:  "127.0.0.1",
+			Name:        "test",
+			Domain:      "test.com",
+			RecordNames: []string{"test"},
+			Balancer:    "127.0.0.1",
 		}
 
 		err := cf.CreateZone(ctx, z)
