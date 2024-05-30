@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.90.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.90.0) - 2024-05-30
+
+- [`6728e7e`](https://github.com/alexfalkowski/infraops/commit/6728e7eb7378c17263dfdab2abadb59e71b4251f) feat(apps): update a dep in https://github.com/alexfalkowski/go-service/pull/794 (#289)
+
 ## [v1.89.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.89.0) - 2024-05-30
 
 - [`402606a`](https://github.com/alexfalkowski/infraops/commit/402606a1f14a0678fd417d30ed884057503d1ede) feat(apps): upgrade versions to handle stopping telemetry (#288)
