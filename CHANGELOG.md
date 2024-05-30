@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.89.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.89.0) - 2024-05-30
+
+- [`402606a`](https://github.com/alexfalkowski/infraops/commit/402606a1f14a0678fd417d30ed884057503d1ede) feat(apps): upgrade versions to handle stopping telemetry (#288)
+
 ## [v1.88.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.88.1) - 2024-05-30
 
 - [`9dfb58e`](https://github.com/alexfalkowski/infraops/commit/9dfb58e1435a7af4c9eef0b2c229985778254cc8) fix(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.29.0 to 4.30.0 (#287)
