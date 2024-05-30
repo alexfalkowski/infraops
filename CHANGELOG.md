@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.91.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.91.0) - 2024-05-30
+
+- [`2188388`](https://github.com/alexfalkowski/infraops/commit/2188388be23e81c5b17ee88fcaedbf6adb34e314) feat(apps): add domain (#290)
+
 ## [v1.90.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.90.0) - 2024-05-30
 
 - [`6728e7e`](https://github.com/alexfalkowski/infraops/commit/6728e7eb7378c17263dfdab2abadb59e71b4251f) feat(apps): update a dep in https://github.com/alexfalkowski/go-service/pull/794 (#289)
