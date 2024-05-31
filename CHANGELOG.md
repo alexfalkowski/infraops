@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.94.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.94.0) - 2024-06-01
+
+- [`ddde77e`](https://github.com/alexfalkowski/infraops/commit/ddde77e0e77702e42f8e145f7942c6a5b98a2470) feat(apps): upgrade versions to handle ip headers (#294)
+
 ## [v1.93.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.93.0) - 2024-05-31
 
 - [`4433c40`](https://github.com/alexfalkowski/infraops/commit/4433c40b436dcee4f30af2a51e3022f04c197563) feat(deps): upgrade new cluster (#293)
