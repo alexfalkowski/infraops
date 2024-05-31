@@ -12,7 +12,7 @@ func createPodDisruptionBudget(ctx *pulumi.Context, app *App) error {
 		Spec: pv1.PodDisruptionBudgetSpecArgs{
 			MaxUnavailable: pulumi.Int(1),
 			Selector: v1.LabelSelectorArgs{
-				MatchLabels: labels(app),
+				MatchLabels: matchLabels(app),
 			},
 		},
 	}

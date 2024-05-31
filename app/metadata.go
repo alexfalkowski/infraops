@@ -5,20 +5,37 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func metadata(app *App) mv1.ObjectMetaArgs {
+func metadata(app *App, ms ...pulumi.StringMap) mv1.ObjectMetaArgs {
+	ms = append(ms, recommendedLabels(app))
+
 	return mv1.ObjectMetaArgs{
 		Name:      pulumi.String(app.Name),
 		Namespace: pulumi.String(app.Name),
+		Labels:    merge(ms...),
 	}
 }
 
-func labels(app *App) pulumi.StringMap {
+func recommendedLabels(app *App) pulumi.StringMap {
+	return pulumi.StringMap{
+		"app.kubernetes.io/name":    pulumi.String(app.Name),
+		"app.kubernetes.io/version": pulumi.String(app.Version),
+	}
+}
+
+func matchLabels(app *App) pulumi.StringMap {
 	return pulumi.StringMap{
 		"app": pulumi.String(app.Name),
 	}
 }
 
-func annotations(app *App) pulumi.StringMap {
+func deploymentLabels(app *App) pulumi.StringMap {
+	return pulumi.StringMap{
+		"circleci.com/component-name": pulumi.String(app.Name),
+		"circleci.com/version":        pulumi.String(app.Version),
+	}
+}
+
+func deploymentAnnotations(app *App) pulumi.StringMap {
 	f := pulumi.String("false")
 
 	return pulumi.StringMap{
@@ -30,4 +47,16 @@ func annotations(app *App) pulumi.StringMap {
 		"circleci.com/promote-release-enabled":   f,
 		"circleci.com/cancel-release-enabled":    f,
 	}
+}
+
+func merge(ms ...pulumi.StringMap) pulumi.StringMap {
+	fm := pulumi.StringMap{}
+
+	for _, m := range ms {
+		for k, v := range m {
+			fm[k] = v
+		}
+	}
+
+	return fm
 }

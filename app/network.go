@@ -10,7 +10,7 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 	args := &nv1.NetworkPolicyArgs{
 		Metadata: metadata(app),
 		Spec: nv1.NetworkPolicySpecArgs{
-			PodSelector: mv1.LabelSelectorArgs{MatchLabels: labels(app)},
+			PodSelector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
 			Ingress: nv1.NetworkPolicyIngressRuleArray{
 				nv1.NetworkPolicyIngressRuleArgs{},
 			},
