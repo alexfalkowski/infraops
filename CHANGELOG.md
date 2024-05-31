@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.93.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.93.0) - 2024-05-31
+
+- [`4433c40`](https://github.com/alexfalkowski/infraops/commit/4433c40b436dcee4f30af2a51e3022f04c197563) feat(deps): upgrade new cluster (#293)
+
 ## [v1.92.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.92.0) - 2024-05-31
 
 - [`10f52cf`](https://github.com/alexfalkowski/infraops/commit/10f52cfcd0fc376a057a2df85d95fd81cdbd4119) feat(apps): add recommended labels (#291)
