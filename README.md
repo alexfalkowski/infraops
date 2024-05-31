@@ -38,11 +38,7 @@ To have an app ready as an example we will use `example`, you need to run the fo
 The above is for a new application. If you want to setup all current apps, run the following.
 
 ```bash
-❯ make -C area/apps setup-konfig
-
-❯ make -C area/apps setup-standort
-
-❯ make -C area/apps setup-bezeichner
+❯ make -C area/apps setup
 ```
 
 #### Delete

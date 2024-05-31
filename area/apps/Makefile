@@ -10,7 +10,7 @@ lint: kube-linter kube-score
 
 # Save kubeconfig.
 save-config:
-	doctl kubernetes cluster kubeconfig save f7a7f2b2-f562-49fe-93e7-2b6ef3038fa5
+	doctl kubernetes cluster kubeconfig save e18082d3-d874-4e84-8703-c15e6d6fea3a
 
 # Delete namespace.
 delete-namespace:
@@ -29,6 +29,9 @@ kube-score-namespace:
 	kubectl api-resources --verbs=list --namespaced -o name \
 		| xargs -I{} bash -c "kubectl get {} --namespace $(namespace) -oyaml && echo ---" \
 		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
+
+# Setup all apps.
+setup: setup-konfig setup-standort setup-bezeichner
 
 # Delete all apps.
 delete: delete-konfig delete-standort delete-bezeichner

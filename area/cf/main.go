@@ -11,7 +11,7 @@ func main() {
 			Name:        "lean-thoughts",
 			Domain:      "lean-thoughts.com",
 			RecordNames: []string{"standort", "bezeichner"},
-			Balancer:    "46.101.69.137",
+			Balancer:    "209.38.186.238",
 		}
 
 		return cf.CreateZone(ctx, z)
