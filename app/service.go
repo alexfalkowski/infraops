@@ -49,9 +49,10 @@ func createService(ctx *pulumi.Context, app *App) error {
 	args := &cv1.ServiceArgs{
 		Metadata: metadata(app, matchLabels(app)),
 		Spec: cv1.ServiceSpecArgs{
-			Ports:    cv1.ServicePortArray{servicePort("http", 8080), servicePort("grpc", 9090)},
-			Selector: matchLabels(app),
-			Type:     pulumi.String("ClusterIP"),
+			Ports:                 cv1.ServicePortArray{servicePort("http", 8080), servicePort("grpc", 9090)},
+			Selector:              matchLabels(app),
+			Type:                  pulumi.String("ClusterIP"),
+			ExternalTrafficPolicy: pulumi.String("Local"),
 		},
 	}
 	_, err := cv1.NewService(ctx, app.Name, args)
