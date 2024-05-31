@@ -11,18 +11,13 @@ import (
 )
 
 func createDeployment(ctx *pulumi.Context, app *App) error {
+	m := metadata(app, deploymentLabels(app))
+	m.Annotations = deploymentAnnotations(app)
+
 	args := &av1.DeploymentArgs{
-		Metadata: mv1.ObjectMetaArgs{
-			Name:        pulumi.String(app.Name),
-			Namespace:   pulumi.String(app.Name),
-			Annotations: annotations(app),
-			Labels: pulumi.StringMap{
-				"circleci.com/component-name": pulumi.String(app.Name),
-				"circleci.com/version":        pulumi.String(app.Version),
-			},
-		},
+		Metadata: m,
 		Spec: av1.DeploymentSpecArgs{
-			Selector: mv1.LabelSelectorArgs{MatchLabels: labels(app)},
+			Selector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
 			Replicas: pulumi.Int(3),
 			Strategy: av1.DeploymentStrategyArgs{
 				RollingUpdate: av1.RollingUpdateDeploymentArgs{
@@ -32,11 +27,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 			},
 			Template: cv1.PodTemplateSpecArgs{
 				Metadata: mv1.ObjectMetaArgs{
-					Labels: pulumi.StringMap{
-						"app":                         pulumi.String(app.Name),
-						"circleci.com/component-name": pulumi.String(app.Name),
-						"circleci.com/version":        pulumi.String(app.Version),
-					},
+					Labels: merge(matchLabels(app), deploymentLabels(app)),
 				},
 				Spec: cv1.PodSpecArgs{
 					ServiceAccountName: pulumi.String(app.Name),
@@ -56,14 +47,10 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 
 func createService(ctx *pulumi.Context, app *App) error {
 	args := &cv1.ServiceArgs{
-		Metadata: mv1.ObjectMetaArgs{
-			Name:      pulumi.String(app.Name),
-			Namespace: pulumi.String(app.Name),
-			Labels:    labels(app),
-		},
+		Metadata: metadata(app, matchLabels(app)),
 		Spec: cv1.ServiceSpecArgs{
 			Ports:    cv1.ServicePortArray{servicePort("http", 8080), servicePort("grpc", 9090)},
-			Selector: labels(app),
+			Selector: matchLabels(app),
 			Type:     pulumi.String("ClusterIP"),
 		},
 	}

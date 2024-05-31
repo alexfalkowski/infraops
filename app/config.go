@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
-	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -37,12 +36,12 @@ func initConfigMap(app *App) (*cv1.ConfigMapArgs, error) {
 		return nil, err
 	}
 
+	m := metadata(app)
+	m.Name = pulumi.String("konfig")
+
 	args := &cv1.ConfigMapArgs{
-		Metadata: mv1.ObjectMetaArgs{
-			Name:      pulumi.String("konfig"),
-			Namespace: pulumi.String(app.Name),
-		},
-		Data: pulumi.StringMap{configFile("konfig"): pulumi.String(d)},
+		Metadata: m,
+		Data:     pulumi.StringMap{configFile("konfig"): pulumi.String(d)},
 	}
 
 	return args, nil
