@@ -1,6 +1,6 @@
 # Save kubeconfig.
 save-config:
-	doctl kubernetes cluster kubeconfig save f7a7f2b2-f562-49fe-93e7-2b6ef3038fa5
+	doctl kubernetes cluster kubeconfig save e18082d3-d874-4e84-8703-c15e6d6fea3a
 
 # Delete all.
 delete:
@@ -11,9 +11,9 @@ setup: setup-helm install-helm setup-grafana
 
 # Setup helm repos.
 setup-helm:
-	helm repo add nginx-stable https://helm.nginx.com/stable
+	helm repo add nginx https://kubernetes.github.io/ingress-nginx
 	helm repo add grafana https://grafana.github.io/helm-charts
-	helm repo add release-agent https://circleci-public.github.io/cci-k8s-release-agent
+	helm repo add circleci https://circleci-public.github.io/cci-k8s-release-agent
 	helm repo update
 
 # Setup grafana.
@@ -27,9 +27,9 @@ update-grafana:
 
 # Install helm.
 install-helm:
-	helm upgrade --install nginx-ingress-release nginx-stable/nginx-ingress --namespace nginx-ingress --create-namespace --version 1.2.1
+	helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.10.1
 	helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.3.22
-	helm upgrade --install circleci-release release-agent/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{konfig,standort,bezeichner}"
+	helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{konfig,standort,bezeichner}"
 
 # Update deps.
 update: update-grafana
