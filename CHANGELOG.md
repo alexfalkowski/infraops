@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.97.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.97.0) - 2024-06-01
+
+- [`6179316`](https://github.com/alexfalkowski/infraops/commit/6179316581c791db678cb3594ed9feeef35453c6) feat(k8s): update grafana/agent:v0.41.0 (#297)
+
 ## [v1.96.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.96.0) - 2024-06-01
 
 - [`1f7bc6a`](https://github.com/alexfalkowski/infraops/commit/1f7bc6a8a54e57da3df96932ec8b8cecab241451) feat(k8s): pass values to nginx (#296)
