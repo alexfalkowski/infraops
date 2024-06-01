@@ -1,0 +1,4 @@
+controller:
+  config:
+    compute-full-forwarded-for: true
+    use-forwarded-headers: true
