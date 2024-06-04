@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'net/http'
+
+# Parse CIDRs from CloudFlare.
+cidrs = JSON.parse(Net::HTTP.get(URI('https://api.cloudflare.com/client/v4/ips')))['result']['ipv4_cidrs']
+allow_list = cidrs.map { |c| "cidr:#{c}" }.join(',')
+
+# Create the command to run on the load balancers.
+lbs = JSON.parse(`doctl compute load-balancer list -o json`)
+lbs.each do |lb|
+  cmd = "doctl compute load-balancer update #{lb['id']} --deny-list cidr:0.0.0.0/0 --allow-list #{allow_list}"
+
+  `#{cmd}`
+end
