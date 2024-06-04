@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.100.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.100.0) - 2024-06-04
+
+- [`1b8ab01`](https://github.com/alexfalkowski/infraops/commit/1b8ab01129eebb48c356d39adce2000b609f84ea) feat(k8s): only allow cloudflare ips (#304)
+
 ## [v1.99.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.99.2) - 2024-06-04
 
 - [`634f45b`](https://github.com/alexfalkowski/infraops/commit/634f45b8e21102e0641ebabc8cec3c4502c4db58) fix(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.30.0 to 4.30.1 (#302)
