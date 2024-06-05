@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.100.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.100.1) - 2024-06-05
+
+- [`14fcf0a`](https://github.com/alexfalkowski/infraops/commit/14fcf0a7def60fd408be1420736199bbaea72cc5) fix(deps): upgrade to go 1.22.4 (#305)
+
 ## [v1.100.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.100.0) - 2024-06-04
 
 - [`1b8ab01`](https://github.com/alexfalkowski/infraops/commit/1b8ab01129eebb48c356d39adce2000b609f84ea) feat(k8s): only allow cloudflare ips (#304)
