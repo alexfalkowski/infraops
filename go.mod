@@ -6,7 +6,7 @@ require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.30.0
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.30.1
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
-	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.12.0
+	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.13.1
 	github.com/pulumi/pulumi/sdk/v3 v3.118.0
 	github.com/stretchr/testify v1.9.0
 )
