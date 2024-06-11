@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.102.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.102.1) - 2024-06-11
+
+- [`1ea0187`](https://github.com/alexfalkowski/infraops/commit/1ea0187a7da33f38f5b6cc007052bd4b55069658) fix(apps): use v2.106.0 (#313)
+
 ## [v1.102.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.102.0) - 2024-06-11
 
 - [`aabd1ed`](https://github.com/alexfalkowski/infraops/commit/aabd1ed6136d3fc8ca42725634f8bf63fe7cb25f) feat(apps): upgrade apps to use new token structure (#312)
