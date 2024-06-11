@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.102.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.102.0) - 2024-06-11
+
+- [`aabd1ed`](https://github.com/alexfalkowski/infraops/commit/aabd1ed6136d3fc8ca42725634f8bf63fe7cb25f) feat(apps): upgrade apps to use new token structure (#312)
+- [`b10c8bc`](https://github.com/alexfalkowski/infraops/commit/b10c8bcae82e75f4a9545bdbdc2d8202e671c052) build(deps): bump bin from `955891d` to `897d5f1` (#311)
+
 ## [v1.101.3](https://github.com/alexfalkowski/infraops/releases/tag/v1.101.3) - 2024-06-06
 
 - [`8ea919d`](https://github.com/alexfalkowski/infraops/commit/8ea919da7e9e537bb982c13c921f3a71a7a7866e) fix(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.118.0 to 3.119.0 (#310)
