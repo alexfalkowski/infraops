@@ -31,7 +31,8 @@ telemetry:
     host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
     key: /etc/secrets/otlp/token
 token:
-  hash: $argon2id$v=19$m=65536,t=3,p=4$L8nxrWMr7welQoQh7mxCIw$xlUfRaN9FajHewkyxYQxkrP2dkwkIkhZNqt7lvHAw+M
+  argon2:
+    hash: $argon2id$v=19$m=65536,t=3,p=4$L8nxrWMr7welQoQh7mxCIw$xlUfRaN9FajHewkyxYQxkrP2dkwkIkhZNqt7lvHAw+M
 transport:
   http:
     mux: gateway
