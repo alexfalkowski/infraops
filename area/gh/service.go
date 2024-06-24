@@ -43,7 +43,7 @@ func createAuth(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "auth", Description: "Auth provides all your authn and authz needs.",
 		HomepageURL: "https://alexfalkowski.github.io/auth", Checks: checks,
-		EnablePages: true,
+		EnablePages: true, Archived: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
