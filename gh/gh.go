@@ -27,6 +27,7 @@ type Repository struct {
 	Checks      []string
 	IsTemplate  bool
 	EnablePages bool
+	Archived    bool
 }
 
 // CreateRepository for gh.
@@ -54,6 +55,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		HomepageUrl:         pulumi.String(repo.HomepageURL),
 		IsTemplate:          pulumi.Bool(repo.IsTemplate),
 		Name:                pulumi.String(repo.Name),
+		Archived:            pulumi.Bool(repo.Archived),
 		Pages:               pages(repo),
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
