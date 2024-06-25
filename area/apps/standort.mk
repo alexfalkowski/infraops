@@ -18,4 +18,5 @@ rollout-standort:
 
 # Verify standort.
 verify-standort:
-	curl -sf https://standort.lean-thoughts.com/v2/location
+	curl -svf --header "Content-Type: application/json" --request POST --data {}  https://standort.lean-thoughts.com/v2/location
+
