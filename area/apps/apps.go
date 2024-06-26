@@ -10,7 +10,7 @@ func createKonfig(ctx *pulumi.Context) error {
 		ID:            "1115c470-ccc9-4daf-8459-ef1e19c40afe",
 		Name:          "konfig",
 		Domain:        "lean-thoughts.com",
-		Version:       "1.167.0",
+		Version:       "1.168.0",
 		Memory:        app.Memory{Min: "128Mi", Max: "256Mi"},
 		SecretVolumes: []string{"gh"},
 	}
@@ -23,8 +23,8 @@ func createStandort(ctx *pulumi.Context) error {
 		ID:            "28c679dc-5924-47e8-ac48-73cd842ba5cd",
 		Name:          "standort",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "1.167.0",
-		Version:       "2.113.5",
+		InitVersion:   "1.168.0",
+		Version:       "2.114.0",
 		ConfigVersion: "1.9.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
@@ -37,8 +37,8 @@ func createBezeichner(ctx *pulumi.Context) error {
 		ID:            "98968ca0-4ada-4856-8547-210f92b838ea",
 		Name:          "bezeichner",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "1.167.0",
-		Version:       "1.117.5",
+		InitVersion:   "1.168.0",
+		Version:       "1.118.0",
 		ConfigVersion: "1.8.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
