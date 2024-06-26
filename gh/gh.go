@@ -23,6 +23,7 @@ type Repository struct {
 	Name        string
 	Description string
 	HomepageURL string
+	Visibility  string
 	Topics      []string
 	Checks      []string
 	IsTemplate  bool
