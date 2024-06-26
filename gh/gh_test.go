@@ -12,7 +12,7 @@ func TestCreateRepository(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
 		a := &gh.Repository{
 			Name: "test", Description: "test", HomepageURL: "https://alexfalkowski.github.io/test",
-			Template: gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
+			Template: &gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
 		}
 
 		err := gh.CreateRepository(ctx, a)
