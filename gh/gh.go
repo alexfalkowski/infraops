@@ -13,13 +13,13 @@ type Template struct {
 	Repository string
 }
 
-func (t Template) IsValid() bool {
+func (t *Template) IsValid() bool {
 	return t.Owner != "" && t.Repository != ""
 }
 
 // Repository for gh.
 type Repository struct {
-	Template    Template
+	Template    *Template
 	Name        string
 	Description string
 	HomepageURL string
@@ -100,7 +100,8 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 }
 
 func template(repo *Repository) *github.RepositoryTemplateArgs {
-	if !repo.Template.IsValid() {
+	template := repo.Template
+	if template == nil || !repo.Template.IsValid() {
 		return nil
 	}
 
