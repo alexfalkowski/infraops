@@ -3,7 +3,7 @@ module github.com/alexfalkowski/infraops
 go 1.22.4
 
 require (
-	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.33.0
+	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.33.1
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.30.2
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.13.1
