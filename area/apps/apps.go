@@ -29,7 +29,16 @@ func createStandort(ctx *pulumi.Context) error {
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
 
-	return app.CreateApp(ctx, a)
+	if err := app.CreateApp(ctx, a); err != nil {
+		return err
+	}
+
+	d, err := a.Probe(ctx, "v2/location", "{}")
+	if err != nil {
+		return err
+	}
+
+	return ctx.Log.Info(d, nil)
 }
 
 func createBezeichner(ctx *pulumi.Context) error {
@@ -43,5 +52,14 @@ func createBezeichner(ctx *pulumi.Context) error {
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
 
-	return app.CreateApp(ctx, a)
+	if err := app.CreateApp(ctx, a); err != nil {
+		return err
+	}
+
+	d, err := a.Probe(ctx, "v1/generate", `{ "application": "uuid", "count": 10 }`)
+	if err != nil {
+		return err
+	}
+
+	return ctx.Log.Info(d, nil)
 }
