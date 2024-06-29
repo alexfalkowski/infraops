@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.110.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.110.0) - 2024-06-29
+
+- [`6403299`](https://github.com/alexfalkowski/infraops/commit/64032994d4cffcd5ffbcd9781b8e421a8f599d34) feat(apps): update konfig to v1.177.0 (#335)
+- [`c98426e`](https://github.com/alexfalkowski/infraops/commit/c98426ecd1060d1e099108ca4cd8314984238aef) build(ci): add codecov (#334)
+
 ## [v1.109.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.109.0) - 2024-06-28
 
 - [`3113ade`](https://github.com/alexfalkowski/infraops/commit/3113adeb67e70f4d8775eb8a1374f8c82ba191f1) feat(apps): add probing (#333)
