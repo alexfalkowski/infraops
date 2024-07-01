@@ -12,7 +12,8 @@ health:
   timeout: 1s
 limiter:
   kind: token
-  pattern: 1000-S
+  tokens: 1000
+  interval: 1s
 source:
   kind: git
   git:
@@ -35,7 +36,6 @@ token:
     hash: $argon2id$v=19$m=65536,t=3,p=4$L8nxrWMr7welQoQh7mxCIw$xlUfRaN9FajHewkyxYQxkrP2dkwkIkhZNqt7lvHAw+M
 transport:
   http:
-    mux: gateway
     port: 8080
     retry:
       attempts: 3

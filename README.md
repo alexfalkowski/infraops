@@ -1,5 +1,8 @@
-[![CircleCI](https://circleci.com/gh/alexfalkowski/infraops.svg?style=svg)](https://circleci.com/gh/alexfalkowski/infraops)
+[![CircleCI](https://circleci.com/gh/alexfalkowski/infraops.svg?style=shield)](https://circleci.com/gh/alexfalkowski/infraops)
 [![codecov](https://codecov.io/gh/alexfalkowski/infraops/graph/badge.svg?token=U3X5JGAA8I)](https://codecov.io/gh/alexfalkowski/infraops)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alexfalkowski/infraops)](https://goreportcard.com/report/github.com/alexfalkowski/infraops)
+[![Go Reference](https://pkg.go.dev/badge/github.com/alexfalkowski/infraops.svg)](https://pkg.go.dev/github.com/alexfalkowski/infraops)
+[![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 
 A place where all infrastructure is taken care of.
 

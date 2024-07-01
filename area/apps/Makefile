@@ -38,3 +38,6 @@ delete: delete-konfig delete-standort delete-bezeichner
 
 # Rollout all apps.
 rollout: rollout-konfig rollout-standort rollout-bezeichner
+
+# Verify all apps.
+verify: verify-standort verify-bezeichner
