@@ -24,3 +24,6 @@ update-bezeichner:
 rollout-bezeichner:
 	$(MAKE) namespace=bezeichner rollout-namespace
 
+# Verify bezeichner.
+verify-bezeichner:
+	curl -svf --header "Content-Type: application/json" --request POST --data '{ "application": "uuid", "count": 10 }'  https://bezeichner.lean-thoughts.com/v1/generate

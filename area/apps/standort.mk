@@ -16,3 +16,6 @@ setup-standort:
 rollout-standort:
 	$(MAKE) namespace=standort rollout-namespace
 
+# Verify standort.
+verify-standort:
+	curl -svf --header "Content-Type: application/json" --request POST --data {}  https://standort.lean-thoughts.com/v2/location
