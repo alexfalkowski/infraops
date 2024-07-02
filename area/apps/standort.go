@@ -10,8 +10,8 @@ func createStandort(ctx *pulumi.Context) error {
 		ID:            "28c679dc-5924-47e8-ac48-73cd842ba5cd",
 		Name:          "standort",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "1.180.1",
-		Version:       "2.120.1",
+		InitVersion:   "1.181.0",
+		Version:       "2.121.0",
 		ConfigVersion: "1.10.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
