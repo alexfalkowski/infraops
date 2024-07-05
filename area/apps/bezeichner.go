@@ -10,8 +10,8 @@ func createBezeichner(ctx *pulumi.Context) error {
 		ID:            "98968ca0-4ada-4856-8547-210f92b838ea",
 		Name:          "bezeichner",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "1.193.0",
-		Version:       "1.134.0",
+		InitVersion:   "1.194.0",
+		Version:       "1.135.0",
 		ConfigVersion: "1.9.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
