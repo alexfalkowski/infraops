@@ -10,7 +10,7 @@ func main() {
 		z := &cf.Zone{
 			Name:        "lean-thoughts",
 			Domain:      "lean-thoughts.com",
-			RecordNames: []string{"standort", "bezeichner"},
+			RecordNames: []string{"standort", "bezeichner", "web"},
 			Balancer:    "209.38.186.238",
 		}
 
