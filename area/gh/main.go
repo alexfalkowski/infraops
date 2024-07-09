@@ -11,8 +11,8 @@ var fns = []createFn{
 	createInfraOps, createDocker, createBin,
 	createNonnative, createGoHealth, createGoService,
 	createGoServiceTemplate, createGoClientTemplate,
-	createStatus, createStandort, createAuth,
-	createKonfig, createMigrieren, createBezeichner,
+	createStatus, createStandort, createAuth, createKonfig,
+	createMigrieren, createBezeichner, createWeb,
 	createServiceControl,
 }
 
