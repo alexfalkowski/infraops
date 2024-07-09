@@ -81,3 +81,15 @@ func createBezeichner(ctx *pulumi.Context) error {
 
 	return gh.CreateRepository(ctx, repo)
 }
+
+func createWeb(ctx *pulumi.Context) error {
+	checks := []string{"ci/circleci: build-client", "ci/circleci: build-docker"}
+	repo := &gh.Repository{
+		Name: "web", Description: "A website lean-thoughts.com.",
+		HomepageURL: "https://alexfalkowski.github.io/web", Checks: checks,
+		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
+		Visibility: "public", IsTemplate: false, EnablePages: false,
+	}
+
+	return gh.CreateRepository(ctx, repo)
+}
