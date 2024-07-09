@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.131.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.131.0) - 2024-07-09
+
+- [`08a28e4`](https://github.com/alexfalkowski/infraops/commit/08a28e4d2b0f3f4601e20ffcf79b340f3e1c0006) feat(k8s): add web to circleci (#363)
+
 ## [v1.130.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.130.0) - 2024-07-09
 
 - [`f413360`](https://github.com/alexfalkowski/infraops/commit/f413360975215ac560257e1c166f5da86b590786) feat(apps): update web to v0.4.0 (#362)
