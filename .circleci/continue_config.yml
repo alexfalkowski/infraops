@@ -21,7 +21,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout
@@ -124,7 +124,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout
@@ -148,7 +148,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout
@@ -173,7 +173,7 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout
@@ -197,7 +197,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout
@@ -222,7 +222,7 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout
@@ -246,7 +246,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/go:1.22-ruby
+      - image: alexfalkowski/go:1.22
     working_directory: ~/infraops
     steps:
       - checkout

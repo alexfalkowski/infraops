@@ -1,11 +1,22 @@
 package gh
 
 import (
+	"errors"
+
+	e "github.com/alexfalkowski/infraops/errors"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 const master = "master"
+
+var (
+	// ErrMissingTemplate for gh.
+	ErrMissingTemplate = errors.New("missing template")
+
+	// ErrMissingChecks for gh.
+	ErrMissingChecks = errors.New("missing checks")
+)
 
 // Template for gh.
 type Template struct {
@@ -13,8 +24,25 @@ type Template struct {
 	Repository string
 }
 
-func (t *Template) IsValid() bool {
-	return t.Owner != "" && t.Repository != ""
+// Valid if no error is returned.
+func (t *Template) Valid() error {
+	if t.Owner == "" || t.Repository == "" {
+		return ErrMissingTemplate
+	}
+
+	return nil
+}
+
+// Checks for gh.
+type Checks []string
+
+// Valid if no error is returned.
+func (c Checks) Valid() error {
+	if len(c) == 0 {
+		return ErrMissingChecks
+	}
+
+	return nil
 }
 
 // Repository for gh.
@@ -25,7 +53,7 @@ type Repository struct {
 	HomepageURL string
 	Visibility  string
 	Topics      []string
-	Checks      []string
+	Checks      Checks
 	IsTemplate  bool
 	EnablePages bool
 	Archived    bool
@@ -35,13 +63,26 @@ type Repository struct {
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
 	if err != nil {
-		return err
+		return e.Prefix(repo.Name, err)
 	}
 
-	return branchProtection(ctx, r.NodeId, repo)
+	if err := branchProtection(ctx, r.NodeId, repo); err != nil {
+		return e.Prefix(repo.Name, err)
+	}
+
+	return nil
 }
 
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
+	t, err := template(repo)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := repo.Checks.Valid(); err != nil {
+		return nil, err
+	}
+
 	args := &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
 		AllowRebaseMerge:    pulumi.Bool(false),
@@ -67,7 +108,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 			},
 		},
 		SquashMergeCommitTitle: pulumi.String("PR_TITLE"),
-		Template:               template(repo),
+		Template:               t,
 		Topics:                 pulumi.ToStringArray(repo.Topics),
 		Visibility:             pulumi.String("public"),
 		VulnerabilityAlerts:    pulumi.Bool(true),
@@ -99,16 +140,22 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 	return err
 }
 
-func template(repo *Repository) *github.RepositoryTemplateArgs {
-	template := repo.Template
-	if template == nil || !repo.Template.IsValid() {
-		return nil
+//nolint:nilnil
+func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
+	if repo.Template == nil {
+		return nil, nil
 	}
 
-	return &github.RepositoryTemplateArgs{
+	if err := repo.Template.Valid(); err != nil {
+		return nil, err
+	}
+
+	args := &github.RepositoryTemplateArgs{
 		Owner:      pulumi.String(repo.Template.Owner),
 		Repository: pulumi.String(repo.Template.Repository),
 	}
+
+	return args, nil
 }
 
 func pages(repo *Repository) *github.RepositoryPagesArgs {
