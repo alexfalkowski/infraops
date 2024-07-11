@@ -11,7 +11,7 @@ func createGoClientTemplate(ctx *pulumi.Context) error {
 		Name: "go-client-template", Description: "A template for go clients.",
 		HomepageURL: "https://alexfalkowski.github.io/go-client-template", Checks: checks,
 		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
-		Visibility: "public", IsTemplate: true, EnablePages: true,
+		Visibility: gh.Public, IsTemplate: true, EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
@@ -23,7 +23,7 @@ func createServiceControl(ctx *pulumi.Context) error {
 		Name: "servicectl", Description: "A tool for go-service and go-service-templates.",
 		HomepageURL: "https://alexfalkowski.github.io/servicectl", Checks: checks,
 		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
-		Visibility: "public", EnablePages: true,
+		Visibility: gh.Public, EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)

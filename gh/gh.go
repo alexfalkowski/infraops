@@ -16,13 +16,41 @@ var (
 
 	// ErrMissingChecks for gh.
 	ErrMissingChecks = errors.New("missing checks")
+
+	// Public visibility.
+	Public = Visibility("public")
+
+	// Private visibility.
+	Private = Visibility("private")
 )
 
-// Template for gh.
-type Template struct {
-	Owner      string
-	Repository string
-}
+type (
+	// Visibility of the repositories.
+	Visibility string
+
+	// Template for gh.
+	Template struct {
+		Owner      string
+		Repository string
+	}
+
+	// Checks for gh.
+	Checks []string
+
+	// Repository for gh.
+	Repository struct {
+		Template    *Template
+		Name        string
+		Description string
+		HomepageURL string
+		Visibility  Visibility
+		Topics      []string
+		Checks      Checks
+		IsTemplate  bool
+		EnablePages bool
+		Archived    bool
+	}
+)
 
 // Valid if no error is returned.
 func (t *Template) Valid() error {
@@ -33,9 +61,6 @@ func (t *Template) Valid() error {
 	return nil
 }
 
-// Checks for gh.
-type Checks []string
-
 // Valid if no error is returned.
 func (c Checks) Valid() error {
 	if len(c) == 0 {
@@ -45,20 +70,6 @@ func (c Checks) Valid() error {
 	return nil
 }
 
-// Repository for gh.
-type Repository struct {
-	Template    *Template
-	Name        string
-	Description string
-	HomepageURL string
-	Visibility  string
-	Topics      []string
-	Checks      Checks
-	IsTemplate  bool
-	EnablePages bool
-	Archived    bool
-}
-
 // CreateRepository for gh.
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
@@ -66,11 +77,7 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 		return e.Prefix(repo.Name, err)
 	}
 
-	if err := branchProtection(ctx, r.NodeId, repo); err != nil {
-		return e.Prefix(repo.Name, err)
-	}
-
-	return nil
+	return e.Prefix(repo.Name, branchProtection(ctx, r.NodeId, repo))
 }
 
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
@@ -110,7 +117,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		SquashMergeCommitTitle: pulumi.String("PR_TITLE"),
 		Template:               t,
 		Topics:                 pulumi.ToStringArray(repo.Topics),
-		Visibility:             pulumi.String("public"),
+		Visibility:             pulumi.String(repo.Visibility),
 		VulnerabilityAlerts:    pulumi.Bool(true),
 	}
 

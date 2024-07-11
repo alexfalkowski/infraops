@@ -67,6 +67,24 @@ The code is based on the package https://www.pulumi.com/registry/packages/github
 
 The original idea was inspired from https://github.com/dirien/pulumi-github.
 
+#### Creation
+
+There is a caveat when creating repositories, that requires a 2 step process.
+
+The first step is to have:
+
+```go
+EnablePages: false
+```
+
+Then the second PR, we set it to:
+
+```go
+EnablePages: true
+```
+
+The reason for this is that there seems to be a timing issue with creating the `master` branch.
+
 ### Kubernetes (k8s)
 
 This contains all the packages our cluster needs.
