@@ -8,7 +8,7 @@ import (
 func createNonnative(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "nonnative", Description: "Allows you to keep using the power of ruby to test other systems.",
-		HomepageURL: "https://alexfalkowski.github.io/nonnative", Checks: []string{"ci/circleci: build"},
+		HomepageURL: "https://alexfalkowski.github.io/nonnative", Checks: gh.Checks{"ci/circleci: build"},
 		Visibility: "public", EnablePages: true,
 	}
 
@@ -18,7 +18,7 @@ func createNonnative(ctx *pulumi.Context) error {
 func createGoHealth(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "go-health", Description: "Health monitoring pattern in Go.",
-		HomepageURL: "https://alexfalkowski.github.io/go-health", Checks: []string{"ci/circleci: build"},
+		HomepageURL: "https://alexfalkowski.github.io/go-health", Checks: gh.Checks{"ci/circleci: build"},
 		Visibility: "public", EnablePages: true,
 	}
 
@@ -28,7 +28,7 @@ func createGoHealth(ctx *pulumi.Context) error {
 func createGoService(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "go-service", Description: "A framework to build services in go.",
-		HomepageURL: "https://alexfalkowski.github.io/go-service", Checks: []string{"ci/circleci: build"},
+		HomepageURL: "https://alexfalkowski.github.io/go-service", Checks: gh.Checks{"ci/circleci: build"},
 		Visibility: "public", EnablePages: true,
 	}
 
