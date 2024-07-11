@@ -13,10 +13,39 @@ func TestCreateRepository(t *testing.T) {
 		a := &gh.Repository{
 			Name: "test", Description: "test", HomepageURL: "https://alexfalkowski.github.io/test",
 			Template: &gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
+			Checks:   gh.Checks{"ci/circleci: build"},
 		}
 
 		err := gh.CreateRepository(ctx, a)
 		require.NoError(t, err)
+
+		return nil
+	}, pulumi.WithMocks("project", "stack", gh.Mocks(0)))
+
+	require.NoError(t, err)
+
+	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
+		a := &gh.Repository{
+			Name: "test", Description: "test", HomepageURL: "https://alexfalkowski.github.io/test",
+		}
+
+		err := gh.CreateRepository(ctx, a)
+		require.Error(t, err)
+
+		return nil
+	}, pulumi.WithMocks("project", "stack", gh.Mocks(0)))
+
+	require.NoError(t, err)
+
+	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
+		a := &gh.Repository{
+			Name: "test", Description: "test", HomepageURL: "https://alexfalkowski.github.io/test",
+			Template: &gh.Template{Owner: "alexfalkowski"},
+			Checks:   gh.Checks{"ci/circleci: build"},
+		}
+
+		err := gh.CreateRepository(ctx, a)
+		require.Error(t, err)
 
 		return nil
 	}, pulumi.WithMocks("project", "stack", gh.Mocks(0)))

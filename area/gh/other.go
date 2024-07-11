@@ -8,7 +8,7 @@ import (
 func createInfraOps(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "infraops", Description: "A place where all infrastructure is taken care of.",
-		HomepageURL: "https://alexfalkowski.github.io/infraops", Checks: []string{"ci/circleci: build"},
+		HomepageURL: "https://alexfalkowski.github.io/infraops", Checks: gh.Checks{"ci/circleci: build"},
 		Visibility: "public", EnablePages: true,
 	}
 
@@ -18,8 +18,8 @@ func createInfraOps(ctx *pulumi.Context) error {
 func createSite(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "alexfalkowski.github.io", Description: "A site for my profile.",
-		HomepageURL: "https://alexfalkowski.github.io",
-		Visibility:  "public", EnablePages: true,
+		HomepageURL: "https://alexfalkowski.github.io", Checks: gh.Checks{"ci/circleci: build"},
+		Visibility: "public", EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
@@ -28,7 +28,7 @@ func createSite(ctx *pulumi.Context) error {
 func createDocker(ctx *pulumi.Context) error {
 	repo := &gh.Repository{
 		Name: "docker", Description: "Common setup used for my projects.",
-		Topics: []string{"docker", "ruby", "golang"}, Checks: []string{"ci/circleci: lint", "ci/circleci: build"},
+		Topics: []string{"docker", "ruby", "golang"}, Checks: gh.Checks{"ci/circleci: lint", "ci/circleci: build"},
 		Visibility: "public", EnablePages: true,
 	}
 
