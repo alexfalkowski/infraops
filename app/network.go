@@ -25,7 +25,7 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 }
 
 func createIngress(ctx *pulumi.Context, app *App) error {
-	if app.ConfigVersion == "" {
+	if !app.HasConfigVersion() {
 		return nil
 	}
 

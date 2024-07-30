@@ -15,7 +15,7 @@ func createConfigMap(ctx *pulumi.Context, app *App) error {
 		err  error
 	)
 
-	if app.ConfigVersion != "" {
+	if app.HasConfigVersion() {
 		args, err = initConfigMap(app)
 	} else {
 		args, err = configMap(app)
@@ -36,19 +36,25 @@ func initConfigMap(app *App) (*cv1.ConfigMapArgs, error) {
 		return nil, err
 	}
 
+	name := initName(app)
+
 	m := metadata(app)
-	m.Name = pulumi.String("konfig")
+	m.Name = pulumi.String(name)
 
 	args := &cv1.ConfigMapArgs{
 		Metadata: m,
-		Data:     pulumi.StringMap{configFile("konfig"): pulumi.String(d)},
+		Data:     pulumi.StringMap{configFile(name): pulumi.String(d)},
 	}
 
 	return args, nil
 }
 
+func initName(app *App) string {
+	return app.Name + "-init"
+}
+
 func initConfig(app *App) (string, error) {
-	cfg, err := readFile("init.yaml")
+	cfg, err := readFile(app.Namespace, "init.yaml")
 	if err != nil {
 		return "", err
 	}
@@ -63,7 +69,7 @@ func initConfig(app *App) (string, error) {
 }
 
 func configMap(app *App) (*cv1.ConfigMapArgs, error) {
-	d, err := readFile(app.Name + ".yaml")
+	d, err := readFile(app.Namespace, app.Name+".yaml")
 	if err != nil {
 		return nil, err
 	}
@@ -76,8 +82,12 @@ func configMap(app *App) (*cv1.ConfigMapArgs, error) {
 	return args, nil
 }
 
-func configFullFilePath(name string) pulumi.String {
-	return pulumi.String(configPath(name) + "/" + configFile(name))
+func configMatchingFilePath(name string) pulumi.String {
+	return configFilePath(name, name)
+}
+
+func configFilePath(path, file string) pulumi.String {
+	return pulumi.String(configPath(path) + "/" + configFile(file))
 }
 
 func configPath(name string) string {
@@ -88,13 +98,13 @@ func configFile(name string) string {
 	return name + ".yaml"
 }
 
-func readFile(file string) (string, error) {
+func readFile(ns, file string) (string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 
-	p := filepath.Clean(filepath.Join(wd, file))
+	p := filepath.Clean(filepath.Join(wd, ns, file))
 	d, err := os.ReadFile(p)
 
 	return string(d), err

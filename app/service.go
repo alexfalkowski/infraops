@@ -60,17 +60,18 @@ func createService(ctx *pulumi.Context, app *App) error {
 }
 
 func initContainers(app *App) cv1.ContainerArray {
-	if app.ConfigVersion == "" {
+	if !app.HasConfigVersion() {
 		return nil
 	}
 
-	path := configFullFilePath("konfig")
+	name := initName(app)
+	path := configFilePath("konfig", name)
 
 	volumeMounts := cv1.VolumeMountArray{
 		cv1.VolumeMountArgs{
 			MountPath: path,
-			Name:      pulumi.String("konfig"),
-			SubPath:   pulumi.String(configFile("konfig")),
+			Name:      pulumi.String(name),
+			SubPath:   pulumi.String(configFile(name)),
 		},
 		cv1.VolumeMountArgs{
 			Name:      pulumi.String(app.Name),
@@ -82,7 +83,7 @@ func initContainers(app *App) cv1.ContainerArray {
 
 	return cv1.ContainerArray{
 		cv1.ContainerArgs{
-			Name:            pulumi.String(app.Name + "-init"),
+			Name:            pulumi.String(name),
 			Image:           image("konfig", app.InitVersion),
 			ImagePullPolicy: pulumi.String("Always"),
 			Args:            pulumi.StringArray{pulumi.String("config")},
@@ -94,7 +95,7 @@ func initContainers(app *App) cv1.ContainerArray {
 				},
 				cv1.EnvVarArgs{
 					Name:  pulumi.String("KONFIG_APP_CONFIG_FILE"),
-					Value: configFullFilePath(app.Name),
+					Value: configMatchingFilePath(app.Name),
 				},
 			},
 			Resources: cv1.ResourceRequirementsArgs{
@@ -111,7 +112,7 @@ func initContainers(app *App) cv1.ContainerArray {
 func containers(app *App) cv1.ContainerArray {
 	volumeMounts := cv1.VolumeMountArray{}
 
-	if app.ConfigVersion != "" {
+	if app.HasConfigVersion() {
 		v := cv1.VolumeMountArgs{
 			MountPath: pulumi.String(configPath(app.Name)),
 			Name:      pulumi.String(app.Name),
@@ -119,7 +120,7 @@ func containers(app *App) cv1.ContainerArray {
 		volumeMounts = append(volumeMounts, v)
 	} else {
 		v := cv1.VolumeMountArgs{
-			MountPath: configFullFilePath(app.Name),
+			MountPath: configMatchingFilePath(app.Name),
 			Name:      pulumi.String(app.Name),
 			SubPath:   pulumi.String(configFile(app.Name)),
 		}
@@ -142,7 +143,7 @@ func containers(app *App) cv1.ContainerArray {
 			Env: cv1.EnvVarArray{
 				cv1.EnvVarArgs{
 					Name:  pulumi.String(strings.ToUpper(app.Name) + "_CONFIG_FILE"),
-					Value: configFullFilePath(app.Name),
+					Value: configMatchingFilePath(app.Name),
 				},
 			},
 			Ports: cv1.ContainerPortArray{
@@ -166,10 +167,11 @@ func containers(app *App) cv1.ContainerArray {
 func createVolumes(app *App) cv1.VolumeArray {
 	volumes := cv1.VolumeArray{}
 
-	if app.ConfigVersion != "" {
+	if app.HasConfigVersion() {
+		n := pulumi.String(initName(app))
 		k := cv1.VolumeArgs{
-			Name:      pulumi.String("konfig"),
-			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String("konfig")},
+			Name:      n,
+			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: n},
 		}
 		s := cv1.VolumeArgs{
 			Name:     pulumi.String(app.Name),

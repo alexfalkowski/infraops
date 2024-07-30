@@ -7,7 +7,7 @@ client:
       command: server
       kind: yaml
       mode: 0o600
-    host: konfig.konfig.svc.cluster.local:9090
+    host: konfig.lean.svc.cluster.local:9090
     retry:
       attempts: 3
       backoff: 100ms

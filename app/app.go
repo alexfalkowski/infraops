@@ -15,10 +15,11 @@ type (
 		Memory        Memory
 		ID            string
 		Name          string
+		Namespace     string
 		Domain        string
+		InitVersion   string
 		Version       string
 		ConfigVersion string
-		InitVersion   string
 		SecretVolumes []string
 	}
 
@@ -46,4 +47,9 @@ func CreateApp(ctx *pulumi.Context, app *App) error {
 	}
 
 	return nil
+}
+
+// HasConfigVersion for app.
+func (a *App) HasConfigVersion() bool {
+	return a.ConfigVersion != ""
 }
