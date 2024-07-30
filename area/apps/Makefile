@@ -1,13 +1,9 @@
-include secrets.mk
-include konfig.mk
-include standort.mk
-include bezeichner.mk
-include web.mk
+include lean.mk
 
-kube-score: kube-score-konfig kube-score-standort kube-score-bezeichner kube-score-web
+kube-score: kube-score-lean
 
 # Lint config.
-lint: kube-linter kube-score
+lint: kube-score
 
 # Save kubeconfig.
 save-config:
@@ -32,13 +28,13 @@ kube-score-namespace:
 		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
 
 # Setup all apps.
-setup: setup-konfig setup-standort setup-bezeichner setup-web
+setup: setup-lean
 
 # Delete all apps.
-delete: delete-konfig delete-standort delete-bezeichner delete-web
+delete: delete-lean
 
 # Rollout all apps.
-rollout: rollout-konfig rollout-standort rollout-bezeichner rollout-web
+rollout: rollout-lean
 
 # Verify all apps.
-verify: verify-standort verify-bezeichner verify-web
+verify: verify-lean

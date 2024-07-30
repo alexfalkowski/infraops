@@ -10,7 +10,7 @@ func metadata(app *App, ms ...pulumi.StringMap) mv1.ObjectMetaArgs {
 
 	return mv1.ObjectMetaArgs{
 		Name:      pulumi.String(app.Name),
-		Namespace: pulumi.String(app.Name),
+		Namespace: pulumi.String(app.Namespace),
 		Labels:    merge(ms...),
 	}
 }

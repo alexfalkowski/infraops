@@ -1,12 +1,16 @@
 package main
 
 import (
+	"github.com/alexfalkowski/infraops/area/apps/lean"
+	ap "github.com/alexfalkowski/infraops/area/apps/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-type createFn func(ctx *pulumi.Context) error
+var fns ap.CreateFns
 
-var fns = []createFn{createKonfig, createStandort, createBezeichner, createWeb}
+func init() {
+	fns = append(fns, lean.Fns...)
+}
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
