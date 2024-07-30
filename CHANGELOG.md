@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.156.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.156.1) - 2024-07-30
+
+- [`5442b45`](https://github.com/alexfalkowski/infraops/commit/5442b4580b47751c6992632dc453a51e387bec54) fix(apps): make sure we can perform a rollout (#405)
+
 ## [v1.156.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.156.0) - 2024-07-30
 
 - [`5e373b3`](https://github.com/alexfalkowski/infraops/commit/5e373b3abda648c039d7df6a0890c5f5644a2374) feat(apps): move to one namespace (#404)
