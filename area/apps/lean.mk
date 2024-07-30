@@ -2,7 +2,6 @@ otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
 
 # Run kubescore for lean.
 kube-score-lean:
-	$(MAKE) namespace=lean kube-score-namespace
 	kubectl api-resources --verbs=list --namespaced -o name \
 		| xargs -I{} bash -c "kubectl get {} --namespace lean -oyaml && echo ---" \
 		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
