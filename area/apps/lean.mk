@@ -3,29 +3,39 @@ otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
 # Run kubescore for lean.
 kube-score-lean:
 	$(MAKE) namespace=lean kube-score-namespace
+	kubectl api-resources --verbs=list --namespaced -o name \
+		| xargs -I{} bash -c "kubectl get {} --namespace lean -oyaml && echo ---" \
+		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
 
 # Delete lean.
 delete-lean:
-	$(MAKE) namespace=lean delete-namespace
+	kubectl delete namespaces lean
 
 # Setup lean.
 setup-lean:
-	$(MAKE) namespace=lean setup-namespace
+	kubectl create namespace lean
 	kubectl create secret generic otlp-secret --from-literal=token=$(otlp_secret) --namespace lean
 	kubectl create secret generic konfig-secret --from-literal=token=$(KONFIG_TOKEN) --namespace lean
 	kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
 
-# Preview lean.
-preview-lean:
-	$(MAKE) namespace=lean preview-namespace
-
-# Update lean.
-update-lean:
-	$(MAKE) namespace=lean update-namespace
-
 # Rollout lean.
-rollout-lean:
-	$(MAKE) namespace=lean rollout-namespace
+rollout-lean: rollout-konfig rollout-standort rollout-bezeichner rollout-web
+
+# Rollout konfig.
+rollout-konfig:
+	kubectl rollout restart deployment/konfig -n lean
+
+# Rollout standort.
+rollout-standort:
+	kubectl rollout restart deployment/standort -n lean
+
+# Rollout bezeichner.
+rollout-bezeichner:
+	kubectl rollout restart deployment/bezeichner -n lean
+
+# Rollout web.
+rollout-web:
+	kubectl rollout restart deployment/web -n lean
 
 # Verify all apps.
 verify-lean: verify-standort verify-bezeichner verify-web

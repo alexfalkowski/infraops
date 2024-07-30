@@ -29,14 +29,6 @@ To setup a new area follow the following:
 
 This consists of my open source projects https://github.com/alexfalkowski being deployed to kubernetes.
 
-#### Setup
-
-To have an app ready as an example we will use `example`, you need to run the following:
-
-```bash
-❯ make -C area/apps setup-example
-```
-
 #### Install
 
 The above is for a new application. If you want to setup all current apps, run the following.
