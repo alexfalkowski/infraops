@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.156.3](https://github.com/alexfalkowski/infraops/releases/tag/v1.156.3) - 2024-07-31
+
+- [`541f7b6`](https://github.com/alexfalkowski/infraops/commit/541f7b6f8337dd39f715fc29864cede95b08cd28) fix(apps): use text/template (#407)
+
 ## [v1.156.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.156.2) - 2024-07-30
 
 - [`32eeb5f`](https://github.com/alexfalkowski/infraops/commit/32eeb5f3a02a00d62165d32b1888463f0e704b42) fix(apps): remove wrong line in kube-score-lean (#406)
