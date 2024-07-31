@@ -1,9 +1,10 @@
 package app
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
-	"strings"
+	"text/template"
 
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -54,18 +55,23 @@ func initName(app *App) string {
 }
 
 func initConfig(app *App) (string, error) {
-	cfg, err := readFile(app.Namespace, "init.yaml")
+	p, err := filePath(app.Namespace, "init.yaml")
 	if err != nil {
 		return "", err
 	}
 
-	on := []string{
-		"<app>", app.Name,
-		"<ver>", app.ConfigVersion,
+	t, err := template.ParseFiles(p)
+	if err != nil {
+		return "", err
 	}
-	r := strings.NewReplacer(on...)
 
-	return r.Replace(cfg), nil
+	var b bytes.Buffer
+
+	if err := t.Execute(&b, app); err != nil {
+		return "", err
+	}
+
+	return b.String(), nil
 }
 
 func configMap(app *App) (*cv1.ConfigMapArgs, error) {
@@ -99,13 +105,21 @@ func configFile(name string) string {
 }
 
 func readFile(ns, file string) (string, error) {
+	p, err := filePath(ns, file)
+	if err != nil {
+		return "", err
+	}
+
+	d, err := os.ReadFile(filepath.Clean(p))
+
+	return string(d), err
+}
+
+func filePath(ns, file string) (string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 
-	p := filepath.Clean(filepath.Join(wd, ns, file))
-	d, err := os.ReadFile(p)
-
-	return string(d), err
+	return filepath.Join(wd, ns, file), nil
 }

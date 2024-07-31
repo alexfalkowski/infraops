@@ -1,8 +1,8 @@
 client:
   v1:
     config:
-      application: <app>
-      version: v<ver>
+      application: {{.Name}}
+      version: v{{.ConfigVersion}}
       environment: production
       command: server
       kind: yaml
