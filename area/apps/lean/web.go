@@ -7,7 +7,7 @@ import (
 
 func createWeb(ctx *pulumi.Context) error {
 	a := &app.App{
-		ID:            "98968ca0-4ada-4856-8547-210f92b838ea",
+		ID:            "b46608ae-950a-46bb-b37a-4dfe68a95b52",
 		Name:          "web",
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
