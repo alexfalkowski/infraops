@@ -11,7 +11,7 @@ func createKonfig(ctx *pulumi.Context) error {
 		Name:          "konfig",
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
-		Version:       "1.216.0",
+		Version:       "1.217.0",
 		Memory:        app.Memory{Min: "128Mi", Max: "256Mi"},
 		SecretVolumes: []string{"gh"},
 	}
