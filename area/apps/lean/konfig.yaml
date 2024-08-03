@@ -1,12 +1,4 @@
 environment: production
-client:
-  v1:
-    address: localhost:9090
-    retry:
-      attempts: 3
-      backoff: 100ms
-      timeout: 10s
-    timeout: 5s
 health:
   duration: 1s
   timeout: 1s
