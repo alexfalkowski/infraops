@@ -1,7 +1,7 @@
 environment: production
 client:
   v1:
-    host: localhost:9090
+    address: localhost:9090
     retry:
       attempts: 3
       backoff: 100ms
@@ -25,25 +25,23 @@ telemetry:
     level: info
   metrics:
     kind: otlp
-    host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
     key: /etc/secrets/otlp/token
   tracer:
     kind: otlp
-    host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
     key: /etc/secrets/otlp/token
 token:
   argon2:
     hash: $argon2id$v=19$m=65536,t=3,p=4$L8nxrWMr7welQoQh7mxCIw$xlUfRaN9FajHewkyxYQxkrP2dkwkIkhZNqt7lvHAw+M
 transport:
   http:
-    port: 8080
     retry:
       attempts: 3
       backoff: 100ms
       timeout: 10s
     timeout: 5s
   grpc:
-    port: 9090
     retry:
       attempts: 3
       backoff: 100ms
