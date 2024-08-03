@@ -9,24 +9,42 @@ import (
 )
 
 func TestApp(t *testing.T) {
-	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		a := &app.App{
-			ID:            "1234",
-			Name:          "test",
-			Namespace:     "test",
-			Domain:        "test.com",
-			InitVersion:   "1.0.0",
-			Version:       "1.0.0",
-			ConfigVersion: "1.0.0",
-			SecretVolumes: []string{"test"},
-			Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
-		}
+	fns := []pulumi.RunFunc{withResource, withoutResource}
+	for _, f := range fns {
+		require.NoError(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", app.Mocks(0))))
+	}
+}
 
-		err := app.CreateApp(ctx, a)
-		require.NoError(t, err)
+func withResource(ctx *pulumi.Context) error {
+	a := &app.App{
+		ID:            "1234",
+		Name:          "test",
+		Namespace:     "test",
+		Domain:        "test.com",
+		InitVersion:   "1.0.0",
+		Version:       "1.0.0",
+		ConfigVersion: "1.0.0",
+		SecretVolumes: []string{"test"},
+		Resources: &app.Resources{
+			CPU:     &app.Range{Min: "125m", Max: "250m"},
+			Memory:  &app.Range{Min: "64Mi", Max: "128Mi"},
+			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
+		},
+	}
 
-		return nil
-	}, pulumi.WithMocks("project", "stack", app.Mocks(0)))
+	return app.CreateApp(ctx, a)
+}
 
-	require.NoError(t, err)
+func withoutResource(ctx *pulumi.Context) error {
+	a := &app.App{
+		ID:            "1234",
+		Name:          "test",
+		Namespace:     "test",
+		Domain:        "test.com",
+		InitVersion:   "1.0.0",
+		Version:       "1.0.0",
+		ConfigVersion: "1.0.0",
+	}
+
+	return app.CreateApp(ctx, a)
 }

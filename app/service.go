@@ -49,7 +49,11 @@ func createService(ctx *pulumi.Context, app *App) error {
 	args := &cv1.ServiceArgs{
 		Metadata: metadata(app, matchLabels(app)),
 		Spec: cv1.ServiceSpecArgs{
-			Ports:    cv1.ServicePortArray{servicePort("http", 8080), servicePort("grpc", 9090)},
+			Ports: cv1.ServicePortArray{
+				servicePort("debug", 6060),
+				servicePort("http", 8080),
+				servicePort("grpc", 9090),
+			},
 			Selector: matchLabels(app),
 			Type:     pulumi.String("ClusterIP"),
 		},
@@ -98,10 +102,7 @@ func initContainers(app *App) cv1.ContainerArray {
 					Value: configMatchingFilePath(app.Name),
 				},
 			},
-			Resources: cv1.ResourceRequirementsArgs{
-				Requests: resourceRequirement("125m", "1Gi", "64Mi"),
-				Limits:   resourceRequirement("250m", "2Gi", "128Mi"),
-			},
+			Resources: createResources(app),
 			SecurityContext: cv1.SecurityContextArgs{
 				ReadOnlyRootFilesystem: pulumi.Bool(true),
 			},
@@ -147,16 +148,14 @@ func containers(app *App) cv1.ContainerArray {
 				},
 			},
 			Ports: cv1.ContainerPortArray{
+				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(6060)},
 				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
 				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(9090)},
 			},
 			LivenessProbe:  httpProbe("/livez"),
 			ReadinessProbe: httpProbe("/readyz"),
 			StartupProbe:   tcpProbe(),
-			Resources: cv1.ResourceRequirementsArgs{
-				Requests: resourceRequirement("125m", "1Gi", app.Memory.Min),
-				Limits:   resourceRequirement("250m", "2Gi", app.Memory.Max),
-			},
+			Resources:      createResources(app),
 			SecurityContext: cv1.SecurityContextArgs{
 				ReadOnlyRootFilesystem: pulumi.Bool(true),
 			},
@@ -234,11 +233,32 @@ func servicePort(name string, port int) cv1.ServicePortArgs {
 	}
 }
 
-func resourceRequirement(cpu, storage, memory string) pulumi.StringMap {
-	return pulumi.StringMap{
-		"cpu":               pulumi.String(cpu),
-		"ephemeral-storage": pulumi.String(storage),
-		"memory":            pulumi.String(memory),
+func createResources(app *App) cv1.ResourceRequirementsArgs {
+	if !app.HasResources() {
+		return cv1.ResourceRequirementsArgs{}
+	}
+
+	requests := pulumi.StringMap{}
+	limits := pulumi.StringMap{}
+
+	if app.Resources.CPU != nil {
+		requests["cpu"] = pulumi.String(app.Resources.CPU.Min)
+		limits["cpu"] = pulumi.String(app.Resources.CPU.Max)
+	}
+
+	if app.Resources.Memory != nil {
+		requests["memory"] = pulumi.String(app.Resources.Memory.Min)
+		limits["memory"] = pulumi.String(app.Resources.Memory.Max)
+	}
+
+	if app.Resources.Storage != nil {
+		requests["ephemeral-storage"] = pulumi.String(app.Resources.Storage.Min)
+		limits["ephemeral-storage"] = pulumi.String(app.Resources.Storage.Max)
+	}
+
+	return cv1.ResourceRequirementsArgs{
+		Requests: requests,
+		Limits:   limits,
 	}
 }
 

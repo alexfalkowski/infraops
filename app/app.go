@@ -12,7 +12,7 @@ var ErrVersionMismatch = errors.New("version mismatch")
 type (
 	// App to be created.
 	App struct {
-		Memory        Memory
+		Resources     *Resources
 		ID            string
 		Name          string
 		Namespace     string
@@ -23,8 +23,15 @@ type (
 		SecretVolumes []string
 	}
 
-	// Memory for apps.
-	Memory struct {
+	// Resources for apps.
+	Resources struct {
+		CPU     *Range
+		Memory  *Range
+		Storage *Range
+	}
+
+	// Range for apps.
+	Range struct {
 		Min string
 		Max string
 	}
@@ -52,4 +59,9 @@ func CreateApp(ctx *pulumi.Context, app *App) error {
 // HasConfigVersion for app.
 func (a *App) HasConfigVersion() bool {
 	return a.ConfigVersion != ""
+}
+
+// HasResources for app.
+func (a *App) HasResources() bool {
+	return a.Resources != nil
 }
