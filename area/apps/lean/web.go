@@ -11,9 +11,9 @@ func createWeb(ctx *pulumi.Context) error {
 		Name:          "web",
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "1.217.0",
-		Version:       "0.33.0",
-		ConfigVersion: "1.0.0",
+		InitVersion:   "1.220.0",
+		Version:       "0.35.0",
+		ConfigVersion: "1.1.0",
 		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
 	}
 

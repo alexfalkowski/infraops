@@ -1,5 +1,6 @@
 client:
   v1:
+    address: konfig.lean.svc.cluster.local:9090
     config:
       application: {{.Name}}
       version: v{{.ConfigVersion}}
@@ -7,7 +8,6 @@ client:
       command: server
       kind: yaml
       mode: 0o600
-    host: konfig.lean.svc.cluster.local:9090
     retry:
       attempts: 3
       backoff: 100ms
@@ -19,11 +19,11 @@ telemetry:
     level: info
   metrics:
     kind: otlp
-    host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
     key: /etc/secrets/otlp/token
   tracer:
     kind: otlp
-    host: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
     key: /etc/secrets/otlp/token
 token:
   argon2:
