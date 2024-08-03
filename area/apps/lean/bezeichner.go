@@ -14,7 +14,11 @@ func createBezeichner(ctx *pulumi.Context) error {
 		InitVersion:   "1.220.0",
 		Version:       "1.156.0",
 		ConfigVersion: "1.10.0",
-		Memory:        app.Memory{Min: "64Mi", Max: "128Mi"},
+		Resources: &app.Resources{
+			CPU:     &app.Range{Min: "125m", Max: "250m"},
+			Memory:  &app.Range{Min: "64Mi", Max: "128Mi"},
+			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
+		},
 	}
 
 	return app.CreateApp(ctx, a)
