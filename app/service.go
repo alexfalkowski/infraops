@@ -269,7 +269,8 @@ func httpProbe(path string) cv1.ProbeArgs {
 			Port: pulumi.Int(8080),
 		},
 		InitialDelaySeconds: pulumi.Int(5),
-		PeriodSeconds:       pulumi.Int(5),
+		PeriodSeconds:       pulumi.Int(10),
+		TimeoutSeconds:      pulumi.Int(30),
 	}
 }
 
@@ -279,6 +280,7 @@ func tcpProbe() cv1.ProbeArgs {
 			Port: pulumi.Int(8080),
 		},
 		InitialDelaySeconds: pulumi.Int(5),
-		PeriodSeconds:       pulumi.Int(5),
+		PeriodSeconds:       pulumi.Int(10),
+		TimeoutSeconds:      pulumi.Int(30),
 	}
 }
