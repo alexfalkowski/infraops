@@ -1,18 +1,17 @@
 client:
-  v1:
-    address: konfig.lean.svc.cluster.local:9090
-    config:
-      application: {{.Name}}
-      version: v{{.ConfigVersion}}
-      environment: production
-      command: server
-      kind: yaml
-      mode: 0o600
-    retry:
-      attempts: 3
-      backoff: 100ms
-      timeout: 10s
-    timeout: 5s
+  address: konfig.lean.svc.cluster.local:9090
+  config:
+    application: {{.Name}}
+    version: v{{.ConfigVersion}}
+    environment: production
+    command: server
+    kind: yaml
+    mode: 0o600
+  retry:
+    attempts: 3
+    backoff: 100ms
+    timeout: 10s
+  timeout: 5s
 environment: production
 telemetry:
   logger:

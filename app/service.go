@@ -88,7 +88,7 @@ func initContainers(app *App) cv1.ContainerArray {
 	return cv1.ContainerArray{
 		cv1.ContainerArgs{
 			Name:            pulumi.String(name),
-			Image:           image("konfig", app.InitVersion),
+			Image:           image("konfigctl", app.InitVersion),
 			ImagePullPolicy: pulumi.String("Always"),
 			Args:            pulumi.StringArray{pulumi.String("config")},
 			VolumeMounts:    volumeMounts,
