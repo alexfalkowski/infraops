@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/alexfalkowski/infraops/area/apps/lean"
-	ap "github.com/alexfalkowski/infraops/area/apps/pulumi"
+	ap "github.com/alexfalkowski/infraops/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

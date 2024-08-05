@@ -1,19 +1,14 @@
 package main
 
 import (
+	ap "github.com/alexfalkowski/infraops/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-type createFn func(ctx *pulumi.Context) error
+var fns ap.CreateFns
 
-var fns = []createFn{
-	createSite, createAppConfig,
-	createInfraOps, createDocker, createBin,
-	createNonnative, createGoHealth, createGoService,
-	createGoServiceTemplate, createGoClientTemplate,
-	createStatus, createStandort, createAuth, createKonfig,
-	createMigrieren, createBezeichner, createWeb,
-	createServiceControl,
+func init() {
+	fns = append(fns, Fns...)
 }
 
 func main() {

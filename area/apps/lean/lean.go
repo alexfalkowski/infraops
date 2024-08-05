@@ -1,7 +1,7 @@
 package lean
 
 import (
-	"github.com/alexfalkowski/infraops/area/apps/pulumi"
+	"github.com/alexfalkowski/infraops/pulumi"
 )
 
 // Fns to create resources.
