@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.166.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.166.1) - 2024-08-05
+
+- [`d5fc67e`](https://github.com/alexfalkowski/infraops/commit/d5fc67e9f085cbf59d2f6b79090ca957a2f82ba6) fix(gh): enable pages for konfigctl (#422)
+
 ## [v1.166.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.166.0) - 2024-08-05
 
 - [`1e7c5e6`](https://github.com/alexfalkowski/infraops/commit/1e7c5e6513a8c6c4344f6cb7fe88529ccb67eb86) feat(gh): add konfig control (#421)
