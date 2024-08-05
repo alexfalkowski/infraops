@@ -9,9 +9,9 @@ client:
     mode: 0o600
   retry:
     attempts: 3
-    backoff: 100ms
+    backoff: 1s
     timeout: 10s
-  timeout: 5s
+  timeout: 15s
 environment: production
 telemetry:
   logger:
