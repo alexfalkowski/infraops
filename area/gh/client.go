@@ -28,3 +28,15 @@ func createServiceControl(ctx *pulumi.Context) error {
 
 	return gh.CreateRepository(ctx, repo)
 }
+
+func createKonfigControl(ctx *pulumi.Context) error {
+	checks := gh.Checks{"ci/circleci: build-client", "ci/circleci: build-docker"}
+	repo := &gh.Repository{
+		Name: "konfigctl", Description: "A tool to control https://alexfalkowski.github.io/konfig",
+		HomepageURL: "https://alexfalkowski.github.io/konfigctl", Checks: checks,
+		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
+		Visibility: gh.Public, EnablePages: false,
+	}
+
+	return gh.CreateRepository(ctx, repo)
+}
