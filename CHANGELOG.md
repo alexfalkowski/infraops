@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.171.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.171.0) - 2024-08-05
+
+- [`721cd47`](https://github.com/alexfalkowski/infraops/commit/721cd478454669f12b902d597216f9cecafa0a91) feat(apps): bump cpu for konfig (#427)
+
 ## [v1.170.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.170.0) - 2024-08-05
 
 - [`9f979fa`](https://github.com/alexfalkowski/infraops/commit/9f979faa78c8aa04ac5ce909ddffdf4677ed562e) feat(app): add timout to probes (#426)
