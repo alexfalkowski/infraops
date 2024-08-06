@@ -117,7 +117,6 @@ jobs:
       - pulumi/update:
           stack: alexfalkowski/apps/prod
           working_directory: ~/infraops/area/apps
-      - run: make -C area/apps rollout
       - run: make -C area/apps verify
       - run: make -C area/apps kube-score
     resource_class: large
