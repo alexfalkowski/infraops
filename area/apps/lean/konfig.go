@@ -17,7 +17,7 @@ func createKonfig(ctx *pulumi.Context) error {
 			Memory:  &app.Range{Min: "128Mi", Max: "256Mi"},
 			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
 		},
-		SecretVolumes: []string{"gh", "konfig"},
+		Secrets: app.Secrets{"konfig", "otlp", "gh"},
 	}
 
 	return app.CreateApp(ctx, a)

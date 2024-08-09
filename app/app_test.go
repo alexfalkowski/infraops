@@ -24,7 +24,7 @@ func withResource(ctx *pulumi.Context) error {
 		InitVersion:   "1.0.0",
 		Version:       "1.0.0",
 		ConfigVersion: "1.0.0",
-		SecretVolumes: []string{"test"},
+		Secrets:       []string{"test"},
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
 			Memory:  &app.Range{Min: "64Mi", Max: "128Mi"},

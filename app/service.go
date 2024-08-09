@@ -70,7 +70,6 @@ func initContainers(app *App) cv1.ContainerArray {
 
 	name := initName(app)
 	path := configFilePath("konfig", name)
-
 	volumeMounts := cv1.VolumeMountArray{
 		cv1.VolumeMountArgs{
 			MountPath: path,
@@ -81,8 +80,10 @@ func initContainers(app *App) cv1.ContainerArray {
 			Name:      pulumi.String(app.Name),
 			MountPath: pulumi.String(configPath(app.Name)),
 		},
-		secretVolumeMount("konfig"),
-		secretVolumeMount("otlp"),
+	}
+
+	for _, s := range app.Secrets {
+		volumeMounts = append(volumeMounts, secretVolumeMount(s))
 	}
 
 	return cv1.ContainerArray{
@@ -128,9 +129,7 @@ func containers(app *App) cv1.ContainerArray {
 		volumeMounts = append(volumeMounts, v)
 	}
 
-	volumeMounts = append(volumeMounts, secretVolumeMount("otlp"))
-
-	for _, v := range app.SecretVolumes {
+	for _, v := range app.Secrets {
 		volumeMounts = append(volumeMounts, secretVolumeMount(v))
 	}
 
@@ -176,7 +175,7 @@ func createVolumes(app *App) cv1.VolumeArray {
 			Name:     pulumi.String(app.Name),
 			EmptyDir: cv1.EmptyDirVolumeSourceArgs{},
 		}
-		volumes = append(volumes, k, s, secretVolume("konfig"))
+		volumes = append(volumes, k, s)
 	} else {
 		v := cv1.VolumeArgs{
 			Name:      pulumi.String(app.Name),
@@ -185,9 +184,7 @@ func createVolumes(app *App) cv1.VolumeArray {
 		volumes = append(volumes, v)
 	}
 
-	volumes = append(volumes, secretVolume("otlp"))
-
-	for _, v := range app.SecretVolumes {
+	for _, v := range app.Secrets {
 		volumes = append(volumes, secretVolume(v))
 	}
 
