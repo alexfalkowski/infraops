@@ -19,6 +19,7 @@ func createStandort(ctx *pulumi.Context) error {
 			Memory:  &app.Range{Min: "64Mi", Max: "128Mi"},
 			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
 		},
+		Secrets: app.Secrets{"konfig", "otlp"},
 	}
 
 	return app.CreateApp(ctx, a)

@@ -20,8 +20,11 @@ type (
 		InitVersion   string
 		Version       string
 		ConfigVersion string
-		SecretVolumes []string
+		Secrets       Secrets
 	}
+
+	// Secrets for apps.
+	Secrets []string
 
 	// Resources for apps.
 	Resources struct {
