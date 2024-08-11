@@ -1,4 +1,4 @@
-otlp_secret := $(shell echo -n "Basic 790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
+otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
 
 # Run kubescore for lean.
 kube-score-lean:
@@ -13,7 +13,7 @@ delete-lean:
 # Setup lean.
 setup-lean:
 	kubectl create namespace lean
-	kubectl create secret generic otlp-secret --from-literal=token=$(otlp_secret) --namespace lean
+	kubectl create secret generic otlp-secret --from-literal=token="Basic $(otlp_secret)" --namespace lean
 	kubectl create secret generic konfig-secret --from-literal=token=$(KONFIG_TOKEN) --namespace lean
 	kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
 
