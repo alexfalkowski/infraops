@@ -1,4 +1,4 @@
-otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
+otlp_secret := $(shell echo -n "Basic 790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
 
 # Run kubescore for lean.
 kube-score-lean:

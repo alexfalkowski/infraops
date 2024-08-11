@@ -19,10 +19,12 @@ telemetry:
   metrics:
     kind: otlp
     url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
-    key: /etc/secrets/otlp/token
+    headers:
+      Authorization: /etc/secrets/otlp/token
   tracer:
     kind: otlp
     url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
-    key: /etc/secrets/otlp/token
+    headers:
+      Authorization: /etc/secrets/otlp/token
 token:
   key: /etc/secrets/konfig/token
