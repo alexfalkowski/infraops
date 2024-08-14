@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.178.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.178.0) - 2024-08-14
+
+- [`98d857f`](https://github.com/alexfalkowski/infraops/commit/98d857fe4d4f32fd3cda3745a2338869e2d0891f) feat(cf): remove deprecation (#446)
+- [`6f64bcb`](https://github.com/alexfalkowski/infraops/commit/6f64bcb015bb95231df139199549311b2f7275b0) build(ci): use pulumi in k8s:1.0 (#445)
+
 ## [v1.177.4](https://github.com/alexfalkowski/infraops/releases/tag/v1.177.4) - 2024-08-14
 
 - [`1941ae7`](https://github.com/alexfalkowski/infraops/commit/1941ae7eab3a046cbc73477ae2932125199e639d) fix(deps): bump github.com/pulumi/pulumi-kubernetes/sdk/v4 from 4.16.0 to 4.17.0 (#444)
