@@ -16,7 +16,6 @@ parameters:
 
 orbs:
   codecov: codecov/codecov@4.0.1
-  pulumi: pulumi/pulumi@2.1.0
 
 jobs:
   build:
@@ -88,10 +87,8 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/preview:
-          stack: alexfalkowski/apps/prod
-          working_directory: ~/infraops/area/apps
+      - run: make pulumi-login
+      - run: make area=apps pulumi-preview
     resource_class: large
   apps_update:
     docker:
@@ -113,17 +110,15 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/update:
-          stack: alexfalkowski/apps/prod
-          working_directory: ~/infraops/area/apps
+      - run: make pulumi-login
+      - run: make area=apps pulumi-update
       - run: make -C area/apps verify
       - run: make -C area/apps kube-score
     resource_class: large
 
   cf_preview:
     docker:
-      - image: alexfalkowski/go:1.22
+      - image: alexfalkowski/k8s:1.0
     working_directory: ~/infraops
     steps:
       - checkout
@@ -140,14 +135,12 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/preview:
-          stack: alexfalkowski/cf/prod
-          working_directory: ~/infraops/area/cf
+      - run: make pulumi-login
+      - run: make area=cf pulumi-preview
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/go:1.22
+      - image: alexfalkowski/k8s:1.0
     working_directory: ~/infraops
     steps:
       - checkout
@@ -164,15 +157,13 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/update:
-          stack: alexfalkowski/cf/prod
-          working_directory: ~/infraops/area/cf
+      - run: make pulumi-login
+      - run: make area=cf pulumi-update
     resource_class: large
 
   do_preview:
     docker:
-      - image: alexfalkowski/go:1.22
+      - image: alexfalkowski/k8s:1.0
     working_directory: ~/infraops
     steps:
       - checkout
@@ -189,14 +180,12 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/preview:
-          stack: alexfalkowski/do/prod
-          working_directory: ~/infraops/area/do
+      - run: make pulumi-login
+      - run: make area=do pulumi-preview
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/go:1.22
+      - image: alexfalkowski/k8s:1.0
     working_directory: ~/infraops
     steps:
       - checkout
@@ -213,15 +202,13 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/update:
-          stack: alexfalkowski/do/prod
-          working_directory: ~/infraops/area/do
+      - run: make pulumi-login
+      - run: make area=do pulumi-update
     resource_class: large
 
   gh_preview:
     docker:
-      - image: alexfalkowski/go:1.22
+      - image: alexfalkowski/k8s:1.0
     working_directory: ~/infraops
     steps:
       - checkout
@@ -238,14 +225,12 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/preview:
-          stack: alexfalkowski/gh/prod
-          working_directory: ~/infraops/area/gh
+      - run: make pulumi-login
+      - run: make area=gh pulumi-preview
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/go:1.22
+      - image: alexfalkowski/k8s:1.0
     working_directory: ~/infraops
     steps:
       - checkout
@@ -262,10 +247,8 @@ jobs:
           key: infraops-go-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/go/pkg/mod
-      - pulumi/login
-      - pulumi/update:
-          stack: alexfalkowski/gh/prod
-          working_directory: ~/infraops/area/gh
+      - run: make pulumi-login
+      - run: make area=gh pulumi-update
     resource_class: large
 
 workflows:
