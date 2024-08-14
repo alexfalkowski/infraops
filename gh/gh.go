@@ -3,7 +3,7 @@ package gh
 import (
 	"errors"
 
-	e "github.com/alexfalkowski/infraops/errors"
+	errs "github.com/alexfalkowski/infraops/errors"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -74,10 +74,10 @@ func (c Checks) Valid() error {
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
 	if err != nil {
-		return e.Prefix(repo.Name, err)
+		return errs.Prefix(repo.Name, err)
 	}
 
-	return e.Prefix(repo.Name, branchProtection(ctx, r.NodeId, repo))
+	return errs.Prefix(repo.Name, branchProtection(ctx, r.NodeId, repo))
 }
 
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
