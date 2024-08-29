@@ -264,6 +264,12 @@ func httpProbe(path string) cv1.ProbeArgs {
 		HttpGet: cv1.HTTPGetActionArgs{
 			Path: pulumi.String(path),
 			Port: pulumi.Int(8080),
+			HttpHeaders: cv1.HTTPHeaderArray{
+				cv1.HTTPHeaderArgs{
+					Name:  pulumi.String("Content-Type"),
+					Value: pulumi.String("application/json"),
+				},
+			},
 		},
 		InitialDelaySeconds: pulumi.Int(5),
 		PeriodSeconds:       pulumi.Int(10),
