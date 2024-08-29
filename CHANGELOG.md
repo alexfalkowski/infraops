@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.193.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.193.0) - 2024-08-29
+
+- [`44eef12`](https://github.com/alexfalkowski/infraops/commit/44eef12d04863f066692d264dde91a7820213ce3) feat(apps): update versions (#471)
+
 ## [v1.192.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.192.2) - 2024-08-29
 
 - [`062c115`](https://github.com/alexfalkowski/infraops/commit/062c11562883696fbcb4ab096736cd6af7c39384) fix(do): update k8s to 1.30.4-do.0 (#470)
