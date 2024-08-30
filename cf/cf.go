@@ -5,6 +5,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+var (
+	on   = pulumi.String("on")
+	off  = pulumi.String("off")
+	yes  = pulumi.Bool(true)
+	year = pulumi.Int(31536000)
+)
+
 // Zone for cf.
 type Zone struct {
 	Name        string
@@ -31,8 +38,12 @@ func CreateZone(ctx *pulumi.Context, zone *Zone) error {
 		return err
 	}
 
+	if err := settings(ctx, zone, z); err != nil {
+		return err
+	}
+
 	for _, n := range zone.RecordNames {
-		args := &cloudflare.RecordArgs{
+		r := &cloudflare.RecordArgs{
 			Type:    pulumi.String("A"),
 			Name:    pulumi.String(n),
 			Content: pulumi.String(zone.Balancer),
@@ -41,13 +52,41 @@ func CreateZone(ctx *pulumi.Context, zone *Zone) error {
 			Ttl:     pulumi.Int(1),
 		}
 
-		_, err := cloudflare.NewRecord(ctx, n, args)
+		_, err := cloudflare.NewRecord(ctx, n, r)
 		if err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func settings(ctx *pulumi.Context, zone *Zone, cz *cloudflare.Zone) error {
+	ss := cloudflare.ZoneSettingsOverrideSettingsSecurityHeaderArgs{
+		Enabled:           yes,
+		IncludeSubdomains: yes,
+		Nosniff:           yes,
+		Preload:           yes,
+		MaxAge:            year,
+	}
+
+	st := &cloudflare.ZoneSettingsOverrideSettingsArgs{
+		MinTlsVersion:    pulumi.String("1.2"),
+		CacheLevel:       pulumi.String("aggressive"),
+		Http3:            on,
+		EmailObfuscation: off,
+		H2Prioritization: on,
+		SecurityHeader:   ss,
+	}
+
+	zso := &cloudflare.ZoneSettingsOverrideArgs{
+		ZoneId:   cz.ID(),
+		Settings: st,
+	}
+
+	_, err := cloudflare.NewZoneSettingsOverride(ctx, zone.Name, zso)
+
+	return err
 }
 
 func account(ctx *pulumi.Context) (*cloudflare.Account, error) {

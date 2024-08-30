@@ -11,7 +11,7 @@ pulumi-login:
 
 # Preview pulumi changes.
 pulumi-preview:
-	pulumi preview --stack alexfalkowski/$(area)/prod --cwd area/$(area)
+	pulumi preview --stack alexfalkowski/$(area)/prod --cwd area/$(area) --diff
 
 # Update pulumi changes.
 pulumi-update:
