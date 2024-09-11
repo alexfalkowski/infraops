@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.202.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.202.0) - 2024-09-11
+
+- [`be58bba`](https://github.com/alexfalkowski/infraops/commit/be58bba7be052b8d00ffc512dcbf70a9772b3ca0) feat(k8s): add metrics server (#488)
+
 ## [v1.201.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.201.0) - 2024-09-11
 
 - [`bc17532`](https://github.com/alexfalkowski/infraops/commit/bc1753255919cfe962418f1c951153d2c0733e6a) feat(apps): update versions (#487)
