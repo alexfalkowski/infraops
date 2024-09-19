@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.39.0
-	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.31.1
+	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.32.0
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.18.1
 	github.com/pulumi/pulumi/sdk/v3 v3.133.0
