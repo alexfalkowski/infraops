@@ -7,13 +7,27 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		z := &cf.Zone{
-			Name:        "lean-thoughts",
-			Domain:      "lean-thoughts.com",
-			RecordNames: []string{"standort", "bezeichner", "web"},
-			Balancer:    "209.38.186.238",
+		zones := []*cf.Zone{
+			{
+				Name:        "lean-thoughts",
+				Domain:      "lean-thoughts.com",
+				RecordNames: []string{"standort", "bezeichner", "web"},
+				Balancer:    "209.38.186.238",
+			},
+			{
+				Name:        "sasha-adventures",
+				Domain:      "sasha-adventures.com",
+				RecordNames: []string{"www"},
+				Balancer:    "209.38.186.238",
+			},
 		}
 
-		return cf.CreateZone(ctx, z)
+		for _, z := range zones {
+			if err := cf.CreateZone(ctx, z); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	})
 }

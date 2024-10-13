@@ -6,10 +6,11 @@ import (
 )
 
 var (
-	on   = pulumi.String("on")
-	off  = pulumi.String("off")
-	yes  = pulumi.Bool(true)
-	year = pulumi.Int(31536000)
+	on      = pulumi.String("on")
+	off     = pulumi.String("off")
+	yes     = pulumi.Bool(true)
+	year    = pulumi.Int(31536000)
+	account = pulumi.String("561357e2a2b66ddfeabd46e2965d2c67")
 )
 
 // Zone for cf.
@@ -22,13 +23,8 @@ type Zone struct {
 
 // CreateZone for cf.
 func CreateZone(ctx *pulumi.Context, zone *Zone) error {
-	a, err := account(ctx)
-	if err != nil {
-		return err
-	}
-
 	args := &cloudflare.ZoneArgs{
-		AccountId: a.ID(),
+		AccountId: account,
 		Plan:      pulumi.String("free"),
 		Zone:      pulumi.String(zone.Domain),
 	}
@@ -87,12 +83,4 @@ func settings(ctx *pulumi.Context, zone *Zone, cz *cloudflare.Zone) error {
 	_, err := cloudflare.NewZoneSettingsOverride(ctx, zone.Name, zso)
 
 	return err
-}
-
-func account(ctx *pulumi.Context) (*cloudflare.Account, error) {
-	args := &cloudflare.AccountArgs{
-		Name: pulumi.String("main account"),
-	}
-
-	return cloudflare.NewAccount(ctx, "main", args)
 }
