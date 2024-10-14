@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.231.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.231.0) - 2024-10-14
+
+- [`0b727df`](https://github.com/alexfalkowski/infraops/commit/0b727dfd28c93f6c7b296c3182cd0d27d22ad970) feat(apps): updated versions (#525)
+
 ## [v1.230.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.230.0) - 2024-10-13
 
 - [`a7eb052`](https://github.com/alexfalkowski/infraops/commit/a7eb052de3239c5c4336245530f66416b6ec8053) feat(cf): add sasha-adventures zone (#524)
