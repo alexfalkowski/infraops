@@ -7,29 +7,32 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		zones := []*cf.Zone{
+		lean := &cf.BalancerZone{
+			Name:        "lean-thoughts",
+			Domain:      "lean-thoughts.com",
+			RecordNames: []string{"standort", "bezeichner", "web"},
+			IP:          "209.38.186.238",
+		}
+
+		if err := cf.CreateBalancerZone(ctx, lean); err != nil {
+			return err
+		}
+
+		pages := []*cf.PageZone{
 			{
-				Name:        "lean-thoughts",
-				Domain:      "lean-thoughts.com",
-				RecordNames: []string{"standort", "bezeichner", "web"},
-				Balancer:    "209.38.186.238",
+				Name:   "sasha-adventures",
+				Domain: "sasha-adventures.com",
+				Host:   "sasha-adventures.github.io",
 			},
 			{
-				Name:        "sasha-adventures",
-				Domain:      "sasha-adventures.com",
-				RecordNames: []string{"www"},
-				Balancer:    "209.38.186.238",
-			},
-			{
-				Name:        "afalkowski",
-				Domain:      "afalkowski.com",
-				RecordNames: []string{"www"},
-				Balancer:    "209.38.186.238",
+				Name:   "afalkowski",
+				Domain: "afalkowski.com",
+				Host:   "alexfalkowski.github.io",
 			},
 		}
 
-		for _, z := range zones {
-			if err := cf.CreateZone(ctx, z); err != nil {
+		for _, p := range pages {
+			if err := cf.CreatePageZone(ctx, p); err != nil {
 				return err
 			}
 		}

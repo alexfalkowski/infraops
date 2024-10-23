@@ -1,8 +1,6 @@
 package cf
 
 import (
-	"fmt"
-
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -15,53 +13,7 @@ var (
 	account = pulumi.String("561357e2a2b66ddfeabd46e2965d2c67")
 )
 
-// Zone for cf.
-type Zone struct {
-	Name        string
-	Domain      string
-	Balancer    string
-	RecordNames []string
-}
-
-// CreateZone for cf.
-func CreateZone(ctx *pulumi.Context, zone *Zone) error {
-	args := &cloudflare.ZoneArgs{
-		AccountId: account,
-		Plan:      pulumi.String("free"),
-		Zone:      pulumi.String(zone.Domain),
-	}
-
-	z, err := cloudflare.NewZone(ctx, zone.Name, args)
-	if err != nil {
-		return err
-	}
-
-	if err := settings(ctx, zone, z); err != nil {
-		return err
-	}
-
-	for _, n := range zone.RecordNames {
-		name := fmt.Sprintf("%s.%s", n, zone.Domain)
-
-		r := &cloudflare.RecordArgs{
-			Type:    pulumi.String("A"),
-			Name:    pulumi.String(name),
-			Content: pulumi.String(zone.Balancer),
-			ZoneId:  z.ID(),
-			Proxied: pulumi.Bool(true),
-			Ttl:     pulumi.Int(1),
-		}
-
-		_, err := cloudflare.NewRecord(ctx, name, r)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func settings(ctx *pulumi.Context, zone *Zone, cz *cloudflare.Zone) error {
+func settings(ctx *pulumi.Context, name string, cz *cloudflare.Zone) error {
 	ss := cloudflare.ZoneSettingsOverrideSettingsSecurityHeaderArgs{
 		Enabled:           yes,
 		IncludeSubdomains: yes,
@@ -84,7 +36,7 @@ func settings(ctx *pulumi.Context, zone *Zone, cz *cloudflare.Zone) error {
 		Settings: st,
 	}
 
-	_, err := cloudflare.NewZoneSettingsOverride(ctx, zone.Name, zso)
+	_, err := cloudflare.NewZoneSettingsOverride(ctx, name, zso)
 
 	return err
 }
