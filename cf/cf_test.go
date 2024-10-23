@@ -8,16 +8,33 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateZone(t *testing.T) {
+func TestCreateBalancerZone(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		z := &cf.Zone{
+		z := &cf.BalancerZone{
 			Name:        "test",
 			Domain:      "test.com",
 			RecordNames: []string{"test"},
-			Balancer:    "127.0.0.1",
+			IP:          "127.0.0.1",
 		}
 
-		err := cf.CreateZone(ctx, z)
+		err := cf.CreateBalancerZone(ctx, z)
+		require.NoError(t, err)
+
+		return nil
+	}, pulumi.WithMocks("project", "stack", cf.Mocks(0)))
+
+	require.NoError(t, err)
+}
+
+func TestCreatePagerZone(t *testing.T) {
+	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
+		z := &cf.PageZone{
+			Name:   "test",
+			Domain: "test.com",
+			Host:   "test.github.io",
+		}
+
+		err := cf.CreatePageZone(ctx, z)
 		require.NoError(t, err)
 
 		return nil
