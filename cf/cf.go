@@ -1,6 +1,8 @@
 package cf
 
 import (
+	"fmt"
+
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -39,16 +41,18 @@ func CreateZone(ctx *pulumi.Context, zone *Zone) error {
 	}
 
 	for _, n := range zone.RecordNames {
+		name := fmt.Sprintf("%s.%s", n, zone.Domain)
+
 		r := &cloudflare.RecordArgs{
 			Type:    pulumi.String("A"),
-			Name:    pulumi.String(n),
+			Name:    pulumi.String(name),
 			Content: pulumi.String(zone.Balancer),
 			ZoneId:  z.ID(),
 			Proxied: pulumi.Bool(true),
 			Ttl:     pulumi.Int(1),
 		}
 
-		_, err := cloudflare.NewRecord(ctx, n, r)
+		_, err := cloudflare.NewRecord(ctx, name, r)
 		if err != nil {
 			return err
 		}

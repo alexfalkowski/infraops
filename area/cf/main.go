@@ -20,6 +20,12 @@ func main() {
 				RecordNames: []string{"www"},
 				Balancer:    "209.38.186.238",
 			},
+			{
+				Name:        "afalkowski",
+				Domain:      "afalkowski.com",
+				RecordNames: []string{"www"},
+				Balancer:    "209.38.186.238",
+			},
 		}
 
 		for _, z := range zones {
