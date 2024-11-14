@@ -32,6 +32,10 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 		return err
 	}
 
+	if err := dnssec(ctx, zone.Name, z); err != nil {
+		return err
+	}
+
 	for _, n := range zone.RecordNames {
 		name := fmt.Sprintf("%s.%s", n, zone.Domain)
 

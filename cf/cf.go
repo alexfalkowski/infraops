@@ -40,3 +40,11 @@ func settings(ctx *pulumi.Context, name string, cz *cloudflare.Zone) error {
 
 	return err
 }
+
+func dnssec(ctx *pulumi.Context, name string, cz *cloudflare.Zone) error {
+	_, err := cloudflare.NewZoneDnssec(ctx, name, &cloudflare.ZoneDnssecArgs{
+		ZoneId: cz.ID(),
+	})
+
+	return err
+}
