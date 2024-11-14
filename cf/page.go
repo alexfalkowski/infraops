@@ -31,6 +31,10 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		return err
 	}
 
+	if err := dnssec(ctx, zone.Name, z); err != nil {
+		return err
+	}
+
 	name := fmt.Sprintf("%s.%s", "www", zone.Domain)
 	r := &cloudflare.RecordArgs{
 		Type:    pulumi.String("CNAME"),
