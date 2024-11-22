@@ -13,7 +13,7 @@ var (
 	account = pulumi.String("561357e2a2b66ddfeabd46e2965d2c67")
 )
 
-func settings(ctx *pulumi.Context, name string, cz *cloudflare.Zone) error {
+func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
 	ss := cloudflare.ZoneSettingsOverrideSettingsSecurityHeaderArgs{
 		Enabled:           yes,
 		IncludeSubdomains: yes,
@@ -23,12 +23,14 @@ func settings(ctx *pulumi.Context, name string, cz *cloudflare.Zone) error {
 	}
 
 	st := &cloudflare.ZoneSettingsOverrideSettingsArgs{
+		AlwaysUseHttps:   on,
 		MinTlsVersion:    pulumi.String("1.2"),
 		CacheLevel:       pulumi.String("aggressive"),
 		Http3:            on,
 		EmailObfuscation: off,
 		H2Prioritization: on,
 		SecurityHeader:   ss,
+		Ssl:              pulumi.String(ssl),
 	}
 
 	zso := &cloudflare.ZoneSettingsOverrideArgs{
