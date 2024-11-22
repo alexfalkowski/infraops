@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.256.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.256.0) - 2024-11-22
+
+- [`ccf1e74`](https://github.com/alexfalkowski/infraops/commit/ccf1e746a06361efe80b002eed481ca81d266d39) feat(apps): update versions (#559)
+- [`7f17d52`](https://github.com/alexfalkowski/infraops/commit/7f17d52b38b114570ebe11be221cafd0c95426cd) docs(diagrams): update (#558)
+
 ## [v1.255.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.255.0) - 2024-11-22
 
 - [`dc0159c`](https://github.com/alexfalkowski/infraops/commit/dc0159c3c7eda2dc7334c975d46643e0d47268ca) feat(cf): set ssl to strict (#557)
