@@ -27,7 +27,7 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		return err
 	}
 
-	if err := settings(ctx, zone.Name, z); err != nil {
+	if err := settings(ctx, zone.Name, "strict", z); err != nil {
 		return err
 	}
 
