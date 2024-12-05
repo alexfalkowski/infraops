@@ -6,7 +6,7 @@ toolchain go1.23.0
 
 require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.44.0
-	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.35.1
+	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.36.0
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.18.3
 	github.com/pulumi/pulumi/sdk/v3 v3.142.0
