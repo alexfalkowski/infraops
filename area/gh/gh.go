@@ -13,4 +13,5 @@ var Fns = pulumi.CreateFns{
 	createStatus, createStandort, createAuth, createKonfig,
 	createMigrieren, createBezeichner, createWeb,
 	createServiceControl, createKonfigControl,
+	createIDPControl, createIDPService,
 }

@@ -88,7 +88,7 @@ func createWeb(ctx *pulumi.Context) error {
 		Name: "web", Description: "A website lean-thoughts.com.",
 		HomepageURL: "https://alexfalkowski.github.io/web", Checks: checks,
 		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-service-template"},
-		Visibility: gh.Public, IsTemplate: false, EnablePages: true,
+		Visibility: gh.Public, EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
