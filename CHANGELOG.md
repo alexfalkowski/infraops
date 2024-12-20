@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.293.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.293.0) - 2024-12-20
+
+- [`77b4c8d`](https://github.com/alexfalkowski/infraops/commit/77b4c8d052087e49b6f6b0cf52cc85a98b7816aa) feat(deps): upgraded golang.org/x/net v0.28.0 => v0.33.0 (#608)
+
 ## [v1.292.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.292.2) - 2024-12-20
 
 - [`5363b12`](https://github.com/alexfalkowski/infraops/commit/5363b12cce8b279251fe48450d1d28d7ef62599e) fix(deps): upgraded github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.37.0 => v4.37.1 (#607)
