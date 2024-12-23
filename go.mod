@@ -9,7 +9,7 @@ require (
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.37.1
 	github.com/pulumi/pulumi-github/sdk/v5 v5.26.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.19.0
-	github.com/pulumi/pulumi/sdk/v3 v3.143.0
+	github.com/pulumi/pulumi/sdk/v3 v3.144.1
 	github.com/stretchr/testify v1.10.0
 )
 
