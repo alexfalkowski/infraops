@@ -28,7 +28,7 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 		return err
 	}
 
-	if err := settings(ctx, zone.Name, "flexible", z); err != nil {
+	if err := settings(ctx, zone.Name, "full", z); err != nil {
 		return err
 	}
 
