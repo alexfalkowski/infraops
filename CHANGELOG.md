@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.307.1](https://github.com/alexfalkowski/infraops/releases/tag/v1.307.1) - 2025-01-05
+
+- [`b49c032`](https://github.com/alexfalkowski/infraops/commit/b49c032c6f5bdbd107e343407c77cdf533c907d4) fix(apps): update versions (#633)
+- [`4894776`](https://github.com/alexfalkowski/infraops/commit/48947768811f90d175f982b725324067673896ab) build(deps): bump bin from `bde1e44` to `a278340` (#632)
+- [`eb006af`](https://github.com/alexfalkowski/infraops/commit/eb006afca19b071129c20d54ffd6842d9db1ea74) build(ci): update to alexfalkowski/go:1.4 (#631)
+
 ## [v1.307.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.307.0) - 2025-01-04
 
 - [`46684f6`](https://github.com/alexfalkowski/infraops/commit/46684f69faa93682b17d19bedb04b875fcbe2f32) feat(apps): update konfig to v1.339 (#630)
