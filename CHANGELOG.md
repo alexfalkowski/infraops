@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.310.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.310.0) - 2025-01-06
+
+- [`2713006`](https://github.com/alexfalkowski/infraops/commit/271300669c49da3ebea31501e1518bde0f4f7055) feat(deps): update github.com/go-git/go-git/v5 to v5.13.1 (#636)
+
 ## [v1.309.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.309.0) - 2025-01-06
 
 - [`7353409`](https://github.com/alexfalkowski/infraops/commit/7353409879803554645ba50873411abcf95343eb) feat(apps): update versions (#635)
