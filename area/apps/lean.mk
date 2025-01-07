@@ -6,6 +6,10 @@ kube-score-lean:
 		| xargs -I{} bash -c "kubectl get {} --namespace lean -oyaml && echo ---" \
 		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
 
+# Run kubescape for lean.
+kubescape-lean:
+	kubescape scan --include-namespaces lean
+
 # Delete lean.
 delete-lean:
 	kubectl delete namespaces lean
