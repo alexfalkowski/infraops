@@ -124,7 +124,7 @@ jobs:
       - run: make pulumi-login
       - run: make area=apps pulumi-update
       - run: make -C area/apps verify
-      - run: make -C area/apps kube-score
+      - run: make -C area/apps lint
       - save_cache:
           name: save go build cache
           key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}

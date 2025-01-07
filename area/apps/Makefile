@@ -1,9 +1,13 @@
 include lean.mk
 
+# Run kube score.
 kube-score: kube-score-lean
 
+# Run kubescape.
+kubescape: kubescape-lean
+
 # Lint config.
-lint: kube-score
+lint: kube-score kubescape
 
 # Save kubeconfig.
 save-config:
