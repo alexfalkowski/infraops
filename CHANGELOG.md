@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.312.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.312.0) - 2025-01-07
+
+- [`4793101`](https://github.com/alexfalkowski/infraops/commit/4793101e6d3e58e132f7150e93a030f5cac72e40) feat(apps): add kubescape (#640)
+
 ## [v1.311.2](https://github.com/alexfalkowski/infraops/releases/tag/v1.311.2) - 2025-01-07
 
 - [`d3ad00f`](https://github.com/alexfalkowski/infraops/commit/d3ad00f3f47be993b6b81f893103ef1e6740c37a) fix(apps): konfigctl v0.87.1 (#639)
