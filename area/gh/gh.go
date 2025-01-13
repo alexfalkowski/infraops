@@ -10,8 +10,7 @@ var Fns = pulumi.CreateFns{
 	createInfraOps, createDocker, createBin,
 	createNonnative, createGoHealth, createGoService,
 	createGoServiceTemplate, createGoClientTemplate,
-	createStatus, createStandort, createAuth, createKonfig,
+	createStatus, createStandort, createKonfig,
 	createMigrieren, createBezeichner, createWeb,
 	createServiceControl, createKonfigControl,
-	createIDPControl, createIDPService,
 }
