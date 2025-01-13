@@ -38,17 +38,6 @@ func createStandort(ctx *pulumi.Context) error {
 	return gh.CreateRepository(ctx, repo)
 }
 
-func createAuth(ctx *pulumi.Context) error {
-	checks := gh.Checks{"ci/circleci: build-service", "ci/circleci: build-docker"}
-	repo := &gh.Repository{
-		Name: "auth", Description: "Auth provides all your authn and authz needs.",
-		HomepageURL: "https://alexfalkowski.github.io/auth", Checks: checks,
-		Visibility: gh.Public, EnablePages: true, Archived: true,
-	}
-
-	return gh.CreateRepository(ctx, repo)
-}
-
 func createKonfig(ctx *pulumi.Context) error {
 	checks := gh.Checks{"ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coverage"}
 	repo := &gh.Repository{
