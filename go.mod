@@ -1,8 +1,8 @@
 module github.com/alexfalkowski/infraops
 
-go 1.23
+go 1.23.3
 
-toolchain go1.23.0
+toolchain go1.23.5
 
 require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v5 v5.47.0
