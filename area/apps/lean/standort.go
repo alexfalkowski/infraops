@@ -12,7 +12,7 @@ func createStandort(ctx *pulumi.Context) error {
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
 		InitVersion:   "0.107.0",
-		Version:       "2.255.0",
+		Version:       "2.254.0",
 		ConfigVersion: "1.12.1",
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
