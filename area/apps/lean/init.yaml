@@ -1,8 +1,8 @@
 client:
   address: konfig.lean.svc.cluster.local:9090
   config:
-    application: {{.Name}}
-    version: v{{.ConfigVersion}}
+    application: "{{.Name}}"
+    version: "v{{.ConfigVersion}}"
     environment: production
     command: server
     kind: yaml
@@ -13,6 +13,8 @@ client:
     timeout: 10s
   timeout: 15s
 environment: production
+id:
+  kind: ksuid
 telemetry:
   logger:
     level: info
