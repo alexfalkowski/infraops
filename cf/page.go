@@ -3,6 +3,7 @@ package cf
 import (
 	"fmt"
 
+	"github.com/alexfalkowski/infraops/runtime"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -15,7 +16,13 @@ type PageZone struct {
 }
 
 // CreatePageZone for cf.
-func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
+func CreatePageZone(ctx *pulumi.Context, zone *PageZone) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = runtime.ConvertRecover(r)
+		}
+	}()
+
 	args := &cloudflare.ZoneArgs{
 		AccountId: account,
 		Plan:      pulumi.String("free"),
@@ -23,17 +30,13 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 	}
 
 	z, err := cloudflare.NewZone(ctx, zone.Name, args)
-	if err != nil {
-		return err
-	}
+	runtime.Must(err)
 
-	if err := settings(ctx, zone.Name, "strict", z); err != nil {
-		return err
-	}
+	err = settings(ctx, zone.Name, "strict", z)
+	runtime.Must(err)
 
-	if err := dnssec(ctx, zone.Name, z); err != nil {
-		return err
-	}
+	err = dnssec(ctx, zone.Name, z)
+	runtime.Must(err)
 
 	name := fmt.Sprintf("%s.%s", "www", zone.Domain)
 	r := &cloudflare.RecordArgs{
@@ -44,7 +47,9 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		Proxied: pulumi.Bool(true),
 		Ttl:     pulumi.Int(1),
 	}
-	_, err = cloudflare.NewRecord(ctx, name, r)
 
-	return err
+	_, err = cloudflare.NewRecord(ctx, name, r)
+	runtime.Must(err)
+
+	return //nolint:nakedret
 }
