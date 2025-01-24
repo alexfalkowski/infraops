@@ -23,10 +23,10 @@ type BadMocks int
 
 //nolint:err113
 func (BadMocks) Call(_ pulumi.MockCallArgs) (resource.PropertyMap, error) {
-	return resource.PropertyMap{}, errors.New("bad call")
+	return nil, errors.New("bad call")
 }
 
 //nolint:err113
 func (BadMocks) NewResource(_ pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
-	return "", resource.PropertyMap{}, errors.New("bad resource")
+	return "", nil, errors.New("bad resource")
 }
