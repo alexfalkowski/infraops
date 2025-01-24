@@ -3,6 +3,7 @@ package cf
 import (
 	"fmt"
 
+	"github.com/alexfalkowski/infraops/runtime"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -16,7 +17,15 @@ type BalancerZone struct {
 }
 
 // CreateBalancerZone for cf.
-func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
+//
+//nolint:nakedret
+func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = runtime.ConvertRecover(r)
+		}
+	}()
+
 	args := &cloudflare.ZoneArgs{
 		AccountId: account,
 		Plan:      pulumi.String("free"),
@@ -24,17 +33,13 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	}
 
 	z, err := cloudflare.NewZone(ctx, zone.Name, args)
-	if err != nil {
-		return err
-	}
+	runtime.Must(err)
 
-	if err := settings(ctx, zone.Name, "full", z); err != nil {
-		return err
-	}
+	err = settings(ctx, zone.Name, "full", z)
+	runtime.Must(err)
 
-	if err := dnssec(ctx, zone.Name, z); err != nil {
-		return err
-	}
+	err = dnssec(ctx, zone.Name, z)
+	runtime.Must(err)
 
 	for _, n := range zone.RecordNames {
 		name := fmt.Sprintf("%s.%s", n, zone.Domain)
@@ -49,10 +54,8 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 		}
 
 		_, err := cloudflare.NewRecord(ctx, name, r)
-		if err != nil {
-			return err
-		}
+		runtime.Must(err)
 	}
 
-	return nil
+	return
 }

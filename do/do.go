@@ -1,6 +1,7 @@
 package do
 
 import (
+	"github.com/alexfalkowski/infraops/runtime"
 	"github.com/pulumi/pulumi-digitalocean/sdk/v4/go/digitalocean"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -28,16 +29,18 @@ func Configure(ctx *pulumi.Context) error {
 }
 
 // CreateProject for do.
-func CreateProject(ctx *pulumi.Context, project *Project) error {
+func CreateProject(ctx *pulumi.Context, project *Project) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = runtime.ConvertRecover(r)
+		}
+	}()
+
 	v, err := createVPC(ctx, project)
-	if err != nil {
-		return err
-	}
+	runtime.Must(err)
 
 	c, err := createCluster(ctx, v, project)
-	if err != nil {
-		return err
-	}
+	runtime.Must(err)
 
 	args := &digitalocean.ProjectArgs{
 		Name:        pulumi.String(project.Name),
@@ -49,9 +52,11 @@ func CreateProject(ctx *pulumi.Context, project *Project) error {
 			c.ClusterUrn,
 		},
 	}
-	_, err = digitalocean.NewProject(ctx, project.Name, args)
 
-	return err
+	_, err = digitalocean.NewProject(ctx, project.Name, args)
+	runtime.Must(err)
+
+	return
 }
 
 func createVPC(ctx *pulumi.Context, p *Project) (*digitalocean.Vpc, error) {

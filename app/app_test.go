@@ -4,14 +4,20 @@ import (
 	"testing"
 
 	"github.com/alexfalkowski/infraops/app"
+	"github.com/alexfalkowski/infraops/test"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )
 
 func TestApp(t *testing.T) {
 	fns := []pulumi.RunFunc{withResource, withoutResource}
+
 	for _, f := range fns {
-		require.NoError(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", app.Mocks(0))))
+		require.NoError(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", test.Mocks(0))))
+	}
+
+	for _, f := range fns {
+		require.Error(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", test.BadMocks(0))))
 	}
 }
 
