@@ -13,11 +13,11 @@ func TestApp(t *testing.T) {
 	fns := []pulumi.RunFunc{withResource, withoutResource}
 
 	for _, f := range fns {
-		require.NoError(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", test.Mocks(0))))
+		require.NoError(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", &test.Stub{})))
 	}
 
 	for _, f := range fns {
-		require.Error(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", test.BadMocks(0))))
+		require.Error(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", &test.ErrStub{})))
 	}
 }
 

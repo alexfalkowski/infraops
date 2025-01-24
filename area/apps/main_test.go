@@ -16,7 +16,7 @@ func TestFns(t *testing.T) {
 		}
 
 		return nil
-	}, pulumi.WithMocks("project", "stack", test.Mocks(0)))
+	}, pulumi.WithMocks("project", "stack", &test.Stub{}))
 	require.NoError(t, err)
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
@@ -26,6 +26,6 @@ func TestFns(t *testing.T) {
 		}
 
 		return nil
-	}, pulumi.WithMocks("project", "stack", test.BadMocks(0)))
+	}, pulumi.WithMocks("project", "stack", &test.ErrStub{}))
 	require.Error(t, err)
 }
