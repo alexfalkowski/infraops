@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	errs "github.com/alexfalkowski/infraops/errors"
+	"github.com/alexfalkowski/infraops/runtime"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -80,15 +81,19 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	return errs.Prefix(repo.Name, branchProtection(ctx, r.NodeId, repo))
 }
 
-func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
-	t, err := template(repo)
-	if err != nil {
-		return nil, err
-	}
+//nolint:nonamedreturns
+func repository(ctx *pulumi.Context, repo *Repository) (repository *github.Repository, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = runtime.ConvertRecover(r)
+		}
+	}()
 
-	if err := repo.Checks.Valid(); err != nil {
-		return nil, err
-	}
+	t, err := template(repo)
+	runtime.Must(err)
+
+	err = repo.Checks.Valid()
+	runtime.Must(err)
 
 	args := &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
@@ -121,7 +126,10 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		VulnerabilityAlerts:    pulumi.Bool(true),
 	}
 
-	return github.NewRepository(ctx, repo.Name, args)
+	repository, err = github.NewRepository(ctx, repo.Name, args)
+	runtime.Must(err)
+
+	return //nolint:nakedret
 }
 
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
