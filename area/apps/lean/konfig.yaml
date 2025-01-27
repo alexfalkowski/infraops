@@ -29,7 +29,7 @@ telemetry:
       Authorization: /etc/secrets/otlp/token
 token:
   kind: key
-  key: /etc/secrets/konfig/token
+  secret: /etc/secrets/konfig/token
 transport:
   http:
     retry:
