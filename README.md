@@ -1,3 +1,4 @@
+![Gopher](assets/gopher.png)
 [![CircleCI](https://circleci.com/gh/alexfalkowski/infraops.svg?style=shield)](https://circleci.com/gh/alexfalkowski/infraops)
 [![codecov](https://codecov.io/gh/alexfalkowski/infraops/graph/badge.svg?token=U3X5JGAA8I)](https://codecov.io/gh/alexfalkowski/infraops)
 [![Go Report Card](https://goreportcard.com/badge/github.com/alexfalkowski/infraops)](https://goreportcard.com/report/github.com/alexfalkowski/infraops)
