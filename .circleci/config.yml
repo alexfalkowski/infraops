@@ -12,22 +12,22 @@ workflows:
           mapping: |
             .circleci/.* gh true
             area/gh/.* gh true
-            gh/.* gh true
+            internal/gh/.* gh true
             go.* gh true
 
             .circleci/.* cf true
             area/cf/.* cf true
-            cf/.* cf true
+            internal/cf/.* cf true
             go.* cf true
 
             .circleci/.* do true
             area/do/.* do true
-            do/.* do true
+            internal/do/.* do true
             go.* do true
 
             .circleci/.* apps true
             area/apps/.* apps true
-            app/.* apps true
+            internal/app/.* apps true
             go.* apps true
           base-revision: origin/master
           resource_class: large
