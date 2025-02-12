@@ -3,8 +3,8 @@ package gh
 import (
 	"errors"
 
-	errs "github.com/alexfalkowski/infraops/errors"
-	"github.com/alexfalkowski/infraops/runtime"
+	errs "github.com/alexfalkowski/infraops/internal/errors"
+	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )

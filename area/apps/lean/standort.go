@@ -1,7 +1,7 @@
 package lean
 
 import (
-	"github.com/alexfalkowski/infraops/app"
+	"github.com/alexfalkowski/infraops/internal/app"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

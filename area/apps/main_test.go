@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/alexfalkowski/infraops/test"
+	test "github.com/alexfalkowski/infraops/internal/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )
