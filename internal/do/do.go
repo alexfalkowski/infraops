@@ -1,7 +1,7 @@
 package do
 
 import (
-	"github.com/alexfalkowski/infraops/runtime"
+	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-digitalocean/sdk/v4/go/digitalocean"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
