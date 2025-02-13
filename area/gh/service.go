@@ -19,7 +19,7 @@ func createGoServiceTemplate(ctx *pulumi.Context) error {
 func createStatus(ctx *pulumi.Context) error {
 	checks := gh.Checks{"ci/circleci: build-service", "ci/circleci: build-docker"}
 	repo := &gh.Repository{
-		Name: "status", Description: "An alternative to https://httpstat.us/",
+		Name: "status", Description: "An alternative to https://httpstat.us/.",
 		HomepageURL: "https://alexfalkowski.github.io/status", Checks: checks,
 		Visibility: gh.Public, EnablePages: true,
 	}
