@@ -16,3 +16,7 @@ pulumi-preview:
 # Update pulumi changes.
 pulumi-update:
 	pulumi update --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
+
+# Cancel pulumi changes.
+pulumi-cancel:
+	pulumi cancel --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
