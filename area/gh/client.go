@@ -47,7 +47,7 @@ func createChock(ctx *pulumi.Context) error {
 		Name: "chock", Description: "A tool to build and publish container images.",
 		HomepageURL: "https://alexfalkowski.github.io/chock", Checks: checks,
 		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
-		Visibility: gh.Public, EnablePages: false,
+		Visibility: gh.Public, EnablePages: true,
 	}
 
 	return gh.CreateRepository(ctx, repo)
