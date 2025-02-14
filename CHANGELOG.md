@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.419.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.419.0) - 2025-02-14
+
+- [`57332b1`](https://github.com/alexfalkowski/infraops/commit/57332b13ef7e9a2fb73c68e69037a74e9ec96718) feat(gh): remove chock (#784)
+
 ## [v1.418.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.418.0) - 2025-02-13
 
 - [`4566c0d`](https://github.com/alexfalkowski/infraops/commit/4566c0d9d37d4e8e854a4ede591814bce8e28a90) feat(gh): enable pages for chock (#783)
