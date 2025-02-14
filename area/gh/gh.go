@@ -12,5 +12,5 @@ var Fns = pulumi.CreateFns{
 	createGoServiceTemplate, createGoClientTemplate,
 	createStatus, createStandort, createKonfig,
 	createMigrieren, createBezeichner, createWeb,
-	createServiceCtl, createKonfigCtl, createChock,
+	createServiceCtl, createKonfigCtl,
 }
