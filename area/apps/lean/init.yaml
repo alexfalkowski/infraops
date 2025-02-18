@@ -29,5 +29,5 @@ telemetry:
     headers:
       Authorization: /etc/secrets/otlp/token
 token:
-  kind: token
+  kind: opaque
   secret: /etc/secrets/konfig/token
