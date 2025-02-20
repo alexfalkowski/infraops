@@ -22,19 +22,13 @@ setup-grafana:
 	kubectl create secret generic metrics-secret --from-literal=username=1289421 --from-literal=password=$(GRAFANA_METRICS_TOKEN) --namespace grafana
 	kubectl create secret generic logs-secret --from-literal=username=743756 --from-literal=password=$(GRAFANA_LOGS_TOKEN) --namespace grafana
 
-# Update grafana.
-update-grafana:
-	kubectl apply -f grafana --namespace grafana
-
 # Install helm.
 install-helm:
 	helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.11.4 -f nginx/values.yaml
-	helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.5.1
+	helm upgrade --install alloy-metrics-release grafana/alloy --create-namespace -n grafana -f grafana/metrics.yaml --set-file alloy.configMap.content=grafana/metrics.alloy --version 0.11.0
+	helm upgrade --install alloy-logs-release grafana/alloy --create-namespace -n grafana -f grafana/logs.yaml --set-file alloy.configMap.content=grafana/logs.alloy --version 0.11.0
 	helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version v1.3.3
 	helm upgrade --install metrics-server-release metrics-server/metrics-server --create-namespace --namespace metrics-server --version 3.12.2
-
-# Update deps.
-update: update-grafana
 
 # All pods.
 pods:
