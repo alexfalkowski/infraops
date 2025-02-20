@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.445.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.445.0) - 2025-02-20
+
+- [`99b567c`](https://github.com/alexfalkowski/infraops/commit/99b567c0d1276883bf5c058a8eda5f81e06a0fa7) feat(k8s): do not use alloy (#815)
+
 ## [v1.444.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.444.0) - 2025-02-20
 
 - [`4dfe8bd`](https://github.com/alexfalkowski/infraops/commit/4dfe8bd701e167940268901f3847840ab23b78e4) feat(k8s): move to alloy (#813)
