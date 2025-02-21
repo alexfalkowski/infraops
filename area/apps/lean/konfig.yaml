@@ -16,6 +16,7 @@ source:
     token: /etc/secrets/gh/token
 telemetry:
   logger:
+    kind: stdout
     level: info
   metrics:
     kind: otlp
