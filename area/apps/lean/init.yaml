@@ -17,6 +17,7 @@ id:
   kind: ksuid
 telemetry:
   logger:
+    kind: stdout
     level: info
   metrics:
     kind: otlp
