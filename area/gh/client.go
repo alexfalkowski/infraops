@@ -17,18 +17,6 @@ func createGoClientTemplate(ctx *pulumi.Context) error {
 	return gh.CreateRepository(ctx, repo)
 }
 
-func createServiceCtl(ctx *pulumi.Context) error {
-	checks := gh.Checks{"ci/circleci: build-client", "ci/circleci: build-docker"}
-	repo := &gh.Repository{
-		Name: "servicectl", Description: "A tool for go-service and go-service-templates.",
-		HomepageURL: "https://alexfalkowski.github.io/servicectl", Checks: checks,
-		Template:   &gh.Template{Owner: "alexfalkowski", Repository: "go-client-template"},
-		Visibility: gh.Public, EnablePages: true,
-	}
-
-	return gh.CreateRepository(ctx, repo)
-}
-
 func createKonfigCtl(ctx *pulumi.Context) error {
 	checks := gh.Checks{"ci/circleci: build-client", "ci/circleci: build-docker"}
 	repo := &gh.Repository{
