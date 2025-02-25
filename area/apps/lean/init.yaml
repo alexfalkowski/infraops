@@ -17,8 +17,10 @@ id:
   kind: ksuid
 telemetry:
   logger:
-    kind: stdout
-    level: info
+    kind: otlp
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/logs
+    headers:
+      Authorization: /etc/secrets/otlp/token
   metrics:
     kind: otlp
     url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
