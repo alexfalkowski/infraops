@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.463.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.463.0) - 2025-02-28
+
+- [`8a00669`](https://github.com/alexfalkowski/infraops/commit/8a0066919e90d927d347e43b39d11982d112a345) docs(diagrams): update with make (#836)
+- [`98975b7`](https://github.com/alexfalkowski/infraops/commit/98975b7e57b3b54622dfbe38ffab49facd04ac82) feat(deps): update golang.org/x/crypto to v0.35.0 (#834)
+- [`8bc2371`](https://github.com/alexfalkowski/infraops/commit/8bc2371615f819874834086589ca43e54d9edbde) build(deps): bump bin from `c8030a1` to `637442f` (#835)
+
 ## [v1.462.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.462.0) - 2025-02-28
 
 - [`4ffa906`](https://github.com/alexfalkowski/infraops/commit/4ffa906ec3dd33b8131edb2207bda149188568cc) feat(k8s): simplify setup (#833)
