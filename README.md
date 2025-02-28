@@ -87,7 +87,7 @@ This contains all the packages our cluster needs.
 To ge the cluster ready, you need to run the following:
 
 ```bash
-❯ make -C area/k8s setup update
+❯ make -C area/k8s setup
 ```
 
 #### Delete

@@ -7,7 +7,7 @@ delete:
 	kubectl delete namespaces nginx-ingress grafana circleci
 
 # Setup everything.
-setup: setup-helm install-helm setup-grafana
+setup: setup-helm install-helm setup-grafana update
 
 # Setup helm repos.
 setup-helm:
