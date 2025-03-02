@@ -12,7 +12,7 @@ func createBezeichner(ctx *pulumi.Context) error {
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
 		InitVersion:   "0.196.0",
-		Version:       "1.353.0",
+		Version:       "1.352.0",
 		ConfigVersion: "1.15.0",
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
