@@ -332,6 +332,7 @@ workflows:
     jobs:
       - build
       - release:
+          serial-group: << pipeline.git.branch >>
           requires:
             - build
           filters:
@@ -346,6 +347,7 @@ workflows:
             branches:
               ignore: master
       - apps_update:
+          serial-group: << pipeline.git.branch >>
           context: infraops
           filters:
             branches:
@@ -360,6 +362,7 @@ workflows:
             branches:
               ignore: master
       - cf_update:
+          serial-group: << pipeline.git.branch >>
           context: infraops
           filters:
             branches:
@@ -373,6 +376,7 @@ workflows:
             branches:
               ignore: master
       - do_update:
+          serial-group: << pipeline.git.branch >>
           context: infraops
           filters:
             branches:
@@ -386,6 +390,7 @@ workflows:
             branches:
               ignore: master
       - gh_update:
+          serial-group: << pipeline.git.branch >>
           context: infraops
           filters:
             branches:
