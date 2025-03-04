@@ -60,6 +60,9 @@ jobs:
     working_directory: ~/infraops
     steps:
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make pull
       - run: release
     resource_class: large
 
@@ -104,6 +107,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make pull
       - run: make -C area/apps save-config
       - restore_cache:
           name: restore deps
@@ -172,6 +176,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make pull
       - restore_cache:
           name: restore deps
           keys:
@@ -237,6 +242,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make pull
       - restore_cache:
           name: restore deps
           keys:
@@ -302,6 +308,7 @@ jobs:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make pull
       - restore_cache:
           name: restore deps
           keys:
@@ -332,7 +339,7 @@ workflows:
     jobs:
       - build
       - release:
-          serial-group: << pipeline.git.branch >>-release
+          serial-group: release
           requires:
             - build
           filters:
@@ -347,7 +354,7 @@ workflows:
             branches:
               ignore: master
       - apps_update:
-          serial-group: << pipeline.git.branch >>-apps_update
+          serial-group: apps_update
           context: infraops
           filters:
             branches:
@@ -362,7 +369,7 @@ workflows:
             branches:
               ignore: master
       - cf_update:
-          serial-group: << pipeline.git.branch >>-cf_update
+          serial-group: cf_update
           context: infraops
           filters:
             branches:
@@ -376,7 +383,7 @@ workflows:
             branches:
               ignore: master
       - do_update:
-          serial-group: << pipeline.git.branch >>-do_update
+          serial-group: do_update
           context: infraops
           filters:
             branches:
@@ -390,7 +397,7 @@ workflows:
             branches:
               ignore: master
       - gh_update:
-          serial-group: << pipeline.git.branch >>-gh_update
+          serial-group: gh_update
           context: infraops
           filters:
             branches:
