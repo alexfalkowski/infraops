@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.470.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.470.0) - 2025-03-04
+
+- [`9f324b0`](https://github.com/alexfalkowski/infraops/commit/9f324b0513e6e4a8c52d244c9f086f2447213a20) feat(apps): update versions (#848)
+- [`97f0034`](https://github.com/alexfalkowski/infraops/commit/97f0034b13389c9918f35bf21071c969f6bc07ad) build(ci): use the name of the job as it only runs on master (#847)
+- [`8e7a71e`](https://github.com/alexfalkowski/infraops/commit/8e7a71e19faa18da048623e271e9fccc6ee63d98) build(ci): make sure serial-group is unique (#846)
+- [`29ec164`](https://github.com/alexfalkowski/infraops/commit/29ec16410020500be2dd7ac6c9f0ff25a0a1f728) build(ci): use serial-group (#845)
+
 ## [v1.469.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.469.0) - 2025-03-03
 
 - [`83f2092`](https://github.com/alexfalkowski/infraops/commit/83f2092a9320f8a6ffcdc6b394693996232f5133) feat(apps): update versions (#844)
