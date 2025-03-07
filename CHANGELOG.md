@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.476.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.476.0) - 2025-03-07
+
+- [`c1bd3d3`](https://github.com/alexfalkowski/infraops/commit/c1bd3d3f95b22701ef4606c4510fb22beb97c7a8) feat(gh): seperate each repository in a file to be registered (#855)
+
 ## [v1.475.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.475.0) - 2025-03-07
 
 - [`43cf803`](https://github.com/alexfalkowski/infraops/commit/43cf8033db4f39a1c99d14629bce44ca273b8f6f) feat(do): update k8s to v1.32.2 (#854)
