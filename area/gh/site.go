@@ -4,8 +4,8 @@ import "github.com/alexfalkowski/infraops/internal/gh"
 
 func init() {
 	RegisterRepository(&gh.Repository{
-		Name: "go-service", Description: "A framework to build services in go.",
-		HomepageURL: "https://alexfalkowski.github.io/go-service",
+		Name: "alexfalkowski.github.io", Description: "A site for my profile.",
+		HomepageURL: "https://alexfalkowski.github.io",
 		Checks:      gh.Checks{"ci/circleci: build"},
 		Visibility:  gh.Public,
 		EnablePages: true,
