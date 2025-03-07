@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.477.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.477.0) - 2025-03-07
+
+- [`c232bfb`](https://github.com/alexfalkowski/infraops/commit/c232bfba47aff3acb3c2f3ce7bd2d92bc53ee92b) feat(apps): use register model as in gh (#856)
+
 ## [v1.476.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.476.0) - 2025-03-07
 
 - [`c1bd3d3`](https://github.com/alexfalkowski/infraops/commit/c1bd3d3f95b22701ef4606c4510fb22beb97c7a8) feat(gh): seperate each repository in a file to be registered (#855)
