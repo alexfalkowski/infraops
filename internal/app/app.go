@@ -38,13 +38,11 @@ type (
 		Min string
 		Max string
 	}
-
-	createFn func(ctx *pulumi.Context, app *App) error
 )
 
 // CreateApp in the cluster.
 func CreateApp(ctx *pulumi.Context, app *App) error {
-	fns := []createFn{
+	fns := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,
 		createDeployment, createService, createIngress,
