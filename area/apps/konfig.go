@@ -1,12 +1,11 @@
-package lean
+package main
 
 import (
 	"github.com/alexfalkowski/infraops/internal/app"
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createKonfig(ctx *pulumi.Context) error {
-	a := &app.App{
+func init() {
+	RegisterApplication(&app.App{
 		ID:        "1115c470-ccc9-4daf-8459-ef1e19c40afe",
 		Name:      "konfig",
 		Namespace: "lean",
@@ -18,7 +17,5 @@ func createKonfig(ctx *pulumi.Context) error {
 			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
 		},
 		Secrets: app.Secrets{"konfig", "otlp", "gh"},
-	}
-
-	return app.CreateApp(ctx, a)
+	})
 }

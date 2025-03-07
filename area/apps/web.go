@@ -1,12 +1,11 @@
-package lean
+package main
 
 import (
 	"github.com/alexfalkowski/infraops/internal/app"
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createWeb(ctx *pulumi.Context) error {
-	a := &app.App{
+func init() {
+	RegisterApplication(&app.App{
 		ID:            "b46608ae-950a-46bb-b37a-4dfe68a95b52",
 		Name:          "web",
 		Namespace:     "lean",
@@ -20,7 +19,5 @@ func createWeb(ctx *pulumi.Context) error {
 			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
 		},
 		Secrets: app.Secrets{"konfig", "otlp"},
-	}
-
-	return app.CreateApp(ctx, a)
+	})
 }

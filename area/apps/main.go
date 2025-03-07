@@ -1,21 +1,20 @@
 package main
 
 import (
-	"github.com/alexfalkowski/infraops/area/apps/lean"
-	ap "github.com/alexfalkowski/infraops/internal/pulumi"
+	"github.com/alexfalkowski/infraops/internal/app"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-var fns ap.CreateFns
+var applications []*app.App
 
-func init() {
-	fns = append(fns, lean.Fns...)
+func RegisterApplication(application *app.App) {
+	applications = append(applications, application)
 }
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		for _, fn := range fns {
-			if err := fn(ctx); err != nil {
+		for _, application := range applications {
+			if err := app.CreateApp(ctx, application); err != nil {
 				return err
 			}
 		}
