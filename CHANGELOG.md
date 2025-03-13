@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.481.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.481.0) - 2025-03-13
+
+- [`24aa9f5`](https://github.com/alexfalkowski/infraops/commit/24aa9f505c4363ced78bb37bc38dce0b57c5bb83) feat(deps): bump golang.org/x/net from 0.34.0 to 0.36.0 (#861)
+- [`dc698f4`](https://github.com/alexfalkowski/infraops/commit/dc698f4bbb8b9f052d7582a5d08af7d6e3024bc0) build(ci): update alexfalkowski/k8s:1.27 (#860)
+
 ## [v1.480.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.480.0) - 2025-03-11
 
 - [`bd41b42`](https://github.com/alexfalkowski/infraops/commit/bd41b428e6ba69c16cbff67ab18b185994842225) feat(apps): update versions (#859)
