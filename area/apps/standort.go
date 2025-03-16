@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/alexfalkowski/infraops/internal/app"
-)
+import "github.com/alexfalkowski/infraops/internal/app"
 
 func init() {
 	RegisterApplication(&app.App{
@@ -10,8 +8,8 @@ func init() {
 		Name:          "standort",
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "0.210.0",
-		Version:       "2.360.0",
+		InitVersion:   "0.211.0",
+		Version:       "2.361.0",
 		ConfigVersion: "1.16.0",
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
