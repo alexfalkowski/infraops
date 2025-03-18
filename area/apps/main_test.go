@@ -9,10 +9,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateApp(t *testing.T) {
-	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
+func TestCreate(t *testing.T) {
+	config, err := app.Read("apps.txtpb")
+	require.NoError(t, err)
+
+	applications := config.GetApplications()
+
+	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
 		for _, application := range applications {
-			err := app.CreateApp(ctx, application)
+			err := app.Create(ctx, app.Convert(application))
 			require.NoError(t, err)
 		}
 
@@ -22,7 +27,7 @@ func TestCreateApp(t *testing.T) {
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
 		for _, application := range applications {
-			err := app.CreateApp(ctx, application)
+			err := app.Create(ctx, app.Convert(application))
 			require.NoError(t, err)
 		}
 
