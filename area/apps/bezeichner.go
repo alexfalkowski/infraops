@@ -8,8 +8,8 @@ func init() {
 		Name:          "bezeichner",
 		Namespace:     "lean",
 		Domain:        "lean-thoughts.com",
-		InitVersion:   "0.213.0",
-		Version:       "1.369.0",
+		InitVersion:   "0.214.0",
+		Version:       "1.370.0",
 		ConfigVersion: "1.15.0",
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
