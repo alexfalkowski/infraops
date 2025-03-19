@@ -1,0 +1,153 @@
+repositories [
+  {
+    name: "bezeichner"
+    description: "Bezeichner takes care of identifiers used in your services."
+		homepage_url: "https://alexfalkowski.github.io/bezeichner"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "bin"
+    description: "A place for common executables."
+		homepage_url: "https://alexfalkowski.github.io/bin"
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "app-config"
+    description: "A place for all of my application configuration."
+		homepage_url: "https://alexfalkowski.github.io/app-config"
+		checks: ["ci/circleci: verify-config"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "docker"
+    description: "Common setup used for my projects."
+		homepage_url: "https://alexfalkowski.github.io/docker"
+		topics: ["docker", "ruby", "golang"]
+		checks: ["ci/circleci: lint", "ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "go-health"
+    description: "Health monitoring pattern in go."
+		homepage_url: "https://alexfalkowski.github.io/go-health"
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "infraops"
+    description: "A place where all infrastructure is taken care of."
+		homepage_url: "https://alexfalkowski.github.io/infraops"
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "konfigctl"
+    description: "A tool to control https://alexfalkowski.github.io/konfig."
+		homepage_url: "https://alexfalkowski.github.io/konfigctl"
+		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
+		visibility: "public"
+		template {
+		  owner: "alexfalkowski"
+			repository: "go-client-template"
+		}
+		enable_pages: true
+  },
+  {
+    name: "konfig"
+    description: "Konfig is a configuration system for application configuration."
+		homepage_url: "https://alexfalkowski.github.io/konfig"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coverage"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "migrieren"
+    description: "Migrieren provides a way to migrate your databases."
+		homepage_url: "https://alexfalkowski.github.io/migrieren"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "nonnative"
+    description: "Allows you to keep using the power of ruby to test other systems."
+		homepage_url: "https://alexfalkowski.github.io/nonnative"
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "go-service"
+    description: "A framework to build services in go."
+		homepage_url: "https://alexfalkowski.github.io/go-service"
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "alexfalkowski.github.io"
+    description: "A site for my profile."
+		homepage_url: "https://alexfalkowski.github.io"
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "standort"
+    description: "Standort provides location based information."
+		homepage_url: "https://alexfalkowski.github.io/standort"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "status"
+    description: "An alternative to https://httpstat.us/."
+		homepage_url: "https://alexfalkowski.github.io/status"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		visibility: "public"
+		enable_pages: true
+  },
+  {
+    name: "go-service-template"
+    description: "A template for go services."
+		homepage_url: "https://alexfalkowski.github.io/go-service-template"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		visibility: "public"
+		is_template: true
+		enable_pages: true
+  },
+  {
+    name: "go-client-template"
+    description: "A template for go clients."
+		homepage_url: "https://alexfalkowski.github.io/go-client-template"
+		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
+		visibility: "public"
+		template {
+		  owner: "alexfalkowski"
+			repository: "go-service-template"
+		}
+		is_template: true
+		enable_pages: true
+  },
+  {
+    name: "web"
+    description: "A website lean-thoughts.com."
+		homepage_url: "https://alexfalkowski.github.io/web"
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		visibility: "public"
+		template {
+		  owner: "alexfalkowski"
+			repository: "go-service-template"
+		}
+		enable_pages: true
+  }
+]

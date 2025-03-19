@@ -7,8 +7,13 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		for _, repository := range repositories {
-			if err := gh.CreateRepository(ctx, repository); err != nil {
+		config, err := gh.ReadConfiguration("gh.pbtxt")
+		if err != nil {
+			return err
+		}
+
+		for _, repository := range config.GetRepositories() {
+			if err := gh.CreateRepository(ctx, gh.ConvertRepository(repository)); err != nil {
 				return err
 			}
 		}

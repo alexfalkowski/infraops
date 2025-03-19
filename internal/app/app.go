@@ -42,16 +42,16 @@ type (
 	}
 )
 
-// Read reads the applications from the configuration.
-func Read(path string) (*v1.Applications, error) {
+// ReadConfiguration reads the applications from the configuration.
+func ReadConfiguration(path string) (*v1.Applications, error) {
 	var configuration v1.Applications
 	err := config.Read(path, &configuration)
 
 	return &configuration, err
 }
 
-// Convert api app to domain app.
-func Convert(a *v1.Application) *App {
+// ConvertApplication converts a v1.Application to an App.
+func ConvertApplication(a *v1.Application) *App {
 	cpu := a.GetResources().GetCpu()
 	mem := a.GetResources().GetMemory()
 	storage := a.GetResources().GetStorage()
@@ -74,8 +74,8 @@ func Convert(a *v1.Application) *App {
 	return app
 }
 
-// Create in the cluster.
-func Create(ctx *pulumi.Context, app *App) error {
+// CreateApplication in the cluster.
+func CreateApplication(ctx *pulumi.Context, app *App) error {
 	fns := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,

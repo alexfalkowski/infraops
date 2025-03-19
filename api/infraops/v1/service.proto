@@ -34,3 +34,28 @@ message Application {
 message Applications {
   repeated Application applications = 1;
 }
+
+// Template represents the template to be used for a repository.
+message Template {
+  string owner = 1;
+  string repository = 2;
+}
+
+// Repository represents the repository to be created.
+message Repository {
+  string name = 1;
+  string description = 2;
+  string homepage_url = 3;
+  string visibility = 4;
+  bool enable_pages = 5;
+  bool is_template = 6;
+  bool archived = 7;
+  Template template = 8;
+  repeated string topics = 9;
+  repeated string checks = 10;
+}
+
+// Repositories represents the repositories to be created.
+message Repositories {
+  repeated Repository repositories = 1;
+}

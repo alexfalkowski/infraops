@@ -3,6 +3,8 @@ package gh
 import (
 	"errors"
 
+	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	"github.com/alexfalkowski/infraops/internal/config"
 	errs "github.com/alexfalkowski/infraops/internal/errors"
 	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
@@ -71,6 +73,43 @@ func (c Checks) Valid() error {
 	return nil
 }
 
+// ReadConfiguration reads the repositories from the configuration.
+func ReadConfiguration(path string) (*v1.Repositories, error) {
+	var configuration v1.Repositories
+	err := config.Read(path, &configuration)
+
+	return &configuration, err
+}
+
+// ConvertRepository converts a v1.Repository to a Repository.
+func ConvertRepository(r *v1.Repository) *Repository {
+	repository := &Repository{
+		Name:        r.GetName(),
+		Description: r.GetDescription(),
+		HomepageURL: r.GetHomepageUrl(),
+		Visibility:  Visibility(r.GetVisibility()),
+		Topics:      r.GetTopics(),
+		Checks:      Checks(r.GetChecks()),
+		IsTemplate:  r.GetIsTemplate(),
+		EnablePages: r.GetEnablePages(),
+		Archived:    r.GetArchived(),
+	}
+
+	if template := r.GetTemplate(); template != nil {
+		ownder := template.GetOwner()
+		repo := template.GetRepository()
+
+		if ownder != "" && repo != "" {
+			repository.Template = &Template{
+				Owner:      ownder,
+				Repository: repo,
+			}
+		}
+	}
+
+	return repository
+}
+
 // CreateRepository for gh.
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
@@ -81,7 +120,6 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	return errs.Prefix(repo.Name, branchProtection(ctx, r.NodeId, repo))
 }
 
-//nolint:nonamedreturns
 func repository(ctx *pulumi.Context, repo *Repository) (repository *github.Repository, err error) {
 	defer func() {
 		if r := recover(); r != nil {

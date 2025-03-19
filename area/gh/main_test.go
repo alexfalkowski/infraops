@@ -10,9 +10,14 @@ import (
 )
 
 func TestCreateRepository(t *testing.T) {
-	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
+	config, err := gh.ReadConfiguration("gh.pbtxt")
+	require.NoError(t, err)
+
+	repositories := config.GetRepositories()
+
+	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
 		for _, repository := range repositories {
-			err := gh.CreateRepository(ctx, repository)
+			err := gh.CreateRepository(ctx, gh.ConvertRepository(repository))
 			require.NoError(t, err)
 		}
 
@@ -22,7 +27,7 @@ func TestCreateRepository(t *testing.T) {
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
 		for _, repository := range repositories {
-			err := gh.CreateRepository(ctx, repository)
+			err := gh.CreateRepository(ctx, gh.ConvertRepository(repository))
 			require.NoError(t, err)
 		}
 

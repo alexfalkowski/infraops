@@ -7,13 +7,13 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		config, err := app.Read("apps.pbtxt")
+		config, err := app.ReadConfiguration("apps.pbtxt")
 		if err != nil {
 			return err
 		}
 
 		for _, application := range config.GetApplications() {
-			if err := app.Create(ctx, app.Convert(application)); err != nil {
+			if err := app.CreateApplication(ctx, app.ConvertApplication(application)); err != nil {
 				return err
 			}
 		}
