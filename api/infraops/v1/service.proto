@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package infraops.v1;
+
+option go_package = "github.com/alexfalkowski/infraops/api/infraops/v1";
+
+// Range represents a range of values.
+message Range {
+  string min = 1;
+  string max = 2;
+}
+
+// Resources represents the resources required for an application.
+message Resources {
+  Range cpu = 1;
+  Range memory = 2;
+  Range storage = 3;
+}
+
+// Application represents the application to be released.
+message Application {
+  string id = 1;
+  string name = 2;
+  string namespace = 3;
+  string domain = 4;
+  string init_version = 5;
+  string version = 6;
+  string config_version = 7;
+  Resources resources = 8;
+  repeated string secrets = 9;
+}
+
+// Applications represents the applications to be released.
+message Applications {
+  repeated Application applications = 1;
+}
