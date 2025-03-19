@@ -51,5 +51,5 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) (err error) {
 	_, err = cloudflare.NewRecord(ctx, name, r)
 	runtime.Must(err)
 
-	return //nolint:nakedret
+	return
 }
