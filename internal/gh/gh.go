@@ -96,12 +96,12 @@ func ConvertRepository(r *v1.Repository) *Repository {
 	}
 
 	if template := r.GetTemplate(); template != nil {
-		ownder := template.GetOwner()
+		owner := template.GetOwner()
 		repo := template.GetRepository()
 
-		if ownder != "" && repo != "" {
+		if owner != "" && repo != "" {
 			repository.Template = &Template{
-				Owner:      ownder,
+				Owner:      owner,
 				Repository: repo,
 			}
 		}
@@ -167,7 +167,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (repository *github.Repos
 	repository, err = github.NewRepository(ctx, repo.Name, args)
 	runtime.Must(err)
 
-	return //nolint:nakedret
+	return
 }
 
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
@@ -193,7 +193,6 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 	return err
 }
 
-//nolint:nilnil
 func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	if repo.Template == nil {
 		return nil, nil

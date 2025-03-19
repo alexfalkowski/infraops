@@ -17,8 +17,6 @@ type BalancerZone struct {
 }
 
 // CreateBalancerZone for cf.
-//
-//nolint:nakedret
 func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) (err error) {
 	defer func() {
 		if r := recover(); r != nil {

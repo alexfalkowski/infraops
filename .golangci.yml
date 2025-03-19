@@ -19,3 +19,5 @@ linters:
     - tagliatelle
     - tenv
     - nonamedreturns
+    - nakedret
+    - nilnil
