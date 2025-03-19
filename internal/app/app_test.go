@@ -20,7 +20,7 @@ func TestApp(t *testing.T) {
 		require.Error(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", &test.ErrStub{})))
 	}
 
-	_, err := app.Read("invalid")
+	_, err := app.ReadConfiguration("invalid")
 	require.Error(t, err)
 }
 
@@ -41,7 +41,7 @@ func withResource(ctx *pulumi.Context) error {
 		},
 	}
 
-	return app.Create(ctx, a)
+	return app.CreateApplication(ctx, a)
 }
 
 func withoutResource(ctx *pulumi.Context) error {
@@ -55,5 +55,5 @@ func withoutResource(ctx *pulumi.Context) error {
 		ConfigVersion: "1.0.0",
 	}
 
-	return app.Create(ctx, a)
+	return app.CreateApplication(ctx, a)
 }

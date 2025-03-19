@@ -10,14 +10,14 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	config, err := app.Read("apps.pbtxt")
+	config, err := app.ReadConfiguration("apps.pbtxt")
 	require.NoError(t, err)
 
 	applications := config.GetApplications()
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
 		for _, application := range applications {
-			err := app.Create(ctx, app.Convert(application))
+			err := app.CreateApplication(ctx, app.ConvertApplication(application))
 			require.NoError(t, err)
 		}
 
@@ -27,7 +27,7 @@ func TestCreate(t *testing.T) {
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
 		for _, application := range applications {
-			err := app.Create(ctx, app.Convert(application))
+			err := app.CreateApplication(ctx, app.ConvertApplication(application))
 			require.NoError(t, err)
 		}
 

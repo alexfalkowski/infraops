@@ -1,6 +1,10 @@
 include bin/build/make/go.mak
 include bin/build/make/git.mak
 
+# Lint the API.
+api-lint:
+	make -C api lint
+
 # Diagrams generated from https://github.com/loov/goda.
 diagrams:
 	$(MAKE) package=. create-diagram
@@ -21,10 +25,10 @@ pulumi-update:
 pulumi-cancel:
 	pulumi cancel --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Lint the API.
-api-lint:
-	make -C api lint
-
 # Check the API for breaking changes.
 api-breaking:
 	make -C api breaking
+
+# Generate the API.
+api-generate:
+	make -C api generate
