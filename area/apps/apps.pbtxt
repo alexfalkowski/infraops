@@ -1,0 +1,60 @@
+applications [
+  {
+    id: "1115c470-ccc9-4daf-8459-ef1e19c40afe"
+    name: "konfig"
+    namespace: "lean"
+    domain: "lean-thoughts.com"
+    version: "1.494.0"
+    resources {
+      cpu: { min: "250m", max: "500m" }
+      memory: { min: "128Mi", max: "256Mi" }
+      storage: { min: "1Gi", max: "2Gi" }
+    },
+    secrets: ["konfig", "otlp", "gh"]
+  },
+  {
+    id: "98968ca0-4ada-4856-8547-210f92b838ea"
+    name: "bezeichner"
+    namespace: "lean"
+    domain: "lean-thoughts.com"
+    init_version: "0.214.0"
+    version: "1.370.0"
+    config_version: "1.15.0"
+    resources {
+      cpu: { min: "125m", max: "250m" }
+      memory: { min: "64Mi", max: "128Mi" }
+      storage: { min: "1Gi", max: "2Gi" }
+    },
+    secrets: ["konfig", "otlp"]
+  },
+  {
+    id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
+    name: "standort"
+    namespace: "lean"
+    domain: "lean-thoughts.com"
+    init_version: "0.214.0"
+    version: "2.364.0"
+    config_version: "1.16.0"
+    resources {
+      cpu: { min: "125m", max: "250m" }
+      memory: { min: "64Mi", max: "128Mi" }
+      storage: { min: "1Gi", max: "2Gi" }
+    },
+    secrets: ["konfig", "otlp"]
+  },
+  {
+    id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
+    name: "web"
+    namespace: "lean"
+    domain: "lean-thoughts.com"
+    init_version: "0.214.0"
+    version: "0.239.0"
+    config_version: "1.6.0"
+    resources {
+      cpu: { min: "125m", max: "250m" }
+      memory: { min: "64Mi", max: "128Mi" }
+      storage: { min: "1Gi", max: "2Gi" }
+    },
+    secrets: ["konfig", "otlp"]
+  }
+]

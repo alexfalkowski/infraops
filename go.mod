@@ -9,6 +9,7 @@ require (
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.22.1
 	github.com/pulumi/pulumi/sdk/v3 v3.157.0
 	github.com/stretchr/testify v1.10.0
+	google.golang.org/protobuf v1.35.1
 )
 
 require (
@@ -91,7 +92,6 @@ require (
 	golang.org/x/tools v0.23.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240814211410-ddb44dafa142 // indirect
 	google.golang.org/grpc v1.67.1 // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	lukechampine.com/frand v1.4.2 // indirect

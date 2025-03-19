@@ -3,6 +3,8 @@ package app
 import (
 	"errors"
 
+	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -40,8 +42,40 @@ type (
 	}
 )
 
-// CreateApp in the cluster.
-func CreateApp(ctx *pulumi.Context, app *App) error {
+// Read reads the applications from the configuration.
+func Read(path string) (*v1.Applications, error) {
+	var configuration v1.Applications
+	err := config.Read(path, &configuration)
+
+	return &configuration, err
+}
+
+// Convert api app to domain app.
+func Convert(a *v1.Application) *App {
+	cpu := a.GetResources().GetCpu()
+	mem := a.GetResources().GetMemory()
+	storage := a.GetResources().GetStorage()
+	app := &App{
+		ID:            a.GetId(),
+		Name:          a.GetName(),
+		Namespace:     a.GetNamespace(),
+		Domain:        a.GetDomain(),
+		InitVersion:   a.GetInitVersion(),
+		Version:       a.GetVersion(),
+		ConfigVersion: a.GetConfigVersion(),
+		Secrets:       a.GetSecrets(),
+		Resources: &Resources{
+			CPU:     &Range{Min: cpu.GetMin(), Max: cpu.GetMax()},
+			Memory:  &Range{Min: mem.GetMin(), Max: mem.GetMax()},
+			Storage: &Range{Min: storage.GetMin(), Max: storage.GetMax()},
+		},
+	}
+
+	return app
+}
+
+// Create in the cluster.
+func Create(ctx *pulumi.Context, app *App) error {
 	fns := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,
