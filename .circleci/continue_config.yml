@@ -39,7 +39,8 @@ jobs:
           keys:
             - infraops-build-go-build-cache-{{ checksum "go.sum" }}
             - infraops-build-go-build-cache-
-      - run: make -C api lint
+      - run: make api-lint
+      - run: make api-breaking
       - run: make lint
       - run: make sec
       - run: make specs

@@ -20,3 +20,11 @@ pulumi-update:
 # Cancel pulumi changes.
 pulumi-cancel:
 	pulumi cancel --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
+
+# Lint the API.
+api-lint:
+	make -C api lint
+
+# Check the API for breaking changes.
+api-breaking:
+	make -C api breaking
