@@ -54,7 +54,7 @@ repositories [
 		homepage_url: "https://alexfalkowski.github.io/konfigctl"
 		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
 		visibility: "public"
-		template {
+		template: {
 		  owner: "alexfalkowski"
 			repository: "go-client-template"
 		}
@@ -131,7 +131,7 @@ repositories [
 		homepage_url: "https://alexfalkowski.github.io/go-client-template"
 		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
 		visibility: "public"
-		template {
+		template: {
 		  owner: "alexfalkowski"
 			repository: "go-service-template"
 		}
@@ -144,7 +144,7 @@ repositories [
 		homepage_url: "https://alexfalkowski.github.io/web"
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
-		template {
+		template: {
 		  owner: "alexfalkowski"
 			repository: "go-service-template"
 		}
