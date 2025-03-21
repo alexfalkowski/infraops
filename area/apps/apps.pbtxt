@@ -27,7 +27,7 @@ applications [
     namespace: "lean"
     domain: "lean-thoughts.com"
     init_version: "0.219.0"
-    version: "1.375.0"
+    version: "1.375.1"
     config_version: "1.15.0"
     resources: {
       cpu: {
