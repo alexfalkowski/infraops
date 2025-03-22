@@ -15,9 +15,9 @@ var (
 	account = pulumi.String("561357e2a2b66ddfeabd46e2965d2c67")
 )
 
-// ReadConfiguration reads the repositories from the configuration.
-func ReadConfiguration(path string) (*v1.Zones, error) {
-	var configuration v1.Zones
+// ReadConfiguration reads a file and populates a configuration.
+func ReadConfiguration(path string) (*v1.Cloudflare, error) {
+	var configuration v1.Cloudflare
 	err := config.Read(path, &configuration)
 
 	return &configuration, err

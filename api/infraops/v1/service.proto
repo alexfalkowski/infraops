@@ -30,8 +30,8 @@ message Application {
   repeated string secrets = 9;
 }
 
-// Applications represents the applications to be released.
-message Applications {
+// Kubernetes applications to be released.
+message Kubernetes {
   repeated Application applications = 1;
 }
 
@@ -55,8 +55,8 @@ message Repository {
   repeated string checks = 10;
 }
 
-// Repositories represents the repositories to be created.
-message Repositories {
+// Github specific configuration.
+message Github {
   repeated Repository repositories = 1;
 }
 
@@ -75,8 +75,19 @@ message PageZone {
   string host = 3;
 }
 
-// Zones defined in Cloudflare.
-message Zones {
+// Cloudflare specific configuration.
+message Cloudflare {
   repeated BalancerZone balancer_zones = 1;
   repeated PageZone page_zones = 2;
+}
+
+// Project represents the project to be created.
+message Project {
+  string name = 1;
+  string description = 2;
+}
+
+// DigitalOcean specific configuration.
+message DigitalOcean {
+  repeated Project projects = 1;
 }

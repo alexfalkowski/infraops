@@ -1,15 +1,19 @@
 package do
 
 import (
+	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-digitalocean/sdk/v4/go/digitalocean"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Project for do.
-type Project struct {
-	Name        string
-	Description string
+// ReadConfiguration reads a file and populates a configuration.
+func ReadConfiguration(path string) (*v1.DigitalOcean, error) {
+	var configuration v1.DigitalOcean
+	err := config.Read(path, &configuration)
+
+	return &configuration, err
 }
 
 // Configure for do.
@@ -26,6 +30,20 @@ func Configure(ctx *pulumi.Context) error {
 	_, err := digitalocean.NewVpc(ctx, n, args)
 
 	return err
+}
+
+// Project for do.
+type Project struct {
+	Name        string
+	Description string
+}
+
+// ConvertProject converts a v1.Project to a Project.
+func ConvertProject(p *v1.Project) *Project {
+	return &Project{
+		Name:        p.GetName(),
+		Description: p.GetDescription(),
+	}
 }
 
 // CreateProject for do.
