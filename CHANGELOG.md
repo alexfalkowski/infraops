@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.501.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.501.0) - 2025-03-22
+
+- [`f397c62`](https://github.com/alexfalkowski/infraops/commit/f397c62f259795adcd5b4b53b0ddc11a1899a9f0) feat(cf): move to use a configuration language (#890)
+- [`b4b7911`](https://github.com/alexfalkowski/infraops/commit/b4b7911d7bf94dd74847a84bc1ece8500f00c56b) refactor(config): use colon in pbtxt (#889)
+
 ## [v1.500.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.500.0) - 2025-03-22
 
 - [`63e9fb3`](https://github.com/alexfalkowski/infraops/commit/63e9fb326833879e5ca7c2d28e3db81cb5301b4a) feat(apps): update versions (#888)
