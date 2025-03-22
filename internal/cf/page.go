@@ -3,6 +3,7 @@ package cf
 import (
 	"fmt"
 
+	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
 	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -13,6 +14,15 @@ type PageZone struct {
 	Name   string
 	Domain string
 	Host   string
+}
+
+// ConvertPageZone converts a v1.PageZone to a PageZone.
+func ConvertPageZone(z *v1.PageZone) *PageZone {
+	return &PageZone{
+		Name:   z.GetName(),
+		Domain: z.GetDomain(),
+		Host:   z.GetHost(),
+	}
 }
 
 // CreatePageZone for cf.

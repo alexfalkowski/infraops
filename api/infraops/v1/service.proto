@@ -59,3 +59,24 @@ message Repository {
 message Repositories {
   repeated Repository repositories = 1;
 }
+
+// BalancerZone represents the zone for a balancer.
+message BalancerZone {
+  string name = 1;
+  string domain = 2;
+  string ip = 3;
+  repeated string record_names = 4;
+}
+
+// PageZone represents the zone for a page.
+message PageZone {
+  string name = 1;
+  string domain = 2;
+  string host = 3;
+}
+
+// Zones defined in Cloudflare.
+message Zones {
+  repeated BalancerZone balancer_zones = 1;
+  repeated PageZone page_zones = 2;
+}

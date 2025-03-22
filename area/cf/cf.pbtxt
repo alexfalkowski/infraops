@@ -1,0 +1,20 @@
+balancer_zones: [
+  {
+    name: "lean-thoughts",
+    domain: "lean-thoughts.com",
+    record_names: ["standort", "bezeichner", "web"]
+    ip: "209.38.186.238"
+  }
+],
+page_zones: [
+  {
+    name:   "sasha-adventures",
+    domain: "sasha-adventures.com",
+    host:   "sasha-adventures.github.io",
+  },
+  {
+    name:   "afalkowski",
+    domain: "afalkowski.com",
+    host:   "alexfalkowski.github.io",
+  }
+]
