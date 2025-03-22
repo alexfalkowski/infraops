@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.503.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.503.0) - 2025-03-22
+
+- [`18c209e`](https://github.com/alexfalkowski/infraops/commit/18c209eafee5c2d99b8bf004e7e403a66261c7d5) feat(apps): update versions (#894)
+- [`704cc30`](https://github.com/alexfalkowski/infraops/commit/704cc307b8f65f407551f548b5b72dd84eace993) docs(readme): add configuration (#893)
+- [`5101f23`](https://github.com/alexfalkowski/infraops/commit/5101f2350bd1b897c1053ba2d2b5a40cfbd44cd5) build(ci): reenable api-breaking (#892)
+
 ## [v1.502.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.502.0) - 2025-03-22
 
 - [`5bc6ccc`](https://github.com/alexfalkowski/infraops/commit/5bc6cccdafc123d11a1fd014f3dbe4a5c68b07fe) feat(do): move to use a configuration language (#891)
