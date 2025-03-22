@@ -1,4 +1,4 @@
-repositories [
+repositories: [
   {
     name: "bezeichner"
     description: "Bezeichner takes care of identifiers used in your services."

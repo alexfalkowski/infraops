@@ -1,4 +1,4 @@
-applications [
+applications: [
   {
     id: "1115c470-ccc9-4daf-8459-ef1e19c40afe"
     name: "konfig"
