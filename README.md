@@ -26,6 +26,10 @@ To setup a new area follow the following:
 - Choose the template you need, if in doubt choose `go`.
 - The stack name should always be `prod`.
 
+### Configuration
+
+Each area is defined by the configuration that is generated from the [protobuf](api/infraops/v1/service.proto) and the format used is the [Text Format](https://protobuf.dev/reference/protobuf/textformat-spec/).
+
 ### Applications (apps)
 
 This consists of my open source projects https://github.com/alexfalkowski being deployed to kubernetes.
@@ -67,13 +71,13 @@ There is a caveat when creating repositories, that requires a 2 step process.
 The first step is to have:
 
 ```go
-EnablePages: false
+enable_pages: false
 ```
 
 Then the second PR, we set it to:
 
 ```go
-EnablePages: true
+enable_pages: true
 ```
 
 The reason for this is that there seems to be a timing issue with creating the `master` branch.
