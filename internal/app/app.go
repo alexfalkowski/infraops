@@ -42,9 +42,9 @@ type (
 	}
 )
 
-// ReadConfiguration reads the applications from the configuration.
-func ReadConfiguration(path string) (*v1.Applications, error) {
-	var configuration v1.Applications
+// ReadConfiguration reads a file and populates a configuration.
+func ReadConfiguration(path string) (*v1.Kubernetes, error) {
+	var configuration v1.Kubernetes
 	err := config.Read(path, &configuration)
 
 	return &configuration, err

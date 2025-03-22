@@ -11,11 +11,17 @@ func main() {
 			return err
 		}
 
-		lt := &do.Project{
-			Name:        "lean-thoughts",
-			Description: "The lean thoughts domain",
+		config, err := do.ReadConfiguration("do.pbtxt")
+		if err != nil {
+			return err
 		}
 
-		return do.CreateProject(ctx, lt)
+		for _, project := range config.GetProjects() {
+			if err := do.CreateProject(ctx, do.ConvertProject(project)); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	})
 }

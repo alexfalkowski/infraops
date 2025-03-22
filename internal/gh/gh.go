@@ -73,9 +73,9 @@ func (c Checks) Valid() error {
 	return nil
 }
 
-// ReadConfiguration reads the repositories from the configuration.
-func ReadConfiguration(path string) (*v1.Repositories, error) {
-	var configuration v1.Repositories
+// ReadConfiguration reads a file and populates a configuration.
+func ReadConfiguration(path string) (*v1.Github, error) {
+	var configuration v1.Github
 	err := config.Read(path, &configuration)
 
 	return &configuration, err

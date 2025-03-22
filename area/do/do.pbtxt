@@ -1,0 +1,6 @@
+projects: [
+  {
+    name: "lean-thoughts"
+    description: "The lean thoughts domain"
+  }
+]
