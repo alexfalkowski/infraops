@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.502.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.502.0) - 2025-03-22
+
+- [`5bc6ccc`](https://github.com/alexfalkowski/infraops/commit/5bc6cccdafc123d11a1fd014f3dbe4a5c68b07fe) feat(do): move to use a configuration language (#891)
+
 ## [v1.501.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.501.0) - 2025-03-22
 
 - [`f397c62`](https://github.com/alexfalkowski/infraops/commit/f397c62f259795adcd5b4b53b0ddc11a1899a9f0) feat(cf): move to use a configuration language (#890)
