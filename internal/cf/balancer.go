@@ -3,6 +3,7 @@ package cf
 import (
 	"fmt"
 
+	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
 	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -14,6 +15,16 @@ type BalancerZone struct {
 	Domain      string
 	IP          string
 	RecordNames []string
+}
+
+// ConvertBalancerZone converts a v1.BalancerZone to a BalancerZone.
+func ConvertBalancerZone(z *v1.BalancerZone) *BalancerZone {
+	return &BalancerZone{
+		Name:        z.GetName(),
+		Domain:      z.GetDomain(),
+		IP:          z.GetIp(),
+		RecordNames: z.GetRecordNames(),
+	}
 }
 
 // CreateBalancerZone for cf.

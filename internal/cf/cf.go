@@ -1,6 +1,8 @@
 package cf
 
 import (
+	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -12,6 +14,14 @@ var (
 	year    = pulumi.Int(31536000)
 	account = pulumi.String("561357e2a2b66ddfeabd46e2965d2c67")
 )
+
+// ReadConfiguration reads the repositories from the configuration.
+func ReadConfiguration(path string) (*v1.Zones, error) {
+	var configuration v1.Zones
+	err := config.Read(path, &configuration)
+
+	return &configuration, err
+}
 
 func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
 	ss := cloudflare.ZoneSettingsOverrideSettingsSecurityHeaderArgs{
