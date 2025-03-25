@@ -1,23 +1,46 @@
-linters-settings:
-  lll:
-    line-length: 180
+version: "2"
 linters:
-  enable-all: true
+  default: all
   disable:
-    - tagalign
-    - gochecknoinits
     - bodyclose
     - depguard
     - exhaustruct
     - forcetypeassert
     - gochecknoglobals
+    - gochecknoinits
     - ireturn
     - mnd
-    - paralleltest
-    - varnamelen
-    - wrapcheck
-    - tagliatelle
-    - tenv
-    - nonamedreturns
     - nakedret
     - nilnil
+    - nonamedreturns
+    - paralleltest
+    - tagalign
+    - tagliatelle
+    - varnamelen
+    - wrapcheck
+  settings:
+    lll:
+      line-length: 180
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
