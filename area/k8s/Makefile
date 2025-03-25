@@ -28,7 +28,7 @@ update-grafana:
 
 # Install circleci.
 install-circleci:
-	helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version v1.3.5
+	helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version v1.3.7
 
 # Install metrics server.
 install-metrics-server:
@@ -36,7 +36,7 @@ install-metrics-server:
 
 # Install nginx ingress controller.
 install-nginx-ingress:
-	helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.12.0 -f nginx/values.yaml
+	helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.12.1 -f nginx/values.yaml
 
 # Install grafana agent.
 install-grafana-agent:
