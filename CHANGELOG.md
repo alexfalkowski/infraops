@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.508.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.508.0) - 2025-03-25
+
+- [`dc305d2`](https://github.com/alexfalkowski/infraops/commit/dc305d2ee300d10a0f1e19b34a8ac463858619cf) feat(deps): bump google.golang.org/protobuf from 1.36.5 to 1.36.6 (#900)
+- [`52c24b7`](https://github.com/alexfalkowski/infraops/commit/52c24b74d9751f1898c2628c296e096a5987f972) build(deps): bump bin from `8e1a9ac` to `b887116` (#902)
+- [`0858fa1`](https://github.com/alexfalkowski/infraops/commit/0858fa1cb5ab27583c04d8fbd1965212cb5f3abe) build(ci): update alexfalkowski/k8s:1.33 (#899)
+
 ## [v1.507.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.507.0) - 2025-03-24
 
 - [`94417e2`](https://github.com/alexfalkowski/infraops/commit/94417e2c2a6065d3195b6c98497a965e94bebc8c) feat(apps): update versions (#898)
