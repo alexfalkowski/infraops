@@ -28,6 +28,7 @@ jobs:
           keys:
             - infraops-build-go-cache-{{ checksum "go.sum" }}
             - infraops-build-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -39,6 +40,7 @@ jobs:
           keys:
             - infraops-build-go-build-cache-{{ checksum "go.sum" }}
             - infraops-build-go-build-cache-
+      - run: make clean
       - run: make api-lint
       - run: make api-breaking
       - run: make golangci-lint
@@ -82,6 +84,7 @@ jobs:
           keys:
             - infraops-apps-go-cache-{{ checksum "go.sum" }}
             - infraops-apps-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -93,6 +96,7 @@ jobs:
           keys:
             - infraops-apps-go-build-cache-{{ checksum "go.sum" }}
             - infraops-apps-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=apps pulumi-preview
       - save_cache:
@@ -116,6 +120,7 @@ jobs:
           keys:
             - infraops-apps-go-cache-{{ checksum "go.sum" }}
             - infraops-apps-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -127,6 +132,7 @@ jobs:
           keys:
             - infraops-apps-go-build-cache-{{ checksum "go.sum" }}
             - infraops-apps-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=apps pulumi-update
       - run: make -C area/apps verify
@@ -151,6 +157,7 @@ jobs:
           keys:
             - infraops-cf-go-cache-{{ checksum "go.sum" }}
             - infraops-cf-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -162,6 +169,7 @@ jobs:
           keys:
             - infraops-cf-go-build-cache-{{ checksum "go.sum" }}
             - infraops-cf-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=cf pulumi-preview
       - save_cache:
@@ -184,6 +192,7 @@ jobs:
           keys:
             - infraops-cf-go-cache-{{ checksum "go.sum" }}
             - infraops-cf-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -195,6 +204,7 @@ jobs:
           keys:
             - infraops-cf-go-build-cache-{{ checksum "go.sum" }}
             - infraops-cf-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=cf pulumi-update
       - save_cache:
@@ -217,6 +227,7 @@ jobs:
           keys:
             - infraops-do-go-cache-{{ checksum "go.sum" }}
             - infraops-do-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -228,6 +239,7 @@ jobs:
           keys:
             - infraops-do-go-build-cache-{{ checksum "go.sum" }}
             - infraops-do-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=do pulumi-preview
       - save_cache:
@@ -250,6 +262,7 @@ jobs:
           keys:
             - infraops-do-go-cache-{{ checksum "go.sum" }}
             - infraops-do-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -261,6 +274,7 @@ jobs:
           keys:
             - infraops-do-go-build-cache-{{ checksum "go.sum" }}
             - infraops-do-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=do pulumi-update
       - save_cache:
@@ -283,6 +297,7 @@ jobs:
           keys:
             - infraops-gh-go-cache-{{ checksum "go.sum" }}
             - infraops-gh-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -294,6 +309,7 @@ jobs:
           keys:
             - infraops-gh-go-build-cache-{{ checksum "go.sum" }}
             - infraops-gh-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=gh pulumi-preview
       - save_cache:
@@ -316,6 +332,7 @@ jobs:
           keys:
             - infraops-gh-go-cache-{{ checksum "go.sum" }}
             - infraops-gh-go-cache-
+      - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
@@ -327,6 +344,7 @@ jobs:
           keys:
             - infraops-gh-go-build-cache-{{ checksum "go.sum" }}
             - infraops-gh-go-build-cache-
+      - run: make clean
       - run: make pulumi-login
       - run: make area=gh pulumi-update
       - save_cache:
