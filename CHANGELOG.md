@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v1.514.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.514.0) - 2025-03-28
+
+- [`7902b7b`](https://github.com/alexfalkowski/infraops/commit/7902b7bcd451c21f9d832a1c6dc9f75ee9949a6b) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.158.0 to 3.159.0 (#916)
+- [`b2f8d66`](https://github.com/alexfalkowski/infraops/commit/b2f8d66276d98c428b440b7334b314cd903b75c1) build(ci): add clean (#915)
+- [`98de940`](https://github.com/alexfalkowski/infraops/commit/98de94029e6225ed58fdcd14213dc72c86307eec) build(deps): bump bin from `c661929` to `16e2296` (#914)
+- [`37afc66`](https://github.com/alexfalkowski/infraops/commit/37afc666d13bda6cdd087121ca5c0555f5f9c3b6) build(ci): use alexfalkowski/go:2.3 (#913)
+- [`89eef7e`](https://github.com/alexfalkowski/infraops/commit/89eef7e16118e07f8c05f6dfeb1714091a5feaa0) build(deps): bump bin from `446c480` to `c661929` (#912)
+- [`77fb629`](https://github.com/alexfalkowski/infraops/commit/77fb6291d781f7abe7c713e231f91d0bdc2fb401) build(ci): use alexfalkowski/go:2.2 (#911)
+
 ## [v1.513.0](https://github.com/alexfalkowski/infraops/releases/tag/v1.513.0) - 2025-03-26
 
 - [`e5e94de`](https://github.com/alexfalkowski/infraops/commit/e5e94dea7e8c846a97fefc9908d95f465aca8776) feat(apps): update versions (#910)
