@@ -30,6 +30,8 @@ telemetry:
       Authorization: /etc/secrets/otlp/token
 token:
   kind: opaque
+  opaque:
+    name: konfig
 transport:
   http:
     retry:
