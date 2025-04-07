@@ -31,4 +31,3 @@ telemetry:
       Authorization: /etc/secrets/otlp/token
 token:
   kind: opaque
-  secret: /etc/secrets/konfig/token
