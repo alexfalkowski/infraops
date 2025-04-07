@@ -4,7 +4,7 @@ applications: [
     name: "konfig"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.524.0"
+    version: "1.525.0"
     resources: {
       cpu: {
         min: "250m"
@@ -19,15 +19,15 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["konfig", "otlp", "gh"]
+    secrets: ["otlp", "gh"]
   },
   {
     id: "98968ca0-4ada-4856-8547-210f92b838ea"
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.239.0"
-    version: "1.395.0"
+    init_version: "0.240.0"
+    version: "1.396.0"
     config_version: "1.15.0"
     resources: {
       cpu: {
@@ -43,15 +43,15 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["konfig", "otlp"]
+    secrets: ["otlp"]
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.239.0"
-    version: "2.389.0"
+    init_version: "0.240.0"
+    version: "2.390.0"
     config_version: "1.16.0"
     resources: {
       cpu: {
@@ -67,15 +67,15 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["konfig", "otlp"]
+    secrets: ["otlp"]
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.239.0"
-    version: "0.264.0"
+    init_version: "0.240.0"
+    version: "0.265.0"
     config_version: "1.6.0"
     resources: {
       cpu: {
@@ -91,6 +91,6 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["konfig", "otlp"]
+    secrets: ["otlp"]
   }
 ]
