@@ -11,7 +11,7 @@ lint: kube-score kubescape
 
 # Save kubeconfig.
 save-config:
-	doctl kubernetes cluster kubeconfig save 9bccba18-cc46-4b4b-9692-5cbb74d75b04
+	@doctl kubernetes cluster kubeconfig save 9bccba18-cc46-4b4b-9692-5cbb74d75b04
 
 # Setup all apps.
 setup: setup-lean
