@@ -1,4 +1,6 @@
 otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
+konfig_public_secret := $(shell cat ~/keys/konfig_public_key)
+konfig_private_secret := $(shell cat ~/keys/konfig_private_key)
 
 # Run kubescore for lean.
 kube-score-lean:
@@ -14,12 +16,25 @@ kubescape-lean:
 delete-lean:
 	kubectl delete namespaces lean
 
-# Setup lean.
-setup-lean:
+# Create lean
+create-lean:
 	kubectl create namespace lean
+
+# Setup otlp.
+setup-otlp:
 	kubectl create secret generic otlp-secret --from-literal=token="Basic $(otlp_secret)" --namespace lean
-	kubectl create secret generic konfig-secret --from-literal=token=$(KONFIG_TOKEN) --namespace lean
+
+# Setup konfig.
+setup-konfig:
+	kubectl create secret generic konfig-public-secret --from-literal=token="$(konfig_public_secret)" --namespace lean
+	kubectl create secret generic konfig-private-secret --from-literal=token="$(konfig_private_secret)" --namespace lean
+
+# Setup Github.
+setup-gh:
 	kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
+
+# Setup lean.
+setup-lean: create-lean setup-otlp setup-konfig setup-gh
 
 # Rollout lean.
 rollout-lean: rollout-konfig rollout-standort rollout-bezeichner rollout-web
