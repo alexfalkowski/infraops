@@ -19,7 +19,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "gh", "konfig-public"]
+    secrets: ["otlp", "gh", "konfig"]
   },
   {
     id: "98968ca0-4ada-4856-8547-210f92b838ea"
@@ -43,7 +43,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig-private"]
+    secrets: ["otlp", "konfig"]
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
@@ -67,7 +67,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig-private"]
+    secrets: ["otlp", "konfig"]
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
@@ -91,6 +91,6 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig-private"]
+    secrets: ["otlp", "konfig"]
   }
 ]
