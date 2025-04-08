@@ -1,6 +1,4 @@
 otlp_secret := $(shell echo -n "790760:$(GRAFANA_OTLP_TOKEN)" | base64 -w 0)
-konfig_public_secret := $(shell cat ~/keys/konfig_public_key)
-konfig_private_secret := $(shell cat ~/keys/konfig_private_key)
 
 # Run kubescore for lean.
 kube-score-lean:
@@ -26,8 +24,7 @@ setup-otlp:
 
 # Setup konfig.
 setup-konfig:
-	kubectl create secret generic konfig-public-secret --from-literal=token="$(konfig_public_secret)" --namespace lean
-	kubectl create secret generic konfig-private-secret --from-literal=token="$(konfig_private_secret)" --namespace lean
+	kubectl create secret generic konfig-secret --from-file ~/keys/konfig --namespace lean
 
 # Setup Github.
 setup-gh:

@@ -30,6 +30,8 @@ telemetry:
     headers:
       Authorization: /etc/secrets/otlp/token
 token:
-  kind: opaque
-  opaque:
-    name: konfig
+  kind: ssh
+  ssh:
+    key:
+      name: konfig
+      private: /etc/secrets/konfig/private_key
