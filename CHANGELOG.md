@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.4.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.4.0) - 2025-04-08
+
+- [`cd954a8`](https://github.com/alexfalkowski/infraops/commit/cd954a83cf960eb129d891f79748b0a38bf840be) feat(apps): update versions (#948)
+- [`8250281`](https://github.com/alexfalkowski/infraops/commit/8250281607b754feef08fb5bbc8a8bffcafc5898) build(make): supress the command (#947)
+- [`436150d`](https://github.com/alexfalkowski/infraops/commit/436150da97c01363ab6f38a8dce443fd7669d32b) docs(diagrams): update with make (#946)
+
 ## [v2.3.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.3.0) - 2025-04-08
 
 - [`ffd7a7b`](https://github.com/alexfalkowski/infraops/commit/ffd7a7b332fd37d5e432b8cda40e7a9487d6b469) feat(apps): load otlp from file (#945)
