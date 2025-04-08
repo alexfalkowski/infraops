@@ -3,8 +3,7 @@ package cf
 import (
 	"fmt"
 
-	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
-	"github.com/alexfalkowski/infraops/internal/runtime"
+	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -17,8 +16,8 @@ type BalancerZone struct {
 	RecordNames []string
 }
 
-// ConvertBalancerZone converts a v1.BalancerZone to a BalancerZone.
-func ConvertBalancerZone(z *v1.BalancerZone) *BalancerZone {
+// ConvertBalancerZone converts a v2.BalancerZone to a BalancerZone.
+func ConvertBalancerZone(z *v2.BalancerZone) *BalancerZone {
 	return &BalancerZone{
 		Name:        z.GetName(),
 		Domain:      z.GetDomain(),
@@ -28,13 +27,7 @@ func ConvertBalancerZone(z *v1.BalancerZone) *BalancerZone {
 }
 
 // CreateBalancerZone for cf.
-func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = runtime.ConvertRecover(r)
-		}
-	}()
-
+func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	args := &cloudflare.ZoneArgs{
 		AccountId: account,
 		Plan:      pulumi.String("free"),
@@ -42,13 +35,17 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) (err error) {
 	}
 
 	z, err := cloudflare.NewZone(ctx, zone.Name, args)
-	runtime.Must(err)
+	if err != nil {
+		return err
+	}
 
-	err = settings(ctx, zone.Name, "full", z)
-	runtime.Must(err)
+	if err := settings(ctx, zone.Name, "full", z); err != nil {
+		return err
+	}
 
-	err = dnssec(ctx, zone.Name, z)
-	runtime.Must(err)
+	if err := dnssec(ctx, zone.Name, z); err != nil {
+		return err
+	}
 
 	for _, n := range zone.RecordNames {
 		name := fmt.Sprintf("%s.%s", n, zone.Domain)
@@ -62,9 +59,10 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) (err error) {
 			Ttl:     pulumi.Int(1),
 		}
 
-		_, err := cloudflare.NewRecord(ctx, name, r)
-		runtime.Must(err)
+		if _, err := cloudflare.NewRecord(ctx, name, r); err != nil {
+			return err
+		}
 	}
 
-	return
+	return nil
 }

@@ -1,7 +1,7 @@
 package cf
 
 import (
-	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -16,8 +16,8 @@ var (
 )
 
 // ReadConfiguration reads a file and populates a configuration.
-func ReadConfiguration(path string) (*v1.Cloudflare, error) {
-	var configuration v1.Cloudflare
+func ReadConfiguration(path string) (*v2.Cloudflare, error) {
+	var configuration v2.Cloudflare
 	err := config.Read(path, &configuration)
 
 	return &configuration, err

@@ -58,6 +58,14 @@ The code is bases on the package https://www.pulumi.com/registry/packages/cloudf
 
 The code is bases on the package https://www.pulumi.com/registry/packages/digitalocean/.
 
+#### Project
+
+Create manually a default project for me it is with name *lean-thoughts* and description *All of experiments for lean-thoughts.*.
+
+#### VPC
+
+The account needs a default VPC. Create one manually under the region you would like for me it was FRA1 with name *default-fra1* and description *The default vpc for fra1*.
+
 ### GitHub (gh)
 
 The code is based on the package https://www.pulumi.com/registry/packages/github/.

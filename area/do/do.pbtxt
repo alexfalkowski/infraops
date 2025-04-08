@@ -1,4 +1,4 @@
-projects: [
+clusters: [
   {
     name: "lean-thoughts"
     description: "The lean thoughts domain"

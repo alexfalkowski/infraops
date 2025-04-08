@@ -29,11 +29,9 @@ telemetry:
     headers:
       Authorization: /etc/secrets/otlp/token
 token:
-  kind: ssh
-  ssh:
-    keys:
-      - name: konfig
-        public: /etc/secrets/konfig-public/token
+  kind: opaque
+  opaque:
+    name: konfig
 transport:
   http:
     retry:

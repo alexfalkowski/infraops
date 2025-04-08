@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.5
 // 	protoc        (unknown)
-// source: infraops/v1/service.proto
+// source: infraops/v2/service.proto
 
-package v1
+package v2
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -32,7 +32,7 @@ type Range struct {
 
 func (x *Range) Reset() {
 	*x = Range{}
-	mi := &file_infraops_v1_service_proto_msgTypes[0]
+	mi := &file_infraops_v2_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *Range) String() string {
 func (*Range) ProtoMessage() {}
 
 func (x *Range) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[0]
+	mi := &file_infraops_v2_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *Range) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Range.ProtoReflect.Descriptor instead.
 func (*Range) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{0}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Range) GetMin() string {
@@ -86,7 +86,7 @@ type Resources struct {
 
 func (x *Resources) Reset() {
 	*x = Resources{}
-	mi := &file_infraops_v1_service_proto_msgTypes[1]
+	mi := &file_infraops_v2_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -98,7 +98,7 @@ func (x *Resources) String() string {
 func (*Resources) ProtoMessage() {}
 
 func (x *Resources) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[1]
+	mi := &file_infraops_v2_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -111,7 +111,7 @@ func (x *Resources) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Resources.ProtoReflect.Descriptor instead.
 func (*Resources) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{1}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Resources) GetCpu() *Range {
@@ -153,7 +153,7 @@ type Application struct {
 
 func (x *Application) Reset() {
 	*x = Application{}
-	mi := &file_infraops_v1_service_proto_msgTypes[2]
+	mi := &file_infraops_v2_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -165,7 +165,7 @@ func (x *Application) String() string {
 func (*Application) ProtoMessage() {}
 
 func (x *Application) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[2]
+	mi := &file_infraops_v2_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -178,7 +178,7 @@ func (x *Application) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Application.ProtoReflect.Descriptor instead.
 func (*Application) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{2}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Application) GetId() string {
@@ -254,7 +254,7 @@ type Kubernetes struct {
 
 func (x *Kubernetes) Reset() {
 	*x = Kubernetes{}
-	mi := &file_infraops_v1_service_proto_msgTypes[3]
+	mi := &file_infraops_v2_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -266,7 +266,7 @@ func (x *Kubernetes) String() string {
 func (*Kubernetes) ProtoMessage() {}
 
 func (x *Kubernetes) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[3]
+	mi := &file_infraops_v2_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -279,7 +279,7 @@ func (x *Kubernetes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Kubernetes.ProtoReflect.Descriptor instead.
 func (*Kubernetes) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{3}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Kubernetes) GetApplications() []*Application {
@@ -300,7 +300,7 @@ type Template struct {
 
 func (x *Template) Reset() {
 	*x = Template{}
-	mi := &file_infraops_v1_service_proto_msgTypes[4]
+	mi := &file_infraops_v2_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -312,7 +312,7 @@ func (x *Template) String() string {
 func (*Template) ProtoMessage() {}
 
 func (x *Template) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[4]
+	mi := &file_infraops_v2_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -325,7 +325,7 @@ func (x *Template) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Template.ProtoReflect.Descriptor instead.
 func (*Template) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{4}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Template) GetOwner() string {
@@ -361,7 +361,7 @@ type Repository struct {
 
 func (x *Repository) Reset() {
 	*x = Repository{}
-	mi := &file_infraops_v1_service_proto_msgTypes[5]
+	mi := &file_infraops_v2_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -373,7 +373,7 @@ func (x *Repository) String() string {
 func (*Repository) ProtoMessage() {}
 
 func (x *Repository) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[5]
+	mi := &file_infraops_v2_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -386,7 +386,7 @@ func (x *Repository) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Repository.ProtoReflect.Descriptor instead.
 func (*Repository) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{5}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Repository) GetName() string {
@@ -469,7 +469,7 @@ type Github struct {
 
 func (x *Github) Reset() {
 	*x = Github{}
-	mi := &file_infraops_v1_service_proto_msgTypes[6]
+	mi := &file_infraops_v2_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -481,7 +481,7 @@ func (x *Github) String() string {
 func (*Github) ProtoMessage() {}
 
 func (x *Github) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[6]
+	mi := &file_infraops_v2_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -494,7 +494,7 @@ func (x *Github) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Github.ProtoReflect.Descriptor instead.
 func (*Github) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{6}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Github) GetRepositories() []*Repository {
@@ -517,7 +517,7 @@ type BalancerZone struct {
 
 func (x *BalancerZone) Reset() {
 	*x = BalancerZone{}
-	mi := &file_infraops_v1_service_proto_msgTypes[7]
+	mi := &file_infraops_v2_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -529,7 +529,7 @@ func (x *BalancerZone) String() string {
 func (*BalancerZone) ProtoMessage() {}
 
 func (x *BalancerZone) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[7]
+	mi := &file_infraops_v2_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -542,7 +542,7 @@ func (x *BalancerZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BalancerZone.ProtoReflect.Descriptor instead.
 func (*BalancerZone) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{7}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *BalancerZone) GetName() string {
@@ -585,7 +585,7 @@ type PageZone struct {
 
 func (x *PageZone) Reset() {
 	*x = PageZone{}
-	mi := &file_infraops_v1_service_proto_msgTypes[8]
+	mi := &file_infraops_v2_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -597,7 +597,7 @@ func (x *PageZone) String() string {
 func (*PageZone) ProtoMessage() {}
 
 func (x *PageZone) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[8]
+	mi := &file_infraops_v2_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -610,7 +610,7 @@ func (x *PageZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageZone.ProtoReflect.Descriptor instead.
 func (*PageZone) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{8}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PageZone) GetName() string {
@@ -645,7 +645,7 @@ type Cloudflare struct {
 
 func (x *Cloudflare) Reset() {
 	*x = Cloudflare{}
-	mi := &file_infraops_v1_service_proto_msgTypes[9]
+	mi := &file_infraops_v2_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -657,7 +657,7 @@ func (x *Cloudflare) String() string {
 func (*Cloudflare) ProtoMessage() {}
 
 func (x *Cloudflare) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[9]
+	mi := &file_infraops_v2_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -670,7 +670,7 @@ func (x *Cloudflare) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cloudflare.ProtoReflect.Descriptor instead.
 func (*Cloudflare) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{9}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *Cloudflare) GetBalancerZones() []*BalancerZone {
@@ -687,8 +687,8 @@ func (x *Cloudflare) GetPageZones() []*PageZone {
 	return nil
 }
 
-// Project represents the project to be created.
-type Project struct {
+// Cluster represents the cluster to be created.
+type Cluster struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
@@ -696,21 +696,21 @@ type Project struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Project) Reset() {
-	*x = Project{}
-	mi := &file_infraops_v1_service_proto_msgTypes[10]
+func (x *Cluster) Reset() {
+	*x = Cluster{}
+	mi := &file_infraops_v2_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Project) String() string {
+func (x *Cluster) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Project) ProtoMessage() {}
+func (*Cluster) ProtoMessage() {}
 
-func (x *Project) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[10]
+func (x *Cluster) ProtoReflect() protoreflect.Message {
+	mi := &file_infraops_v2_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -721,19 +721,19 @@ func (x *Project) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Project.ProtoReflect.Descriptor instead.
-func (*Project) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{10}
+// Deprecated: Use Cluster.ProtoReflect.Descriptor instead.
+func (*Cluster) Descriptor() ([]byte, []int) {
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *Project) GetName() string {
+func (x *Cluster) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *Project) GetDescription() string {
+func (x *Cluster) GetDescription() string {
 	if x != nil {
 		return x.Description
 	}
@@ -743,14 +743,14 @@ func (x *Project) GetDescription() string {
 // DigitalOcean specific configuration.
 type DigitalOcean struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Projects      []*Project             `protobuf:"bytes,1,rep,name=projects,proto3" json:"projects,omitempty"`
+	Clusters      []*Cluster             `protobuf:"bytes,1,rep,name=clusters,proto3" json:"clusters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *DigitalOcean) Reset() {
 	*x = DigitalOcean{}
-	mi := &file_infraops_v1_service_proto_msgTypes[11]
+	mi := &file_infraops_v2_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -762,7 +762,7 @@ func (x *DigitalOcean) String() string {
 func (*DigitalOcean) ProtoMessage() {}
 
 func (x *DigitalOcean) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v1_service_proto_msgTypes[11]
+	mi := &file_infraops_v2_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -775,33 +775,33 @@ func (x *DigitalOcean) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DigitalOcean.ProtoReflect.Descriptor instead.
 func (*DigitalOcean) Descriptor() ([]byte, []int) {
-	return file_infraops_v1_service_proto_rawDescGZIP(), []int{11}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *DigitalOcean) GetProjects() []*Project {
+func (x *DigitalOcean) GetClusters() []*Cluster {
 	if x != nil {
-		return x.Projects
+		return x.Clusters
 	}
 	return nil
 }
 
-var File_infraops_v1_service_proto protoreflect.FileDescriptor
+var File_infraops_v2_service_proto protoreflect.FileDescriptor
 
-var file_infraops_v1_service_proto_rawDesc = string([]byte{
-	0x0a, 0x19, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65,
+var file_infraops_v2_service_proto_rawDesc = string([]byte{
+	0x0a, 0x19, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2f, 0x76, 0x32, 0x2f, 0x73, 0x65,
 	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0b, 0x69, 0x6e, 0x66,
-	0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x31, 0x22, 0x2b, 0x0a, 0x05, 0x52, 0x61, 0x6e, 0x67,
+	0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x32, 0x22, 0x2b, 0x0a, 0x05, 0x52, 0x61, 0x6e, 0x67,
 	0x65, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x69, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03,
 	0x6d, 0x69, 0x6e, 0x12, 0x10, 0x0a, 0x03, 0x6d, 0x61, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x03, 0x6d, 0x61, 0x78, 0x22, 0x8b, 0x01, 0x0a, 0x09, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
 	0x63, 0x65, 0x73, 0x12, 0x24, 0x0a, 0x03, 0x63, 0x70, 0x75, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x12, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x52,
+	0x32, 0x12, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x32, 0x2e, 0x52,
 	0x61, 0x6e, 0x67, 0x65, 0x52, 0x03, 0x63, 0x70, 0x75, 0x12, 0x2a, 0x0a, 0x06, 0x6d, 0x65, 0x6d,
 	0x6f, 0x72, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x69, 0x6e, 0x66, 0x72,
-	0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x06, 0x6d,
+	0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x32, 0x2e, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x06, 0x6d,
 	0x65, 0x6d, 0x6f, 0x72, 0x79, 0x12, 0x2c, 0x0a, 0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65,
 	0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70,
-	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x07, 0x73, 0x74, 0x6f, 0x72,
+	0x73, 0x2e, 0x76, 0x32, 0x2e, 0x52, 0x61, 0x6e, 0x67, 0x65, 0x52, 0x07, 0x73, 0x74, 0x6f, 0x72,
 	0x61, 0x67, 0x65, 0x22, 0x9b, 0x02, 0x0a, 0x0b, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
 	0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
@@ -817,13 +817,13 @@ var file_infraops_v1_service_proto_rawDesc = string([]byte{
 	0x28, 0x09, 0x52, 0x0d, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x56, 0x65, 0x72, 0x73, 0x69, 0x6f,
 	0x6e, 0x12, 0x34, 0x0a, 0x09, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x18, 0x08,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x52, 0x09, 0x72, 0x65,
+	0x76, 0x32, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x52, 0x09, 0x72, 0x65,
 	0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x65, 0x63, 0x72, 0x65,
 	0x74, 0x73, 0x18, 0x09, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x73, 0x65, 0x63, 0x72, 0x65, 0x74,
 	0x73, 0x22, 0x4a, 0x0a, 0x0a, 0x4b, 0x75, 0x62, 0x65, 0x72, 0x6e, 0x65, 0x74, 0x65, 0x73, 0x12,
 	0x3c, 0x0a, 0x0c, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
 	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73,
-	0x2e, 0x76, 0x31, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52,
+	0x2e, 0x76, 0x32, 0x2e, 0x41, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52,
 	0x0c, 0x61, 0x70, 0x70, 0x6c, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x40, 0x0a,
 	0x08, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x6f, 0x77, 0x6e,
 	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6f, 0x77, 0x6e, 0x65, 0x72, 0x12,
@@ -845,14 +845,14 @@ var file_infraops_v1_service_proto_rawDesc = string([]byte{
 	0x72, 0x63, 0x68, 0x69, 0x76, 0x65, 0x64, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x61,
 	0x72, 0x63, 0x68, 0x69, 0x76, 0x65, 0x64, 0x12, 0x31, 0x0a, 0x08, 0x74, 0x65, 0x6d, 0x70, 0x6c,
 	0x61, 0x74, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15, 0x2e, 0x69, 0x6e, 0x66, 0x72,
-	0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
+	0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x32, 0x2e, 0x54, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65,
 	0x52, 0x08, 0x74, 0x65, 0x6d, 0x70, 0x6c, 0x61, 0x74, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x74, 0x6f,
 	0x70, 0x69, 0x63, 0x73, 0x18, 0x09, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x74, 0x6f, 0x70, 0x69,
 	0x63, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x73, 0x18, 0x0a, 0x20, 0x03,
 	0x28, 0x09, 0x52, 0x06, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x73, 0x22, 0x45, 0x0a, 0x06, 0x47, 0x69,
 	0x74, 0x68, 0x75, 0x62, 0x12, 0x3b, 0x0a, 0x0c, 0x72, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x6f,
 	0x72, 0x69, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x69, 0x6e, 0x66,
-	0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x32, 0x2e, 0x52, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74,
 	0x6f, 0x72, 0x79, 0x52, 0x0c, 0x72, 0x65, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x6f, 0x72, 0x69, 0x65,
 	0x73, 0x22, 0x6d, 0x0a, 0x0c, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x5a, 0x6f, 0x6e,
 	0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
@@ -869,64 +869,64 @@ var file_infraops_v1_service_proto_rawDesc = string([]byte{
 	0x0a, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x66, 0x6c, 0x61, 0x72, 0x65, 0x12, 0x40, 0x0a, 0x0e, 0x62,
 	0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x5f, 0x7a, 0x6f, 0x6e, 0x65, 0x73, 0x18, 0x01, 0x20,
 	0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76,
-	0x31, 0x2e, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x5a, 0x6f, 0x6e, 0x65, 0x52, 0x0d,
+	0x32, 0x2e, 0x42, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x5a, 0x6f, 0x6e, 0x65, 0x52, 0x0d,
 	0x62, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x72, 0x5a, 0x6f, 0x6e, 0x65, 0x73, 0x12, 0x34, 0x0a,
 	0x0a, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x7a, 0x6f, 0x6e, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x15, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x0b, 0x32, 0x15, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2e, 0x76, 0x32, 0x2e,
 	0x50, 0x61, 0x67, 0x65, 0x5a, 0x6f, 0x6e, 0x65, 0x52, 0x09, 0x70, 0x61, 0x67, 0x65, 0x5a, 0x6f,
-	0x6e, 0x65, 0x73, 0x22, 0x3f, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x6a, 0x65, 0x63, 0x74, 0x12, 0x12,
+	0x6e, 0x65, 0x73, 0x22, 0x3f, 0x0a, 0x07, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x12, 0x12,
 	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
 	0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f,
 	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70,
 	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x40, 0x0a, 0x0c, 0x44, 0x69, 0x67, 0x69, 0x74, 0x61, 0x6c, 0x4f,
-	0x63, 0x65, 0x61, 0x6e, 0x12, 0x30, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x6a, 0x65, 0x63, 0x74, 0x73,
+	0x63, 0x65, 0x61, 0x6e, 0x12, 0x30, 0x0a, 0x08, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x73,
 	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70,
-	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x6a, 0x65, 0x63, 0x74, 0x52, 0x08, 0x70, 0x72,
-	0x6f, 0x6a, 0x65, 0x63, 0x74, 0x73, 0x42, 0x33, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x73, 0x2e, 0x76, 0x32, 0x2e, 0x43, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x52, 0x08, 0x63, 0x6c,
+	0x75, 0x73, 0x74, 0x65, 0x72, 0x73, 0x42, 0x33, 0x5a, 0x31, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
 	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x61, 0x6c, 0x65, 0x78, 0x66, 0x61, 0x6c, 0x6b, 0x6f, 0x77, 0x73,
 	0x6b, 0x69, 0x2f, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2f, 0x61, 0x70, 0x69, 0x2f,
-	0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2f, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x69, 0x6e, 0x66, 0x72, 0x61, 0x6f, 0x70, 0x73, 0x2f, 0x76, 0x32, 0x62, 0x06, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x33,
 })
 
 var (
-	file_infraops_v1_service_proto_rawDescOnce sync.Once
-	file_infraops_v1_service_proto_rawDescData []byte
+	file_infraops_v2_service_proto_rawDescOnce sync.Once
+	file_infraops_v2_service_proto_rawDescData []byte
 )
 
-func file_infraops_v1_service_proto_rawDescGZIP() []byte {
-	file_infraops_v1_service_proto_rawDescOnce.Do(func() {
-		file_infraops_v1_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_infraops_v1_service_proto_rawDesc), len(file_infraops_v1_service_proto_rawDesc)))
+func file_infraops_v2_service_proto_rawDescGZIP() []byte {
+	file_infraops_v2_service_proto_rawDescOnce.Do(func() {
+		file_infraops_v2_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_infraops_v2_service_proto_rawDesc), len(file_infraops_v2_service_proto_rawDesc)))
 	})
-	return file_infraops_v1_service_proto_rawDescData
+	return file_infraops_v2_service_proto_rawDescData
 }
 
-var file_infraops_v1_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
-var file_infraops_v1_service_proto_goTypes = []any{
-	(*Range)(nil),        // 0: infraops.v1.Range
-	(*Resources)(nil),    // 1: infraops.v1.Resources
-	(*Application)(nil),  // 2: infraops.v1.Application
-	(*Kubernetes)(nil),   // 3: infraops.v1.Kubernetes
-	(*Template)(nil),     // 4: infraops.v1.Template
-	(*Repository)(nil),   // 5: infraops.v1.Repository
-	(*Github)(nil),       // 6: infraops.v1.Github
-	(*BalancerZone)(nil), // 7: infraops.v1.BalancerZone
-	(*PageZone)(nil),     // 8: infraops.v1.PageZone
-	(*Cloudflare)(nil),   // 9: infraops.v1.Cloudflare
-	(*Project)(nil),      // 10: infraops.v1.Project
-	(*DigitalOcean)(nil), // 11: infraops.v1.DigitalOcean
+var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_infraops_v2_service_proto_goTypes = []any{
+	(*Range)(nil),        // 0: infraops.v2.Range
+	(*Resources)(nil),    // 1: infraops.v2.Resources
+	(*Application)(nil),  // 2: infraops.v2.Application
+	(*Kubernetes)(nil),   // 3: infraops.v2.Kubernetes
+	(*Template)(nil),     // 4: infraops.v2.Template
+	(*Repository)(nil),   // 5: infraops.v2.Repository
+	(*Github)(nil),       // 6: infraops.v2.Github
+	(*BalancerZone)(nil), // 7: infraops.v2.BalancerZone
+	(*PageZone)(nil),     // 8: infraops.v2.PageZone
+	(*Cloudflare)(nil),   // 9: infraops.v2.Cloudflare
+	(*Cluster)(nil),      // 10: infraops.v2.Cluster
+	(*DigitalOcean)(nil), // 11: infraops.v2.DigitalOcean
 }
-var file_infraops_v1_service_proto_depIdxs = []int32{
-	0,  // 0: infraops.v1.Resources.cpu:type_name -> infraops.v1.Range
-	0,  // 1: infraops.v1.Resources.memory:type_name -> infraops.v1.Range
-	0,  // 2: infraops.v1.Resources.storage:type_name -> infraops.v1.Range
-	1,  // 3: infraops.v1.Application.resources:type_name -> infraops.v1.Resources
-	2,  // 4: infraops.v1.Kubernetes.applications:type_name -> infraops.v1.Application
-	4,  // 5: infraops.v1.Repository.template:type_name -> infraops.v1.Template
-	5,  // 6: infraops.v1.Github.repositories:type_name -> infraops.v1.Repository
-	7,  // 7: infraops.v1.Cloudflare.balancer_zones:type_name -> infraops.v1.BalancerZone
-	8,  // 8: infraops.v1.Cloudflare.page_zones:type_name -> infraops.v1.PageZone
-	10, // 9: infraops.v1.DigitalOcean.projects:type_name -> infraops.v1.Project
+var file_infraops_v2_service_proto_depIdxs = []int32{
+	0,  // 0: infraops.v2.Resources.cpu:type_name -> infraops.v2.Range
+	0,  // 1: infraops.v2.Resources.memory:type_name -> infraops.v2.Range
+	0,  // 2: infraops.v2.Resources.storage:type_name -> infraops.v2.Range
+	1,  // 3: infraops.v2.Application.resources:type_name -> infraops.v2.Resources
+	2,  // 4: infraops.v2.Kubernetes.applications:type_name -> infraops.v2.Application
+	4,  // 5: infraops.v2.Repository.template:type_name -> infraops.v2.Template
+	5,  // 6: infraops.v2.Github.repositories:type_name -> infraops.v2.Repository
+	7,  // 7: infraops.v2.Cloudflare.balancer_zones:type_name -> infraops.v2.BalancerZone
+	8,  // 8: infraops.v2.Cloudflare.page_zones:type_name -> infraops.v2.PageZone
+	10, // 9: infraops.v2.DigitalOcean.clusters:type_name -> infraops.v2.Cluster
 	10, // [10:10] is the sub-list for method output_type
 	10, // [10:10] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
@@ -934,26 +934,26 @@ var file_infraops_v1_service_proto_depIdxs = []int32{
 	0,  // [0:10] is the sub-list for field type_name
 }
 
-func init() { file_infraops_v1_service_proto_init() }
-func file_infraops_v1_service_proto_init() {
-	if File_infraops_v1_service_proto != nil {
+func init() { file_infraops_v2_service_proto_init() }
+func file_infraops_v2_service_proto_init() {
+	if File_infraops_v2_service_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_infraops_v1_service_proto_rawDesc), len(file_infraops_v1_service_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_infraops_v2_service_proto_rawDesc), len(file_infraops_v2_service_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_infraops_v1_service_proto_goTypes,
-		DependencyIndexes: file_infraops_v1_service_proto_depIdxs,
-		MessageInfos:      file_infraops_v1_service_proto_msgTypes,
+		GoTypes:           file_infraops_v2_service_proto_goTypes,
+		DependencyIndexes: file_infraops_v2_service_proto_depIdxs,
+		MessageInfos:      file_infraops_v2_service_proto_msgTypes,
 	}.Build()
-	File_infraops_v1_service_proto = out.File
-	file_infraops_v1_service_proto_goTypes = nil
-	file_infraops_v1_service_proto_depIdxs = nil
+	File_infraops_v2_service_proto = out.File
+	file_infraops_v2_service_proto_goTypes = nil
+	file_infraops_v2_service_proto_depIdxs = nil
 }

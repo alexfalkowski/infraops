@@ -42,7 +42,7 @@ jobs:
             - infraops-build-go-build-cache-
       - run: make clean
       - run: make api-lint
-      - run: make api-breaking
+      # - run: make api-breaking
       - run: make golangci-lint
       - run: make sec
       - run: make specs

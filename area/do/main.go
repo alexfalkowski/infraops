@@ -7,17 +7,13 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		if err := do.Configure(ctx); err != nil {
-			return err
-		}
-
 		config, err := do.ReadConfiguration("do.pbtxt")
 		if err != nil {
 			return err
 		}
 
-		for _, project := range config.GetProjects() {
-			if err := do.CreateProject(ctx, do.ConvertProject(project)); err != nil {
+		for _, cluster := range config.GetClusters() {
+			if err := do.CreateCluster(ctx, do.ConvertCluster(cluster)); err != nil {
 				return err
 			}
 		}

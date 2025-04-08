@@ -1,83 +1,47 @@
 package do
 
 import (
-	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
-	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-digitalocean/sdk/v4/go/digitalocean"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 // ReadConfiguration reads a file and populates a configuration.
-func ReadConfiguration(path string) (*v1.DigitalOcean, error) {
-	var configuration v1.DigitalOcean
+func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
+	var configuration v2.DigitalOcean
 	err := config.Read(path, &configuration)
 
 	return &configuration, err
 }
 
-// Configure for do.
-func Configure(ctx *pulumi.Context) error {
-	// We need a default VPC, or the first one created becomes the default one.
-	r := string(digitalocean.RegionFRA1)
-	n := "default-" + r
-	args := &digitalocean.VpcArgs{
-		Name:        pulumi.String(n),
-		Region:      digitalocean.RegionFRA1,
-		Description: pulumi.String("The default vpc for " + r),
-	}
-
-	_, err := digitalocean.NewVpc(ctx, n, args)
-
-	return err
-}
-
-// Project for do.
-type Project struct {
+// Cluster for do.
+type Cluster struct {
 	Name        string
 	Description string
 }
 
-// ConvertProject converts a v1.Project to a Project.
-func ConvertProject(p *v1.Project) *Project {
-	return &Project{
-		Name:        p.GetName(),
-		Description: p.GetDescription(),
+// ConvertCluster converts a v2.Cluster to a Cluster.
+func ConvertCluster(cluster *v2.Cluster) *Cluster {
+	return &Cluster{
+		Name:        cluster.GetName(),
+		Description: cluster.GetDescription(),
 	}
 }
 
-// CreateProject for do.
-func CreateProject(ctx *pulumi.Context, project *Project) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = runtime.ConvertRecover(r)
-		}
-	}()
-
-	v, err := createVPC(ctx, project)
-	runtime.Must(err)
-
-	c, err := createCluster(ctx, v, project)
-	runtime.Must(err)
-
-	args := &digitalocean.ProjectArgs{
-		Name:        pulumi.String(project.Name),
-		Description: pulumi.String(project.Description),
-		Environment: pulumi.String("Production"),
-		Purpose:     pulumi.String("Service or API"),
-		IsDefault:   pulumi.Bool(false),
-		Resources: pulumi.StringArray{
-			c.ClusterUrn,
-		},
+// CreateCluster for do.
+func CreateCluster(ctx *pulumi.Context, cluster *Cluster) (err error) {
+	v, err := createVPC(ctx, cluster)
+	if err != nil {
+		return err
 	}
 
-	_, err = digitalocean.NewProject(ctx, project.Name, args)
-	runtime.Must(err)
+	_, err = createCluster(ctx, v, cluster)
 
-	return
+	return err
 }
 
-func createVPC(ctx *pulumi.Context, p *Project) (*digitalocean.Vpc, error) {
+func createVPC(ctx *pulumi.Context, p *Cluster) (*digitalocean.Vpc, error) {
 	args := &digitalocean.VpcArgs{
 		Name:        pulumi.String(p.Name),
 		Region:      digitalocean.RegionFRA1,
@@ -87,7 +51,7 @@ func createVPC(ctx *pulumi.Context, p *Project) (*digitalocean.Vpc, error) {
 	return digitalocean.NewVpc(ctx, p.Name, args)
 }
 
-func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Project) (*digitalocean.KubernetesCluster, error) {
+func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Cluster) (*digitalocean.KubernetesCluster, error) {
 	args := &digitalocean.KubernetesClusterArgs{
 		MaintenancePolicy: &digitalocean.KubernetesClusterMaintenancePolicyArgs{
 			Day:       pulumi.String("any"),

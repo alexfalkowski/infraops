@@ -9,22 +9,18 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateProject(t *testing.T) {
+func TestCreateCluster(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		require.NoError(t, do.Configure(ctx))
-
-		p := &do.Project{Name: "test", Description: "test"}
-		require.NoError(t, do.CreateProject(ctx, p))
+		p := &do.Cluster{Name: "test", Description: "test"}
+		require.NoError(t, do.CreateCluster(ctx, p))
 
 		return nil
 	}, pulumi.WithMocks("project", "stack", &test.Stub{}))
 	require.NoError(t, err)
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
-		require.NoError(t, do.Configure(ctx))
-
-		p := &do.Project{Name: "test", Description: "test"}
-		require.NoError(t, do.CreateProject(ctx, p))
+		p := &do.Cluster{Name: "test", Description: "test"}
+		require.NoError(t, do.CreateCluster(ctx, p))
 
 		return nil
 	}, pulumi.WithMocks("project", "stack", &test.ErrStub{}))
