@@ -2,11 +2,10 @@ package gh
 
 import (
 	"errors"
+	"fmt"
 
-	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
-	errs "github.com/alexfalkowski/infraops/internal/errors"
-	"github.com/alexfalkowski/infraops/internal/runtime"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -74,15 +73,15 @@ func (c Checks) Valid() error {
 }
 
 // ReadConfiguration reads a file and populates a configuration.
-func ReadConfiguration(path string) (*v1.Github, error) {
-	var configuration v1.Github
+func ReadConfiguration(path string) (*v2.Github, error) {
+	var configuration v2.Github
 	err := config.Read(path, &configuration)
 
 	return &configuration, err
 }
 
-// ConvertRepository converts a v1.Repository to a Repository.
-func ConvertRepository(r *v1.Repository) *Repository {
+// ConvertRepository converts a v2.Repository to a Repository.
+func ConvertRepository(r *v2.Repository) *Repository {
 	repository := &Repository{
 		Name:        r.GetName(),
 		Description: r.GetDescription(),
@@ -114,24 +113,25 @@ func ConvertRepository(r *v1.Repository) *Repository {
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
 	if err != nil {
-		return errs.Prefix(repo.Name, err)
+		return fmt.Errorf("%v: %w", repo.Name, err)
 	}
 
-	return errs.Prefix(repo.Name, branchProtection(ctx, r.NodeId, repo))
+	if err := branchProtection(ctx, r.NodeId, repo); err != nil {
+		return fmt.Errorf("%v: %w", repo.Name, err)
+	}
+
+	return nil
 }
 
-func repository(ctx *pulumi.Context, repo *Repository) (repository *github.Repository, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = runtime.ConvertRecover(r)
-		}
-	}()
-
+func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
 	t, err := template(repo)
-	runtime.Must(err)
+	if err != nil {
+		return nil, err
+	}
 
-	err = repo.Checks.Valid()
-	runtime.Must(err)
+	if err := repo.Checks.Valid(); err != nil {
+		return nil, err
+	}
 
 	args := &github.RepositoryArgs{
 		AllowMergeCommit:    pulumi.Bool(false),
@@ -164,10 +164,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (repository *github.Repos
 		VulnerabilityAlerts:    pulumi.Bool(true),
 	}
 
-	repository, err = github.NewRepository(ctx, repo.Name, args)
-	runtime.Must(err)
-
-	return
+	return github.NewRepository(ctx, repo.Name, args)
 }
 
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {

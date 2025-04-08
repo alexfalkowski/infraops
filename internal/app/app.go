@@ -3,7 +3,7 @@ package app
 import (
 	"errors"
 
-	v1 "github.com/alexfalkowski/infraops/api/infraops/v1"
+	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -43,15 +43,15 @@ type (
 )
 
 // ReadConfiguration reads a file and populates a configuration.
-func ReadConfiguration(path string) (*v1.Kubernetes, error) {
-	var configuration v1.Kubernetes
+func ReadConfiguration(path string) (*v2.Kubernetes, error) {
+	var configuration v2.Kubernetes
 	err := config.Read(path, &configuration)
 
 	return &configuration, err
 }
 
-// ConvertApplication converts a v1.Application to an App.
-func ConvertApplication(a *v1.Application) *App {
+// ConvertApplication converts a v2.Application to an App.
+func ConvertApplication(a *v2.Application) *App {
 	cpu := a.GetResources().GetCpu()
 	mem := a.GetResources().GetMemory()
 	storage := a.GetResources().GetStorage()

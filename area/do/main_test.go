@@ -9,15 +9,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateProject(t *testing.T) {
+func TestCreateCluster(t *testing.T) {
 	config, err := do.ReadConfiguration("do.pbtxt")
 	require.NoError(t, err)
 
-	projects := config.GetProjects()
+	clusters := config.GetClusters()
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
-		for _, project := range projects {
-			err := do.CreateProject(ctx, do.ConvertProject(project))
+		for _, cluster := range clusters {
+			err := do.CreateCluster(ctx, do.ConvertCluster(cluster))
 			require.NoError(t, err)
 		}
 
@@ -26,8 +26,8 @@ func TestCreateProject(t *testing.T) {
 	require.NoError(t, err)
 
 	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
-		for _, project := range projects {
-			err := do.CreateProject(ctx, do.ConvertProject(project))
+		for _, cluster := range clusters {
+			err := do.CreateCluster(ctx, do.ConvertCluster(cluster))
 			require.NoError(t, err)
 		}
 

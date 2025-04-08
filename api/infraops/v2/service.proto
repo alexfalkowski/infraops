@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package infraops.v1;
+package infraops.v2;
 
-option go_package = "github.com/alexfalkowski/infraops/api/infraops/v1";
+option go_package = "github.com/alexfalkowski/infraops/api/infraops/v2";
 
 // Range represents a range of values.
 message Range {
@@ -81,13 +81,13 @@ message Cloudflare {
   repeated PageZone page_zones = 2;
 }
 
-// Project represents the project to be created.
-message Project {
+// Cluster represents the cluster to be created.
+message Cluster {
   string name = 1;
   string description = 2;
 }
 
 // DigitalOcean specific configuration.
 message DigitalOcean {
-  repeated Project projects = 1;
+  repeated Cluster clusters = 1;
 }
