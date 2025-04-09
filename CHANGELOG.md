@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.5.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.5.1) - 2025-04-09
+
+- [`3462559`](https://github.com/alexfalkowski/infraops/commit/34625597a0857b6d8d79c737f1ed6e4671116fef) fix(cf): move account to an env varaible (#952)
+- [`62a46d7`](https://github.com/alexfalkowski/infraops/commit/62a46d7162d1017254973a5abc0fd1f7827e0a8f) docs(readme): add examples (#951)
+
 ## [v2.5.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.5.0) - 2025-04-09
 
 - [`51ddfb6`](https://github.com/alexfalkowski/infraops/commit/51ddfb6304e34398c66f38375d0936747b9ee440) feat(cf): add support for R2 (#950)
