@@ -24,6 +24,12 @@ func main() {
 			}
 		}
 
+		for _, bucket := range config.GetBuckets() {
+			if err := cf.CreateBucket(ctx, cf.ConvertBucket(bucket)); err != nil {
+				return err
+			}
+		}
+
 		return nil
 	})
 }
