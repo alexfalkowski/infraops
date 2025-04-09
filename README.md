@@ -50,9 +50,69 @@ To remove all the apps, you need to run the following:
 ❯ make -C area/apps delete
 ```
 
+#### Configuration
+
+Have a look at [configuration](area/apps/apps.pbtxt), the format is:
+
+```pbtxt
+applications: [
+  {
+    id: id
+    name: name
+    namespace: namespace
+    domain: domain
+    init_version: init_version
+    version: version
+    resources: {
+      cpu: {
+        min: "250m"
+        max: "500m"
+      }
+      memory: {
+        min: "128Mi"
+        max: "256Mi"
+      }
+      storage: {
+        min: "1Gi"
+        max: "2Gi"
+      }
+    }
+    secrets: ["secrets"]
+  }
+]
+```
+
 ### Cloudflare (cf)
 
 The code is bases on the package https://www.pulumi.com/registry/packages/cloudflare/.
+
+#### Configuration
+
+Have a look at [configuration](area/cf/cf.pbtxt), the format is:
+
+```pbtxt
+balancer_zones: [
+  {
+    name: name
+    domain: domain
+    record_names: ["name"]
+    ip: ip
+  }
+]
+page_zones: [
+  {
+    name:   name
+    domain: domain
+    host:   host
+  }
+],
+buckets: [
+  {
+    name: name
+    region: region
+  }
+]
+```
 
 ### DigitalOcean (do)
 
@@ -60,11 +120,32 @@ The code is bases on the package https://www.pulumi.com/registry/packages/digita
 
 #### Project
 
-Create manually a default project for me it is with name *lean-thoughts* and description *All of experiments for lean-thoughts.*.
+Create manually a default project with a name and description, example:
+
+| Name          | Description                           |
+| ------------- | ------------------------------------- |
+| lean-thoughts | All of experiments for lean-thoughts. |
 
 #### VPC
 
-The account needs a default VPC. Create one manually under the region you would like for me it was FRA1 with name *default-fra1* and description *The default vpc for fra1*.
+The account needs a default VPC. Create one manually under the region you would like with a name and description, example:
+
+| Name         | Description               |
+| ------------ | ------------------------- |
+| default-fra1 | The default vpc for fra1. |
+
+#### Configuration
+
+Have a look at [configuration](area/do/do.pbtxt), the format is:
+
+```pbtxt
+clusters: [
+  {
+    name: name
+    description: description
+  }
+]
+```
 
 ### GitHub (gh)
 
@@ -90,9 +171,33 @@ enable_pages: true
 
 The reason for this is that there seems to be a timing issue with creating the `master` branch.
 
+#### Configuration
+
+Have a look at [configuration](area/gh/gh.pbtxt), the format is:
+
+```pbtxt
+repositories: [
+  {
+    name: name
+    description: description
+    homepage_url: homepage_url
+    checks: ["check"]
+    visibility: "public"
+    template: {
+      owner: owner
+      repository: repository
+    }
+    enable_pages: true
+  }
+]
+```
+
 ### Kubernetes (k8s)
 
 This contains all the packages our cluster needs.
+
+> [!CAUTION]
+> This needs to be run once you have a cluster in DigitalOcean.
 
 #### Setup
 
