@@ -1,6 +1,8 @@
 package cf
 
 import (
+	"os"
+
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
@@ -12,7 +14,7 @@ var (
 	off     = pulumi.String("off")
 	yes     = pulumi.Bool(true)
 	year    = pulumi.Int(31536000)
-	account = pulumi.String("561357e2a2b66ddfeabd46e2965d2c67")
+	account = pulumi.String(os.Getenv("CLOUDFLARE_ACCOUNT_ID"))
 )
 
 // ReadConfiguration reads a file and populates a configuration.
