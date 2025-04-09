@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.5.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.5.0) - 2025-04-09
+
+- [`51ddfb6`](https://github.com/alexfalkowski/infraops/commit/51ddfb6304e34398c66f38375d0936747b9ee440) feat(cf): add support for R2 (#950)
+- [`0fc72e3`](https://github.com/alexfalkowski/infraops/commit/0fc72e337bbc7e9d1aa3f5e67a4e518bfc3063c9) build(ci): use lexfalkowski/go:2.7 (#949)
+
 ## [v2.4.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.4.0) - 2025-04-08
 
 - [`cd954a8`](https://github.com/alexfalkowski/infraops/commit/cd954a83cf960eb129d891f79748b0a38bf840be) feat(apps): update versions (#948)
