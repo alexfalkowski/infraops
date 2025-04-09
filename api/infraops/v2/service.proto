@@ -75,10 +75,17 @@ message PageZone {
   string host = 3;
 }
 
+// Bucket defines an R2 bucket with a region (location, e.g EEUR)
+message Bucket {
+  string name = 1;
+  string region = 2;
+}
+
 // Cloudflare specific configuration.
 message Cloudflare {
   repeated BalancerZone balancer_zones = 1;
   repeated PageZone page_zones = 2;
+  repeated Bucket buckets = 3;
 }
 
 // Cluster represents the cluster to be created.

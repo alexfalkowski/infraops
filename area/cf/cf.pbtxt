@@ -1,20 +1,26 @@
 balancer_zones: [
   {
-    name: "lean-thoughts",
-    domain: "lean-thoughts.com",
+    name: "lean-thoughts"
+    domain: "lean-thoughts.com"
     record_names: ["standort", "bezeichner", "web"]
     ip: "68.183.243.110"
   }
-],
+]
 page_zones: [
   {
-    name:   "sasha-adventures",
-    domain: "sasha-adventures.com",
-    host:   "sasha-adventures.github.io",
+    name:   "sasha-adventures"
+    domain: "sasha-adventures.com"
+    host:   "sasha-adventures.github.io"
   },
   {
-    name:   "afalkowski",
-    domain: "afalkowski.com",
-    host:   "alexfalkowski.github.io",
+    name:   "afalkowski"
+    domain: "afalkowski.com"
+    host:   "alexfalkowski.github.io"
+  }
+],
+buckets: [
+  {
+    name: "test"
+    region: "EEUR"
   }
 ]

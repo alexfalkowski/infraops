@@ -70,3 +70,31 @@ func TestCreatePagerZone(t *testing.T) {
 	}, pulumi.WithMocks("project", "stack", &test.ErrStub{}))
 	require.Error(t, err)
 }
+
+func TestCreateBucket(t *testing.T) {
+	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
+		bucket := &cf.Bucket{
+			Name:   "test",
+			Region: "eeur",
+		}
+
+		err := cf.CreateBucket(ctx, bucket)
+		require.NoError(t, err)
+
+		return nil
+	}, pulumi.WithMocks("project", "stack", &test.Stub{}))
+	require.NoError(t, err)
+
+	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
+		bucket := &cf.Bucket{
+			Name:   "test",
+			Region: "eeur",
+		}
+
+		err := cf.CreateBucket(ctx, bucket)
+		require.NoError(t, err)
+
+		return nil
+	}, pulumi.WithMocks("project", "stack", &test.ErrStub{}))
+	require.Error(t, err)
+}
