@@ -111,6 +111,14 @@ func initContainers(app *App) cv1.ContainerArray {
 			VolumeMounts:    volumeMounts,
 			Env: cv1.EnvVarArray{
 				cv1.EnvVarArgs{
+					Name: pulumi.String("SERVICE_ID"),
+					ValueFrom: &cv1.EnvVarSourceArgs{
+						FieldRef: &cv1.ObjectFieldSelectorArgs{
+							FieldPath: pulumi.String("metadata.uid"),
+						},
+					},
+				},
+				cv1.EnvVarArgs{
 					Name:  pulumi.String("KONFIG_CONFIG_FILE"),
 					Value: path,
 				},
@@ -165,6 +173,14 @@ func internalContainer(app *App) cv1.ContainerArray {
 			Args:            pulumi.StringArray{pulumi.String("server")},
 			VolumeMounts:    volumeMounts,
 			Env: cv1.EnvVarArray{
+				cv1.EnvVarArgs{
+					Name: pulumi.String("SERVICE_ID"),
+					ValueFrom: &cv1.EnvVarSourceArgs{
+						FieldRef: &cv1.ObjectFieldSelectorArgs{
+							FieldPath: pulumi.String("metadata.uid"),
+						},
+					},
+				},
 				cv1.EnvVarArgs{
 					Name:  pulumi.String(strings.ToUpper(app.Name) + "_CONFIG_FILE"),
 					Value: configMatchingFilePath(app.Name),
