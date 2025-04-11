@@ -31,6 +31,10 @@ func matchLabels(app *App) pulumi.StringMap {
 }
 
 func deploymentLabels(app *App) pulumi.StringMap {
+	if !app.IsInternal() {
+		return pulumi.StringMap{}
+	}
+
 	return pulumi.StringMap{
 		"circleci.com/component-name": pulumi.String(app.Name),
 		"circleci.com/version":        pulumi.String(app.Version),
@@ -38,6 +42,10 @@ func deploymentLabels(app *App) pulumi.StringMap {
 }
 
 func deploymentAnnotations(app *App) pulumi.StringMap {
+	if !app.IsInternal() {
+		return pulumi.StringMap{}
+	}
+
 	f := pulumi.String("false")
 
 	return pulumi.StringMap{
