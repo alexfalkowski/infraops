@@ -25,10 +25,6 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 }
 
 func createIngress(ctx *pulumi.Context, app *App) error {
-	if !app.HasConfigVersion() {
-		return nil
-	}
-
 	args := &nv1.IngressArgs{
 		Metadata: metadata(app),
 		Spec: nv1.IngressSpecArgs{
