@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.16.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.16.0) - 2025-04-11
+
+- [`3d80a9a`](https://github.com/alexfalkowski/infraops/commit/3d80a9a629ea26642ce5fb83d2bd891c60b98a17) feat(apps): add is external for better redability (#971)
+- [`4ae1fc2`](https://github.com/alexfalkowski/infraops/commit/4ae1fc2a905cfbe96772212eea0cacafce87e096) build(ci): use alexfalkowski/k8s:1.38 (#970)
+
 ## [v2.15.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.15.1) - 2025-04-11
 
 - [`0c79a45`](https://github.com/alexfalkowski/infraops/commit/0c79a45576963a1101b22c06826d76ea38ee06b3) fix(apps): remove ' (#969)
