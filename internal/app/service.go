@@ -208,7 +208,7 @@ func externalContainer(app *App) cv1.ContainerArray {
 
 func createVolumes(app *App) cv1.VolumeArray {
 	volumes := cv1.VolumeArray{}
-	if !app.IsInternal() {
+	if app.IsExternal() {
 		return volumes
 	}
 

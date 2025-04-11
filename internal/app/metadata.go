@@ -31,7 +31,7 @@ func matchLabels(app *App) pulumi.StringMap {
 }
 
 func deploymentLabels(app *App) pulumi.StringMap {
-	if !app.IsInternal() {
+	if app.IsExternal() {
 		return pulumi.StringMap{}
 	}
 
@@ -42,7 +42,7 @@ func deploymentLabels(app *App) pulumi.StringMap {
 }
 
 func deploymentAnnotations(app *App) pulumi.StringMap {
-	if !app.IsInternal() {
+	if app.IsExternal() {
 		return pulumi.StringMap{}
 	}
 

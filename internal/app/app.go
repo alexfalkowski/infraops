@@ -121,3 +121,8 @@ func (a *App) HasResources() bool {
 func (a *App) IsInternal() bool {
 	return a.Kind == "internal"
 }
+
+// IsExternal defines an app that is not built by us.
+func (a *App) IsExternal() bool {
+	return a.Kind == "external"
+}
