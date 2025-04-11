@@ -6,7 +6,7 @@ applications: [
     name: "konfig"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.530.0"
+    version: "1.531.0"
     resources: {
       cpu: {
         min: "250m"
