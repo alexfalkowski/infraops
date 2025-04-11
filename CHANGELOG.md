@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.15.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.15.0) - 2025-04-11
+
+- [`97e2e2f`](https://github.com/alexfalkowski/infraops/commit/97e2e2f9a12612ad6e76e6392011e6e35a429bce) feat(apps): use grpc full method name (#968)
+- [`b59c66c`](https://github.com/alexfalkowski/infraops/commit/b59c66c6a7a752fe49b4250e6217e9184a4cebfb) build(ci): reenable api-breaking (#967)
+
 ## [v2.14.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.14.1) - 2025-04-11
 
 - [`62a03c3`](https://github.com/alexfalkowski/infraops/commit/62a03c3a1fad5421929e546e6f5c621dc0d601f8) fix(apps): update konfig to v1.531.1 (#966)
