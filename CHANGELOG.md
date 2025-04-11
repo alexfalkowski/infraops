@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.10.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.10.0) - 2025-04-11
+
+- [`6287718`](https://github.com/alexfalkowski/infraops/commit/6287718307a71fe465b9ad796e8f0c82e91d5d86) feat(apps): use maps.Copy (#959)
+- [`11b46d4`](https://github.com/alexfalkowski/infraops/commit/11b46d4051665c5c474bb5f77ddc48dd6a869562) build(ci): reenable api-breaking (#958)
+
 ## [v2.9.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.9.0) - 2025-04-11
 
 - [`7fa4e74`](https://github.com/alexfalkowski/infraops/commit/7fa4e74e4a54f225e95972fa74f9af3f8645dbcc) feat(api): add version to schema (#957)
