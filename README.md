@@ -55,6 +55,7 @@ To remove all the apps, you need to run the following:
 Have a look at [configuration](area/apps/apps.pbtxt), the format is:
 
 ```pbtxt
+version: "2.0"
 applications: [
   {
     id: id
@@ -92,6 +93,7 @@ The code is bases on the package https://www.pulumi.com/registry/packages/cloudf
 Have a look at [configuration](area/cf/cf.pbtxt), the format is:
 
 ```pbtxt
+version: "2.0"
 balancer_zones: [
   {
     name: name
@@ -140,6 +142,7 @@ The account needs a default VPC. Create one manually under the region you would 
 Have a look at [configuration](area/do/do.pbtxt), the format is:
 
 ```pbtxt
+version: "2.0"
 clusters: [
   {
     name: name
@@ -177,6 +180,7 @@ The reason for this is that there seems to be a timing issue with creating the `
 Have a look at [configuration](area/gh/gh.pbtxt), the format is:
 
 ```pbtxt
+version: "2.0"
 repositories: [
   {
     name: name
