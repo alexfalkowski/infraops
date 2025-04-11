@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.17.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.17.0) - 2025-04-12
+
+- [`28a2103`](https://github.com/alexfalkowski/infraops/commit/28a2103b7fa9ef1585526de48f26ca53262c745b) feat(apps): add service id (#973)
+
 ## [v2.16.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.16.0) - 2025-04-11
 
 - [`3d80a9a`](https://github.com/alexfalkowski/infraops/commit/3d80a9a629ea26642ce5fb83d2bd891c60b98a17) feat(apps): add is external for better redability (#971)
