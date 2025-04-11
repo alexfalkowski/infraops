@@ -6,7 +6,7 @@ applications: [
     name: "konfig"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.531.1"
+    version: "1.532.0"
     resources: {
       cpu: {
         min: "250m"
@@ -30,7 +30,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     init_version: "0.244.0"
-    version: "1.400.0"
+    version: "1.401.0"
     config_version: "1.15.0"
     resources: {
       cpu: {
@@ -55,7 +55,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     init_version: "0.244.0"
-    version: "2.394.0"
+    version: "2.395.0"
     config_version: "1.16.0"
     resources: {
       cpu: {
