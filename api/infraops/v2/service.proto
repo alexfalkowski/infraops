@@ -32,7 +32,8 @@ message Application {
 
 // Kubernetes applications to be released.
 message Kubernetes {
-  repeated Application applications = 1;
+  string version = 1;
+  repeated Application applications = 2;
 }
 
 // Template represents the template to be used for a repository.
@@ -57,7 +58,8 @@ message Repository {
 
 // Github specific configuration.
 message Github {
-  repeated Repository repositories = 1;
+  string version = 1;
+  repeated Repository repositories = 2;
 }
 
 // BalancerZone represents the zone for a balancer.
@@ -83,9 +85,10 @@ message Bucket {
 
 // Cloudflare specific configuration.
 message Cloudflare {
-  repeated BalancerZone balancer_zones = 1;
-  repeated PageZone page_zones = 2;
-  repeated Bucket buckets = 3;
+  string version = 1;
+  repeated BalancerZone balancer_zones = 2;
+  repeated PageZone page_zones = 3;
+  repeated Bucket buckets = 4;
 }
 
 // Cluster represents the cluster to be created.
@@ -96,5 +99,6 @@ message Cluster {
 
 // DigitalOcean specific configuration.
 message DigitalOcean {
-  repeated Cluster clusters = 1;
+  string version = 1;
+  repeated Cluster clusters = 2;
 }
