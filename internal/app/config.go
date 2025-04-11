@@ -11,7 +11,7 @@ import (
 )
 
 func createConfigMap(ctx *pulumi.Context, app *App) error {
-	if !app.IsInternal() {
+	if app.IsExternal() {
 		return nil
 	}
 
