@@ -1,6 +1,8 @@
 package app
 
 import (
+	"maps"
+
 	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -53,9 +55,7 @@ func merge(ms ...pulumi.StringMap) pulumi.StringMap {
 	fm := pulumi.StringMap{}
 
 	for _, m := range ms {
-		for k, v := range m {
-			fm[k] = v
-		}
+		maps.Copy(fm, m)
 	}
 
 	return fm
