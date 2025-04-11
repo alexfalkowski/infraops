@@ -195,7 +195,7 @@ func externalContainer(app *App) cv1.ContainerArray {
 			Ports: cv1.ContainerPortArray{
 				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
 			},
-			LivenessProbe:  tcpProbe(),
+			LivenessProbe:  httpProbe("/"),
 			ReadinessProbe: tcpProbe(),
 			StartupProbe:   tcpProbe(),
 			Resources:      createResources(app),
