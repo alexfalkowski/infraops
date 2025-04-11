@@ -118,5 +118,11 @@ applications: [
         max: "2Gi"
       }
     }
+    environments: [
+      {
+        name: "MO_MONITORABLE_GITHUB_TOKEN"
+        value: "secret:gh/token"
+      }
+    ]
   }
 ]

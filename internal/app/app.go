@@ -2,6 +2,7 @@ package app
 
 import (
 	"errors"
+	"strings"
 
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
@@ -10,38 +11,6 @@ import (
 
 // ErrVersionMismatch for app.
 var ErrVersionMismatch = errors.New("version mismatch")
-
-type (
-	// App to be created.
-	App struct {
-		Resources     *Resources
-		ID            string
-		Name          string
-		Kind          string
-		Namespace     string
-		Domain        string
-		InitVersion   string
-		Version       string
-		ConfigVersion string
-		Secrets       Secrets
-	}
-
-	// Secrets for apps.
-	Secrets []string
-
-	// Resources for apps.
-	Resources struct {
-		CPU     *Range
-		Memory  *Range
-		Storage *Range
-	}
-
-	// Range for apps.
-	Range struct {
-		Min string
-		Max string
-	}
-)
 
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.Kubernetes, error) {
@@ -87,6 +56,20 @@ func ConvertApplication(a *v2.Application) *App {
 		app.Resources = r
 	}
 
+	environments := a.GetEnvironments()
+	if environments != nil {
+		app.Environments = make([]Environment, len(environments))
+
+		for i, e := range environments {
+			environment := Environment{
+				Name:  e.GetName(),
+				Value: e.GetValue(),
+			}
+
+			app.Environments[i] = environment
+		}
+	}
+
 	return app
 }
 
@@ -107,6 +90,21 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 	return nil
 }
 
+// App to be created.
+type App struct {
+	Resources     *Resources
+	ID            string
+	Name          string
+	Kind          string
+	Namespace     string
+	Domain        string
+	InitVersion   string
+	Version       string
+	ConfigVersion string
+	Secrets       []string
+	Environments  []Environment
+}
+
 // HasConfigVersion for app.
 func (a *App) HasConfigVersion() bool {
 	return a.ConfigVersion != ""
@@ -125,4 +123,28 @@ func (a *App) IsInternal() bool {
 // IsExternal defines an app that is not built by us.
 func (a *App) IsExternal() bool {
 	return a.Kind == "external"
+}
+
+// Resources for apps.
+type Resources struct {
+	CPU     *Range
+	Memory  *Range
+	Storage *Range
+}
+
+// Range for apps.
+type Range struct {
+	Min string
+	Max string
+}
+
+// Environment for apps.
+type Environment struct {
+	Name  string
+	Value string
+}
+
+// IsSecret defines whether the env variable is a secret.
+func (e Environment) IsSecret() bool {
+	return strings.HasPrefix(e.Value, "secret:")
 }

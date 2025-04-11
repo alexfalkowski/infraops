@@ -17,6 +17,12 @@ message Resources {
   Range storage = 3;
 }
 
+// Environment represents the Environment variables for an application.
+message Environment {
+  string name = 1;
+  string value = 2;
+}
+
 // Application represents the application to be released.
 message Application {
   string id = 1;
@@ -29,6 +35,7 @@ message Application {
   string config_version = 8;
   Resources resources = 9;
   repeated string secrets = 10;
+  repeated Environment environments = 11;
 }
 
 // Kubernetes applications to be released.
