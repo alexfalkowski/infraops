@@ -20,14 +20,15 @@ message Resources {
 // Application represents the application to be released.
 message Application {
   string id = 1;
-  string name = 2;
-  string namespace = 3;
-  string domain = 4;
-  string init_version = 5;
-  string version = 6;
-  string config_version = 7;
-  Resources resources = 8;
-  repeated string secrets = 9;
+  string kind = 2;
+  string name = 3;
+  string namespace = 4;
+  string domain = 5;
+  string init_version = 6;
+  string version = 7;
+  string config_version = 8;
+  Resources resources = 9;
+  repeated string secrets = 10;
 }
 
 // Kubernetes applications to be released.

@@ -11,6 +11,10 @@ import (
 )
 
 func createConfigMap(ctx *pulumi.Context, app *App) error {
+	if !app.IsInternal() {
+		return nil
+	}
+
 	var (
 		args *cv1.ConfigMapArgs
 		err  error

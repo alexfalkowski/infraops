@@ -3,7 +3,7 @@ balancer_zones: [
   {
     name: "lean-thoughts"
     domain: "lean-thoughts.com"
-    record_names: ["standort", "bezeichner", "web"]
+    record_names: ["konfig", "standort", "bezeichner", "web", "monitoror"]
     ip: "68.183.243.110"
   }
 ]

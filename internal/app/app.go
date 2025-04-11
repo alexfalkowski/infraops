@@ -17,6 +17,7 @@ type (
 		Resources     *Resources
 		ID            string
 		Name          string
+		Kind          string
 		Namespace     string
 		Domain        string
 		InitVersion   string
@@ -52,12 +53,9 @@ func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 
 // ConvertApplication converts a v2.Application to an App.
 func ConvertApplication(a *v2.Application) *App {
-	resources := a.GetResources()
-	cpu := resources.GetCpu()
-	mem := resources.GetMemory()
-	storage := resources.GetStorage()
 	app := &App{
 		ID:            a.GetId(),
+		Kind:          a.GetKind(),
 		Name:          a.GetName(),
 		Namespace:     a.GetNamespace(),
 		Domain:        a.GetDomain(),
@@ -65,11 +63,28 @@ func ConvertApplication(a *v2.Application) *App {
 		Version:       a.GetVersion(),
 		ConfigVersion: a.GetConfigVersion(),
 		Secrets:       a.GetSecrets(),
-		Resources: &Resources{
-			CPU:     &Range{Min: cpu.GetMin(), Max: cpu.GetMax()},
-			Memory:  &Range{Min: mem.GetMin(), Max: mem.GetMax()},
-			Storage: &Range{Min: storage.GetMin(), Max: storage.GetMax()},
-		},
+	}
+
+	resources := a.GetResources()
+	if resources != nil {
+		cpu := resources.GetCpu()
+		mem := resources.GetMemory()
+		storage := resources.GetStorage()
+		r := &Resources{}
+
+		if cpu != nil {
+			r.CPU = &Range{Min: cpu.GetMin(), Max: cpu.GetMax()}
+		}
+
+		if mem != nil {
+			r.Memory = &Range{Min: mem.GetMin(), Max: mem.GetMax()}
+		}
+
+		if storage != nil {
+			r.Storage = &Range{Min: storage.GetMin(), Max: storage.GetMax()}
+		}
+
+		app.Resources = r
 	}
 
 	return app
@@ -100,4 +115,9 @@ func (a *App) HasConfigVersion() bool {
 // HasResources for app.
 func (a *App) HasResources() bool {
 	return a.Resources != nil
+}
+
+// IsInternal defines whether this application uses our opinionated way of deploying apps.
+func (a *App) IsInternal() bool {
+	return a.Kind == "internal"
 }

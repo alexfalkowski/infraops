@@ -46,25 +46,41 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 }
 
 func createService(ctx *pulumi.Context, app *App) error {
-	args := &cv1.ServiceArgs{
-		Metadata: metadata(app, matchLabels(app)),
-		Spec: cv1.ServiceSpecArgs{
-			Ports: cv1.ServicePortArray{
-				servicePort("debug", 6060),
-				servicePort("http", 8080),
-				servicePort("grpc", 9090),
+	var args *cv1.ServiceArgs
+
+	if app.IsInternal() {
+		args = &cv1.ServiceArgs{
+			Metadata: metadata(app, matchLabels(app)),
+			Spec: cv1.ServiceSpecArgs{
+				Ports: cv1.ServicePortArray{
+					servicePort("debug", 6060),
+					servicePort("http", 8080),
+					servicePort("grpc", 9090),
+				},
+				Selector: matchLabels(app),
+				Type:     pulumi.String("ClusterIP"),
 			},
-			Selector: matchLabels(app),
-			Type:     pulumi.String("ClusterIP"),
-		},
+		}
+	} else {
+		args = &cv1.ServiceArgs{
+			Metadata: metadata(app, matchLabels(app)),
+			Spec: cv1.ServiceSpecArgs{
+				Ports: cv1.ServicePortArray{
+					servicePort("http", 8080),
+				},
+				Selector: matchLabels(app),
+				Type:     pulumi.String("ClusterIP"),
+			},
+		}
 	}
+
 	_, err := cv1.NewService(ctx, app.Name, args)
 
 	return err
 }
 
 func initContainers(app *App) cv1.ContainerArray {
-	if !app.HasConfigVersion() {
+	if !app.HasConfigVersion() || !app.IsInternal() {
 		return nil
 	}
 
@@ -89,7 +105,7 @@ func initContainers(app *App) cv1.ContainerArray {
 	return cv1.ContainerArray{
 		cv1.ContainerArgs{
 			Name:            pulumi.String(name),
-			Image:           image("konfigctl", app.InitVersion),
+			Image:           initImage("konfigctl", app.InitVersion),
 			ImagePullPolicy: pulumi.String("Always"),
 			Args:            pulumi.StringArray{pulumi.String("config")},
 			VolumeMounts:    volumeMounts,
@@ -112,6 +128,14 @@ func initContainers(app *App) cv1.ContainerArray {
 }
 
 func containers(app *App) cv1.ContainerArray {
+	if app.IsInternal() {
+		return internalContainer(app)
+	}
+
+	return externalContainer(app)
+}
+
+func internalContainer(app *App) cv1.ContainerArray {
 	volumeMounts := cv1.VolumeMountArray{}
 
 	if app.HasConfigVersion() {
@@ -136,7 +160,7 @@ func containers(app *App) cv1.ContainerArray {
 	return cv1.ContainerArray{
 		cv1.ContainerArgs{
 			Name:            pulumi.String(app.Name),
-			Image:           image(app.Name, app.Version),
+			Image:           image(app),
 			ImagePullPolicy: pulumi.String("Always"),
 			Args:            pulumi.StringArray{pulumi.String("server")},
 			VolumeMounts:    volumeMounts,
@@ -162,8 +186,29 @@ func containers(app *App) cv1.ContainerArray {
 	}
 }
 
+func externalContainer(app *App) cv1.ContainerArray {
+	return cv1.ContainerArray{
+		cv1.ContainerArgs{
+			Name:            pulumi.String(app.Name),
+			Image:           image(app),
+			ImagePullPolicy: pulumi.String("Always"),
+			Ports: cv1.ContainerPortArray{
+				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
+			},
+			StartupProbe: tcpProbe(),
+			Resources:    createResources(app),
+			SecurityContext: cv1.SecurityContextArgs{
+				ReadOnlyRootFilesystem: pulumi.Bool(true),
+			},
+		},
+	}
+}
+
 func createVolumes(app *App) cv1.VolumeArray {
 	volumes := cv1.VolumeArray{}
+	if !app.IsInternal() {
+		return volumes
+	}
 
 	if app.HasConfigVersion() {
 		n := pulumi.String(initName(app))
@@ -208,8 +253,16 @@ func secretVolumeMount(name string) cv1.VolumeMountArgs {
 	}
 }
 
-func image(name, version string) pulumi.String {
+func initImage(name, version string) pulumi.String {
 	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", name, version))
+}
+
+func image(app *App) pulumi.String {
+	if app.IsInternal() {
+		return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", app.Name, app.Version))
+	}
+
+	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:%s", app.Name, app.Version))
 }
 
 func podSecurity() cv1.PodSecurityContextArgs {

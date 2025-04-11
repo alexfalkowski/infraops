@@ -2,6 +2,7 @@ version: "2.0"
 applications: [
   {
     id: "1115c470-ccc9-4daf-8459-ef1e19c40afe"
+    kind: "internal"
     name: "konfig"
     namespace: "lean"
     domain: "lean-thoughts.com"
@@ -24,6 +25,7 @@ applications: [
   },
   {
     id: "98968ca0-4ada-4856-8547-210f92b838ea"
+    kind: "internal"
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
@@ -48,6 +50,7 @@ applications: [
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
+    kind: "internal"
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
@@ -72,6 +75,7 @@ applications: [
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
+    kind: "internal"
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
@@ -93,5 +97,26 @@ applications: [
       }
     }
     secrets: ["otlp", "konfig"]
+  },
+  {
+    kind: "external"
+    name: "monitoror"
+    namespace: "lean"
+    domain: "lean-thoughts.com"
+    version: "1.0"
+    resources: {
+      cpu: {
+        min: "125m"
+        max: "250m"
+      }
+      memory: {
+        min: "64Mi"
+        max: "128Mi"
+      }
+      storage: {
+        min: "1Gi"
+        max: "2Gi"
+      }
+    }
   }
 ]

@@ -58,6 +58,7 @@ Have a look at [configuration](area/apps/apps.pbtxt), the format is:
 applications: [
   {
     id: id
+    kind: internal/external
     name: name
     namespace: namespace
     domain: domain
