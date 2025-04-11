@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.15.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.15.1) - 2025-04-11
+
+- [`0c79a45`](https://github.com/alexfalkowski/infraops/commit/0c79a45576963a1101b22c06826d76ea38ee06b3) fix(apps): remove ' (#969)
+
 ## [v2.15.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.15.0) - 2025-04-11
 
 - [`97e2e2f`](https://github.com/alexfalkowski/infraops/commit/97e2e2f9a12612ad6e76e6392011e6e35a429bce) feat(apps): use grpc full method name (#968)
