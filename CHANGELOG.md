@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.11.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.11.0) - 2025-04-11
+
+- [`2540c4a`](https://github.com/alexfalkowski/infraops/commit/2540c4ac862bb095f5fcb1209c29a55749b4c800) feat(apps): allow externale apps (monitoror) (#960)
+
 ## [v2.10.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.10.0) - 2025-04-11
 
 - [`6287718`](https://github.com/alexfalkowski/infraops/commit/6287718307a71fe465b9ad796e8f0c82e91d5d86) feat(apps): use maps.Copy (#959)
