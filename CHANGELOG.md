@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.11.2](https://github.com/alexfalkowski/infraops/releases/tag/v2.11.2) - 2025-04-11
+
+- [`84a1bde`](https://github.com/alexfalkowski/infraops/commit/84a1bde35c9cf4d185198cf17440ab03b7dad203) fix(apps): need different probes (#962)
+
 ## [v2.11.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.11.1) - 2025-04-11
 
 - [`9d5b151`](https://github.com/alexfalkowski/infraops/commit/9d5b15157130cd44f1462efbd2d930cfa7eef1da) fix(apps): add ingress to all apps (#961)
