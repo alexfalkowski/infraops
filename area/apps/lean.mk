@@ -55,11 +55,11 @@ verify-lean: verify-standort verify-bezeichner verify-web
 
 # Verify standort.
 verify-standort:
-	@curl -svf --header "Content-Type: application/json" --request POST --data {}  https://standort.lean-thoughts.com/standort.v2.Service/GetLocation'
+	@curl -svf --header "Content-Type: application/json" --request POST --data {}  https://standort.lean-thoughts.com/standort.v2.Service/GetLocation
 
 # Verify bezeichner.
 verify-bezeichner:
-	@curl -svf --header "Content-Type: application/json" --request POST --data '{ "application": "uuid", "count": 10 }'  https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers
+	@curl -svf --header "Content-Type: application/json" --request POST --data '{ "application": "ulid", "count": 10 }'  https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers
 
 # Verify web.
 verify-web:
