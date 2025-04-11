@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.11.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.11.1) - 2025-04-11
+
+- [`9d5b151`](https://github.com/alexfalkowski/infraops/commit/9d5b15157130cd44f1462efbd2d930cfa7eef1da) fix(apps): add ingress to all apps (#961)
+
 ## [v2.11.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.11.0) - 2025-04-11
 
 - [`2540c4a`](https://github.com/alexfalkowski/infraops/commit/2540c4ac862bb095f5fcb1209c29a55749b4c800) feat(apps): allow externale apps (monitoror) (#960)
