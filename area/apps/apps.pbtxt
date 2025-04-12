@@ -6,7 +6,7 @@ applications: [
     name: "konfig"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.536.0"
+    version: "1.537.0"
     resources: {
       cpu: {
         min: "250m"
@@ -35,8 +35,8 @@ applications: [
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.247.0"
-    version: "1.404.0"
+    init_version: "0.248.0"
+    version: "1.405.0"
     config_version: "1.15.0"
     resources: {
       cpu: {
@@ -66,8 +66,8 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.247.0"
-    version: "2.399.0"
+    init_version: "0.248.0"
+    version: "2.400.0"
     config_version: "1.16.0"
     resources: {
       cpu: {
@@ -97,8 +97,8 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.247.0"
-    version: "0.272.0"
+    init_version: "0.248.0"
+    version: "0.273.0"
     config_version: "1.6.0"
     resources: {
       cpu: {
