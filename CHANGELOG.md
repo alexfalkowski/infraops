@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.27.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.27.0) - 2025-04-12
+
+- [`e01a63a`](https://github.com/alexfalkowski/infraops/commit/e01a63a076d7c60a0de868e0cf487ee2c5353798) feat(apps): log when we exit on failure (#985)
+
 ## [v2.26.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.26.0) - 2025-04-12
 
 - [`1d58dc4`](https://github.com/alexfalkowski/infraops/commit/1d58dc408acc9bb116655c1315720d8ee0b91b31) feat(apps): use strings.IsEmpty (#984)
