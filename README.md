@@ -80,6 +80,12 @@ applications: [
       }
     }
     secrets: ["secrets"]
+    environments: [
+      {
+        name: name
+        value: static value or "secret:secrets/value"
+      }
+    ]
   }
 ]
 ```
