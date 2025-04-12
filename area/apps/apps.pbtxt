@@ -127,7 +127,7 @@ applications: [
     name: "monitoror"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.5"
+    version: "1.6"
     resources: {
       cpu: {
         min: "125m"
