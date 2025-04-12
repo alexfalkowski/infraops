@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.18.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.18.0) - 2025-04-12
+
+- [`c35f15d`](https://github.com/alexfalkowski/infraops/commit/c35f15d3884bcd2abc45fb0a8829b904fa994ee7) feat(apps): add ability to load env vars (#975)
+
 ## [v2.17.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.17.0) - 2025-04-12
 
 - [`28a2103`](https://github.com/alexfalkowski/infraops/commit/28a2103b7fa9ef1585526de48f26ca53262c745b) feat(apps): add service id (#973)
