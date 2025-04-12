@@ -165,61 +165,93 @@ func internalContainer(app *App) cv1.ContainerArray {
 		volumeMounts = append(volumeMounts, secretVolumeMount(v))
 	}
 
-	return cv1.ContainerArray{
-		cv1.ContainerArgs{
-			Name:            pulumi.String(app.Name),
-			Image:           image(app),
-			ImagePullPolicy: pulumi.String("Always"),
-			Args:            pulumi.StringArray{pulumi.String("server")},
-			VolumeMounts:    volumeMounts,
-			Env: cv1.EnvVarArray{
-				cv1.EnvVarArgs{
-					Name: pulumi.String("SERVICE_ID"),
-					ValueFrom: &cv1.EnvVarSourceArgs{
-						FieldRef: &cv1.ObjectFieldSelectorArgs{
-							FieldPath: pulumi.String("metadata.uid"),
-						},
-					},
-				},
-				cv1.EnvVarArgs{
-					Name:  pulumi.String(strings.ToUpper(app.Name) + "_CONFIG_FILE"),
-					Value: configMatchingFilePath(app.Name),
-				},
-			},
-			Ports: cv1.ContainerPortArray{
-				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(6060)},
-				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
-				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(9090)},
-			},
-			LivenessProbe:  httpProbe("/livez"),
-			ReadinessProbe: httpProbe("/readyz"),
-			StartupProbe:   tcpProbe(),
-			Resources:      createResources(app),
-			SecurityContext: cv1.SecurityContextArgs{
-				ReadOnlyRootFilesystem: pulumi.Bool(true),
+	envs := cv1.EnvVarArray{}
+	envs = append(envs, cv1.EnvVarArgs{
+		Name: pulumi.String("SERVICE_ID"),
+		ValueFrom: &cv1.EnvVarSourceArgs{
+			FieldRef: &cv1.ObjectFieldSelectorArgs{
+				FieldPath: pulumi.String("metadata.uid"),
 			},
 		},
+	})
+	envs = append(envs, cv1.EnvVarArgs{
+		Name:  pulumi.String(strings.ToUpper(app.Name) + "_CONFIG_FILE"),
+		Value: configMatchingFilePath(app.Name),
+	})
+
+	container := cv1.ContainerArgs{
+		Name:            pulumi.String(app.Name),
+		Image:           image(app),
+		ImagePullPolicy: pulumi.String("Always"),
+		Args:            pulumi.StringArray{pulumi.String("server")},
+		VolumeMounts:    volumeMounts,
+		Env:             addEnvironments(app, envs),
+		Ports: cv1.ContainerPortArray{
+			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(6060)},
+			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
+			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(9090)},
+		},
+		LivenessProbe:  httpProbe("/livez"),
+		ReadinessProbe: httpProbe("/readyz"),
+		StartupProbe:   tcpProbe(),
+		Resources:      createResources(app),
+		SecurityContext: cv1.SecurityContextArgs{
+			ReadOnlyRootFilesystem: pulumi.Bool(true),
+		},
 	}
+
+	return cv1.ContainerArray{container}
 }
 
 func externalContainer(app *App) cv1.ContainerArray {
-	return cv1.ContainerArray{
-		cv1.ContainerArgs{
-			Name:            pulumi.String(app.Name),
-			Image:           image(app),
-			ImagePullPolicy: pulumi.String("Always"),
-			Ports: cv1.ContainerPortArray{
-				cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
-			},
-			LivenessProbe:  httpProbe("/"),
-			ReadinessProbe: tcpProbe(),
-			StartupProbe:   tcpProbe(),
-			Resources:      createResources(app),
-			SecurityContext: cv1.SecurityContextArgs{
-				ReadOnlyRootFilesystem: pulumi.Bool(true),
-			},
+	container := cv1.ContainerArgs{
+		Name:            pulumi.String(app.Name),
+		Image:           image(app),
+		ImagePullPolicy: pulumi.String("Always"),
+		Env:             addEnvironments(app, cv1.EnvVarArray{}),
+		Ports: cv1.ContainerPortArray{
+			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
+		},
+		LivenessProbe:  httpProbe("/"),
+		ReadinessProbe: tcpProbe(),
+		StartupProbe:   tcpProbe(),
+		Resources:      createResources(app),
+		SecurityContext: cv1.SecurityContextArgs{
+			ReadOnlyRootFilesystem: pulumi.Bool(true),
 		},
 	}
+
+	return cv1.ContainerArray{container}
+}
+
+func addEnvironments(app *App, envs cv1.EnvVarArray) cv1.EnvVarArray {
+	for _, env := range app.Environments {
+		var arg cv1.EnvVarArgs
+
+		if env.IsSecret() {
+			value := strings.TrimPrefix(env.Value, "secret:")
+			name, value, _ := strings.Cut(value, "/")
+
+			arg = cv1.EnvVarArgs{
+				Name: pulumi.String(env.Name),
+				ValueFrom: &cv1.EnvVarSourceArgs{
+					SecretKeyRef: &cv1.SecretKeySelectorArgs{
+						Name: pulumi.String(name + "-secret"),
+						Key:  pulumi.String(value),
+					},
+				},
+			}
+		} else {
+			arg = cv1.EnvVarArgs{
+				Name:  pulumi.String(env.Name),
+				Value: pulumi.String(env.Value),
+			}
+		}
+
+		envs = append(envs, arg)
+	}
+
+	return envs
 }
 
 func createVolumes(app *App) cv1.VolumeArray {
