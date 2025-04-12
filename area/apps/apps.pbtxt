@@ -22,6 +22,12 @@ applications: [
       }
     }
     secrets: ["otlp", "gh", "konfig"]
+    environments: [
+      {
+        name: "SERVICE_NAME"
+        value: "konfig"
+      }
+    ]
   },
   {
     id: "98968ca0-4ada-4856-8547-210f92b838ea"
@@ -47,6 +53,12 @@ applications: [
       }
     }
     secrets: ["otlp", "konfig"]
+    environments: [
+      {
+        name: "SERVICE_NAME"
+        value: "bezeichner"
+      }
+    ]
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
@@ -72,6 +84,12 @@ applications: [
       }
     }
     secrets: ["otlp", "konfig"]
+    environments: [
+      {
+        name: "SERVICE_NAME"
+        value: "standort"
+      }
+    ]
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
@@ -97,6 +115,12 @@ applications: [
       }
     }
     secrets: ["otlp", "konfig"]
+    environments: [
+      {
+        name: "SERVICE_NAME"
+        value: "web"
+      }
+    ]
   },
   {
     kind: "external"
@@ -118,5 +142,11 @@ applications: [
         max: "2Gi"
       }
     }
+    environments: [
+      {
+        name: "MO_MONITORABLE_GITHUB_TOKEN"
+        value: "secret:gh/token"
+      }
+    ]
   }
 ]
