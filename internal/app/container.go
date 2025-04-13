@@ -35,8 +35,14 @@ func initContainers(app *App) cv1.ContainerArray {
 			Name:            pulumi.String(name),
 			Image:           initImage("konfigctl", app.InitVersion),
 			ImagePullPolicy: pulumi.String("Always"),
-			Args:            pulumi.StringArray{pulumi.String("config")},
-			VolumeMounts:    volumeMounts,
+			Args: pulumi.StringArray{
+				pulumi.String("config"),
+				pulumi.String("-i"),
+				pulumi.String("env:KONFIG_CONFIG_FILE"),
+				pulumi.String("-o"),
+				pulumi.String("env:KONFIG_APP_CONFIG_FILE"),
+			},
+			VolumeMounts: volumeMounts,
 			Env: cv1.EnvVarArray{
 				cv1.EnvVarArgs{
 					Name: pulumi.String("SERVICE_ID"),
@@ -71,6 +77,7 @@ func containers(app *App) cv1.ContainerArray {
 	return externalContainer(app)
 }
 
+//nolint:funlen
 func internalContainer(app *App) cv1.ContainerArray {
 	volumeMounts := cv1.VolumeMountArray{}
 
@@ -102,8 +109,10 @@ func internalContainer(app *App) cv1.ContainerArray {
 			},
 		},
 	})
+
+	env := strings.ToUpper(app.Name) + "_CONFIG_FILE"
 	envs = append(envs, cv1.EnvVarArgs{
-		Name:  pulumi.String(strings.ToUpper(app.Name) + "_CONFIG_FILE"),
+		Name:  pulumi.String(env),
 		Value: configMatchingFilePath(app.Name),
 	})
 
@@ -111,9 +120,13 @@ func internalContainer(app *App) cv1.ContainerArray {
 		Name:            pulumi.String(app.Name),
 		Image:           image(app),
 		ImagePullPolicy: pulumi.String("Always"),
-		Args:            pulumi.StringArray{pulumi.String("server")},
-		VolumeMounts:    volumeMounts,
-		Env:             addEnvironments(app, envs),
+		Args: pulumi.StringArray{
+			pulumi.String("server"),
+			pulumi.String("-i"),
+			pulumi.String("env:" + env),
+		},
+		VolumeMounts: volumeMounts,
+		Env:          addEnvironments(app, envs),
 		Ports: cv1.ContainerPortArray{
 			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(6060)},
 			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
