@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.37.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.37.0) - 2025-04-20
+
+- [`2bd5a50`](https://github.com/alexfalkowski/infraops/commit/2bd5a5081c9f483c69697c1254dca3c47f203b7d) feat(apps): use bookworm (#995)
+
 ## [v2.36.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.36.0) - 2025-04-20
 
 - [`d097947`](https://github.com/alexfalkowski/infraops/commit/d0979479317ce583bd3af682cfd9c51de1abeb3b) feat(bin): use the new field allignment (#994)
