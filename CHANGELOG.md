@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.41.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.41.0) - 2025-04-22
+
+- [`a53a2b0`](https://github.com/alexfalkowski/infraops/commit/a53a2b0d74fb5c3ab4f0517ef307e1b271ebe4c1) feat(app): use files for input/output (#1001)
+- [`1523219`](https://github.com/alexfalkowski/infraops/commit/1523219d83b10815b98831f4cc2c5fd83d108fdf) build(ci): use alexfalkowski/go:2.12 (#1000)
+
 ## [v2.40.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.40.0) - 2025-04-21
 
 - [`88f2a7c`](https://github.com/alexfalkowski/infraops/commit/88f2a7cbc9f6c369ccdc5d184632b8811d48b053) feat(apps): kind is not needed to standort (#999)
