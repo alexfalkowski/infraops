@@ -92,12 +92,12 @@ func configMap(app *App) (*cv1.ConfigMapArgs, error) {
 	return args, nil
 }
 
-func configMatchingFilePath(name string) pulumi.String {
+func configMatchingFilePath(name string) string {
 	return configFilePath(name, name)
 }
 
-func configFilePath(path, file string) pulumi.String {
-	return pulumi.String(configPath(path) + "/" + configFile(file))
+func configFilePath(path, file string) string {
+	return configPath(path) + "/" + configFile(file)
 }
 
 func configPath(name string) string {

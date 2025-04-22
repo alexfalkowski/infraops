@@ -1,8 +1,6 @@
 package app
 
 import (
-	"strings"
-
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -16,7 +14,7 @@ func initContainers(app *App) cv1.ContainerArray {
 	path := configFilePath("konfig", name)
 	volumeMounts := cv1.VolumeMountArray{
 		cv1.VolumeMountArgs{
-			MountPath: path,
+			MountPath: pulumi.String(path),
 			Name:      pulumi.String(name),
 			SubPath:   pulumi.String(configFile(name)),
 		},
@@ -38,30 +36,13 @@ func initContainers(app *App) cv1.ContainerArray {
 			Args: pulumi.StringArray{
 				pulumi.String("config"),
 				pulumi.String("-i"),
-				pulumi.String("env:KONFIG_CONFIG_FILE"),
+				pulumi.String("file:" + path),
 				pulumi.String("-o"),
-				pulumi.String("env:KONFIG_APP_CONFIG_FILE"),
+				pulumi.String("file:" + configMatchingFilePath(app.Name)),
 			},
 			VolumeMounts: volumeMounts,
-			Env: cv1.EnvVarArray{
-				cv1.EnvVarArgs{
-					Name: pulumi.String("SERVICE_ID"),
-					ValueFrom: &cv1.EnvVarSourceArgs{
-						FieldRef: &cv1.ObjectFieldSelectorArgs{
-							FieldPath: pulumi.String("metadata.uid"),
-						},
-					},
-				},
-				cv1.EnvVarArgs{
-					Name:  pulumi.String("KONFIG_CONFIG_FILE"),
-					Value: path,
-				},
-				cv1.EnvVarArgs{
-					Name:  pulumi.String("KONFIG_APP_CONFIG_FILE"),
-					Value: configMatchingFilePath(app.Name),
-				},
-			},
-			Resources: createResources(app),
+			Env:          cv1.EnvVarArray{serviceID()},
+			Resources:    createResources(app),
 			SecurityContext: cv1.SecurityContextArgs{
 				ReadOnlyRootFilesystem: pulumi.Bool(true),
 			},
@@ -77,7 +58,6 @@ func containers(app *App) cv1.ContainerArray {
 	return externalContainer(app)
 }
 
-//nolint:funlen
 func internalContainer(app *App) cv1.ContainerArray {
 	volumeMounts := cv1.VolumeMountArray{}
 
@@ -89,7 +69,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 		volumeMounts = append(volumeMounts, v)
 	} else {
 		v := cv1.VolumeMountArgs{
-			MountPath: configMatchingFilePath(app.Name),
+			MountPath: pulumi.String(configMatchingFilePath(app.Name)),
 			Name:      pulumi.String(app.Name),
 			SubPath:   pulumi.String(configFile(app.Name)),
 		}
@@ -100,22 +80,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 		volumeMounts = append(volumeMounts, secretVolumeMount(v))
 	}
 
-	envs := cv1.EnvVarArray{}
-	envs = append(envs, cv1.EnvVarArgs{
-		Name: pulumi.String("SERVICE_ID"),
-		ValueFrom: &cv1.EnvVarSourceArgs{
-			FieldRef: &cv1.ObjectFieldSelectorArgs{
-				FieldPath: pulumi.String("metadata.uid"),
-			},
-		},
-	})
-
-	env := strings.ToUpper(app.Name) + "_CONFIG_FILE"
-	envs = append(envs, cv1.EnvVarArgs{
-		Name:  pulumi.String(env),
-		Value: configMatchingFilePath(app.Name),
-	})
-
+	envs := cv1.EnvVarArray{serviceID()}
 	container := cv1.ContainerArgs{
 		Name:            pulumi.String(app.Name),
 		Image:           image(app),
@@ -123,7 +88,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 		Args: pulumi.StringArray{
 			pulumi.String("server"),
 			pulumi.String("-i"),
-			pulumi.String("env:" + env),
+			pulumi.String("file:" + configMatchingFilePath(app.Name)),
 		},
 		VolumeMounts: volumeMounts,
 		Env:          addEnvironments(app, envs),
@@ -163,4 +128,15 @@ func externalContainer(app *App) cv1.ContainerArray {
 	}
 
 	return cv1.ContainerArray{container}
+}
+
+func serviceID() cv1.EnvVarArgs {
+	return cv1.EnvVarArgs{
+		Name: pulumi.String("SERVICE_ID"),
+		ValueFrom: &cv1.EnvVarSourceArgs{
+			FieldRef: &cv1.ObjectFieldSelectorArgs{
+				FieldPath: pulumi.String("metadata.uid"),
+			},
+		},
+	}
 }
