@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.42.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.42.0) - 2025-04-22
+
+- [`ec49c25`](https://github.com/alexfalkowski/infraops/commit/ec49c25aa76ad22eaffaec7c302412b68e8f77d1) feat(apps): flags are created by the command (#1002)
+
 ## [v2.41.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.41.0) - 2025-04-22
 
 - [`a53a2b0`](https://github.com/alexfalkowski/infraops/commit/a53a2b0d74fb5c3ab4f0517ef307e1b271ebe4c1) feat(app): use files for input/output (#1001)
