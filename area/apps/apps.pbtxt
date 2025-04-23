@@ -29,7 +29,7 @@ applications: [
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.258.0"
+    init_version: "0.260.0"
     version: "1.415.0"
     config_version: "1.15.0"
     resources: {
@@ -54,7 +54,7 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.258.0"
+    init_version: "0.260.0"
     version: "2.411.0"
     config_version: "1.16.0"
     resources: {
@@ -79,7 +79,7 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.258.0"
+    init_version: "0.260.0"
     version: "0.283.0"
     config_version: "1.6.0"
     resources: {
