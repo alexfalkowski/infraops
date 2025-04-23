@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.48.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.48.0) - 2025-04-23
+
+- [`024db45`](https://github.com/alexfalkowski/infraops/commit/024db4556e551abcdaca630c951b95f4069325a2) feat(apps): do not ignore write error for mvc (#1008)
+
 ## [v2.47.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.47.0) - 2025-04-23
 
 - [`812aa4d`](https://github.com/alexfalkowski/infraops/commit/812aa4d0d2b26b73362d99bd9a58a24a79c083cf) feat(apps): follow the pattern of nil with disabled config (#1007)
