@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.49.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.49.0) - 2025-04-24
+
+- [`664493c`](https://github.com/alexfalkowski/infraops/commit/664493c096748e5bb120421a9d5abe5ebf2ea3e7) feat(apps): remove prefix dups (#1009)
+
 ## [v2.48.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.48.0) - 2025-04-23
 
 - [`024db45`](https://github.com/alexfalkowski/infraops/commit/024db4556e551abcdaca630c951b95f4069325a2) feat(apps): do not ignore write error for mvc (#1008)
