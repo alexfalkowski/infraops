@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.51.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.51.0) - 2025-04-25
+
+- [`96c88a2`](https://github.com/alexfalkowski/infraops/commit/96c88a204d88e82d1ca3a83f1d76cb38004e83f7) feat(gh): do not enforce admins (#1014)
+- [`ce03881`](https://github.com/alexfalkowski/infraops/commit/ce038816d1132387c9116942ffa672ec6b933248) feat(gh): enforce admins (#1013)
+- [`78be880`](https://github.com/alexfalkowski/infraops/commit/78be88074af7ba04cd9344bbae9a42544e10ddb3) build(ci): use alexfalkowski/go:2.13 (#1012)
+
 ## [v2.50.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.50.0) - 2025-04-25
 
 - [`8376a5a`](https://github.com/alexfalkowski/infraops/commit/8376a5a0ebd5a83b8316202834fd1ea70a07f041) feat(apps): do not load file in memory for static files (#1011)
