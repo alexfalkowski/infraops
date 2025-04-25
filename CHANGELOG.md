@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.53.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.53.1) - 2025-04-25
+
+- [`a984e4d`](https://github.com/alexfalkowski/infraops/commit/a984e4d439287b994d06beb67f2eee591728606e) fix(gh): remove restrictions (#1017)
+
 ## [v2.53.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.53.0) - 2025-04-25
 
 - [`824f462`](https://github.com/alexfalkowski/infraops/commit/824f462ce5905eeb6a0471a2388cb2ae0ef07ffe) feat(gh): add bot to the list of restrictions (#1016)
