@@ -22,7 +22,6 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 				Strict:   pulumi.Bool(true),
 			},
 		},
-		PushRestrictions: pulumi.StringArray{pulumi.String("/" + bot)},
 	}
 	_, err := github.NewBranchProtection(ctx, repo.Name, args)
 
