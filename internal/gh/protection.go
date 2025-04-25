@@ -7,7 +7,6 @@ import (
 
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
 	args := &github.BranchProtectionArgs{
-		EnforceAdmins:         pulumi.Bool(false),
 		Pattern:               pulumi.String(master),
 		RepositoryId:          id,
 		RequiredLinearHistory: pulumi.Bool(true),
@@ -23,6 +22,7 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 				Strict:   pulumi.Bool(true),
 			},
 		},
+		PushRestrictions: pulumi.StringArray{pulumi.String("/" + bot)},
 	}
 	_, err := github.NewBranchProtection(ctx, repo.Name, args)
 
