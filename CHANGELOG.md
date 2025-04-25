@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.52.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.52.0) - 2025-04-25
+
+- [`f86e5c0`](https://github.com/alexfalkowski/infraops/commit/f86e5c01f167ebf80542663f17f247a2db566090) feat(gh): add lean-thoughts-ci collaborator (#1015)
+
 ## [v2.51.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.51.0) - 2025-04-25
 
 - [`96c88a2`](https://github.com/alexfalkowski/infraops/commit/96c88a204d88e82d1ca3a83f1d76cb38004e83f7) feat(gh): do not enforce admins (#1014)
