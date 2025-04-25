@@ -169,6 +169,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
 	args := &github.BranchProtectionArgs{
+		EnforceAdmins:         pulumi.Bool(true),
 		Pattern:               pulumi.String(master),
 		RepositoryId:          id,
 		RequiredLinearHistory: pulumi.Bool(true),
