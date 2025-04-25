@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.50.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.50.0) - 2025-04-25
+
+- [`8376a5a`](https://github.com/alexfalkowski/infraops/commit/8376a5a0ebd5a83b8316202834fd1ea70a07f041) feat(apps): do not load file in memory for static files (#1011)
+- [`d4af497`](https://github.com/alexfalkowski/infraops/commit/d4af4976d3ccf486f6ec0717d543aa167fc8fca5) build(codecov): add config (#1010)
+
 ## [v2.49.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.49.0) - 2025-04-24
 
 - [`664493c`](https://github.com/alexfalkowski/infraops/commit/664493c096748e5bb120421a9d5abe5ebf2ea3e7) feat(apps): remove prefix dups (#1009)
