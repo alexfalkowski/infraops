@@ -5,14 +5,15 @@ balancer_zones: [
     domain: "lean-thoughts.com"
     record_names: ["konfig", "standort", "bezeichner", "web", "monitoror"]
     ip: "68.183.243.110"
+  },
+  {
+    name: "sasha-adventures"
+    domain: "sasha-adventures.com"
+    record_names: ["sasha"]
+    ip: "68.183.243.110"
   }
 ]
 page_zones: [
-  {
-    name:   "sasha-adventures"
-    domain: "sasha-adventures.com"
-    host:   "sasha-adventures.github.io"
-  },
   {
     name:   "afalkowski"
     domain: "afalkowski.com"
