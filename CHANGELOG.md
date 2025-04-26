@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.57.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.57.0) - 2025-04-26
+
+- [`98c12bf`](https://github.com/alexfalkowski/infraops/commit/98c12bf0c19768af0e75fc1b436f907fbb2e3b45) feat(cf): move sasha-adventures to balancer_zones (#1023)
+
 ## [v2.56.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.56.0) - 2025-04-26
 
 - [`fdeecf7`](https://github.com/alexfalkowski/infraops/commit/fdeecf75856b5c99635e558446b61dfe8a6cd2e6) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.163.0 to 3.165.0 (#1021)
