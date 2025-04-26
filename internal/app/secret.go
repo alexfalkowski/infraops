@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -52,6 +53,6 @@ func secretVolumeMount(name string) cv1.VolumeMountArgs {
 	return cv1.VolumeMountArgs{
 		Name:      pulumi.String(name + secretSuffix),
 		MountPath: pulumi.String("/etc/secrets/" + name),
-		ReadOnly:  pulumi.Bool(true),
+		ReadOnly:  inputs.Yes,
 	}
 }

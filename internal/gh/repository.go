@@ -1,6 +1,7 @@
 package gh
 
 import (
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -16,16 +17,16 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 	}
 
 	args := &github.RepositoryArgs{
-		AllowMergeCommit:    pulumi.Bool(false),
-		AllowRebaseMerge:    pulumi.Bool(false),
-		AllowUpdateBranch:   pulumi.Bool(true),
-		AutoInit:            pulumi.Bool(true),
-		DeleteBranchOnMerge: pulumi.Bool(true),
+		AllowMergeCommit:    inputs.No,
+		AllowRebaseMerge:    inputs.No,
+		AllowUpdateBranch:   inputs.Yes,
+		AutoInit:            inputs.Yes,
+		DeleteBranchOnMerge: inputs.Yes,
 		Description:         pulumi.String(repo.Description),
-		HasDownloads:        pulumi.Bool(true),
-		HasIssues:           pulumi.Bool(true),
-		HasProjects:         pulumi.Bool(true),
-		HasWiki:             pulumi.Bool(true),
+		HasDownloads:        inputs.Yes,
+		HasIssues:           inputs.Yes,
+		HasProjects:         inputs.Yes,
+		HasWiki:             inputs.Yes,
 		HomepageUrl:         pulumi.String(repo.HomepageURL),
 		IsTemplate:          pulumi.Bool(repo.IsTemplate),
 		Name:                pulumi.String(repo.Name),
@@ -33,17 +34,17 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		Pages:               pages(repo),
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
-				Status: pulumi.String("enabled"),
+				Status: inputs.Enabled,
 			},
 			SecretScanningPushProtection: &github.RepositorySecurityAndAnalysisSecretScanningPushProtectionArgs{
-				Status: pulumi.String("enabled"),
+				Status: inputs.Enabled,
 			},
 		},
 		SquashMergeCommitTitle: pulumi.String("PR_TITLE"),
 		Template:               t,
 		Topics:                 pulumi.ToStringArray(repo.Topics),
 		Visibility:             pulumi.String(repo.Visibility),
-		VulnerabilityAlerts:    pulumi.Bool(true),
+		VulnerabilityAlerts:    inputs.Yes,
 	}
 
 	return github.NewRepository(ctx, repo.Name, args)
