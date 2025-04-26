@@ -3,12 +3,13 @@ version: 2.1
 setup: true
 
 orbs:
-  path_filtering: circleci/path-filtering@1.0.0
+  path_filtering: circleci/path-filtering@1.2.0
 
 workflows:
   filter:
     jobs:
       - path_filtering/filter:
+          tag: "3.9"
           mapping: |
             .circleci/.* gh true
             area/gh/.* gh true
