@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -51,8 +52,8 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		Name:    pulumi.String(name),
 		Content: pulumi.String(zone.Host),
 		ZoneId:  z.ID(),
-		Proxied: pulumi.Bool(true),
-		Ttl:     pulumi.Int(1),
+		Proxied: inputs.Yes,
+		Ttl:     inputs.One,
 	}
 
 	_, err = cloudflare.NewRecord(ctx, name, r)

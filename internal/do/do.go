@@ -3,6 +3,7 @@ package do
 import (
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	"github.com/pulumi/pulumi-digitalocean/sdk/v4/go/digitalocean"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -58,7 +59,7 @@ func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Cluster) (*digit
 			StartTime: pulumi.String("23:00"),
 		},
 		Name:                          pulumi.String(p.Name),
-		DestroyAllAssociatedResources: pulumi.Bool(true),
+		DestroyAllAssociatedResources: inputs.Yes,
 		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
 			NodeCount: pulumi.Int(2),
 			Name:      pulumi.String(p.Name),

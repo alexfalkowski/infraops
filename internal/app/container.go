@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -44,7 +45,7 @@ func initContainers(app *App) cv1.ContainerArray {
 			Env:          cv1.EnvVarArray{serviceID()},
 			Resources:    createResources(app),
 			SecurityContext: cv1.SecurityContextArgs{
-				ReadOnlyRootFilesystem: pulumi.Bool(true),
+				ReadOnlyRootFilesystem: inputs.Yes,
 			},
 		},
 	}
@@ -102,7 +103,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 		StartupProbe:   tcpProbe(),
 		Resources:      createResources(app),
 		SecurityContext: cv1.SecurityContextArgs{
-			ReadOnlyRootFilesystem: pulumi.Bool(true),
+			ReadOnlyRootFilesystem: inputs.Yes,
 		},
 	}
 
@@ -123,7 +124,7 @@ func externalContainer(app *App) cv1.ContainerArray {
 		StartupProbe:   tcpProbe(),
 		Resources:      createResources(app),
 		SecurityContext: cv1.SecurityContextArgs{
-			ReadOnlyRootFilesystem: pulumi.Bool(true),
+			ReadOnlyRootFilesystem: inputs.Yes,
 		},
 	}
 

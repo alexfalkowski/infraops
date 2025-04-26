@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	av1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/apps/v1"
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
@@ -18,8 +19,8 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 			Replicas: pulumi.Int(3),
 			Strategy: av1.DeploymentStrategyArgs{
 				RollingUpdate: av1.RollingUpdateDeploymentArgs{
-					MaxSurge:       pulumi.Int(1),
-					MaxUnavailable: pulumi.Int(1),
+					MaxSurge:       inputs.One,
+					MaxUnavailable: inputs.One,
 				},
 			},
 			Template: cv1.PodTemplateSpecArgs{

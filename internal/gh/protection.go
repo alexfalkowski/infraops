@@ -1,6 +1,7 @@
 package gh
 
 import (
+	"github.com/alexfalkowski/infraops/internal/inputs"
 	"github.com/pulumi/pulumi-github/sdk/v5/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -9,17 +10,17 @@ func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Reposito
 	args := &github.BranchProtectionArgs{
 		Pattern:               pulumi.String(master),
 		RepositoryId:          id,
-		RequiredLinearHistory: pulumi.Bool(true),
+		RequiredLinearHistory: inputs.Yes,
 		RequiredPullRequestReviews: github.BranchProtectionRequiredPullRequestReviewArray{
 			&github.BranchProtectionRequiredPullRequestReviewArgs{
-				DismissStaleReviews:          pulumi.Bool(true),
+				DismissStaleReviews:          inputs.Yes,
 				RequiredApprovingReviewCount: pulumi.Int(0),
 			},
 		},
 		RequiredStatusChecks: github.BranchProtectionRequiredStatusCheckArray{
 			&github.BranchProtectionRequiredStatusCheckArgs{
 				Contexts: pulumi.ToStringArray(repo.Checks),
-				Strict:   pulumi.Bool(true),
+				Strict:   inputs.Yes,
 			},
 		},
 	}
