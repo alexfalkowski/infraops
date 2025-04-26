@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.56.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.56.0) - 2025-04-26
+
+- [`fdeecf7`](https://github.com/alexfalkowski/infraops/commit/fdeecf75856b5c99635e558446b61dfe8a6cd2e6) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.163.0 to 3.165.0 (#1021)
+- [`9ddb46c`](https://github.com/alexfalkowski/infraops/commit/9ddb46c2328f21a83756fe5f5f495cb6dffc4f49) build(ci): use circleci/path-filtering@1.2.0 (#1022)
+
 ## [v2.55.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.55.0) - 2025-04-26
 
 - [`bc51a20`](https://github.com/alexfalkowski/infraops/commit/bc51a20e89762212571f4398fefee340c123048f) feat(pulumi): use common inputs to reduce duplication (#1020)
