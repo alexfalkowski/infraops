@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.55.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.55.0) - 2025-04-26
+
+- [`bc51a20`](https://github.com/alexfalkowski/infraops/commit/bc51a20e89762212571f4398fefee340c123048f) feat(pulumi): use common inputs to reduce duplication (#1020)
+- [`fdfb44b`](https://github.com/alexfalkowski/infraops/commit/fdfb44bd3c41dd68ac614501f6d9520aa239c4e1) build(ci): use alexfalkowski/k8s:1.41 (#1019)
+
 ## [v2.54.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.54.0) - 2025-04-25
 
 - [`d27debb`](https://github.com/alexfalkowski/infraops/commit/d27debba3bb3f66073b553289f99e6798b1a7b1f) feat(apps): remove unneeded func (#1018)
