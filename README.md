@@ -167,10 +167,15 @@ The original idea was inspired from https://github.com/dirien/pulumi-github.
 
 There is a caveat when creating repositories, that requires a 2 step process.
 
-The first step is to have:
+##### Pages
+
+Pages can only be created after the repository is present.
+
+So, the first step is to have:
 
 ```go
 enable_pages: false
+
 ```
 
 Then the second PR, we set it to:
@@ -179,7 +184,28 @@ Then the second PR, we set it to:
 enable_pages: true
 ```
 
-The reason for this is that there seems to be a timing issue with creating the `master` branch.
+> [!NOTE]
+> The reason for this is that there seems to be a timing issue with creating the `master` branch.
+
+##### Collaborators
+
+As with pages the repository needs to be present.
+
+So, the first step is to have:
+
+```go
+enable_collaborators: false
+
+```
+
+Then the second PR, we set it to:
+
+```go
+enable_collaborators: true
+```
+
+> [!NOTE]
+> This also seems like a timing issue, as rerunning the pipeline fixes it.
 
 #### Configuration
 
@@ -199,6 +225,7 @@ repositories: [
       repository: repository
     }
     enable_pages: true
+    enable_collaborators: true
   }
 ]
 ```
