@@ -178,7 +178,7 @@ repositories: [
 		  owner: "alexfalkowski"
 			repository: "go-client-template"
 		}
-		enable_pages: false
+		enable_pages: true
     enable_collaborators: true
   },
   {
@@ -191,7 +191,7 @@ repositories: [
 		  owner: "alexfalkowski"
 			repository: "go-service-template"
 		}
-		enable_pages: false
+		enable_pages: true
     enable_collaborators: true
   }
 ]
