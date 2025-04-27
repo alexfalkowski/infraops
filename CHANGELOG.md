@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.64.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.64.0) - 2025-04-27
+
+- [`83e178b`](https://github.com/alexfalkowski/infraops/commit/83e178bf65ae8994e952d615e05b564508262134) feat(apps): use browser history for web (#1031)
+
 ## [v2.63.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.63.0) - 2025-04-27
 
 - [`cf29b4b`](https://github.com/alexfalkowski/infraops/commit/cf29b4b0c5348bbb7ac75b0ef642b7952222ab5d) feat(apps): remove home for web (#1030)
