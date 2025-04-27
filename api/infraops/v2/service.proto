@@ -59,9 +59,10 @@ message Repository {
   bool enable_pages = 5;
   bool is_template = 6;
   bool archived = 7;
-  Template template = 8;
-  repeated string topics = 9;
-  repeated string checks = 10;
+  bool enable_collaborators = 8;
+  Template template = 9;
+  repeated string topics = 10;
+  repeated string checks = 11;
 }
 
 // Github specific configuration.

@@ -7,6 +7,7 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+		enable_collaborators: true
   },
   {
     name: "nonnative"
@@ -15,6 +16,7 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "go-service"
@@ -23,6 +25,7 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "go-health"
@@ -31,6 +34,7 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "infraops"
@@ -39,6 +43,7 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "bin"
@@ -47,6 +52,7 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "app-config"
@@ -55,6 +61,7 @@ repositories: [
 		checks: ["ci/circleci: verify-config"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "docker"
@@ -64,6 +71,7 @@ repositories: [
 		checks: ["ci/circleci: lint", "ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "go-client-template"
@@ -77,6 +85,7 @@ repositories: [
 		}
 		is_template: true
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "go-service-template"
@@ -86,6 +95,7 @@ repositories: [
 		visibility: "public"
 		is_template: true
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "bezeichner"
@@ -94,6 +104,7 @@ repositories: [
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "konfigctl"
@@ -106,6 +117,7 @@ repositories: [
 			repository: "go-client-template"
 		}
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "konfig"
@@ -114,6 +126,7 @@ repositories: [
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coverage"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "migrieren"
@@ -122,6 +135,7 @@ repositories: [
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "standort"
@@ -130,6 +144,7 @@ repositories: [
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "status"
@@ -138,6 +153,7 @@ repositories: [
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "web"
@@ -150,6 +166,7 @@ repositories: [
 			repository: "go-service-template"
 		}
 		enable_pages: true
+    enable_collaborators: true
   },
   {
     name: "sashactl"
@@ -162,6 +179,7 @@ repositories: [
 			repository: "go-client-template"
 		}
 		enable_pages: false
+    enable_collaborators: true
   },
   {
     name: "sasha"
@@ -174,5 +192,6 @@ repositories: [
 			repository: "go-service-template"
 		}
 		enable_pages: false
+    enable_collaborators: true
   }
 ]

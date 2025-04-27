@@ -40,16 +40,17 @@ type (
 
 	// Repository for gh.
 	Repository struct {
-		Template    *Template
-		Name        string
-		Description string
-		HomepageURL string
-		Visibility  Visibility
-		Topics      []string
-		Checks      Checks
-		IsTemplate  bool
-		EnablePages bool
-		Archived    bool
+		Template            *Template
+		Name                string
+		Description         string
+		HomepageURL         string
+		Visibility          Visibility
+		Topics              []string
+		Checks              Checks
+		IsTemplate          bool
+		EnablePages         bool
+		Archived            bool
+		EnableCollaborators bool
 	}
 )
 
@@ -82,15 +83,16 @@ func ReadConfiguration(path string) (*v2.Github, error) {
 // ConvertRepository converts a v2.Repository to a Repository.
 func ConvertRepository(r *v2.Repository) *Repository {
 	repository := &Repository{
-		Name:        r.GetName(),
-		Description: r.GetDescription(),
-		HomepageURL: r.GetHomepageUrl(),
-		Visibility:  Visibility(r.GetVisibility()),
-		Topics:      r.GetTopics(),
-		Checks:      Checks(r.GetChecks()),
-		IsTemplate:  r.GetIsTemplate(),
-		EnablePages: r.GetEnablePages(),
-		Archived:    r.GetArchived(),
+		Name:                r.GetName(),
+		Description:         r.GetDescription(),
+		HomepageURL:         r.GetHomepageUrl(),
+		Visibility:          Visibility(r.GetVisibility()),
+		Topics:              r.GetTopics(),
+		Checks:              Checks(r.GetChecks()),
+		IsTemplate:          r.GetIsTemplate(),
+		EnablePages:         r.GetEnablePages(),
+		Archived:            r.GetArchived(),
+		EnableCollaborators: r.GetEnableCollaborators(),
 	}
 
 	if template := r.GetTemplate(); template != nil {

@@ -6,6 +6,10 @@ import (
 )
 
 func collaborator(ctx *pulumi.Context, repo *Repository) error {
+	if !repo.EnableCollaborators {
+		return nil
+	}
+
 	args := &github.RepositoryCollaboratorArgs{
 		Permission: pulumi.String("admin"),
 		Repository: pulumi.String("alexfalkowski/" + repo.Name),

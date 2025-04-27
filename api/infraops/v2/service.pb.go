@@ -421,19 +421,20 @@ func (x *Template) GetRepository() string {
 
 // Repository represents the repository to be created.
 type Repository struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	HomepageUrl   string                 `protobuf:"bytes,3,opt,name=homepage_url,json=homepageUrl,proto3" json:"homepage_url,omitempty"`
-	Visibility    string                 `protobuf:"bytes,4,opt,name=visibility,proto3" json:"visibility,omitempty"`
-	EnablePages   bool                   `protobuf:"varint,5,opt,name=enable_pages,json=enablePages,proto3" json:"enable_pages,omitempty"`
-	IsTemplate    bool                   `protobuf:"varint,6,opt,name=is_template,json=isTemplate,proto3" json:"is_template,omitempty"`
-	Archived      bool                   `protobuf:"varint,7,opt,name=archived,proto3" json:"archived,omitempty"`
-	Template      *Template              `protobuf:"bytes,8,opt,name=template,proto3" json:"template,omitempty"`
-	Topics        []string               `protobuf:"bytes,9,rep,name=topics,proto3" json:"topics,omitempty"`
-	Checks        []string               `protobuf:"bytes,10,rep,name=checks,proto3" json:"checks,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Name                string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description         string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	HomepageUrl         string                 `protobuf:"bytes,3,opt,name=homepage_url,json=homepageUrl,proto3" json:"homepage_url,omitempty"`
+	Visibility          string                 `protobuf:"bytes,4,opt,name=visibility,proto3" json:"visibility,omitempty"`
+	EnablePages         bool                   `protobuf:"varint,5,opt,name=enable_pages,json=enablePages,proto3" json:"enable_pages,omitempty"`
+	IsTemplate          bool                   `protobuf:"varint,6,opt,name=is_template,json=isTemplate,proto3" json:"is_template,omitempty"`
+	Archived            bool                   `protobuf:"varint,7,opt,name=archived,proto3" json:"archived,omitempty"`
+	EnableCollaborators bool                   `protobuf:"varint,8,opt,name=enable_collaborators,json=enableCollaborators,proto3" json:"enable_collaborators,omitempty"`
+	Template            *Template              `protobuf:"bytes,9,opt,name=template,proto3" json:"template,omitempty"`
+	Topics              []string               `protobuf:"bytes,10,rep,name=topics,proto3" json:"topics,omitempty"`
+	Checks              []string               `protobuf:"bytes,11,rep,name=checks,proto3" json:"checks,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *Repository) Reset() {
@@ -511,6 +512,13 @@ func (x *Repository) GetIsTemplate() bool {
 func (x *Repository) GetArchived() bool {
 	if x != nil {
 		return x.Archived
+	}
+	return false
+}
+
+func (x *Repository) GetEnableCollaborators() bool {
+	if x != nil {
+		return x.EnableCollaborators
 	}
 	return false
 }
@@ -983,7 +991,7 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x05owner\x18\x01 \x01(\tR\x05owner\x12\x1e\n" +
 	"\n" +
 	"repository\x18\x02 \x01(\tR\n" +
-	"repository\"\xc8\x02\n" +
+	"repository\"\xfb\x02\n" +
 	"\n" +
 	"Repository\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
@@ -996,10 +1004,11 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\vis_template\x18\x06 \x01(\bR\n" +
 	"isTemplate\x12\x1a\n" +
 	"\barchived\x18\a \x01(\bR\barchived\x121\n" +
-	"\btemplate\x18\b \x01(\v2\x15.infraops.v2.TemplateR\btemplate\x12\x16\n" +
-	"\x06topics\x18\t \x03(\tR\x06topics\x12\x16\n" +
-	"\x06checks\x18\n" +
-	" \x03(\tR\x06checks\"_\n" +
+	"\x14enable_collaborators\x18\b \x01(\bR\x13enableCollaborators\x121\n" +
+	"\btemplate\x18\t \x01(\v2\x15.infraops.v2.TemplateR\btemplate\x12\x16\n" +
+	"\x06topics\x18\n" +
+	" \x03(\tR\x06topics\x12\x16\n" +
+	"\x06checks\x18\v \x03(\tR\x06checks\"_\n" +
 	"\x06Github\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12;\n" +
 	"\frepositories\x18\x02 \x03(\v2\x17.infraops.v2.RepositoryR\frepositories\"m\n" +
