@@ -80,7 +80,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     init_version: "0.267.0"
-    version: "0.291.0"
+    version: "0.292.0"
     config_version: "1.6.0"
     resources: {
       cpu: {
