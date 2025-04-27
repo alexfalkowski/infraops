@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.59.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.59.0) - 2025-04-27
+
+- [`dafb898`](https://github.com/alexfalkowski/infraops/commit/dafb89896407f1560a3add37e57e918cf23cd374) feat(gh): add enable_collaborators as two step process (#1025)
+
 ## [v2.58.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.58.0) - 2025-04-27
 
 - [`6fd80ee`](https://github.com/alexfalkowski/infraops/commit/6fd80eef3eb5788a9f5322136051fe3b973a094d) feat(gh): add sasha repos (#1024)
