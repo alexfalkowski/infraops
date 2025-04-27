@@ -99,6 +99,31 @@ applications: [
     secrets: ["otlp", "konfig"]
   },
   {
+    id: "f115d2ee-0700-47be-a423-830bee7750b2"
+    kind: "internal"
+    name: "sasha"
+    namespace: "lean"
+    domain: "sasha-adventures.com"
+    init_version: "0.267.0"
+    version: "0.2.0"
+    config_version: "1.0.0"
+    resources: {
+      cpu: {
+        min: "125m"
+        max: "250m"
+      }
+      memory: {
+        min: "64Mi"
+        max: "128Mi"
+      }
+      storage: {
+        min: "1Gi"
+        max: "2Gi"
+      }
+    }
+    secrets: ["otlp", "konfig"]
+  },
+  {
     kind: "external"
     name: "monitoror"
     namespace: "lean"
