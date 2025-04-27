@@ -80,7 +80,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     init_version: "0.267.0"
-    version: "0.294.0"
+    version: "0.295.0"
     config_version: "1.6.0"
     resources: {
       cpu: {
@@ -105,7 +105,7 @@ applications: [
     namespace: "lean"
     domain: "sasha-adventures.com"
     init_version: "0.267.0"
-    version: "0.4.0"
+    version: "0.5.0"
     config_version: "1.0.0"
     resources: {
       cpu: {
