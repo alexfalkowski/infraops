@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.67.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.67.0) - 2025-04-27
+
+- [`08d1c66`](https://github.com/alexfalkowski/infraops/commit/08d1c660e5192f130f8bcdfb34961782e861875b) feat(apps): rename context to meta (#1034)
+
 ## [v2.66.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.66.0) - 2025-04-27
 
 - [`fd17b15`](https://github.com/alexfalkowski/infraops/commit/fd17b15b30f587946f2c8e1c6e75d216222473ad) feat(apps): add ability to route images (#1033)
