@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.72.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.72.0) - 2025-04-28
+
+- [`d3a04f4`](https://github.com/alexfalkowski/infraops/commit/d3a04f4cbb2f11889bf3877917cfd48e7de62cda) feat(apps): static files are only accesible through get (#1040)
+
 ## [v2.71.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.71.0) - 2025-04-28
 
 - [`e693e82`](https://github.com/alexfalkowski/infraops/commit/e693e82d55673f1fd5aa55fb2af16ca780b7c691) feat(apps): check both templates are set for mvc (#1039)
