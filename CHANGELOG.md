@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.71.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.71.0) - 2025-04-28
+
+- [`e693e82`](https://github.com/alexfalkowski/infraops/commit/e693e82d55673f1fd5aa55fb2af16ca780b7c691) feat(apps): check both templates are set for mvc (#1039)
+
 ## [v2.70.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.70.0) - 2025-04-28
 
 - [`273bfe2`](https://github.com/alexfalkowski/infraops/commit/273bfe23226c5e9b393200be77ebae70ae1d37ff) feat(apps): use partial views with htmx (#1038)
