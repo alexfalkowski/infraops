@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.69.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.69.0) - 2025-04-28
+
+- [`bfeb5ea`](https://github.com/alexfalkowski/infraops/commit/bfeb5ea4a324aab454c5e89bba6408289a8d3316) feat(apps): add layouts for mvc (#1037)
+- [`423ddd8`](https://github.com/alexfalkowski/infraops/commit/423ddd80ada9db181164b602021c0a8961b9f978) build(deps): bump bin from `b0fd780` to `926a71b` (#1036)
+
 ## [v2.68.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.68.0) - 2025-04-28
 
 - [`6a9f9d9`](https://github.com/alexfalkowski/infraops/commit/6a9f9d9468b71df1d54951c363cd1c86c253d2ce) feat(apps): remove dup in mvc (#1035)
