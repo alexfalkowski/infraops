@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.68.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.68.0) - 2025-04-28
+
+- [`6a9f9d9`](https://github.com/alexfalkowski/infraops/commit/6a9f9d9468b71df1d54951c363cd1c86c253d2ce) feat(apps): remove dup in mvc (#1035)
+
 ## [v2.67.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.67.0) - 2025-04-27
 
 - [`08d1c66`](https://github.com/alexfalkowski/infraops/commit/08d1c660e5192f130f8bcdfb34961782e861875b) feat(apps): rename context to meta (#1034)
