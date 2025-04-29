@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.74.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.74.0) - 2025-04-29
+
+- [`26169e1`](https://github.com/alexfalkowski/infraops/commit/26169e1a69520fd869adbf6a9367f905b47620cc) feat(gh): update github.com/pulumi/pulumi-github/sdk/v6 to v6.7.0 (#1044)
+
 ## [v2.73.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.73.0) - 2025-04-29
 
 - [`55d4589`](https://github.com/alexfalkowski/infraops/commit/55d4589d79a7a2faa06426a98eb21d5bda669799) feat(kubescore): apply findings from 'kubescape scan workload' (#1042)
