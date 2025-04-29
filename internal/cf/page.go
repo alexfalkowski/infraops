@@ -5,7 +5,7 @@ import (
 
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/inputs"
-	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
+	"github.com/pulumi/pulumi-cloudflare/sdk/v6/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -27,22 +27,8 @@ func ConvertPageZone(z *v2.PageZone) *PageZone {
 
 // CreatePageZone for cf.
 func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
-	args := &cloudflare.ZoneArgs{
-		AccountId: account,
-		Plan:      pulumi.String("free"),
-		Zone:      pulumi.String(zone.Domain),
-	}
-
-	z, err := cloudflare.NewZone(ctx, zone.Name, args)
+	z, err := newZone(ctx, zone.Name, zone.Domain, "strict")
 	if err != nil {
-		return err
-	}
-
-	if err := settings(ctx, zone.Name, "strict", z); err != nil {
-		return err
-	}
-
-	if err := dnssec(ctx, zone.Name, z); err != nil {
 		return err
 	}
 
@@ -53,7 +39,7 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		Content: pulumi.String(zone.Host),
 		ZoneId:  z.ID(),
 		Proxied: inputs.Yes,
-		Ttl:     inputs.One,
+		Ttl:     inputs.Automatic,
 	}
 
 	_, err = cloudflare.NewRecord(ctx, name, r)
