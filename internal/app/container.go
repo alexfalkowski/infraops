@@ -45,7 +45,8 @@ func initContainers(app *App) cv1.ContainerArray {
 			Env:          cv1.EnvVarArray{serviceID()},
 			Resources:    createResources(app),
 			SecurityContext: cv1.SecurityContextArgs{
-				ReadOnlyRootFilesystem: inputs.Yes,
+				ReadOnlyRootFilesystem:   inputs.Yes,
+				AllowPrivilegeEscalation: inputs.No,
 			},
 		},
 	}
@@ -103,7 +104,8 @@ func internalContainer(app *App) cv1.ContainerArray {
 		StartupProbe:   tcpProbe(),
 		Resources:      createResources(app),
 		SecurityContext: cv1.SecurityContextArgs{
-			ReadOnlyRootFilesystem: inputs.Yes,
+			ReadOnlyRootFilesystem:   inputs.Yes,
+			AllowPrivilegeEscalation: inputs.No,
 		},
 	}
 
@@ -124,7 +126,8 @@ func externalContainer(app *App) cv1.ContainerArray {
 		StartupProbe:   tcpProbe(),
 		Resources:      createResources(app),
 		SecurityContext: cv1.SecurityContextArgs{
-			ReadOnlyRootFilesystem: inputs.Yes,
+			ReadOnlyRootFilesystem:   inputs.Yes,
+			AllowPrivilegeEscalation: inputs.No,
 		},
 	}
 
