@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.73.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.73.0) - 2025-04-29
+
+- [`55d4589`](https://github.com/alexfalkowski/infraops/commit/55d4589d79a7a2faa06426a98eb21d5bda669799) feat(kubescore): apply findings from 'kubescape scan workload' (#1042)
+- [`bc59cb0`](https://github.com/alexfalkowski/infraops/commit/bc59cb021a9ec7e9108e8293b4d93201c69778ec) build(ci): use alexfalkowski/k8s:1.42 (#1041)
+
 ## [v2.72.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.72.0) - 2025-04-28
 
 - [`d3a04f4`](https://github.com/alexfalkowski/infraops/commit/d3a04f4cbb2f11889bf3877917cfd48e7de62cda) feat(apps): static files are only accesible through get (#1040)
