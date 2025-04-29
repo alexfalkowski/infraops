@@ -27,18 +27,8 @@ func ConvertPageZone(z *v2.PageZone) *PageZone {
 
 // CreatePageZone for cf.
 func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
-	args := &cloudflare.ZoneArgs{
-		Account: cloudflare.ZoneAccountArgs{Id: account},
-		Name:    pulumi.String(zone.Domain),
-		Type:    pulumi.String("full"),
-	}
-
-	z, err := cloudflare.NewZone(ctx, zone.Name, args)
+	z, err := createZone(ctx, zone.Name, zone.Domain, "strict")
 	if err != nil {
-		return err
-	}
-
-	if err := settings(ctx, zone.Name, "strict", z); err != nil {
 		return err
 	}
 

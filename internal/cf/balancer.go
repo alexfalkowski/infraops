@@ -29,18 +29,8 @@ func ConvertBalancerZone(z *v2.BalancerZone) *BalancerZone {
 
 // CreateBalancerZone for cf.
 func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
-	args := &cloudflare.ZoneArgs{
-		Account: cloudflare.ZoneAccountArgs{Id: account},
-		Name:    pulumi.String(zone.Domain),
-		Type:    pulumi.String("full"),
-	}
-
-	z, err := cloudflare.NewZone(ctx, zone.Name, args)
+	z, err := createZone(ctx, zone.Name, zone.Domain, "full")
 	if err != nil {
-		return err
-	}
-
-	if err := settings(ctx, zone.Name, "full", z); err != nil {
 		return err
 	}
 
