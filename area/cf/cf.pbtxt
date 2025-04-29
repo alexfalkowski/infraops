@@ -20,3 +20,13 @@ page_zones: [
     host:   "alexfalkowski.github.io"
   }
 ]
+buckets: [
+  {
+    name: "sasha-cms"
+    region: "EEUR"
+    zone: {
+      id: "9e3c6c5da8f6e067f960629d1d099e93"
+      domain: "cms.sasha-adventures.com"
+    }
+  }
+]

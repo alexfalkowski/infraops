@@ -727,18 +727,72 @@ func (x *PageZone) GetHost() string {
 	return ""
 }
 
-// Bucket defines an R2 bucket with a region (location, e.g EEUR)
+// BucketZone defines the zone id and a domain to use.
+type BucketZone struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Domain        string                 `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BucketZone) Reset() {
+	*x = BucketZone{}
+	mi := &file_infraops_v2_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BucketZone) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BucketZone) ProtoMessage() {}
+
+func (x *BucketZone) ProtoReflect() protoreflect.Message {
+	mi := &file_infraops_v2_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BucketZone.ProtoReflect.Descriptor instead.
+func (*BucketZone) Descriptor() ([]byte, []int) {
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *BucketZone) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *BucketZone) GetDomain() string {
+	if x != nil {
+		return x.Domain
+	}
+	return ""
+}
+
+// Bucket defines an R2 bucket with name, region (location, e.g EEUR) and a zone.
 type Bucket struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Region        string                 `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
+	Zone          *BucketZone            `protobuf:"bytes,3,opt,name=zone,proto3,oneof" json:"zone,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Bucket) Reset() {
 	*x = Bucket{}
-	mi := &file_infraops_v2_service_proto_msgTypes[10]
+	mi := &file_infraops_v2_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -750,7 +804,7 @@ func (x *Bucket) String() string {
 func (*Bucket) ProtoMessage() {}
 
 func (x *Bucket) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[10]
+	mi := &file_infraops_v2_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -763,7 +817,7 @@ func (x *Bucket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Bucket.ProtoReflect.Descriptor instead.
 func (*Bucket) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{10}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Bucket) GetName() string {
@@ -780,6 +834,13 @@ func (x *Bucket) GetRegion() string {
 	return ""
 }
 
+func (x *Bucket) GetZone() *BucketZone {
+	if x != nil {
+		return x.Zone
+	}
+	return nil
+}
+
 // Cloudflare specific configuration.
 type Cloudflare struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -793,7 +854,7 @@ type Cloudflare struct {
 
 func (x *Cloudflare) Reset() {
 	*x = Cloudflare{}
-	mi := &file_infraops_v2_service_proto_msgTypes[11]
+	mi := &file_infraops_v2_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -805,7 +866,7 @@ func (x *Cloudflare) String() string {
 func (*Cloudflare) ProtoMessage() {}
 
 func (x *Cloudflare) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[11]
+	mi := &file_infraops_v2_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -818,7 +879,7 @@ func (x *Cloudflare) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cloudflare.ProtoReflect.Descriptor instead.
 func (*Cloudflare) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{11}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Cloudflare) GetVersion() string {
@@ -860,7 +921,7 @@ type Cluster struct {
 
 func (x *Cluster) Reset() {
 	*x = Cluster{}
-	mi := &file_infraops_v2_service_proto_msgTypes[12]
+	mi := &file_infraops_v2_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -872,7 +933,7 @@ func (x *Cluster) String() string {
 func (*Cluster) ProtoMessage() {}
 
 func (x *Cluster) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[12]
+	mi := &file_infraops_v2_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -885,7 +946,7 @@ func (x *Cluster) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cluster.ProtoReflect.Descriptor instead.
 func (*Cluster) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{12}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *Cluster) GetName() string {
@@ -913,7 +974,7 @@ type DigitalOcean struct {
 
 func (x *DigitalOcean) Reset() {
 	*x = DigitalOcean{}
-	mi := &file_infraops_v2_service_proto_msgTypes[13]
+	mi := &file_infraops_v2_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -925,7 +986,7 @@ func (x *DigitalOcean) String() string {
 func (*DigitalOcean) ProtoMessage() {}
 
 func (x *DigitalOcean) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[13]
+	mi := &file_infraops_v2_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -938,7 +999,7 @@ func (x *DigitalOcean) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DigitalOcean.ProtoReflect.Descriptor instead.
 func (*DigitalOcean) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{13}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *DigitalOcean) GetVersion() string {
@@ -1021,9 +1082,15 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
 	"\x06domain\x18\x02 \x01(\tR\x06domain\x12\x12\n" +
 	"\x04host\x18\x03 \x01(\tR\x04host\"4\n" +
+	"\n" +
+	"BucketZone\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
+	"\x06domain\x18\x02 \x01(\tR\x06domain\"o\n" +
 	"\x06Bucket\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
-	"\x06region\x18\x02 \x01(\tR\x06region\"\xcd\x01\n" +
+	"\x06region\x18\x02 \x01(\tR\x06region\x120\n" +
+	"\x04zone\x18\x03 \x01(\v2\x17.infraops.v2.BucketZoneH\x00R\x04zone\x88\x01\x01B\a\n" +
+	"\x05_zone\"\xcd\x01\n" +
 	"\n" +
 	"Cloudflare\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12@\n" +
@@ -1050,7 +1117,7 @@ func file_infraops_v2_service_proto_rawDescGZIP() []byte {
 	return file_infraops_v2_service_proto_rawDescData
 }
 
-var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_infraops_v2_service_proto_goTypes = []any{
 	(*Range)(nil),        // 0: infraops.v2.Range
 	(*Resources)(nil),    // 1: infraops.v2.Resources
@@ -1062,10 +1129,11 @@ var file_infraops_v2_service_proto_goTypes = []any{
 	(*Github)(nil),       // 7: infraops.v2.Github
 	(*BalancerZone)(nil), // 8: infraops.v2.BalancerZone
 	(*PageZone)(nil),     // 9: infraops.v2.PageZone
-	(*Bucket)(nil),       // 10: infraops.v2.Bucket
-	(*Cloudflare)(nil),   // 11: infraops.v2.Cloudflare
-	(*Cluster)(nil),      // 12: infraops.v2.Cluster
-	(*DigitalOcean)(nil), // 13: infraops.v2.DigitalOcean
+	(*BucketZone)(nil),   // 10: infraops.v2.BucketZone
+	(*Bucket)(nil),       // 11: infraops.v2.Bucket
+	(*Cloudflare)(nil),   // 12: infraops.v2.Cloudflare
+	(*Cluster)(nil),      // 13: infraops.v2.Cluster
+	(*DigitalOcean)(nil), // 14: infraops.v2.DigitalOcean
 }
 var file_infraops_v2_service_proto_depIdxs = []int32{
 	0,  // 0: infraops.v2.Resources.cpu:type_name -> infraops.v2.Range
@@ -1076,15 +1144,16 @@ var file_infraops_v2_service_proto_depIdxs = []int32{
 	3,  // 5: infraops.v2.Kubernetes.applications:type_name -> infraops.v2.Application
 	5,  // 6: infraops.v2.Repository.template:type_name -> infraops.v2.Template
 	6,  // 7: infraops.v2.Github.repositories:type_name -> infraops.v2.Repository
-	8,  // 8: infraops.v2.Cloudflare.balancer_zones:type_name -> infraops.v2.BalancerZone
-	9,  // 9: infraops.v2.Cloudflare.page_zones:type_name -> infraops.v2.PageZone
-	10, // 10: infraops.v2.Cloudflare.buckets:type_name -> infraops.v2.Bucket
-	12, // 11: infraops.v2.DigitalOcean.clusters:type_name -> infraops.v2.Cluster
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	10, // 8: infraops.v2.Bucket.zone:type_name -> infraops.v2.BucketZone
+	8,  // 9: infraops.v2.Cloudflare.balancer_zones:type_name -> infraops.v2.BalancerZone
+	9,  // 10: infraops.v2.Cloudflare.page_zones:type_name -> infraops.v2.PageZone
+	11, // 11: infraops.v2.Cloudflare.buckets:type_name -> infraops.v2.Bucket
+	13, // 12: infraops.v2.DigitalOcean.clusters:type_name -> infraops.v2.Cluster
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_infraops_v2_service_proto_init() }
@@ -1092,13 +1161,14 @@ func file_infraops_v2_service_proto_init() {
 	if File_infraops_v2_service_proto != nil {
 		return
 	}
+	file_infraops_v2_service_proto_msgTypes[11].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_infraops_v2_service_proto_rawDesc), len(file_infraops_v2_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

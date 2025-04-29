@@ -86,10 +86,17 @@ message PageZone {
   string host = 3;
 }
 
-// Bucket defines an R2 bucket with a region (location, e.g EEUR)
+// BucketZone defines the zone id and a domain to use.
+message BucketZone {
+  string id = 1;
+  string domain = 2;
+}
+
+// Bucket defines an R2 bucket with name, region (location, e.g EEUR) and a zone.
 message Bucket {
   string name = 1;
   string region = 2;
+  optional BucketZone zone = 3;
 }
 
 // Cloudflare specific configuration.
