@@ -2,7 +2,7 @@ package cf
 
 import (
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
-	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
+	"github.com/pulumi/pulumi-cloudflare/sdk/v6/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

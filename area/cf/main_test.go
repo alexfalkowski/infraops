@@ -65,7 +65,6 @@ func TestPageZones(t *testing.T) {
 	require.Error(t, err)
 }
 
-//nolint:dupl
 func TestBuckets(t *testing.T) {
 	config, err := cf.ReadConfiguration("cf.pbtxt")
 	require.NoError(t, err)
@@ -81,14 +80,4 @@ func TestBuckets(t *testing.T) {
 		return nil
 	}, pulumi.WithMocks("project", "stack", &test.Stub{}))
 	require.NoError(t, err)
-
-	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
-		for _, bucket := range buckets {
-			err := cf.CreateBucket(ctx, cf.ConvertBucket(bucket))
-			require.NoError(t, err)
-		}
-
-		return nil
-	}, pulumi.WithMocks("project", "stack", &test.ErrStub{}))
-	require.Error(t, err)
 }

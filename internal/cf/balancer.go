@@ -5,7 +5,7 @@ import (
 
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/inputs"
-	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
+	"github.com/pulumi/pulumi-cloudflare/sdk/v6/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -30,9 +30,9 @@ func ConvertBalancerZone(z *v2.BalancerZone) *BalancerZone {
 // CreateBalancerZone for cf.
 func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	args := &cloudflare.ZoneArgs{
-		AccountId: account,
-		Plan:      pulumi.String("free"),
-		Zone:      pulumi.String(zone.Domain),
+		Account: cloudflare.ZoneAccountArgs{Id: account},
+		Name:    pulumi.String(zone.Domain),
+		Type:    pulumi.String("full"),
 	}
 
 	z, err := cloudflare.NewZone(ctx, zone.Name, args)
@@ -41,10 +41,6 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	}
 
 	if err := settings(ctx, zone.Name, "full", z); err != nil {
-		return err
-	}
-
-	if err := dnssec(ctx, zone.Name, z); err != nil {
 		return err
 	}
 
@@ -57,7 +53,7 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 			Content: pulumi.String(zone.IP),
 			ZoneId:  z.ID(),
 			Proxied: inputs.Yes,
-			Ttl:     inputs.One,
+			Ttl:     inputs.Automatic,
 		}
 
 		if _, err := cloudflare.NewRecord(ctx, name, r); err != nil {
