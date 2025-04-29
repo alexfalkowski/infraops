@@ -19,10 +19,4 @@ page_zones: [
     domain: "afalkowski.com"
     host:   "alexfalkowski.github.io"
   }
-],
-buckets: [
-  {
-    name: "test"
-    region: "EEUR"
-  }
 ]

@@ -20,4 +20,7 @@ const (
 
 	// One for inputs.
 	One = pulumi.Int(1)
+
+	// Automatic for inputs.
+	Automatic = pulumi.Float64(1)
 )

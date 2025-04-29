@@ -1,12 +1,13 @@
 package cf
 
 import (
+	"fmt"
 	"os"
 
 	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/internal/config"
 	"github.com/alexfalkowski/infraops/internal/inputs"
-	"github.com/pulumi/pulumi-cloudflare/sdk/v5/go/cloudflare"
+	"github.com/pulumi/pulumi-cloudflare/sdk/v6/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -20,40 +21,34 @@ func ReadConfiguration(path string) (*v2.Cloudflare, error) {
 	return &configuration, err
 }
 
-func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
-	ss := cloudflare.ZoneSettingsOverrideSettingsSecurityHeaderArgs{
-		Enabled:           inputs.Yes,
-		IncludeSubdomains: inputs.Yes,
-		Nosniff:           inputs.Yes,
-		Preload:           inputs.Yes,
-		MaxAge:            pulumi.Int(31536000),
-	}
-
-	st := &cloudflare.ZoneSettingsOverrideSettingsArgs{
-		AlwaysUseHttps:   inputs.On,
-		MinTlsVersion:    pulumi.String("1.2"),
-		CacheLevel:       pulumi.String("aggressive"),
-		Http3:            inputs.On,
-		EmailObfuscation: inputs.Off,
-		H2Prioritization: inputs.On,
-		SecurityHeader:   ss,
-		Ssl:              pulumi.String(ssl),
-	}
-
-	zso := &cloudflare.ZoneSettingsOverrideArgs{
-		ZoneId:   cz.ID(),
-		Settings: st,
-	}
-
-	_, err := cloudflare.NewZoneSettingsOverride(ctx, name, zso)
-
-	return err
+// ZoneSetting is a name value.
+type ZoneSetting struct {
+	Name  string
+	Value pulumi.String
 }
 
-func dnssec(ctx *pulumi.Context, name string, cz *cloudflare.Zone) error {
-	_, err := cloudflare.NewZoneDnssec(ctx, name, &cloudflare.ZoneDnssecArgs{
-		ZoneId: cz.ID(),
-	})
+func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
+	settings := []*ZoneSetting{
+		{Name: "always_use_https", Value: inputs.On},
+		{Name: "min_tls_version", Value: pulumi.String("1.2")},
+		{Name: "cache_level", Value: pulumi.String("aggressive")},
+		{Name: "http3", Value: inputs.On},
+		{Name: "email_obfuscation", Value: inputs.Off},
+		{Name: "h2_prioritization", Value: inputs.On},
+		{Name: "ssl", Value: pulumi.String(ssl)},
+	}
+	for _, setting := range settings {
+		args := &cloudflare.ZoneSettingArgs{
+			SettingId: pulumi.String(setting.Name),
+			Value:     setting.Value,
+			ZoneId:    cz.ID(),
+		}
+		name := fmt.Sprintf("%s_%s", name, setting.Name)
 
-	return err
+		if _, err := cloudflare.NewZoneSetting(ctx, name, args); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
