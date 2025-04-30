@@ -105,7 +105,7 @@ applications: [
     namespace: "lean"
     domain: "sasha-adventures.com"
     init_version: "0.272.0"
-    version: "0.13.1"
+    version: "0.13.2"
     config_version: "1.1.0"
     resources: {
       cpu: {
