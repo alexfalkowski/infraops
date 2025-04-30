@@ -57,7 +57,7 @@ jobs:
       - store_artifacts:
           path: test/reports
       - run: make codecov-upload
-    resource_class: large
+    resource_class: xlarge
   release:
     docker:
       - image: alexfalkowski/release:3.15
@@ -177,7 +177,7 @@ jobs:
           key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/.cache/go-build
-    resource_class: large
+    resource_class: xlarge
   cf_update:
     docker:
       - image: alexfalkowski/k8s:1.42
@@ -212,7 +212,7 @@ jobs:
           key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}
           paths:
             - /home/circleci/.cache/go-build
-    resource_class: large
+    resource_class: xlarge
 
   do_preview:
     docker:
