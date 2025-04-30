@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.76.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.76.0) - 2025-04-30
+
+- [`0ed9501`](https://github.com/alexfalkowski/infraops/commit/0ed9501e3eb33ccfe13debf64866cbbdd539f9e0) feat(deps): bump github.com/pulumi/pulumi-github/sdk/v6 from 6.7.0 to 6.7.1 (#1050)
+- [`40a569b`](https://github.com/alexfalkowski/infraops/commit/40a569be9ae03433c06b2d827b45a85c2893bdea) refactor(cf): extract creating zone (#1048)
+
 ## [v2.75.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.75.0) - 2025-04-29
 
 - [`02b7e6d`](https://github.com/alexfalkowski/infraops/commit/02b7e6dcdbf5297439b4fea09192fadf2be0d833) feat(cf): add ability for public buckets (#1047)
