@@ -356,6 +356,7 @@ jobs:
 
 workflows:
   infraops:
+    when: false
     jobs:
       - build
       - release:
@@ -381,7 +382,7 @@ workflows:
               only: master
 
   cf:
-    when: << pipeline.parameters.cf >>
+    when: false
     jobs:
       - cf_preview:
           context: infraops
