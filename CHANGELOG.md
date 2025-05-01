@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.92.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.92.0) - 2025-05-01
+
+- [`6cf8602`](https://github.com/alexfalkowski/infraops/commit/6cf86024eff46cb701436161781ddaf183c69e44) feat(k8s): update nginx-ingress to v4.12.2 (#1067)
+
 ## [v2.91.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.91.0) - 2025-05-01
 
 - [`66572f1`](https://github.com/alexfalkowski/infraops/commit/66572f180923f8a607b6951f43ce5a192cde05f9) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.166.0 to 3.167.0 (#1066)
