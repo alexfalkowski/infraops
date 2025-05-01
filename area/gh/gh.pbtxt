@@ -62,6 +62,7 @@ repositories: [
 		visibility: "public"
 		enable_pages: true
     enable_collaborators: true
+    archived: true
   },
   {
     name: "docker"
@@ -118,6 +119,7 @@ repositories: [
 		}
 		enable_pages: true
     enable_collaborators: true
+    archived: true
   },
   {
     name: "konfig"
@@ -127,6 +129,7 @@ repositories: [
 		visibility: "public"
 		enable_pages: true
     enable_collaborators: true
+    archived: true
   },
   {
     name: "migrieren"
