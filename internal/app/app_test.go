@@ -26,14 +26,12 @@ func TestApp(t *testing.T) {
 
 func withResource(ctx *pulumi.Context) error {
 	a := &app.App{
-		ID:            "1234",
-		Name:          "test",
-		Namespace:     "test",
-		Domain:        "test.com",
-		InitVersion:   "1.0.0",
-		Version:       "1.0.0",
-		ConfigVersion: "1.0.0",
-		Secrets:       []string{"test"},
+		ID:        "1234",
+		Name:      "test",
+		Namespace: "test",
+		Domain:    "test.com",
+		Version:   "1.0.0",
+		Secrets:   []string{"test"},
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
 			Memory:  &app.Range{Min: "64Mi", Max: "128Mi"},
@@ -46,13 +44,11 @@ func withResource(ctx *pulumi.Context) error {
 
 func withoutResource(ctx *pulumi.Context) error {
 	a := &app.App{
-		ID:            "1234",
-		Name:          "test",
-		Namespace:     "test",
-		Domain:        "test.com",
-		InitVersion:   "1.0.0",
-		Version:       "1.0.0",
-		ConfigVersion: "1.0.0",
+		ID:        "1234",
+		Name:      "test",
+		Namespace: "test",
+		Domain:    "test.com",
+		Version:   "1.0.0",
 	}
 
 	return app.CreateApplication(ctx, a)

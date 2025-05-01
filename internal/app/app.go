@@ -23,15 +23,13 @@ func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 // ConvertApplication converts a v2.Application to an App.
 func ConvertApplication(a *v2.Application) *App {
 	app := &App{
-		ID:            a.GetId(),
-		Kind:          a.GetKind(),
-		Name:          a.GetName(),
-		Namespace:     a.GetNamespace(),
-		Domain:        a.GetDomain(),
-		InitVersion:   a.GetInitVersion(),
-		Version:       a.GetVersion(),
-		ConfigVersion: a.GetConfigVersion(),
-		Secrets:       a.GetSecrets(),
+		ID:        a.GetId(),
+		Kind:      a.GetKind(),
+		Name:      a.GetName(),
+		Namespace: a.GetNamespace(),
+		Domain:    a.GetDomain(),
+		Version:   a.GetVersion(),
+		Secrets:   a.GetSecrets(),
 	}
 
 	resources := a.GetResources()
@@ -92,22 +90,15 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 
 // App to be created.
 type App struct {
-	Resources     *Resources
-	ID            string
-	Name          string
-	Kind          string
-	Namespace     string
-	Domain        string
-	InitVersion   string
-	Version       string
-	ConfigVersion string
-	Secrets       []string
-	Environments  []Environment
-}
-
-// HasConfigVersion for app.
-func (a *App) HasConfigVersion() bool {
-	return a.ConfigVersion != ""
+	Resources    *Resources
+	ID           string
+	Name         string
+	Kind         string
+	Namespace    string
+	Domain       string
+	Version      string
+	Secrets      []string
+	Environments []Environment
 }
 
 // HasResources for app.

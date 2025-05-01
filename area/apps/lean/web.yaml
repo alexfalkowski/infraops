@@ -1,0 +1,31 @@
+environment: production
+health:
+  duration: 1s
+  timeout: 1s
+id:
+  kind: ksuid
+limiter:
+  kind: user-agent
+  tokens: 1000
+  interval: 1s
+telemetry:
+  logger:
+    kind: json
+    level: info
+  metrics:
+    kind: otlp
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
+    headers:
+      Authorization: /etc/secrets/otlp/token
+  tracer:
+    kind: otlp
+    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
+    headers:
+      Authorization: /etc/secrets/otlp/token
+transport:
+  http:
+    retry:
+      attempts: 3
+      backoff: 100ms
+      timeout: 3s
+    timeout: 5s
