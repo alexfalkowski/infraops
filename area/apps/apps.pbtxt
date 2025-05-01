@@ -1,37 +1,12 @@
 version: "2.0"
 applications: [
   {
-    id: "1115c470-ccc9-4daf-8459-ef1e19c40afe"
-    kind: "internal"
-    name: "konfig"
-    namespace: "lean"
-    domain: "lean-thoughts.com"
-    version: "1.559.0"
-    resources: {
-      cpu: {
-        min: "250m"
-        max: "500m"
-      }
-      memory: {
-        min: "128Mi"
-        max: "256Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
-    secrets: ["otlp", "gh", "konfig"]
-  },
-  {
     id: "98968ca0-4ada-4856-8547-210f92b838ea"
     kind: "internal"
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.272.0"
     version: "1.427.0"
-    config_version: "1.15.0"
     resources: {
       cpu: {
         min: "125m"
@@ -46,7 +21,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig"]
+    secrets: ["otlp"]
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
@@ -54,9 +29,7 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.272.0"
     version: "2.424.0"
-    config_version: "1.16.0"
     resources: {
       cpu: {
         min: "125m"
@@ -71,7 +44,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig"]
+    secrets: ["otlp"]
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
@@ -79,9 +52,7 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    init_version: "0.272.0"
     version: "0.305.0"
-    config_version: "1.6.0"
     resources: {
       cpu: {
         min: "125m"
@@ -96,7 +67,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig"]
+    secrets: ["otlp"]
   },
   {
     id: "f115d2ee-0700-47be-a423-830bee7750b2"
@@ -104,9 +75,7 @@ applications: [
     name: "sasha"
     namespace: "lean"
     domain: "sasha-adventures.com"
-    init_version: "0.272.0"
     version: "0.15.0"
-    config_version: "1.1.0"
     resources: {
       cpu: {
         min: "125m"
@@ -121,7 +90,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp", "konfig"]
+    secrets: ["otlp"]
   },
   {
     kind: "external"

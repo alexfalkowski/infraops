@@ -30,12 +30,10 @@ message Application {
   string name = 3;
   string namespace = 4;
   string domain = 5;
-  string init_version = 6;
-  string version = 7;
-  string config_version = 8;
-  Resources resources = 9;
-  repeated string secrets = 10;
-  repeated Environment environments = 11;
+  string version = 6;
+  Resources resources = 7;
+  repeated string secrets = 8;
+  repeated Environment environments = 9;
 }
 
 // Kubernetes applications to be released.

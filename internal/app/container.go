@@ -6,52 +6,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func initContainers(app *App) cv1.ContainerArray {
-	if !app.HasConfigVersion() || app.IsExternal() {
-		return nil
-	}
-
-	name := initName(app)
-	path := configFilePath("konfig", name)
-	volumeMounts := cv1.VolumeMountArray{
-		cv1.VolumeMountArgs{
-			MountPath: pulumi.String(path),
-			Name:      pulumi.String(name),
-			SubPath:   pulumi.String(configFile(name)),
-		},
-		cv1.VolumeMountArgs{
-			Name:      pulumi.String(app.Name),
-			MountPath: pulumi.String(configPath(app.Name)),
-		},
-	}
-
-	for _, s := range app.Secrets {
-		volumeMounts = append(volumeMounts, secretVolumeMount(s))
-	}
-
-	return cv1.ContainerArray{
-		cv1.ContainerArgs{
-			Name:            pulumi.String(name),
-			Image:           initImage("konfigctl", app.InitVersion),
-			ImagePullPolicy: pulumi.String("Always"),
-			Args: pulumi.StringArray{
-				pulumi.String("config"),
-				pulumi.String("-i"),
-				pulumi.String("file:" + path),
-				pulumi.String("-o"),
-				pulumi.String("file:" + configMatchingFilePath(app.Name)),
-			},
-			VolumeMounts: volumeMounts,
-			Env:          cv1.EnvVarArray{serviceID()},
-			Resources:    createResources(app),
-			SecurityContext: cv1.SecurityContextArgs{
-				ReadOnlyRootFilesystem:   inputs.Yes,
-				AllowPrivilegeEscalation: inputs.No,
-			},
-		},
-	}
-}
-
 func containers(app *App) cv1.ContainerArray {
 	if app.IsInternal() {
 		return internalContainer(app)
@@ -61,21 +15,12 @@ func containers(app *App) cv1.ContainerArray {
 }
 
 func internalContainer(app *App) cv1.ContainerArray {
-	volumeMounts := cv1.VolumeMountArray{}
-
-	if app.HasConfigVersion() {
-		v := cv1.VolumeMountArgs{
-			MountPath: pulumi.String(configPath(app.Name)),
-			Name:      pulumi.String(app.Name),
-		}
-		volumeMounts = append(volumeMounts, v)
-	} else {
-		v := cv1.VolumeMountArgs{
+	volumeMounts := cv1.VolumeMountArray{
+		cv1.VolumeMountArgs{
 			MountPath: pulumi.String(configMatchingFilePath(app.Name)),
 			Name:      pulumi.String(app.Name),
 			SubPath:   pulumi.String(configFile(app.Name)),
-		}
-		volumeMounts = append(volumeMounts, v)
+		},
 	}
 
 	for _, v := range app.Secrets {

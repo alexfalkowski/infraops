@@ -31,7 +31,6 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 					ServiceAccountName: pulumi.String(app.Name),
 					SecurityContext:    podSecurity(),
 					Volumes:            createSecretVolumes(app),
-					InitContainers:     initContainers(app),
 					Containers:         containers(app),
 				},
 			},

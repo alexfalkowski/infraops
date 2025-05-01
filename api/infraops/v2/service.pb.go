@@ -196,12 +196,10 @@ type Application struct {
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	Namespace     string                 `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	Domain        string                 `protobuf:"bytes,5,opt,name=domain,proto3" json:"domain,omitempty"`
-	InitVersion   string                 `protobuf:"bytes,6,opt,name=init_version,json=initVersion,proto3" json:"init_version,omitempty"`
-	Version       string                 `protobuf:"bytes,7,opt,name=version,proto3" json:"version,omitempty"`
-	ConfigVersion string                 `protobuf:"bytes,8,opt,name=config_version,json=configVersion,proto3" json:"config_version,omitempty"`
-	Resources     *Resources             `protobuf:"bytes,9,opt,name=resources,proto3" json:"resources,omitempty"`
-	Secrets       []string               `protobuf:"bytes,10,rep,name=secrets,proto3" json:"secrets,omitempty"`
-	Environments  []*Environment         `protobuf:"bytes,11,rep,name=environments,proto3" json:"environments,omitempty"`
+	Version       string                 `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
+	Resources     *Resources             `protobuf:"bytes,7,opt,name=resources,proto3" json:"resources,omitempty"`
+	Secrets       []string               `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	Environments  []*Environment         `protobuf:"bytes,9,rep,name=environments,proto3" json:"environments,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -271,23 +269,9 @@ func (x *Application) GetDomain() string {
 	return ""
 }
 
-func (x *Application) GetInitVersion() string {
-	if x != nil {
-		return x.InitVersion
-	}
-	return ""
-}
-
 func (x *Application) GetVersion() string {
 	if x != nil {
 		return x.Version
-	}
-	return ""
-}
-
-func (x *Application) GetConfigVersion() string {
-	if x != nil {
-		return x.ConfigVersion
 	}
 	return ""
 }
@@ -1030,20 +1014,17 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\astorage\x18\x03 \x01(\v2\x12.infraops.v2.RangeR\astorage\"7\n" +
 	"\vEnvironment\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\xed\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\xa3\x02\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1c\n" +
 	"\tnamespace\x18\x04 \x01(\tR\tnamespace\x12\x16\n" +
-	"\x06domain\x18\x05 \x01(\tR\x06domain\x12!\n" +
-	"\finit_version\x18\x06 \x01(\tR\vinitVersion\x12\x18\n" +
-	"\aversion\x18\a \x01(\tR\aversion\x12%\n" +
-	"\x0econfig_version\x18\b \x01(\tR\rconfigVersion\x124\n" +
-	"\tresources\x18\t \x01(\v2\x16.infraops.v2.ResourcesR\tresources\x12\x18\n" +
-	"\asecrets\x18\n" +
-	" \x03(\tR\asecrets\x12<\n" +
-	"\fenvironments\x18\v \x03(\v2\x18.infraops.v2.EnvironmentR\fenvironments\"d\n" +
+	"\x06domain\x18\x05 \x01(\tR\x06domain\x12\x18\n" +
+	"\aversion\x18\x06 \x01(\tR\aversion\x124\n" +
+	"\tresources\x18\a \x01(\v2\x16.infraops.v2.ResourcesR\tresources\x12\x18\n" +
+	"\asecrets\x18\b \x03(\tR\asecrets\x12<\n" +
+	"\fenvironments\x18\t \x03(\v2\x18.infraops.v2.EnvironmentR\fenvironments\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +
