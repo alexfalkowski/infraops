@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.93.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.93.0) - 2025-05-01
+
+- [`55c97da`](https://github.com/alexfalkowski/infraops/commit/55c97dad9cf86428f3c51a3fb81100e9d091d1cb) feat(apps): add missing apps to be verified (#1069)
+- [`5d44953`](https://github.com/alexfalkowski/infraops/commit/5d449539b5e15246bbd3d62cd746f1ff76a4bbc6) build(ci): disable workflows until we have a fix for memory (#1068)
+
 ## [v2.92.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.92.0) - 2025-05-01
 
 - [`6cf8602`](https://github.com/alexfalkowski/infraops/commit/6cf86024eff46cb701436161781ddaf183c69e44) feat(k8s): update nginx-ingress to v4.12.2 (#1067)
