@@ -20,23 +20,15 @@ create-lean:
 setup-otlp:
 	@kubectl create secret generic otlp-secret --from-file ~/keys/otlp --namespace lean
 
-# Setup konfig.
-setup-konfig:
-	@kubectl create secret generic konfig-secret --from-file ~/keys/konfig --namespace lean
-
 # Setup Github.
 setup-gh:
 	@kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
 
 # Setup lean.
-setup-lean: create-lean setup-otlp setup-konfig setup-gh
+setup-lean: create-lean setup-otlp setup-gh
 
 # Rollout lean.
-rollout-lean: rollout-konfig rollout-standort rollout-bezeichner rollout-web
-
-# Rollout konfig.
-rollout-konfig:
-	@kubectl rollout restart deployment/konfig -n lean
+rollout-lean: rollout-standort rollout-bezeichner rollout-web rollout-sasha rollout-monitoror
 
 # Rollout standort.
 rollout-standort:
@@ -50,8 +42,16 @@ rollout-bezeichner:
 rollout-web:
 	@kubectl rollout restart deployment/web -n lean
 
+# Rollout sasha.
+rollout-sasha:
+	@kubectl rollout restart deployment/sasha -n lean
+
+# Rollout monitoror.
+rollout-monitoror:
+	@kubectl rollout restart deployment/monitoror -n lean
+
 # Verify all apps.
-verify-lean: verify-standort verify-bezeichner verify-web
+verify-lean: verify-standort verify-bezeichner verify-web verify-sasha verify-monitoror
 
 # Verify standort.
 verify-standort:
@@ -64,3 +64,11 @@ verify-bezeichner:
 # Verify web.
 verify-web:
 	@curl -svf https://web.lean-thoughts.com
+
+# Verify sasha.
+verify-sasha:
+	@curl -svf https://sasha.sasha-adventures.com/
+
+# Verify monitoror.
+verify-monitoror:
+	@curl -svf https://monitoror.lean-thoughts.com

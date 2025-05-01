@@ -4,7 +4,7 @@ save-config:
 
 # Delete all.
 delete:
-	@kubectl delete namespaces nginx-ingress grafana circleci
+	@kubectl delete namespaces nginx-ingress grafana circleci metrics-server
 
 # Setup everything.
 setup: setup-helm install-helm setup-grafana update
