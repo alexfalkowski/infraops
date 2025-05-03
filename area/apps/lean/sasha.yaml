@@ -10,7 +10,7 @@ limiter:
   interval: 1s
 site:
   articles:
-    address: https://cms.sasha-adventures.com
+    address: https://cms.sasha-adventures.com/sasha-cms
     retry:
       attempts: 3
       backoff: 100ms
