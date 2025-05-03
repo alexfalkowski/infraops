@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.97.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.97.0) - 2025-05-03
+
+- [`96e3630`](https://github.com/alexfalkowski/infraops/commit/96e36304b591b2800b72703917bcc4f5fe8da940) feat(apps): default to empty articles when missing for sasha (#1074)
+
 ## [v2.96.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.96.0) - 2025-05-03
 
 - [`85a74fb`](https://github.com/alexfalkowski/infraops/commit/85a74fb61011e5627d8cbd4042bdd35382b70ed8) feat(apps): default to opts content type for rest (#1073)
