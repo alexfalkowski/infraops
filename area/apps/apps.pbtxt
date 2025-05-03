@@ -75,7 +75,7 @@ applications: [
     name: "sasha"
     namespace: "lean"
     domain: "sasha-adventures.com"
-    version: "0.21.0"
+    version: "0.22.0"
     resources: {
       cpu: {
         min: "125m"
