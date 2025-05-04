@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.99.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.99.0) - 2025-05-04
+
+- [`2fe7e65`](https://github.com/alexfalkowski/infraops/commit/2fe7e65911306a9218b2cb902d96b274585fab5f) feat(apps): only enable runtime module for servers (#1076)
+
 ## [v2.98.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.98.0) - 2025-05-04
 
 - [`23d19dc`](https://github.com/alexfalkowski/infraops/commit/23d19dc12ac886b316a5bb39fd132123543673a3) feat(apps): change address for sasha (#1075)
