@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.98.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.98.0) - 2025-05-04
+
+- [`23d19dc`](https://github.com/alexfalkowski/infraops/commit/23d19dc12ac886b316a5bb39fd132123543673a3) feat(apps): change address for sasha (#1075)
+
 ## [v2.97.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.97.0) - 2025-05-03
 
 - [`96e3630`](https://github.com/alexfalkowski/infraops/commit/96e36304b591b2800b72703917bcc4f5fe8da940) feat(apps): default to empty articles when missing for sasha (#1074)
