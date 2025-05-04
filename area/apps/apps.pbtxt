@@ -52,7 +52,7 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "0.310.0"
+    version: "1.0.0"
     resources: {
       cpu: {
         min: "125m"
@@ -75,7 +75,7 @@ applications: [
     name: "sasha"
     namespace: "lean"
     domain: "sasha-adventures.com"
-    version: "0.23.0"
+    version: "1.1.0"
     resources: {
       cpu: {
         min: "125m"
