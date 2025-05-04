@@ -63,7 +63,6 @@ applications: [
     name: name
     namespace: namespace
     domain: domain
-    init_version: init_version
     version: version
     resources: {
       cpu: {
