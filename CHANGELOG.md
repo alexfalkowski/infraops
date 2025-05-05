@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.100.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.100.0) - 2025-05-05
+
+- [`d82e878`](https://github.com/alexfalkowski/infraops/commit/d82e878ef018036276fa0b088c2abeb37942f2c5) feat(apps): use clean path (#1078)
+- [`34d4308`](https://github.com/alexfalkowski/infraops/commit/34d4308d21ba859adfe58bdb1c84bf725a571caf) feat(apps): celebrate v1.0.0 of mvc (#1077)
+
 ## [v2.99.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.99.0) - 2025-05-04
 
 - [`2fe7e65`](https://github.com/alexfalkowski/infraops/commit/2fe7e65911306a9218b2cb902d96b274585fab5f) feat(apps): only enable runtime module for servers (#1076)
