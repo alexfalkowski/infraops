@@ -156,8 +156,8 @@ github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.43.0 h1:hEwj6/p8yfRYhF6/gQYZBsDY
 github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.43.0/go.mod h1:szJRwHQi8igTMTifLVJFU9fSIfwnsqg1tdSJg/K2DqM=
 github.com/pulumi/pulumi-github/sdk/v6 v6.7.2 h1:CVn0jJwzkqpKiBosh0UVnTgnfw30I5IpRDnTF0TJ6/U=
 github.com/pulumi/pulumi-github/sdk/v6 v6.7.2/go.mod h1:lhWyH3+5Pst2jZ9nwcfmXNA04L9Ygzm1DU5YEAv4nao=
-github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.22.2 h1:TJ1JnD/U21SD7DV8MS525Qv4/mSCANdxrRWUWuNJZOs=
-github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.22.2/go.mod h1:jOdpeNeRvY4iN+W8aDP5+HyqrM7hXsxa9paPsmjQFfY=
+github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.23.0 h1:TZ/XhzF+3/jRiGsjlJHCWhXcU5E5tbXU8O0DKnPmFic=
+github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.23.0/go.mod h1:jOdpeNeRvY4iN+W8aDP5+HyqrM7hXsxa9paPsmjQFfY=
 github.com/pulumi/pulumi/sdk/v3 v3.167.0 h1:QJXsg/ObMIyd+Iao3+rZqdBz2PCyz8y8BAckUQybAP0=
 github.com/pulumi/pulumi/sdk/v3 v3.167.0/go.mod h1:GAaHrdv3kWJHbzkFFFflGbTBQXUYu6SF1ZCo+O9jo44=
 github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
