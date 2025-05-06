@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.101.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.101.0) - 2025-05-06
+
+- [`6dcde91`](https://github.com/alexfalkowski/infraops/commit/6dcde91ae875663b5129a09e8a944493ad011b8f) feat(ci): set env variables to see if we fix running on ci (#1080)
+
 ## [v2.100.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.100.0) - 2025-05-05
 
 - [`d82e878`](https://github.com/alexfalkowski/infraops/commit/d82e878ef018036276fa0b088c2abeb37942f2c5) feat(apps): use clean path (#1078)
