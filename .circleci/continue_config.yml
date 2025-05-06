@@ -19,7 +19,7 @@ jobs:
     docker:
       - image: alexfalkowski/go:2.14
         environment:
-          GOGC: 30
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -63,6 +63,8 @@ jobs:
   release:
     docker:
       - image: alexfalkowski/release:3.17
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -75,6 +77,8 @@ jobs:
   apps_preview:
     docker:
       - image: alexfalkowski/k8s:1.44
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -110,6 +114,8 @@ jobs:
   apps_update:
     docker:
       - image: alexfalkowski/k8s:1.44
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -150,7 +156,7 @@ jobs:
     docker:
       - image: alexfalkowski/k8s:1.44
         environment:
-          GOGC: 30
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -186,7 +192,7 @@ jobs:
     docker:
       - image: alexfalkowski/k8s:1.44
         environment:
-          GOGC: 30
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -223,6 +229,8 @@ jobs:
   do_preview:
     docker:
       - image: alexfalkowski/k8s:1.44
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -257,6 +265,8 @@ jobs:
   do_update:
     docker:
       - image: alexfalkowski/k8s:1.44
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -293,6 +303,8 @@ jobs:
   gh_preview:
     docker:
       - image: alexfalkowski/k8s:1.44
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
@@ -327,6 +339,8 @@ jobs:
   gh_update:
     docker:
       - image: alexfalkowski/k8s:1.44
+        environment:
+          GOMEMLIMIT: 6GiB
     working_directory: ~/infraops
     steps:
       - checkout
