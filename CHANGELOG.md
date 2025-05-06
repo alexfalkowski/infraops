@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.102.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.102.0) - 2025-05-06
+
+- [`3d5d62e`](https://github.com/alexfalkowski/infraops/commit/3d5d62e46c72107c1469c807051ac3df5105638a) feat(ci): set GOGC=30 for cf (#1081)
+
 ## [v2.101.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.101.0) - 2025-05-06
 
 - [`6dcde91`](https://github.com/alexfalkowski/infraops/commit/6dcde91ae875663b5129a09e8a944493ad011b8f) feat(ci): set env variables to see if we fix running on ci (#1080)
