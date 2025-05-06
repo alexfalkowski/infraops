@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.106.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.106.0) - 2025-05-06
+
+- [`ccb2d48`](https://github.com/alexfalkowski/infraops/commit/ccb2d4868f4a2e1fd364625ca7d0ae223de0a17d) feat(apps): use join (#1086)
+- [`e9f7723`](https://github.com/alexfalkowski/infraops/commit/e9f7723f06861b0c950b79ffbe16106ef9493c79) build(ci): use alexfalkowski/k8s:1.46 (#1085)
+
 ## [v2.105.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.105.0) - 2025-05-06
 
 - [`caecab7`](https://github.com/alexfalkowski/infraops/commit/caecab75e9daca84d83ce2bbde6610e67b3e131e) feat(apps): add html media type in mime (#1083)
