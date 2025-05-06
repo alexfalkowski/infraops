@@ -6,10 +6,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func initImage(name, version string) pulumi.String {
-	return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", name, version))
-}
-
 func image(app *App) pulumi.String {
 	if app.IsInternal() {
 		return pulumi.String(fmt.Sprintf("docker.io/alexfalkowski/%s:v%s", app.Name, app.Version))
