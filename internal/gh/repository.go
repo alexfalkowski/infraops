@@ -40,11 +40,12 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 				Status: inputs.Enabled,
 			},
 		},
-		SquashMergeCommitTitle: pulumi.String("PR_TITLE"),
-		Template:               t,
-		Topics:                 pulumi.ToStringArray(repo.Topics),
-		Visibility:             pulumi.String(repo.Visibility),
-		VulnerabilityAlerts:    inputs.Yes,
+		SquashMergeCommitTitle:   pulumi.String("PR_TITLE"),
+		Template:                 t,
+		Topics:                   pulumi.ToStringArray(repo.Topics),
+		Visibility:               pulumi.String(repo.Visibility),
+		VulnerabilityAlerts:      inputs.Yes,
+		WebCommitSignoffRequired: inputs.No,
 	}
 
 	return github.NewRepository(ctx, repo.Name, args)
