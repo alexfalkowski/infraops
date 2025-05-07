@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.108.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.108.0) - 2025-05-07
+
+- [`091596c`](https://github.com/alexfalkowski/infraops/commit/091596c9f86631987e8c46f907b2ddec134adc38) feat(gh): add topics (#1092)
+- [`1591e24`](https://github.com/alexfalkowski/infraops/commit/1591e244f3b98a6cf8849e7bd747b9b43e0155f2) build(deps): bump bin from `652fb33` to `ac9a5b2` (#1091)
+- [`c81a0d8`](https://github.com/alexfalkowski/infraops/commit/c81a0d8816a399474556fca905940972b53568c4) build(deps): bump bin from `7b214f3` to `652fb33` (#1090)
+- [`9429e54`](https://github.com/alexfalkowski/infraops/commit/9429e540fdeff9fbc0597ab93c8eb9b50440cb78) build(deps): bump bin from `926a71b` to `7b214f3` (#1089)
+
 ## [v2.107.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.107.0) - 2025-05-07
 
 - [`2b44c31`](https://github.com/alexfalkowski/infraops/commit/2b44c3178711e75801802105d69a924056ed986c) feat(apps): use new Join (#1088)
