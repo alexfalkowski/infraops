@@ -4,6 +4,7 @@ repositories: [
     name: "alexfalkowski.github.io"
     description: "A site for my profile."
 		homepage_url: "https://alexfalkowski.github.io"
+    topics: ["jekyll", "ruby"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
@@ -13,6 +14,7 @@ repositories: [
     name: "nonnative"
     description: "Allows you to keep using the power of ruby to test other systems."
 		homepage_url: "https://alexfalkowski.github.io/nonnative"
+    topics: ["ruby", "cucumber", "bdd"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
@@ -22,6 +24,7 @@ repositories: [
     name: "go-service"
     description: "A framework to build services in go."
 		homepage_url: "https://alexfalkowski.github.io/go-service"
+    topics: ["golang", "grpc", "http", "rpc", "mvc", "postgres", "cache", "redis", "cloudevents"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
@@ -31,6 +34,7 @@ repositories: [
     name: "go-health"
     description: "Health monitoring pattern in go."
 		homepage_url: "https://alexfalkowski.github.io/go-health"
+    topics: ["golang", "k8s"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
@@ -40,6 +44,7 @@ repositories: [
     name: "infraops"
     description: "A place where all infrastructure is taken care of."
 		homepage_url: "https://alexfalkowski.github.io/infraops"
+    topics: ["golang", "cloudflare", "digitalocean", "github", "k8s"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
@@ -49,6 +54,7 @@ repositories: [
     name: "bin"
     description: "A place for common executables."
 		homepage_url: "https://alexfalkowski.github.io/bin"
+    topics: ["bash", "ruby", "docker"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
 		enable_pages: true
@@ -78,6 +84,7 @@ repositories: [
     name: "go-client-template"
     description: "A template for go clients."
 		homepage_url: "https://alexfalkowski.github.io/go-client-template"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
 		visibility: "public"
 		template: {
@@ -92,6 +99,7 @@ repositories: [
     name: "go-service-template"
     description: "A template for go services."
 		homepage_url: "https://alexfalkowski.github.io/go-service-template"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		is_template: true
@@ -102,6 +110,7 @@ repositories: [
     name: "bezeichner"
     description: "Bezeichner takes care of identifiers used in your services."
 		homepage_url: "https://alexfalkowski.github.io/bezeichner"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
@@ -111,6 +120,7 @@ repositories: [
     name: "konfigctl"
     description: "A tool to control https://alexfalkowski.github.io/konfig."
 		homepage_url: "https://alexfalkowski.github.io/konfigctl"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
 		visibility: "public"
 		template: {
@@ -135,6 +145,7 @@ repositories: [
     name: "migrieren"
     description: "Migrieren provides a way to migrate your databases."
 		homepage_url: "https://alexfalkowski.github.io/migrieren"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
@@ -144,6 +155,7 @@ repositories: [
     name: "standort"
     description: "Standort provides location based information."
 		homepage_url: "https://alexfalkowski.github.io/standort"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
@@ -153,6 +165,7 @@ repositories: [
     name: "status"
     description: "An alternative to https://httpstat.us/."
 		homepage_url: "https://alexfalkowski.github.io/status"
+    topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		enable_pages: true
@@ -162,6 +175,7 @@ repositories: [
     name: "web"
     description: "A website lean-thoughts.com."
 		homepage_url: "https://alexfalkowski.github.io/web"
+    topics: ["golang", "ruby", "make", "cucumber", "htmx"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
 		template: {
@@ -175,6 +189,7 @@ repositories: [
     name: "sashactl"
     description: "A tool that provides a workflow for https://alexfalkowski.github.io/sasha."
 		homepage_url: "https://alexfalkowski.github.io/sashactl"
+    topics: ["golang", "ruby", "make", "cucumber", "r2", "aws", "s3"]
 		checks: ["ci/circleci: build-client", "ci/circleci: build-docker"]
 		visibility: "public"
 		template: {
@@ -188,6 +203,7 @@ repositories: [
     name: "sasha"
     description: "Sasha is site for recording of awesome adventures."
 		homepage_url: "https://alexfalkowski.github.io/sasha"
+    topics: ["golang", "ruby", "make", "cucumber", "htmx"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
 		visibility: "public"
     template: {
