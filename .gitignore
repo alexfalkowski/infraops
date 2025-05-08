@@ -2,3 +2,4 @@ vendor
 coverage.html
 *.cov
 *.xml
+*.bin
