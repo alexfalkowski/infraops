@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.110.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.110.0) - 2025-05-08
+
+- [`1e1081f`](https://github.com/alexfalkowski/infraops/commit/1e1081f088eb2177f3ac9ed8d6e3a1cca1bfaaf2) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.43.0 to 4.44.0 (#1096)
+- [`f8e141a`](https://github.com/alexfalkowski/infraops/commit/f8e141a6ce3f939a5066cd842c7b077619f0faa5) build(ci): use alexfalkowski/k8s:1.48 (#1097)
+- [`f78b107`](https://github.com/alexfalkowski/infraops/commit/f78b1074bd3678b6f3cf138509cc3ce64b00cdfc) build(ci): use alexfalkowski/k8s:1.47 (#1093)
+
 ## [v2.109.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.109.0) - 2025-05-08
 
 - [`941e081`](https://github.com/alexfalkowski/infraops/commit/941e081ed628c8432c43034d8eae5aac6c680595) feat(gh): add pages message (#1094)
