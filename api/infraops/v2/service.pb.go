@@ -631,8 +631,9 @@ type BalancerZone struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Domain        string                 `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
-	Ip            string                 `protobuf:"bytes,3,opt,name=ip,proto3" json:"ip,omitempty"`
-	RecordNames   []string               `protobuf:"bytes,4,rep,name=record_names,json=recordNames,proto3" json:"record_names,omitempty"`
+	Ipv4          string                 `protobuf:"bytes,3,opt,name=ipv4,proto3" json:"ipv4,omitempty"`
+	Ipv6          string                 `protobuf:"bytes,4,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
+	RecordNames   []string               `protobuf:"bytes,5,rep,name=record_names,json=recordNames,proto3" json:"record_names,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -681,9 +682,16 @@ func (x *BalancerZone) GetDomain() string {
 	return ""
 }
 
-func (x *BalancerZone) GetIp() string {
+func (x *BalancerZone) GetIpv4() string {
 	if x != nil {
-		return x.Ip
+		return x.Ipv4
+	}
+	return ""
+}
+
+func (x *BalancerZone) GetIpv6() string {
+	if x != nil {
+		return x.Ipv6
 	}
 	return ""
 }
@@ -1100,12 +1108,13 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x06checks\x18\v \x03(\tR\x06checks\"_\n" +
 	"\x06Github\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12;\n" +
-	"\frepositories\x18\x02 \x03(\v2\x17.infraops.v2.RepositoryR\frepositories\"m\n" +
+	"\frepositories\x18\x02 \x03(\v2\x17.infraops.v2.RepositoryR\frepositories\"\x85\x01\n" +
 	"\fBalancerZone\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
-	"\x06domain\x18\x02 \x01(\tR\x06domain\x12\x0e\n" +
-	"\x02ip\x18\x03 \x01(\tR\x02ip\x12!\n" +
-	"\frecord_names\x18\x04 \x03(\tR\vrecordNames\"J\n" +
+	"\x06domain\x18\x02 \x01(\tR\x06domain\x12\x12\n" +
+	"\x04ipv4\x18\x03 \x01(\tR\x04ipv4\x12\x12\n" +
+	"\x04ipv6\x18\x04 \x01(\tR\x04ipv6\x12!\n" +
+	"\frecord_names\x18\x05 \x03(\tR\vrecordNames\"J\n" +
 	"\bPageZone\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
 	"\x06domain\x18\x02 \x01(\tR\x06domain\x12\x12\n" +

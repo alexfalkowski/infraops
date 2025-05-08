@@ -15,7 +15,8 @@ func TestCreateBalancerZone(t *testing.T) {
 			Name:        "test",
 			Domain:      "test.com",
 			RecordNames: []string{"test"},
-			IP:          "127.0.0.1",
+			IPV4:        "127.0.0.1",
+			IPV6:        "::1",
 		}
 
 		err := cf.CreateBalancerZone(ctx, z)
@@ -30,7 +31,8 @@ func TestCreateBalancerZone(t *testing.T) {
 			Name:        "test",
 			Domain:      "test.com",
 			RecordNames: []string{"test"},
-			IP:          "127.0.0.1",
+			IPV4:        "127.0.0.1",
+			IPV6:        "::1",
 		}
 
 		err := cf.CreateBalancerZone(ctx, z)
