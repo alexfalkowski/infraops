@@ -22,6 +22,10 @@ pulumi-update:
 pulumi-cancel:
 	pulumi cancel --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
+# Delete pulumi stack.
+pulumi-delete:
+	pulumi stack rm --yes --force --stack alexfalkowski/$(area)/prod --cwd area/$(area)
+
 # Lint the API.
 api-lint:
 	make -C api lint

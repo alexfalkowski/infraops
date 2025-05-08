@@ -13,7 +13,8 @@ import (
 type BalancerZone struct {
 	Name        string
 	Domain      string
-	IP          string
+	IPV4        string
+	IPV6        string
 	RecordNames []string
 }
 
@@ -22,7 +23,8 @@ func ConvertBalancerZone(z *v2.BalancerZone) *BalancerZone {
 	return &BalancerZone{
 		Name:        z.GetName(),
 		Domain:      z.GetDomain(),
-		IP:          z.GetIp(),
+		IPV4:        z.GetIpv4(),
+		IPV6:        z.GetIpv6(),
 		RecordNames: z.GetRecordNames(),
 	}
 }
@@ -37,16 +39,29 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	for _, n := range zone.RecordNames {
 		name := fmt.Sprintf("%s.%s", n, zone.Domain)
 
-		r := &cloudflare.RecordArgs{
+		ipv4 := &cloudflare.RecordArgs{
 			Type:    pulumi.String("A"),
 			Name:    pulumi.String(name),
-			Content: pulumi.String(zone.IP),
+			Content: pulumi.String(zone.IPV4),
 			ZoneId:  z.ID(),
 			Proxied: inputs.Yes,
 			Ttl:     inputs.Automatic,
 		}
 
-		if _, err := cloudflare.NewRecord(ctx, name, r); err != nil {
+		if _, err := cloudflare.NewRecord(ctx, "ipv4."+name, ipv4); err != nil {
+			return err
+		}
+
+		ipv6 := &cloudflare.RecordArgs{
+			Type:    pulumi.String("AAAA"),
+			Name:    pulumi.String(name),
+			Content: pulumi.String(zone.IPV6),
+			ZoneId:  z.ID(),
+			Proxied: inputs.Yes,
+			Ttl:     inputs.Automatic,
+		}
+
+		if _, err := cloudflare.NewRecord(ctx, "ipv6."+name, ipv6); err != nil {
 			return err
 		}
 	}
