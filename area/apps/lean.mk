@@ -72,3 +72,14 @@ verify-sasha:
 # Verify monitoror.
 verify-monitoror:
 	@curl -svf https://monitoror.lean-thoughts.com
+
+# Load test lean.
+load-lean: load-standort load-bezeichner
+
+# Load test standort.
+load-standort:
+	@echo "POST https://standort.lean-thoughts.com/standort.v2.Service/GetLocation" | vegeta attack -duration=30s -body "lean/standort.json" -header "Content-Type: application/json" | tee "lean/standort.bin" | vegeta report
+
+# Load test bezeichner.
+load-bezeichner:
+	echo "POST https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers" | vegeta attack -duration=30s -body "lean/bezeichner.json" -header "Content-Type: application/json" | tee "lean/bezeichner.bin" | vegeta report
