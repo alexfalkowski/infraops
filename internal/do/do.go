@@ -70,7 +70,7 @@ func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Cluster) (*digit
 			Size: digitalocean.DropletSlugDropletS2VCPU4GB,
 		},
 		Region:  pulumi.String(digitalocean.RegionFRA1),
-		Version: pulumi.String("1.32.2-do.0"),
+		Version: pulumi.String("1.32.2-do.1"),
 		VpcUuid: v.ID(),
 	}
 
