@@ -25,34 +25,11 @@ var (
 	Private = Visibility("private")
 )
 
-type (
-	// Visibility of the repositories.
-	Visibility string
-
-	// Template for gh.
-	Template struct {
-		Owner      string
-		Repository string
-	}
-
-	// Checks for gh.
-	Checks []string
-
-	// Repository for gh.
-	Repository struct {
-		Template            *Template
-		Name                string
-		Description         string
-		HomepageURL         string
-		Visibility          Visibility
-		Topics              []string
-		Checks              Checks
-		IsTemplate          bool
-		EnablePages         bool
-		Archived            bool
-		EnableCollaborators bool
-	}
-)
+// Template for gh.
+type Template struct {
+	Owner      string
+	Repository string
+}
 
 // Valid if no error is returned.
 func (t *Template) Valid() error {
@@ -62,6 +39,9 @@ func (t *Template) Valid() error {
 
 	return nil
 }
+
+// Checks for gh.
+type Checks []string
 
 // Valid if no error is returned.
 func (c Checks) Valid() error {
@@ -90,7 +70,6 @@ func ConvertRepository(r *v2.Repository) *Repository {
 		Topics:              r.GetTopics(),
 		Checks:              Checks(r.GetChecks()),
 		IsTemplate:          r.GetIsTemplate(),
-		EnablePages:         r.GetEnablePages(),
 		Archived:            r.GetArchived(),
 		EnableCollaborators: r.GetEnableCollaborators(),
 	}
@@ -104,6 +83,12 @@ func ConvertRepository(r *v2.Repository) *Repository {
 				Owner:      owner,
 				Repository: repo,
 			}
+		}
+	}
+
+	if pages := r.GetPages(); pages != nil {
+		repository.Pages = &Pages{
+			CNAME: pages.GetCname(),
 		}
 	}
 
@@ -126,4 +111,39 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	}
 
 	return nil
+}
+
+type (
+	// Visibility of the repositories.
+	Visibility string
+
+	// Pages for gh.
+	Pages struct {
+		CNAME string
+	}
+)
+
+// Repository for gh.
+type Repository struct {
+	Template            *Template
+	Pages               *Pages
+	Name                string
+	Description         string
+	HomepageURL         string
+	Visibility          Visibility
+	Topics              []string
+	Checks              Checks
+	IsTemplate          bool
+	Archived            bool
+	EnableCollaborators bool
+}
+
+// HasPages for this repository.
+func (r *Repository) HasPages() bool {
+	return r.Pages != nil
+}
+
+// HasTemplate for this repository.
+func (r *Repository) HasTemplate() bool {
+	return r.Template != nil
 }
