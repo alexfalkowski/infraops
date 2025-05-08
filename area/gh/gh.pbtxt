@@ -69,6 +69,8 @@ repositories: [
     topics: ["bash"]
 		checks: ["ci/circleci: lint"]
 		visibility: "public"
+    pages: {}
+    enable_collaborators: true
   },
   {
     name: "app-config"
