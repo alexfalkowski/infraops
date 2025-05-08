@@ -104,7 +104,8 @@ balancer_zones: [
     name: name
     domain: domain
     record_names: ["name"]
-    ip: ip
+    ipv4: ip
+    ipv6: ip
   }
 ]
 page_zones: [
