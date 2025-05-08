@@ -24,3 +24,6 @@ rollout: rollout-lean
 
 # Verify all apps.
 verify: verify-lean
+
+# Load all apps.
+load: load-lean
