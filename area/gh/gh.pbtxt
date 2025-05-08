@@ -63,6 +63,14 @@ repositories: [
     enable_collaborators: true
   },
   {
+    name: "scripts"
+    description: "A place for common scripts."
+		homepage_url: "https://alexfalkowski.github.io/scripts"
+    topics: ["bash"]
+		checks: ["ci/circleci: lint"]
+		visibility: "public"
+  },
+  {
     name: "app-config"
     description: "A place for all of my application configuration."
 		homepage_url: "https://alexfalkowski.github.io/app-config"
