@@ -170,17 +170,20 @@ There is a caveat when creating repositories, that requires a 2 step process.
 
 Pages can only be created after the repository is present.
 
-So, the first step is to have:
-
-```go
-enable_pages: false
-
-```
+So, the first step is to leave pages out.
 
 Then the second PR, we set it to:
 
-```go
-enable_pages: true
+```pbtxt
+pages: {}
+```
+
+If this repository will be used to host site with a cname, we need to add this:
+
+```pbtxt
+pages: {
+  cname: "www.yoursite.com"
+}
 ```
 
 > [!NOTE]
@@ -192,14 +195,14 @@ As with pages the repository needs to be present.
 
 So, the first step is to have:
 
-```go
+```pbtxt
 enable_collaborators: false
 
 ```
 
 Then the second PR, we set it to:
 
-```go
+```pbtxt
 enable_collaborators: true
 ```
 
@@ -223,7 +226,7 @@ repositories: [
       owner: owner
       repository: repository
     }
-    enable_pages: true
+    pages: {}
     enable_collaborators: true
   }
 ]

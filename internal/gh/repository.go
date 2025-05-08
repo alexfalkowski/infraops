@@ -52,7 +52,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 }
 
 func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
-	if repo.Template == nil {
+	if !repo.HasTemplate() {
 		return nil, nil
 	}
 
@@ -69,11 +69,12 @@ func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 }
 
 func pages(repo *Repository) *github.RepositoryPagesArgs {
-	if !repo.EnablePages {
+	if !repo.HasPages() {
 		return nil
 	}
 
 	return &github.RepositoryPagesArgs{
+		Cname: pulumi.String(repo.Pages.CNAME),
 		Source: &github.RepositoryPagesSourceArgs{
 			Branch: pulumi.String(master),
 		},

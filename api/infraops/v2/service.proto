@@ -48,17 +48,22 @@ message Template {
   string repository = 2;
 }
 
+// Pages describes whether the repository will have pages enabled.
+message Pages {
+  string cname = 1;
+}
+
 // Repository represents the repository to be created.
 message Repository {
   string name = 1;
   string description = 2;
   string homepage_url = 3;
   string visibility = 4;
-  bool enable_pages = 5;
-  bool is_template = 6;
-  bool archived = 7;
-  bool enable_collaborators = 8;
-  Template template = 9;
+  bool is_template = 5;
+  bool archived = 6;
+  bool enable_collaborators = 7;
+  Template template = 8;
+  Pages pages = 9;
   repeated string topics = 10;
   repeated string checks = 11;
 }
