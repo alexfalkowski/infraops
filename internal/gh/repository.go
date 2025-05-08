@@ -74,7 +74,8 @@ func pages(repo *Repository) *github.RepositoryPagesArgs {
 	}
 
 	return &github.RepositoryPagesArgs{
-		Cname: pulumi.String(repo.Pages.CNAME),
+		BuildType: pulumi.String("legacy"),
+		Cname:     pulumi.String(repo.Pages.CNAME),
 		Source: &github.RepositoryPagesSourceArgs{
 			Branch: pulumi.String(master),
 		},
