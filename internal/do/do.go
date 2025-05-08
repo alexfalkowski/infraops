@@ -63,11 +63,8 @@ func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Cluster) (*digit
 		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
 			NodeCount: pulumi.Int(2),
 			Name:      pulumi.String(p.Name),
-			Labels: pulumi.StringMap{
-				"name": pulumi.String(p.Name),
-				"desc": pulumi.String(p.Description),
-			},
-			Size: digitalocean.DropletSlugDropletS2VCPU4GB,
+			Labels:    pulumi.StringMap{"name": pulumi.String(p.Name)},
+			Size:      digitalocean.DropletSlugDropletS2VCPU4GB,
 		},
 		Region:  pulumi.String(digitalocean.RegionFRA1),
 		Version: pulumi.String("1.32.2-do.1"),
