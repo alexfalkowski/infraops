@@ -48,7 +48,7 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 			Ttl:     inputs.Automatic,
 		}
 
-		if _, err := cloudflare.NewRecord(ctx, "ipv4."+name, ipv4); err != nil {
+		if _, err := cloudflare.NewRecord(ctx, fmt.Sprintf("ipv4.%s", name), ipv4); err != nil {
 			return err
 		}
 
@@ -61,7 +61,7 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 			Ttl:     inputs.Automatic,
 		}
 
-		if _, err := cloudflare.NewRecord(ctx, "ipv6."+name, ipv6); err != nil {
+		if _, err := cloudflare.NewRecord(ctx, fmt.Sprintf("ipv6.%s", name), ipv6); err != nil {
 			return err
 		}
 	}
