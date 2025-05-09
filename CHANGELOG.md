@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.119.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.119.0) - 2025-05-09
+
+- [`74f8595`](https://github.com/alexfalkowski/infraops/commit/74f85959ce2da88518a3844bebfe5d6b4d634945) feat(apps): bump deps (#1109)
+- [`59a7b5c`](https://github.com/alexfalkowski/infraops/commit/59a7b5c8dbf01c875871d2d4644ed65a7a9e56f4) docs(readme): (#1108)
+
 ## [v2.118.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.118.0) - 2025-05-08
 
 - [`55c79ae`](https://github.com/alexfalkowski/infraops/commit/55c79ae352b56268851ae00b0355680e697bfadc) feat(cf): add support for ipv4/6 (#1107)
