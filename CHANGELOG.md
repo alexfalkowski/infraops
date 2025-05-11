@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.120.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.120.0) - 2025-05-11
+
+- [`0d64402`](https://github.com/alexfalkowski/infraops/commit/0d644020a38217d7de3fa5d717ad04e52d452d38) feat(apps): use markdown for sasha (#1112)
+- [`ab88b32`](https://github.com/alexfalkowski/infraops/commit/ab88b32a2fa67d7fc5530d23c398388b2ed72231) refactor(cf): extract record func (#1111)
+
 ## [v2.119.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.119.0) - 2025-05-09
 
 - [`74f8595`](https://github.com/alexfalkowski/infraops/commit/74f85959ce2da88518a3844bebfe5d6b4d634945) feat(apps): bump deps (#1109)
