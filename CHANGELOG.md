@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.121.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.121.1) - 2025-05-11
+
+- [`e4097e7`](https://github.com/alexfalkowski/infraops/commit/e4097e789adc7b3d252d456ec772bbf1fdb01cff) fix(apps): make sure we use info from model (#1114)
+
 ## [v2.121.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.121.0) - 2025-05-11
 
 - [`85dd840`](https://github.com/alexfalkowski/infraops/commit/85dd84098428e16b33da82744ef2dcced90e535c) feat(apps): add meta and model to view for mvc (#1113)
