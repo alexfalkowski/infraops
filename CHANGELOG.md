@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.121.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.121.0) - 2025-05-11
+
+- [`85dd840`](https://github.com/alexfalkowski/infraops/commit/85dd84098428e16b33da82744ef2dcced90e535c) feat(apps): add meta and model to view for mvc (#1113)
+
 ## [v2.120.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.120.0) - 2025-05-11
 
 - [`0d64402`](https://github.com/alexfalkowski/infraops/commit/0d644020a38217d7de3fa5d717ad04e52d452d38) feat(apps): use markdown for sasha (#1112)
