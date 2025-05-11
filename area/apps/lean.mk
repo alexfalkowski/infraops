@@ -82,4 +82,4 @@ load-standort:
 
 # Load test bezeichner.
 load-bezeichner:
-	echo "POST https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers" | vegeta attack -duration=30s -body "lean/bezeichner.json" -header "Content-Type: application/json" | tee "lean/bezeichner.bin" | vegeta report
+	@echo "POST https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers" | vegeta attack -duration=30s -body "lean/bezeichner.json" -header "Content-Type: application/json" | tee "lean/bezeichner.bin" | vegeta report
