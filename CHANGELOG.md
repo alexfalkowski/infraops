@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.123.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.123.0) - 2025-05-12
+
+- [`3de74c1`](https://github.com/alexfalkowski/infraops/commit/3de74c164f736356f03e2720b70d29a982ed0f16) feat(apps): update go-service to v1.594.0 (#1120)
+
 ## [v2.122.2](https://github.com/alexfalkowski/infraops/releases/tag/v2.122.2) - 2025-05-12
 
 - [`d2e4770`](https://github.com/alexfalkowski/infraops/commit/d2e47705bc8f0693fbc162bccc1676b9545dd278) fix(apps): make sure we set the error correctly to display info for sasha (#1119)
