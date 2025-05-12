@@ -6,7 +6,7 @@ applications: [
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.451.0"
+    version: "1.452.0"
     resources: {
       cpu: {
         min: "125m"
@@ -29,7 +29,7 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "2.446.0"
+    version: "2.447.0"
     resources: {
       cpu: {
         min: "125m"
@@ -52,7 +52,7 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.16.0"
+    version: "1.17.0"
     resources: {
       cpu: {
         min: "125m"
