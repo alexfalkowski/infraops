@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.122.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.122.0) - 2025-05-12
+
+- [`e1aebc4`](https://github.com/alexfalkowski/infraops/commit/e1aebc4ff6c95f0d9b7991d68a2bb9f8f9cf25a5) feat(apps): add cache for sasha (#1117)
+- [`db5f421`](https://github.com/alexfalkowski/infraops/commit/db5f421d4b78ce43c097d397c72f440da298a4b1) build(deps): bump bin from `ac9a5b2` to `c59b166` (#1116)
+- [`1e19cce`](https://github.com/alexfalkowski/infraops/commit/1e19cce89c60d50b7cf932af627b0c2d7f99049a) build(apps): use @echo (#1115)
+
 ## [v2.121.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.121.1) - 2025-05-11
 
 - [`e4097e7`](https://github.com/alexfalkowski/infraops/commit/e4097e789adc7b3d252d456ec772bbf1fdb01cff) fix(apps): make sure we use info from model (#1114)
