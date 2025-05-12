@@ -1,3 +1,7 @@
+cache:
+  kind: sync
+  compressor: none
+  encoder: yaml
 environment: production
 health:
   duration: 1s
