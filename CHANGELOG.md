@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.127.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.127.0) - 2025-05-13
+
+- [`488f981`](https://github.com/alexfalkowski/infraops/commit/488f98120baeef47d2adeb1b9fd84dbff95b209d) feat(apps): update purego (#1125)
+- [`dc8364f`](https://github.com/alexfalkowski/infraops/commit/dc8364fb691134dcb0a3784b6cb91d1f0b182895) build(ci): use alexfalkowski/k8s:1.51 (#1124)
+
 ## [v2.126.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.126.0) - 2025-05-13
 
 - [`57a32e6`](https://github.com/alexfalkowski/infraops/commit/57a32e640c64b163d8c2b9a2e3430f786d90a5ce) feat(apps): add common errors (#1123)
