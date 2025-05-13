@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.128.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.128.0) - 2025-05-13
+
+- [`bd15671`](https://github.com/alexfalkowski/infraops/commit/bd1567136bf08edbd8599abef2551f6d3ac60958) feat(apps): use buffer for encoding (#1126)
+
 ## [v2.127.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.127.0) - 2025-05-13
 
 - [`488f981`](https://github.com/alexfalkowski/infraops/commit/488f98120baeef47d2adeb1b9fd84dbff95b209d) feat(apps): update purego (#1125)
