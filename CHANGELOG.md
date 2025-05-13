@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.125.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.125.0) - 2025-05-13
+
+- [`5024350`](https://github.com/alexfalkowski/infraops/commit/5024350112e92bdac89812f1ede8f41e849c2186) feat(apps): writing errors are part of context (#1122)
+
 ## [v2.124.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.124.0) - 2025-05-13
 
 - [`37f0eff`](https://github.com/alexfalkowski/infraops/commit/37f0eff53bffb55baaeb4dc614b85edfaf40af69) feat(apps): add ability to use text mime type (#1121)
