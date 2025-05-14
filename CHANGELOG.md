@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.132.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.132.0) - 2025-05-14
+
+- [`377013a`](https://github.com/alexfalkowski/infraops/commit/377013a2ec64a13563abddd824687af08a62af2b) feat(apps): update grpc (#1132)
+
 ## [v2.131.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.131.0) - 2025-05-14
 
 - [`25b4bd9`](https://github.com/alexfalkowski/infraops/commit/25b4bd91c1d68e23667cfbe7e22c0c0acff12db8) feat(apps): lower cache to 15 mins for sasha (#1131)
