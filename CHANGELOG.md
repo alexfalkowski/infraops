@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.131.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.131.0) - 2025-05-14
+
+- [`25b4bd9`](https://github.com/alexfalkowski/infraops/commit/25b4bd91c1d68e23667cfbe7e22c0c0acff12db8) feat(apps): lower cache to 15 mins for sasha (#1131)
+- [`a8b113b`](https://github.com/alexfalkowski/infraops/commit/a8b113b27387a97c9d664feb7eeeb79f53ec8551) build(ci): remove serial group (#1130)
+
 ## [v2.130.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.130.0) - 2025-05-14
 
 - [`a8d8fa2`](https://github.com/alexfalkowski/infraops/commit/a8d8fa2456758a7176b98548b1434748ddcc86b9) feat(apps): build a better cache (#1129)
