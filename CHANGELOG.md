@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.134.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.134.0) - 2025-05-15
+
+- [`0527fe0`](https://github.com/alexfalkowski/infraops/commit/0527fe0290ed899ac70039926ae96c31ef75d688) feat(apps): convert bytes to string without copy (#1134)
+
 ## [v2.133.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.133.0) - 2025-05-15
 
 - [`fd736c5`](https://github.com/alexfalkowski/infraops/commit/fd736c53747aea6a5f2a5990cf2a4c7afb1319f8) feat(apps): use io interfaces (#1133)
