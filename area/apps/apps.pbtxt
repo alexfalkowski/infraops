@@ -6,7 +6,7 @@ applications: [
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.462.0"
+    version: "1.463.0"
     resources: {
       cpu: {
         min: "125m"
@@ -29,7 +29,7 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "2.457.0"
+    version: "2.458.0"
     resources: {
       cpu: {
         min: "125m"
@@ -52,7 +52,7 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.27.0"
+    version: "1.28.0"
     resources: {
       cpu: {
         min: "125m"
@@ -75,7 +75,7 @@ applications: [
     name: "sasha"
     namespace: "lean"
     domain: "sasha-adventures.com"
-    version: "1.30.0"
+    version: "1.31.0"
     resources: {
       cpu: {
         min: "125m"
