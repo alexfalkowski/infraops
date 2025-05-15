@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.136.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.136.0) - 2025-05-15
+
+- [`f1528b0`](https://github.com/alexfalkowski/infraops/commit/f1528b0aa5057c2317e9529c5941da08c097c52c) feat(apps): use strings.Bytes for base64 (#1136)
+
 ## [v2.135.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.135.0) - 2025-05-15
 
 - [`151ffb2`](https://github.com/alexfalkowski/infraops/commit/151ffb2819b7ce232c07d90efef8a9a5d3b96320) feat(apps): convert []byte without copy (#1135)
