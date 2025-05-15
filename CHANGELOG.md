@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.137.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.137.0) - 2025-05-15
+
+- [`0c54bad`](https://github.com/alexfalkowski/infraops/commit/0c54bad485db72ef2ff18bc2e432942db879502a) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.169.0 to 3.170.0 (#1137)
+
 ## [v2.136.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.136.0) - 2025-05-15
 
 - [`f1528b0`](https://github.com/alexfalkowski/infraops/commit/f1528b0aa5057c2317e9529c5941da08c097c52c) feat(apps): use strings.Bytes for base64 (#1136)
