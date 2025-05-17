@@ -28,7 +28,7 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "2.462.0"
+    version: "2.463.0"
     resources: {
       cpu: {
         min: "125m"
