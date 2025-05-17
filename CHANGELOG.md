@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.141.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.141.0) - 2025-05-17
+
+- [`7618c74`](https://github.com/alexfalkowski/infraops/commit/7618c7454d504b3383e613e430ffe2d714718b89) feat(apps): configure datadog (#1142)
+
 ## [v2.140.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.140.0) - 2025-05-17
 
 - [`dd7a70b`](https://github.com/alexfalkowski/infraops/commit/dd7a70bb8c21bc8504154baf94b0b513841573a2) feat(k8s): add datadog (#1141)
