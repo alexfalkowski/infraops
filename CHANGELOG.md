@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.143.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.143.0) - 2025-05-17
+
+- [`da386d3`](https://github.com/alexfalkowski/infraops/commit/da386d3f4a37db608fe16aa7dce3138b95e3b2e6) feat(apps): remove recover for standort (#1144)
+
 ## [v2.142.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.142.0) - 2025-05-17
 
 - [`7fc4876`](https://github.com/alexfalkowski/infraops/commit/7fc4876e511634b1b238384b543e25060c2d7204) feat(apps): delete grafana and datadog (#1143)
