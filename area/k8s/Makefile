@@ -4,10 +4,10 @@ save-config:
 
 # Delete all.
 delete:
-	@kubectl delete namespaces nginx-ingress grafana circleci metrics-server
+	@kubectl delete namespaces nginx-ingress grafana circleci metrics-server datadog
 
 # Setup everything.
-setup: setup-helm install-helm setup-grafana update
+setup: setup-helm install-helm setup-grafana setup-datadog update
 
 # Setup helm repos.
 setup-helm:
@@ -15,12 +15,29 @@ setup-helm:
 	@helm repo add grafana https://grafana.github.io/helm-charts
 	@helm repo add circleci https://circleci-public.github.io/cci-k8s-release-agent
 	@helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+	@helm repo add datadog https://helm.datadoghq.com
 	@helm repo update
+
+# Setup datadog.
+setup-datadog:
+	kubectl create secret generic datadog-secret --from-literal api-key=$(DD_API_KEY) --namespace datadog
+
+# Install datadog.
+install-datadog:
+	@helm upgrade --install datadog-release --create-namespace datadog/datadog-operator -n datadog --version 2.9.2
+
+# Update datadog.
+update-datadog:
+	@kubectl apply -f datadog --namespace datadog
 
 # Setup grafana.
 setup-grafana:
 	@kubectl create secret generic metrics-secret --from-literal=username=1289421 --from-literal=password=$(GRAFANA_METRICS_TOKEN) --namespace grafana
 	@kubectl create secret generic logs-secret --from-literal=username=743756 --from-literal=password=$(GRAFANA_LOGS_TOKEN) --namespace grafana
+
+# Install grafana.
+install-grafana:
+	@helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.5.1
 
 # Update grafana.
 update-grafana:
@@ -38,15 +55,11 @@ install-metrics-server:
 install-nginx-ingress:
 	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.12.2 -f nginx/values.yaml
 
-# Install grafana agent.
-install-grafana-agent:
-	@helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.5.1
-
 # Install helm.
-install-helm: install-circleci install-metrics-server install-nginx-ingress install-grafana-agent
+install-helm: install-circleci install-metrics-server install-nginx-ingress install-grafana install-datadog
 
 # Update deps.
-update: update-grafana
+update: update-grafana update-datadog
 
 # All pods.
 pods:
