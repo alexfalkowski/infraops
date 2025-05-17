@@ -4,44 +4,17 @@ save-config:
 
 # Delete all.
 delete:
-	@kubectl delete namespaces nginx-ingress grafana circleci metrics-server datadog
+	@kubectl delete namespaces nginx-ingress circleci metrics-server
 
 # Setup everything.
-setup: setup-helm install-helm setup-grafana setup-datadog update
+setup: setup-helm install-helm
 
 # Setup helm repos.
 setup-helm:
 	@helm repo add nginx https://kubernetes.github.io/ingress-nginx
-	@helm repo add grafana https://grafana.github.io/helm-charts
 	@helm repo add circleci https://circleci-public.github.io/cci-k8s-release-agent
 	@helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-	@helm repo add datadog https://helm.datadoghq.com
 	@helm repo update
-
-# Setup datadog.
-setup-datadog:
-	kubectl create secret generic datadog-secret --from-literal api-key=$(DD_API_KEY) --namespace datadog
-
-# Install datadog.
-install-datadog:
-	@helm upgrade --install datadog-release --create-namespace datadog/datadog-operator -n datadog --version 2.9.2
-
-# Update datadog.
-update-datadog:
-	@kubectl apply -f datadog --namespace datadog
-
-# Setup grafana.
-setup-grafana:
-	@kubectl create secret generic metrics-secret --from-literal=username=1289421 --from-literal=password=$(GRAFANA_METRICS_TOKEN) --namespace grafana
-	@kubectl create secret generic logs-secret --from-literal=username=743756 --from-literal=password=$(GRAFANA_LOGS_TOKEN) --namespace grafana
-
-# Install grafana.
-install-grafana:
-	@helm upgrade --install grafana-agent-release --create-namespace grafana/grafana-agent-operator -n grafana --version v0.5.1
-
-# Update grafana.
-update-grafana:
-	@kubectl apply -f grafana --namespace grafana
 
 # Install circleci.
 install-circleci:
@@ -57,9 +30,6 @@ install-nginx-ingress:
 
 # Install helm.
 install-helm: install-circleci install-metrics-server install-nginx-ingress install-grafana install-datadog
-
-# Update deps.
-update: update-grafana update-datadog
 
 # All pods.
 pods:
