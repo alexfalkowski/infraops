@@ -37,6 +37,9 @@ func withResource(ctx *pulumi.Context) error {
 			Memory:  &app.Range{Min: "64Mi", Max: "128Mi"},
 			Storage: &app.Range{Min: "1Gi", Max: "2Gi"},
 		},
+		Environments: []app.Environment{
+			{Name: "test", Value: "test"},
+		},
 	}
 
 	return app.CreateApplication(ctx, a)
@@ -49,6 +52,10 @@ func withoutResource(ctx *pulumi.Context) error {
 		Namespace: "test",
 		Domain:    "test.com",
 		Version:   "1.0.0",
+		Secrets:   []string{"test"},
+		Environments: []app.Environment{
+			{Name: "test", Value: "test"},
+		},
 	}
 
 	return app.CreateApplication(ctx, a)

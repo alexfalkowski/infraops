@@ -16,20 +16,12 @@ delete-lean:
 create-lean:
 	@kubectl create namespace lean
 
-# Setup otlp.
-setup-otlp:
-	@kubectl create secret generic otlp-secret --from-file ~/keys/otlp --namespace lean
-
 # Setup Github.
 setup-gh:
 	@kubectl create secret generic gh-secret --from-literal=token $(GITHUB_TOKEN) --namespace lean
 
-# Setup datadog.
-setup-datadog:
-	@kubectl create secret generic datadog-secret --from-literal api-key=$(DD_API_KEY) --namespace lean
-
 # Setup lean.
-setup-lean: create-lean setup-otlp setup-gh setup-datadog
+setup-lean: create-lean setup-gh
 
 # Rollout lean.
 rollout-lean: rollout-standort rollout-bezeichner rollout-web rollout-sasha rollout-monitoror

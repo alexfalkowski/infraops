@@ -22,15 +22,10 @@ site:
     timeout: 5s
 telemetry:
   logger:
-    kind: otlp
-    url: https://http-intake.logs.datadoghq.com/api/v2/logs
-    headers:
-      dd-api-key: /etc/secrets/datadog/api-key
+    kind: text
+    level: info
   metrics:
-    kind: otlp
-    url: https://api.datadoghq.com/api/intake/otlp/v1/metrics
-    headers:
-      dd-api-key: /etc/secrets/datadog/api-key
+    kind: prometheus
 transport:
   http:
     retry:
