@@ -21,7 +21,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp"]
+    secrets: ["otlp", "datadog"]
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
@@ -44,7 +44,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp"]
+    secrets: ["otlp", "datadog"]
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
@@ -67,7 +67,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp"]
+    secrets: ["otlp", "datadog"]
   },
   {
     id: "f115d2ee-0700-47be-a423-830bee7750b2"
@@ -90,7 +90,7 @@ applications: [
         max: "2Gi"
       }
     }
-    secrets: ["otlp"]
+    secrets: ["otlp", "datadog"]
   },
   {
     kind: "external"

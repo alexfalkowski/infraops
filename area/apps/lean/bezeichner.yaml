@@ -26,18 +26,15 @@ limiter:
   interval: 1s
 telemetry:
   logger:
-    kind: json
-    level: info
+    kind: otlp
+    url: https://http-intake.logs.datadoghq.com/api/v2/logs
+    headers:
+      dd-api-key: /etc/secrets/datadog/api-key
   metrics:
     kind: otlp
-    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/metrics
+    url: https://api.datadoghq.com/api/intake/otlp/v1/metrics
     headers:
-      Authorization: /etc/secrets/otlp/token
-  tracer:
-    kind: otlp
-    url: https://otlp-gateway-prod-eu-west-2.grafana.net/otlp/v1/traces
-    headers:
-      Authorization: /etc/secrets/otlp/token
+      dd-api-key: /etc/secrets/datadog/api-key
 transport:
   http:
     retry:
