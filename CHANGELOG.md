@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.154.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.154.0) - 2025-05-21
+
+- [`df581f9`](https://github.com/alexfalkowski/infraops/commit/df581f97626ef7f1fd4d0af7318e69155ae13e1d) feat(apps): update otel (#1158)
+- [`8edc129`](https://github.com/alexfalkowski/infraops/commit/8edc12913d35fb119fdf05955ea05abd5430a170) build(deps): bump bin from `041892c` to `de214a6` (#1157)
+
 ## [v2.153.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.153.0) - 2025-05-21
 
 - [`92f99a8`](https://github.com/alexfalkowski/infraops/commit/92f99a8a4ef762ca50cc5ab13ae9f9ed9d92a823) feat(apps): move standort to v2 module (#1156)
