@@ -3,8 +3,8 @@ package app_test
 import (
 	"testing"
 
-	"github.com/alexfalkowski/infraops/internal/app"
-	"github.com/alexfalkowski/infraops/internal/test"
+	"github.com/alexfalkowski/infraops/v2/internal/app"
+	"github.com/alexfalkowski/infraops/v2/internal/test"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )

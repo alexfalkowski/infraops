@@ -1,4 +1,4 @@
-module github.com/alexfalkowski/infraops
+module github.com/alexfalkowski/infraops/v2
 
 go 1.24.0
 

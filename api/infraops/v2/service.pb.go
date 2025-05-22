@@ -1140,7 +1140,7 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"Z\n" +
 	"\fDigitalOcean\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x120\n" +
-	"\bclusters\x18\x02 \x03(\v2\x14.infraops.v2.ClusterR\bclustersB3Z1github.com/alexfalkowski/infraops/api/infraops/v2b\x06proto3"
+	"\bclusters\x18\x02 \x03(\v2\x14.infraops.v2.ClusterR\bclustersB6Z4github.com/alexfalkowski/infraops/v2/api/infraops/v2b\x06proto3"
 
 var (
 	file_infraops_v2_service_proto_rawDescOnce sync.Once

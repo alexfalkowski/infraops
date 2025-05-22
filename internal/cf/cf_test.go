@@ -3,8 +3,8 @@ package cf_test
 import (
 	"testing"
 
-	"github.com/alexfalkowski/infraops/internal/cf"
-	"github.com/alexfalkowski/infraops/internal/test"
+	"github.com/alexfalkowski/infraops/v2/internal/cf"
+	"github.com/alexfalkowski/infraops/v2/internal/test"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )
