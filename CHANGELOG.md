@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.155.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.155.0) - 2025-05-22
+
+- [`89b07d1`](https://github.com/alexfalkowski/infraops/commit/89b07d1c796dcd5743ac1f46b2b245efc8928a58) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.170.0 to 3.171.0 (#1160)
+- [`2252b7f`](https://github.com/alexfalkowski/infraops/commit/2252b7f9389e4da004e25146604a18a449c2fc80) build(deps): bump bin from `de214a6` to `eeb0425` (#1159)
+
 ## [v2.154.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.154.0) - 2025-05-21
 
 - [`df581f9`](https://github.com/alexfalkowski/infraops/commit/df581f97626ef7f1fd4d0af7318e69155ae13e1d) feat(apps): update otel (#1158)
