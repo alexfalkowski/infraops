@@ -1,7 +1,7 @@
 package gh
 
 import (
-	"github.com/alexfalkowski/infraops/internal/inputs"
+	"github.com/alexfalkowski/infraops/v2/internal/inputs"
 	"github.com/pulumi/pulumi-github/sdk/v6/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )

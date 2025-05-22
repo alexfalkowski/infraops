@@ -3,8 +3,8 @@ package do_test
 import (
 	"testing"
 
-	"github.com/alexfalkowski/infraops/internal/do"
-	"github.com/alexfalkowski/infraops/internal/test"
+	"github.com/alexfalkowski/infraops/v2/internal/do"
+	"github.com/alexfalkowski/infraops/v2/internal/test"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
-	"github.com/alexfalkowski/infraops/internal/config"
-	"github.com/alexfalkowski/infraops/internal/inputs"
+	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
+	"github.com/alexfalkowski/infraops/v2/internal/config"
+	"github.com/alexfalkowski/infraops/v2/internal/inputs"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v6/go/cloudflare"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )

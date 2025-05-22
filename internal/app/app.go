@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strings"
 
-	v2 "github.com/alexfalkowski/infraops/api/infraops/v2"
-	"github.com/alexfalkowski/infraops/internal/config"
+	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
+	"github.com/alexfalkowski/infraops/v2/internal/config"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/alexfalkowski/infraops/internal/gh"
+	"github.com/alexfalkowski/infraops/v2/internal/gh"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

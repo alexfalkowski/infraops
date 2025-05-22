@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/alexfalkowski/infraops/internal/inputs"
+	"github.com/alexfalkowski/infraops/v2/internal/inputs"
 	v1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
 	pv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/policy/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"

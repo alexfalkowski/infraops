@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package infraops.v2;
 
-option go_package = "github.com/alexfalkowski/infraops/api/infraops/v2";
+option go_package = "github.com/alexfalkowski/infraops/v2/api/infraops/v2";
 
 // Range represents a range of values.
 message Range {
