@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.157.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.157.0) - 2025-05-22
+
+- [`4ca01ea`](https://github.com/alexfalkowski/infraops/commit/4ca01ea5497062754ddac53adf6589f4433da866) feat(v2): move module to v2 (#1162)
+
 ## [v2.156.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.156.0) - 2025-05-22
 
 - [`581b4d5`](https://github.com/alexfalkowski/infraops/commit/581b4d5d6bc407a6e793b4d1649ffbeed43055e2) feat(apps): update otel log (#1161)
