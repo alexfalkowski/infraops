@@ -7,20 +7,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     version: "1.480.0"
-    resources: {
-      cpu: {
-        min: "125m"
-        max: "250m"
-      }
-      memory: {
-        min: "64Mi"
-        max: "128Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
+    resource: "small"
   },
   {
     id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
@@ -29,20 +16,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     version: "2.477.0"
-    resources: {
-      cpu: {
-        min: "125m"
-        max: "250m"
-      }
-      memory: {
-        min: "64Mi"
-        max: "128Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
+    resource: "small"
   },
   {
     id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
@@ -51,20 +25,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     version: "1.45.0"
-    resources: {
-      cpu: {
-        min: "125m"
-        max: "250m"
-      }
-      memory: {
-        min: "64Mi"
-        max: "128Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
+    resource: "small"
   },
   {
     id: "f115d2ee-0700-47be-a423-830bee7750b2"
@@ -73,20 +34,7 @@ applications: [
     namespace: "lean"
     domain: "sasha-adventures.com"
     version: "1.48.0"
-    resources: {
-      cpu: {
-        min: "125m"
-        max: "250m"
-      }
-      memory: {
-        min: "64Mi"
-        max: "128Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
+    resource: "small"
   },
   {
     kind: "external"
@@ -94,20 +42,6 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     version: "1.12"
-    resources: {
-      cpu: {
-        min: "125m"
-        max: "250m"
-      }
-      memory: {
-        min: "64Mi"
-        max: "128Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
     environments: [
       {
         name: "MO_MONITORABLE_GITHUB_TOKEN"

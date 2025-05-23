@@ -23,35 +23,11 @@ func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 // ConvertApplication converts a v2.Application to an App.
 func ConvertApplication(a *v2.Application) *App {
 	app := &App{
-		ID:        a.GetId(),
-		Kind:      a.GetKind(),
-		Name:      a.GetName(),
-		Namespace: a.GetNamespace(),
-		Domain:    a.GetDomain(),
-		Version:   a.GetVersion(),
+		ID: a.GetId(), Kind: a.GetKind(),
+		Name: a.GetName(), Namespace: a.GetNamespace(),
+		Domain: a.GetDomain(), Version: a.GetVersion(),
+		Resources: resources.Resources(a.GetResource()),
 		Secrets:   a.GetSecrets(),
-	}
-
-	resources := a.GetResources()
-	if resources != nil {
-		cpu := resources.GetCpu()
-		mem := resources.GetMemory()
-		storage := resources.GetStorage()
-		r := &Resources{}
-
-		if cpu != nil {
-			r.CPU = &Range{Min: cpu.GetMin(), Max: cpu.GetMax()}
-		}
-
-		if mem != nil {
-			r.Memory = &Range{Min: mem.GetMin(), Max: mem.GetMax()}
-		}
-
-		if storage != nil {
-			r.Storage = &Range{Min: storage.GetMin(), Max: storage.GetMax()}
-		}
-
-		app.Resources = r
 	}
 
 	environments := a.GetEnvironments()
