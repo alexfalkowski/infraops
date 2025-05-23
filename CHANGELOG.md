@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.159.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.159.0) - 2025-05-23
+
+- [`cef0f1c`](https://github.com/alexfalkowski/infraops/commit/cef0f1ccd4f38cc44c75865c208076b29204b004) feat(apps): just use os.Exit (#1165)
+
 ## [v2.158.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.158.0) - 2025-05-23
 
 - [`5aa3cd7`](https://github.com/alexfalkowski/infraops/commit/5aa3cd76eabe258782b51cb2305c6a55a308631e) feat(apps): update otel instrumentation (#1164)
