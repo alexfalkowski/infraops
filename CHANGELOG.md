@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.158.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.158.0) - 2025-05-23
+
+- [`5aa3cd7`](https://github.com/alexfalkowski/infraops/commit/5aa3cd76eabe258782b51cb2305c6a55a308631e) feat(apps): update otel instrumentation (#1164)
+- [`62990cb`](https://github.com/alexfalkowski/infraops/commit/62990cbae5a3a2c0e726d1259816b6ecac07342b) build(ci): reenable api-breaking (#1163)
+
 ## [v2.157.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.157.0) - 2025-05-22
 
 - [`4ca01ea`](https://github.com/alexfalkowski/infraops/commit/4ca01ea5497062754ddac53adf6589f4433da866) feat(v2): move module to v2 (#1162)
