@@ -33,3 +33,24 @@ func createResources(app *App) cv1.ResourceRequirementsArgs {
 		Limits:   limits,
 	}
 }
+
+var resources = ResourcesMap{
+	"small": {
+		CPU:     &Range{Min: "125m", Max: "250m"},
+		Memory:  &Range{Min: "64Mi", Max: "128Mi"},
+		Storage: &Range{Min: "1Gi", Max: "2Gi"},
+	},
+}
+
+// ResourcesMap got app.
+type ResourcesMap map[string]*Resources
+
+// Resources by name if found, otherwise small.
+func (r ResourcesMap) Resources(name string) *Resources {
+	res, ok := r[name]
+	if ok {
+		return res
+	}
+
+	return r["small"]
+}

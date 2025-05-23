@@ -4,19 +4,6 @@ package infraops.v2;
 
 option go_package = "github.com/alexfalkowski/infraops/v2/api/infraops/v2";
 
-// Range represents a range of values.
-message Range {
-  string min = 1;
-  string max = 2;
-}
-
-// Resources represents the resources required for an application.
-message Resources {
-  Range cpu = 1;
-  Range memory = 2;
-  Range storage = 3;
-}
-
 // Environment represents the Environment variables for an application.
 message Environment {
   string name = 1;
@@ -31,7 +18,7 @@ message Application {
   string namespace = 4;
   string domain = 5;
   string version = 6;
-  Resources resources = 7;
+  string resource = 7;
   repeated string secrets = 8;
   repeated Environment environments = 9;
 }
