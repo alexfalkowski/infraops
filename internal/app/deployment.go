@@ -8,18 +8,18 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createStatefulSet(ctx *pulumi.Context, app *App) error {
+func createDeployment(ctx *pulumi.Context, app *App) error {
 	m := metadata(app, deploymentLabels(app))
 	m.Annotations = deploymentAnnotations(app)
 
-	args := &av1.StatefulSetArgs{
+	args := &av1.DeploymentArgs{
 		Metadata: m,
-		Spec: av1.StatefulSetSpecArgs{
-			Selector:    mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
-			Replicas:    pulumi.Int(3),
-			ServiceName: pulumi.String(app.Name),
-			UpdateStrategy: av1.StatefulSetUpdateStrategyArgs{
-				RollingUpdate: av1.RollingUpdateStatefulSetStrategyArgs{
+		Spec: av1.DeploymentSpecArgs{
+			Selector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
+			Replicas: pulumi.Int(3),
+			Strategy: av1.DeploymentStrategyArgs{
+				RollingUpdate: av1.RollingUpdateDeploymentArgs{
+					MaxSurge:       inputs.One,
 					MaxUnavailable: inputs.One,
 				},
 			},
@@ -37,7 +37,7 @@ func createStatefulSet(ctx *pulumi.Context, app *App) error {
 		},
 	}
 
-	_, err := av1.NewStatefulSet(ctx, app.Name, args)
+	_, err := av1.NewDeployment(ctx, app.Name, args)
 
 	return err
 }
