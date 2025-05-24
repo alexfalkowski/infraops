@@ -52,7 +52,7 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 	fns := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,
-		createDeployment, createService, createIngress,
+		createStatefulSet, createService, createIngress,
 	}
 
 	for _, fn := range fns {
