@@ -9,7 +9,7 @@ import (
 )
 
 func createDeployment(ctx *pulumi.Context, app *App) error {
-	m := metadata(app, deploymentLabels(app))
+	m := metadata(app.Name, app, deploymentLabels(app))
 	m.Annotations = deploymentAnnotations(app)
 
 	args := &av1.DeploymentArgs{

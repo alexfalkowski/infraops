@@ -8,7 +8,7 @@ import (
 
 func createServiceAccount(ctx *pulumi.Context, app *App) error {
 	args := &cv1.ServiceAccountArgs{
-		Metadata:                     metadata(app),
+		Metadata:                     metadata(app.Name, app),
 		AutomountServiceAccountToken: inputs.No,
 	}
 	_, err := cv1.NewServiceAccount(ctx, app.Name, args)

@@ -9,7 +9,7 @@ import (
 
 func createPodDisruptionBudget(ctx *pulumi.Context, app *App) error {
 	args := &pv1.PodDisruptionBudgetArgs{
-		Metadata: metadata(app),
+		Metadata: metadata(app.Name, app),
 		Spec: pv1.PodDisruptionBudgetSpecArgs{
 			MaxUnavailable: inputs.One,
 			Selector: v1.LabelSelectorArgs{

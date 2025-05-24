@@ -30,7 +30,7 @@ func configMap(app *App) (*cv1.ConfigMapArgs, error) {
 	}
 
 	args := &cv1.ConfigMapArgs{
-		Metadata: metadata(app),
+		Metadata: metadata(app.Name, app),
 		Data:     pulumi.StringMap{configFile(app.Name): pulumi.String(d)},
 	}
 

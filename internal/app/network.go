@@ -8,7 +8,7 @@ import (
 
 func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 	args := &nv1.NetworkPolicyArgs{
-		Metadata: metadata(app),
+		Metadata: metadata(app.Name, app),
 		Spec: nv1.NetworkPolicySpecArgs{
 			PodSelector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
 			Ingress: nv1.NetworkPolicyIngressRuleArray{
@@ -26,7 +26,7 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 
 func createIngress(ctx *pulumi.Context, app *App) error {
 	args := &nv1.IngressArgs{
-		Metadata: metadata(app),
+		Metadata: metadata(app.Name, app),
 		Spec: nv1.IngressSpecArgs{
 			IngressClassName: pulumi.String("nginx"),
 			Rules: nv1.IngressRuleArray{

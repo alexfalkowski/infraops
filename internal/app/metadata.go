@@ -7,11 +7,11 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func metadata(app *App, ms ...pulumi.StringMap) mv1.ObjectMetaArgs {
+func metadata(name string, app *App, ms ...pulumi.StringMap) mv1.ObjectMetaArgs {
 	ms = append(ms, recommendedLabels(app))
 
 	return mv1.ObjectMetaArgs{
-		Name:      pulumi.String(app.Name),
+		Name:      pulumi.String(name),
 		Namespace: pulumi.String(app.Namespace),
 		Labels:    merge(ms...),
 	}
