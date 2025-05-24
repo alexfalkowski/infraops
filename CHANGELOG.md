@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.164.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.164.0) - 2025-05-24
+
+- [`f9c8ee2`](https://github.com/alexfalkowski/infraops/commit/f9c8ee2819e878758cbb7dc0beaaf5548628b179) feat(apps): we do not need stateful set (#1171)
+
 ## [v2.163.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.163.0) - 2025-05-24
 
 - [`a55b354`](https://github.com/alexfalkowski/infraops/commit/a55b354ba93bebf5efee2a54827617b7694996d2) feat(apps): move to a stateful set (#1170)
