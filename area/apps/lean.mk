@@ -18,7 +18,7 @@ create-lean:
 
 # Setup Github.
 setup-gh:
-	@kubectl create secret generic gh-secret --from-literal=token $(GITHUB_TOKEN) --namespace lean
+	@kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
 
 # Setup lean.
 setup-lean: create-lean setup-gh
