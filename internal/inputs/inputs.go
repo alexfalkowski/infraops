@@ -3,6 +3,9 @@ package inputs
 import "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 
 const (
+	// Always for inputs.
+	Always = pulumi.String("Always")
+
 	// On for inputs.
 	On = pulumi.String("on")
 
@@ -17,6 +20,9 @@ const (
 
 	// Enabled for inputs.
 	Enabled = pulumi.String("enabled")
+
+	// False for inputs.
+	False = pulumi.String("false")
 
 	// One for inputs.
 	One = pulumi.Int(1)
