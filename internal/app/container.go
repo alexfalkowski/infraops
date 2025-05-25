@@ -31,7 +31,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 	container := cv1.ContainerArgs{
 		Name:            pulumi.String(app.Name),
 		Image:           image(app),
-		ImagePullPolicy: pulumi.String("Always"),
+		ImagePullPolicy: inputs.Always,
 		Args:            pulumi.StringArray{pulumi.String("server")},
 		VolumeMounts:    volumeMounts,
 		Env:             addEnvironments(app, envs),
@@ -57,7 +57,7 @@ func externalContainer(app *App) cv1.ContainerArray {
 	container := cv1.ContainerArgs{
 		Name:            pulumi.String(app.Name),
 		Image:           image(app),
-		ImagePullPolicy: pulumi.String("Always"),
+		ImagePullPolicy: inputs.Always,
 		Env:             addEnvironments(app, cv1.EnvVarArray{}),
 		Ports: cv1.ContainerPortArray{
 			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},

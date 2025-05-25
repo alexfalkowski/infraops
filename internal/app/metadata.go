@@ -3,6 +3,7 @@ package app
 import (
 	"maps"
 
+	"github.com/alexfalkowski/infraops/v2/internal/inputs"
 	mv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/meta/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -46,16 +47,14 @@ func deploymentAnnotations(app *App) pulumi.StringMap {
 		return pulumi.StringMap{}
 	}
 
-	f := pulumi.String("false")
-
 	return pulumi.StringMap{
 		"circleci.com/project-id":                pulumi.String(app.ID),
-		"circleci.com/restore-version-enabled":   f,
-		"circleci.com/scale-component-enabled":   f,
-		"circleci.com/restart-component-enabled": f,
-		"circleci.com/retry-release-enabled":     f,
-		"circleci.com/promote-release-enabled":   f,
-		"circleci.com/cancel-release-enabled":    f,
+		"circleci.com/restore-version-enabled":   inputs.False,
+		"circleci.com/scale-component-enabled":   inputs.False,
+		"circleci.com/restart-component-enabled": inputs.False,
+		"circleci.com/retry-release-enabled":     inputs.False,
+		"circleci.com/promote-release-enabled":   inputs.False,
+		"circleci.com/cancel-release-enabled":    inputs.False,
 	}
 }
 
