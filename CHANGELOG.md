@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.167.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.167.0) - 2025-05-26
+
+- [`9c4fc91`](https://github.com/alexfalkowski/infraops/commit/9c4fc919cada30ca43a3aca918ea4d2426002063) feat(apps): update grpc (#1175)
+
 ## [v2.166.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.166.0) - 2025-05-26
 
 - [`62e564e`](https://github.com/alexfalkowski/infraops/commit/62e564ee4ef6dde0dd57aa513ac8ef15c70a525b) feat(apps): use new config format (#1174)
