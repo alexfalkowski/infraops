@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.171.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.171.0) - 2025-05-29
+
+- [`df2db90`](https://github.com/alexfalkowski/infraops/commit/df2db903a9a32e963611f55800592b0c5d9ac10d) feat(apps): ignore client redirects (#1180)
+
 ## [v2.170.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.170.0) - 2025-05-28
 
 - [`d651df3`](https://github.com/alexfalkowski/infraops/commit/d651df3db35df11cc9e994b7c46f08893d584941) feat(apps): use new client/server module (#1179)
