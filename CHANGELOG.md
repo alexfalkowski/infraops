@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.173.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.173.0) - 2025-05-30
+
+- [`5eb76cf`](https://github.com/alexfalkowski/infraops/commit/5eb76cf516d58d398ca4a5fd2b254a7cae54e37f) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.171.0 to 3.173.0 (#1183)
+- [`ed782a5`](https://github.com/alexfalkowski/infraops/commit/ed782a53b9dc85332af467656f703afa60b56e34) docs(readme): update apps (#1185)
+- [`bf4d213`](https://github.com/alexfalkowski/infraops/commit/bf4d2130108a6602055e43a55347e8bb6ca871d2) build(deps): bump bin from `810b10e` to `85504ca` (#1184)
+- [`6222de7`](https://github.com/alexfalkowski/infraops/commit/6222de7c31cf95af8d043b353c0e831726e1a6b6) build(ci): use alexfalkowski/k8s:1.56 (#1182)
+
 ## [v2.172.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.172.0) - 2025-05-29
 
 - [`4ba50fe`](https://github.com/alexfalkowski/infraops/commit/4ba50fe37d7222a15c11e3d7052bf3bc2fa301b9) feat(apps): use more aliases (#1181)
