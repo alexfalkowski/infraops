@@ -3,5 +3,6 @@ clusters: [
   {
     name: "lean-thoughts"
     description: "The lean thoughts domain"
+    resource: "small"
   }
 ]

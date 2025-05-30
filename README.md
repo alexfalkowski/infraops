@@ -20,7 +20,7 @@ The following tools are used:
 
 Each folder takes care of an area of infrastructure. Each area has a package that is used as the entry point, so it is a [facade](https://en.wikipedia.org/wiki/Facade_pattern).
 
-### Setup
+### Areas Setup
 
 To setup a new area follow the following:
 
@@ -28,7 +28,7 @@ To setup a new area follow the following:
 - Choose the template you need, if in doubt choose `go`.
 - The stack name should always be `prod`.
 
-### Configuration
+### Areas Configuration
 
 Each area is defined by the configuration that is generated from the [protobuf](api/infraops/v1/service.proto) and the format used is the [Text Format](https://protobuf.dev/reference/protobuf/textformat-spec/).
 
@@ -142,6 +142,7 @@ clusters: [
   {
     name: name
     description: description
+    resource: small | medium | large
   }
 ]
 ```
@@ -152,11 +153,11 @@ The code is based on the package <https://www.pulumi.com/registry/packages/githu
 
 The original idea was inspired from <https://github.com/dirien/pulumi-github>.
 
-#### Creation
+#### GitHub Creation
 
 There is a caveat when creating repositories, that requires a 2 step process.
 
-##### Pages
+##### GitHub Pages
 
 Pages can only be created after the repository is present.
 
@@ -179,7 +180,7 @@ pages: {
 > [!NOTE]
 > The reason for this is that there seems to be a timing issue with creating the `master` branch.
 
-##### Collaborators
+##### GitHub Collaborators
 
 As with pages the repository needs to be present.
 

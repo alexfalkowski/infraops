@@ -102,6 +102,7 @@ message Cloudflare {
 message Cluster {
   string name = 1;
   string description = 2;
+  string resource = 3;
 }
 
 // DigitalOcean specific configuration.
