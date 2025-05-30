@@ -10,10 +10,11 @@ A place where all infrastructure is taken care of.
 ## Background
 
 The following tools are used:
-- https://www.pulumi.com/
-- https://kubernetes.io/docs/reference/kubectl/
-- https://helm.sh/
-- https://kube-score.com/
+
+- <https://www.pulumi.com/>
+- <https://kubernetes.io/docs/reference/kubectl/>
+- <https://helm.sh/>
+- <https://kube-score.com/>
 
 ## Areas
 
@@ -22,6 +23,7 @@ Each folder takes care of an area of infrastructure. Each area has a package tha
 ### Setup
 
 To setup a new area follow the following:
+
 - Run `pulumi new`.
 - Choose the template you need, if in doubt choose `go`.
 - The stack name should always be `prod`.
@@ -32,9 +34,9 @@ Each area is defined by the configuration that is generated from the [protobuf](
 
 ### Applications (apps)
 
-This consists of my open source projects https://github.com/alexfalkowski being deployed to kubernetes.
+This consists of my open source projects <https://github.com/alexfalkowski> being deployed to kubernetes.
 
-#### Install
+#### Applications Install
 
 The above is for a new application. If you want to setup all current apps, run the following.
 
@@ -42,7 +44,7 @@ The above is for a new application. If you want to setup all current apps, run t
 ❯ make -C area/apps setup
 ```
 
-#### Delete
+#### Applications Delete
 
 To remove all the apps, you need to run the following:
 
@@ -50,7 +52,7 @@ To remove all the apps, you need to run the following:
 ❯ make -C area/apps delete
 ```
 
-#### Configuration
+#### Applications Configuration
 
 Have a look at [configuration](area/apps/apps.pbtxt), the format is:
 
@@ -64,20 +66,7 @@ applications: [
     namespace: namespace
     domain: domain
     version: version
-    resources: {
-      cpu: {
-        min: "250m"
-        max: "500m"
-      }
-      memory: {
-        min: "128Mi"
-        max: "256Mi"
-      }
-      storage: {
-        min: "1Gi"
-        max: "2Gi"
-      }
-    }
+    resource: small | medium | large
     secrets: ["secrets"]
     environments: [
       {
@@ -91,9 +80,9 @@ applications: [
 
 ### Cloudflare (cf)
 
-The code is bases on the package https://www.pulumi.com/registry/packages/cloudflare/.
+The code is bases on the package <https://www.pulumi.com/registry/packages/cloudflare/>.
 
-#### Configuration
+#### Cloudflare Configuration
 
 Have a look at [configuration](area/cf/cf.pbtxt), the format is:
 
@@ -125,9 +114,9 @@ buckets: [
 
 ### DigitalOcean (do)
 
-The code is bases on the package https://www.pulumi.com/registry/packages/digitalocean/.
+The code is bases on the package <https://www.pulumi.com/registry/packages/digitalocean/>.
 
-#### Project
+#### DigitalOcean Project
 
 Create manually a default project with a name and description, example:
 
@@ -135,7 +124,7 @@ Create manually a default project with a name and description, example:
 | ------------- | ------------------------------------- |
 | lean-thoughts | All of experiments for lean-thoughts. |
 
-#### VPC
+#### DigitalOcean VPC
 
 The account needs a default VPC. Create one manually under the region you would like with a name and description, example:
 
@@ -143,7 +132,7 @@ The account needs a default VPC. Create one manually under the region you would 
 | ------------ | ------------------------- |
 | default-fra1 | The default vpc for fra1. |
 
-#### Configuration
+#### DigitalOcean Configuration
 
 Have a look at [configuration](area/do/do.pbtxt), the format is:
 
@@ -159,9 +148,9 @@ clusters: [
 
 ### GitHub (gh)
 
-The code is based on the package https://www.pulumi.com/registry/packages/github/.
+The code is based on the package <https://www.pulumi.com/registry/packages/github/>.
 
-The original idea was inspired from https://github.com/dirien/pulumi-github.
+The original idea was inspired from <https://github.com/dirien/pulumi-github>.
 
 #### Creation
 
@@ -210,7 +199,7 @@ enable_collaborators: true
 > [!NOTE]
 > This also seems like a timing issue, as rerunning the pipeline fixes it.
 
-#### Configuration
+#### GitHub Configuration
 
 Have a look at [configuration](area/gh/gh.pbtxt), the format is:
 
@@ -240,7 +229,7 @@ This contains all the packages our cluster needs.
 > [!CAUTION]
 > This needs to be run once you have a cluster in DigitalOcean.
 
-#### Setup
+#### Kubernetes Setup
 
 To ge the cluster ready, you need to run the following:
 
@@ -248,7 +237,7 @@ To ge the cluster ready, you need to run the following:
 ❯ make -C area/k8s setup
 ```
 
-#### Delete
+#### Kubernetes Delete
 
 To remove all the apps, you need to run the following:
 
