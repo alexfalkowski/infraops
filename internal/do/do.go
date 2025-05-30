@@ -8,6 +8,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+var sizes = map[string]digitalocean.DropletSlug{
+	"small": digitalocean.DropletSlugDropletS2VCPU4GB,
+}
+
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 	var configuration v2.DigitalOcean
@@ -20,6 +24,16 @@ func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 type Cluster struct {
 	Name        string
 	Description string
+	Resource    string
+}
+
+// Size of the cluster.
+func (c *Cluster) Size() digitalocean.DropletSlug {
+	if s, ok := sizes[c.Resource]; ok {
+		return s
+	}
+
+	return digitalocean.DropletSlugDropletS2VCPU4GB
 }
 
 // ConvertCluster converts a v2.Cluster to a Cluster.
@@ -27,6 +41,7 @@ func ConvertCluster(cluster *v2.Cluster) *Cluster {
 	return &Cluster{
 		Name:        cluster.GetName(),
 		Description: cluster.GetDescription(),
+		Resource:    cluster.GetResource(),
 	}
 }
 
@@ -52,24 +67,24 @@ func createVPC(ctx *pulumi.Context, p *Cluster) (*digitalocean.Vpc, error) {
 	return digitalocean.NewVpc(ctx, p.Name, args)
 }
 
-func createCluster(ctx *pulumi.Context, v *digitalocean.Vpc, p *Cluster) (*digitalocean.KubernetesCluster, error) {
+func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster) (*digitalocean.KubernetesCluster, error) {
 	args := &digitalocean.KubernetesClusterArgs{
 		MaintenancePolicy: &digitalocean.KubernetesClusterMaintenancePolicyArgs{
 			Day:       pulumi.String("any"),
 			StartTime: pulumi.String("23:00"),
 		},
-		Name:                          pulumi.String(p.Name),
+		Name:                          pulumi.String(cluster.Name),
 		DestroyAllAssociatedResources: inputs.Yes,
 		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
 			NodeCount: pulumi.Int(2),
-			Name:      pulumi.String(p.Name),
-			Labels:    pulumi.StringMap{"name": pulumi.String(p.Name)},
-			Size:      digitalocean.DropletSlugDropletS2VCPU4GB,
+			Name:      pulumi.String(cluster.Name),
+			Labels:    pulumi.StringMap{"name": pulumi.String(cluster.Name)},
+			Size:      cluster.Size(),
 		},
 		Region:  pulumi.String(digitalocean.RegionFRA1),
 		Version: pulumi.String("1.32.2-do.1"),
-		VpcUuid: v.ID(),
+		VpcUuid: vpc.ID(),
 	}
 
-	return digitalocean.NewKubernetesCluster(ctx, p.Name, args)
+	return digitalocean.NewKubernetesCluster(ctx, cluster.Name, args)
 }

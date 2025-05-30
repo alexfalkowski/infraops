@@ -838,6 +838,7 @@ type Cluster struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Resource      string                 `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -882,6 +883,13 @@ func (x *Cluster) GetName() string {
 func (x *Cluster) GetDescription() string {
 	if x != nil {
 		return x.Description
+	}
+	return ""
+}
+
+func (x *Cluster) GetResource() string {
+	if x != nil {
+		return x.Resource
 	}
 	return ""
 }
@@ -1013,10 +1021,11 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x0ebalancer_zones\x18\x02 \x03(\v2\x19.infraops.v2.BalancerZoneR\rbalancerZones\x124\n" +
 	"\n" +
 	"page_zones\x18\x03 \x03(\v2\x15.infraops.v2.PageZoneR\tpageZones\x12-\n" +
-	"\abuckets\x18\x04 \x03(\v2\x13.infraops.v2.BucketR\abuckets\"?\n" +
+	"\abuckets\x18\x04 \x03(\v2\x13.infraops.v2.BucketR\abuckets\"[\n" +
 	"\aCluster\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x02 \x01(\tR\vdescription\"Z\n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x1a\n" +
+	"\bresource\x18\x03 \x01(\tR\bresource\"Z\n" +
 	"\fDigitalOcean\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x120\n" +
 	"\bclusters\x18\x02 \x03(\v2\x14.infraops.v2.ClusterR\bclustersB6Z4github.com/alexfalkowski/infraops/v2/api/infraops/v2b\x06proto3"
