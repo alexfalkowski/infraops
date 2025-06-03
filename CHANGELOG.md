@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.177.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.177.0) - 2025-06-03
+
+- [`6307bfa`](https://github.com/alexfalkowski/infraops/commit/6307bfab736c7af3c748c5c15e5d1e1188c1cc00) feat(deps): bump github.com/pulumi/pulumi-cloudflare/sdk/v6 from 6.1.2 to 6.2.1 (#1191)
+- [`943a790`](https://github.com/alexfalkowski/infraops/commit/943a790aa55a9bae314935944c38776495442914) build(deps): bump bin from `85504ca` to `9c21752` (#1190)
+- [`4fd0698`](https://github.com/alexfalkowski/infraops/commit/4fd06980485ba3ab67d3e8411f75cbd3b0e442a5) build(ci): use alexfalkowski/go:2.24 (#1189)
+
 ## [v2.176.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.176.0) - 2025-06-01
 
 - [`35c3a6e`](https://github.com/alexfalkowski/infraops/commit/35c3a6e9f89c211ba98b9ddecffa1c1dc4281727) feat(apps): restructure debug (#1188)
