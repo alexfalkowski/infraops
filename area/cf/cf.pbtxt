@@ -4,15 +4,15 @@ balancer_zones: [
     name: "lean-thoughts"
     domain: "lean-thoughts.com"
     record_names: ["konfig", "standort", "bezeichner", "web", "monitoror"]
-    ipv4: "134.199.189.32"
-    ipv6: "2a03:b0c0:3:f0::d3c7:4000"
+    ipv4: "67.207.76.131"
+    ipv6: "2a03:b0c0:3:f0::edba:5000"
   },
   {
     name: "sasha-adventures"
     domain: "sasha-adventures.com"
     record_names: ["sasha"]
-    ipv4: "134.199.189.32"
-    ipv6: "2a03:b0c0:3:f0::d3c7:4000"
+    ipv4: "67.207.76.131"
+    ipv6: "2a03:b0c0:3:f0::edba:5000"
   }
 ]
 page_zones: [
