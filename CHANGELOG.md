@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.182.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.182.0) - 2025-06-04
+
+- [`949f1d5`](https://github.com/alexfalkowski/infraops/commit/949f1d5d9609f361b1485ca2f43a89598421bdfa) feat(apps): extract user to ssh tokens (#1196)
+
 ## [v2.181.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.181.0) - 2025-06-04
 
 - [`873167f`](https://github.com/alexfalkowski/infraops/commit/873167f472ea073bc9369d5f33c312f487c43670) feat(apps): move to new cluster (#1195)
