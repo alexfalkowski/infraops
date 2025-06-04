@@ -9,7 +9,8 @@ import (
 )
 
 var sizes = map[string]digitalocean.DropletSlug{
-	"small": digitalocean.DropletSlugDropletS2VCPU4GB,
+	"small":  digitalocean.DropletSlugDropletS2VCPU4GB,
+	"medium": digitalocean.DropletSlugDropletS4VCPU8GB,
 }
 
 // ReadConfiguration reads a file and populates a configuration.
@@ -82,7 +83,7 @@ func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster)
 			Size:      cluster.Size(),
 		},
 		Region:  pulumi.String(digitalocean.RegionFRA1),
-		Version: pulumi.String("1.32.2-do.1"),
+		Version: pulumi.String("1.32.2-do.2"),
 		VpcUuid: vpc.ID(),
 	}
 
