@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.185.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.185.0) - 2025-06-05
+
+- [`fd663ed`](https://github.com/alexfalkowski/infraops/commit/fd663eda14018a482697b74608ccff9cd4659ad9) feat(apps): update grpc to v1.73.0 (#1199)
+
 ## [v2.184.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.184.0) - 2025-06-05
 
 - [`5c38145`](https://github.com/alexfalkowski/infraops/commit/5c38145fc0a51360abc6203b183f853d28213902) feat(apps): use in memory model for access (#1198)
