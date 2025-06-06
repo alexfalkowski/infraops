@@ -68,7 +68,7 @@ applications: [
     version: version
     resource: small | medium | large
     secrets: ["secrets"]
-    environments: [
+    env_vars: [
       {
         name: name
         value: static value or "secret:secrets/value"
