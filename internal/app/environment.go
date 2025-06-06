@@ -8,15 +8,15 @@ import (
 )
 
 func addEnvironments(app *App, envs cv1.EnvVarArray) cv1.EnvVarArray {
-	for _, env := range app.Environments {
+	for _, envVar := range app.EnvVars {
 		var arg cv1.EnvVarArgs
 
-		if env.IsSecret() {
-			value := strings.TrimPrefix(env.Value, "secret:")
+		if envVar.IsSecret() {
+			value := strings.TrimPrefix(envVar.Value, "secret:")
 			name, value, _ := strings.Cut(value, "/")
 
 			arg = cv1.EnvVarArgs{
-				Name: pulumi.String(env.Name),
+				Name: pulumi.String(envVar.Name),
 				ValueFrom: &cv1.EnvVarSourceArgs{
 					SecretKeyRef: &cv1.SecretKeySelectorArgs{
 						Name: pulumi.String(name + secretSuffix),
@@ -26,8 +26,8 @@ func addEnvironments(app *App, envs cv1.EnvVarArray) cv1.EnvVarArray {
 			}
 		} else {
 			arg = cv1.EnvVarArgs{
-				Name:  pulumi.String(env.Name),
-				Value: pulumi.String(env.Value),
+				Name:  pulumi.String(envVar.Name),
+				Value: pulumi.String(envVar.Value),
 			}
 		}
 

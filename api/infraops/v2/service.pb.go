@@ -21,8 +21,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Environment represents the Environment variables for an application.
-type Environment struct {
+// EnvVar represents the env variables for an application.
+type EnvVar struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
@@ -30,20 +30,20 @@ type Environment struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Environment) Reset() {
-	*x = Environment{}
+func (x *EnvVar) Reset() {
+	*x = EnvVar{}
 	mi := &file_infraops_v2_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *Environment) String() string {
+func (x *EnvVar) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Environment) ProtoMessage() {}
+func (*EnvVar) ProtoMessage() {}
 
-func (x *Environment) ProtoReflect() protoreflect.Message {
+func (x *EnvVar) ProtoReflect() protoreflect.Message {
 	mi := &file_infraops_v2_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,19 +55,19 @@ func (x *Environment) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Environment.ProtoReflect.Descriptor instead.
-func (*Environment) Descriptor() ([]byte, []int) {
+// Deprecated: Use EnvVar.ProtoReflect.Descriptor instead.
+func (*EnvVar) Descriptor() ([]byte, []int) {
 	return file_infraops_v2_service_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Environment) GetName() string {
+func (x *EnvVar) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *Environment) GetValue() string {
+func (x *EnvVar) GetValue() string {
 	if x != nil {
 		return x.Value
 	}
@@ -85,7 +85,7 @@ type Application struct {
 	Version       string                 `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
 	Resource      string                 `protobuf:"bytes,7,opt,name=resource,proto3" json:"resource,omitempty"`
 	Secrets       []string               `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
-	Environments  []*Environment         `protobuf:"bytes,9,rep,name=environments,proto3" json:"environments,omitempty"`
+	EnvVars       []*EnvVar              `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -176,9 +176,9 @@ func (x *Application) GetSecrets() []string {
 	return nil
 }
 
-func (x *Application) GetEnvironments() []*Environment {
+func (x *Application) GetEnvVars() []*EnvVar {
 	if x != nil {
-		return x.Environments
+		return x.EnvVars
 	}
 	return nil
 }
@@ -951,10 +951,10 @@ var File_infraops_v2_service_proto protoreflect.FileDescriptor
 
 const file_infraops_v2_service_proto_rawDesc = "" +
 	"\n" +
-	"\x19infraops/v2/service.proto\x12\vinfraops.v2\"7\n" +
-	"\vEnvironment\x12\x12\n" +
+	"\x19infraops/v2/service.proto\x12\vinfraops.v2\"2\n" +
+	"\x06EnvVar\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\x89\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\xfb\x01\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n" +
@@ -963,8 +963,8 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x06domain\x18\x05 \x01(\tR\x06domain\x12\x18\n" +
 	"\aversion\x18\x06 \x01(\tR\aversion\x12\x1a\n" +
 	"\bresource\x18\a \x01(\tR\bresource\x12\x18\n" +
-	"\asecrets\x18\b \x03(\tR\asecrets\x12<\n" +
-	"\fenvironments\x18\t \x03(\v2\x18.infraops.v2.EnvironmentR\fenvironments\"d\n" +
+	"\asecrets\x18\b \x03(\tR\asecrets\x12.\n" +
+	"\benv_vars\x18\t \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +
@@ -1044,7 +1044,7 @@ func file_infraops_v2_service_proto_rawDescGZIP() []byte {
 
 var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_infraops_v2_service_proto_goTypes = []any{
-	(*Environment)(nil),  // 0: infraops.v2.Environment
+	(*EnvVar)(nil),       // 0: infraops.v2.EnvVar
 	(*Application)(nil),  // 1: infraops.v2.Application
 	(*Kubernetes)(nil),   // 2: infraops.v2.Kubernetes
 	(*Template)(nil),     // 3: infraops.v2.Template
@@ -1060,7 +1060,7 @@ var file_infraops_v2_service_proto_goTypes = []any{
 	(*DigitalOcean)(nil), // 13: infraops.v2.DigitalOcean
 }
 var file_infraops_v2_service_proto_depIdxs = []int32{
-	0,  // 0: infraops.v2.Application.environments:type_name -> infraops.v2.Environment
+	0,  // 0: infraops.v2.Application.env_vars:type_name -> infraops.v2.EnvVar
 	1,  // 1: infraops.v2.Kubernetes.applications:type_name -> infraops.v2.Application
 	3,  // 2: infraops.v2.Repository.template:type_name -> infraops.v2.Template
 	4,  // 3: infraops.v2.Repository.pages:type_name -> infraops.v2.Pages

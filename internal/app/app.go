@@ -30,17 +30,17 @@ func ConvertApplication(a *v2.Application) *App {
 		Secrets:   a.GetSecrets(),
 	}
 
-	environments := a.GetEnvironments()
-	if environments != nil {
-		app.Environments = make([]Environment, len(environments))
+	envVars := a.GetEnvVars()
+	if envVars != nil {
+		app.EnvVars = make([]*EnvVar, len(envVars))
 
-		for i, e := range environments {
-			environment := Environment{
+		for i, e := range envVars {
+			envVar := &EnvVar{
 				Name:  e.GetName(),
 				Value: e.GetValue(),
 			}
 
-			app.Environments[i] = environment
+			app.EnvVars[i] = envVar
 		}
 	}
 
@@ -66,15 +66,15 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 
 // App to be created.
 type App struct {
-	Resources    *Resources
-	ID           string
-	Name         string
-	Kind         string
-	Namespace    string
-	Domain       string
-	Version      string
-	Secrets      []string
-	Environments []Environment
+	Resources *Resources
+	ID        string
+	Name      string
+	Kind      string
+	Namespace string
+	Domain    string
+	Version   string
+	Secrets   []string
+	EnvVars   []*EnvVar
 }
 
 // HasResources for app.
@@ -105,13 +105,13 @@ type Range struct {
 	Max string
 }
 
-// Environment for apps.
-type Environment struct {
+// EnvVar for apps.
+type EnvVar struct {
 	Name  string
 	Value string
 }
 
 // IsSecret defines whether the env variable is a secret.
-func (e Environment) IsSecret() bool {
+func (e *EnvVar) IsSecret() bool {
 	return strings.HasPrefix(e.Value, "secret:")
 }

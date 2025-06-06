@@ -4,8 +4,8 @@ package infraops.v2;
 
 option go_package = "github.com/alexfalkowski/infraops/v2/api/infraops/v2";
 
-// Environment represents the Environment variables for an application.
-message Environment {
+// EnvVar represents the env variables for an application.
+message EnvVar {
   string name = 1;
   string value = 2;
 }
@@ -20,7 +20,7 @@ message Application {
   string version = 6;
   string resource = 7;
   repeated string secrets = 8;
-  repeated Environment environments = 9;
+  repeated EnvVar env_vars = 9;
 }
 
 // Kubernetes applications to be released.
