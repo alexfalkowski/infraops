@@ -42,7 +42,7 @@ applications: [
     namespace: "lean"
     domain: "lean-thoughts.com"
     version: "1.15"
-    environments: [
+    env_vars: [
       {
         name: "MO_MONITORABLE_GITHUB_TOKEN"
         value: "secret:gh/token"
