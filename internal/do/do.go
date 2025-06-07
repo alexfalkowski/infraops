@@ -83,7 +83,7 @@ func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster)
 			Size:      cluster.Size(),
 		},
 		Region:  pulumi.String(digitalocean.RegionFRA1),
-		Version: pulumi.String("1.32.2-do.2"),
+		Version: pulumi.String("1.32.2-do.3"),
 		VpcUuid: vpc.ID(),
 	}
 
