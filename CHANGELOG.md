@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.191.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.191.0) - 2025-06-07
+
+- [`352a585`](https://github.com/alexfalkowski/infraops/commit/352a585d2ca618a10824121b8f1c7da5a9554c2c) feat(apps): alias otel (#1210)
+- [`a80a81b`](https://github.com/alexfalkowski/infraops/commit/a80a81b6d805d253f96b4721805476ca15309747) build(deps): bump bin from `9c21752` to `255c12c` (#1209)
+- [`258f381`](https://github.com/alexfalkowski/infraops/commit/258f381e4aa1992875de7e6d8f4fedba2fabc95f) docs(apps): use env_vars (#1208)
+- [`a7f69cb`](https://github.com/alexfalkowski/infraops/commit/a7f69cbe0e47a840e824a4252400e2e6871f78af) build(ci): reenable api-breaking (#1207)
+
 ## [v2.190.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.190.0) - 2025-06-06
 
 - [`234e2a6`](https://github.com/alexfalkowski/infraops/commit/234e2a654df87ff3d4f7ff1e836e738264970d8b) feat(apps): use env vars (#1206)
