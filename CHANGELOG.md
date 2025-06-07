@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.192.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.192.0) - 2025-06-07
+
+- [`897c294`](https://github.com/alexfalkowski/infraops/commit/897c29419a4396982a761c1d34597aadd04ef7b5) feat(do): update to v1.32.2-do.3 (#1212)
+- [`2a80d7f`](https://github.com/alexfalkowski/infraops/commit/2a80d7f2243f299495af0a8f5be604f7cebc9014) build(ci): use alexfalkowski/k8s:1.61 (#1211)
+
 ## [v2.191.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.191.0) - 2025-06-07
 
 - [`352a585`](https://github.com/alexfalkowski/infraops/commit/352a585d2ca618a10824121b8f1c7da5a9554c2c) feat(apps): alias otel (#1210)
