@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.196.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.196.0) - 2025-06-08
+
+- [`5655e85`](https://github.com/alexfalkowski/infraops/commit/5655e8545234933b32285f6de480d32c55ecafb6) feat(apps): calculate backoff for client before request (#1216)
+
 ## [v2.195.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.195.0) - 2025-06-08
 
 - [`3b15be6`](https://github.com/alexfalkowski/infraops/commit/3b15be6c330d927e731be82f443a3baad61f5e6e) feat(apps): use http client retry correctly (#1215)
