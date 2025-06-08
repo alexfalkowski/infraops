@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.198.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.198.0) - 2025-06-08
+
+- [`f592b9c`](https://github.com/alexfalkowski/infraops/commit/f592b9c13dd75df7b3511211f2f08b2b28c152dd) feat(apps): pass registrar to grpc health (#1218)
+
 ## [v2.197.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.197.0) - 2025-06-08
 
 - [`a206fb4`](https://github.com/alexfalkowski/infraops/commit/a206fb4186ee87c431b04f1abf779873dffca376) feat(apps): pass params to register (#1217)
