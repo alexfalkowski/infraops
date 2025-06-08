@@ -6,7 +6,7 @@ applications: [
     name: "bezeichner"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.520.0"
+    version: "1.521.0"
     resource: "small"
   },
   {
@@ -15,7 +15,7 @@ applications: [
     name: "standort"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "2.516.0"
+    version: "2.517.0"
     resource: "small"
   },
   {
@@ -24,7 +24,7 @@ applications: [
     name: "web"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.85.0"
+    version: "1.86.0"
     resource: "small"
   },
   {
@@ -33,7 +33,7 @@ applications: [
     name: "sasha"
     namespace: "lean"
     domain: "sasha-adventures.com"
-    version: "1.89.0"
+    version: "1.90.0"
     resource: "small"
   },
   {
