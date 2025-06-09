@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
@@ -32,4 +34,8 @@ func tcpProbe() cv1.ProbeArgs {
 		PeriodSeconds:       pulumi.Int(10),
 		TimeoutSeconds:      pulumi.Int(30),
 	}
+}
+
+func probePath(name, path string) string {
+	return fmt.Sprintf("/%s/%s", name, path)
 }
