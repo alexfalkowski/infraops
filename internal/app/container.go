@@ -40,8 +40,8 @@ func internalContainer(app *App) cv1.ContainerArray {
 			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(8080)},
 			cv1.ContainerPortArgs{ContainerPort: pulumi.Int(9090)},
 		},
-		LivenessProbe:  httpProbe("/livez"),
-		ReadinessProbe: httpProbe("/readyz"),
+		LivenessProbe:  httpProbe(probePath(app.Name, "livez")),
+		ReadinessProbe: httpProbe(probePath(app.Name, "readyz")),
 		StartupProbe:   tcpProbe(),
 		Resources:      createResources(app),
 		SecurityContext: cv1.SecurityContextArgs{
