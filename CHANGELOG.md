@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.200.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.200.0) - 2025-06-09
+
+- [`268fa83`](https://github.com/alexfalkowski/infraops/commit/268fa83fc0315fcc4309b6677f64e49dcc382daa) feat(apps): prefix name to observability patterns (#1220)
+
 ## [v2.199.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.199.0) - 2025-06-09
 
 - [`2b555c7`](https://github.com/alexfalkowski/infraops/commit/2b555c7bdecca2df21c6b22a2811829b2fc4129f) feat(apps): move health to transport (#1219)
