@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.201.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.201.0) - 2025-06-10
+
+- [`5f8d9ba`](https://github.com/alexfalkowski/infraops/commit/5f8d9bad1581985678ca860839ad12a62ec7c410) feat(apps): use namespace for prometheus (#1221)
+
 ## [v2.200.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.200.0) - 2025-06-09
 
 - [`268fa83`](https://github.com/alexfalkowski/infraops/commit/268fa83fc0315fcc4309b6677f64e49dcc382daa) feat(apps): prefix name to observability patterns (#1220)
