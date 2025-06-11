@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.206.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.206.0) - 2025-06-11
+
+- [`9661ba5`](https://github.com/alexfalkowski/infraops/commit/9661ba528cd1f5a6b3d0ea75174cf0a80ce33dd9) feat(deps): bump github.com/cloudflare/circl from 1.3.7 to 1.6.1 (#1227)
+
 ## [v2.205.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.205.0) - 2025-06-10
 
 - [`69becc1`](https://github.com/alexfalkowski/infraops/commit/69becc186d5cff0f37c8f6e1d0cd84bc2a27974a) feat(apps): move fx to di (#1226)
