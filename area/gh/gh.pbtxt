@@ -87,7 +87,7 @@ repositories: [
     description: "Common setup used for my projects."
 		homepage_url: "https://alexfalkowski.github.io/docker"
 		topics: ["docker", "ruby", "golang"]
-		checks: ["ci/circleci: lint", "ci/circleci: build"]
+		checks: ["ci/circleci: lint"]
 		visibility: "public"
 		pages: {}
     enable_collaborators: true
