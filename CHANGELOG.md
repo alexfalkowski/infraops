@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.211.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.211.0) - 2025-06-13
+
+- [`1d6457c`](https://github.com/alexfalkowski/infraops/commit/1d6457cf1bda31d09209630e4ea5678c8be1f4da) feat(gh): update checks for go-service-template (#1234)
+
 ## [v2.210.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.210.0) - 2025-06-13
 
 - [`965b587`](https://github.com/alexfalkowski/infraops/commit/965b58795ef860045191c4eae39d666f50c9ee2a) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.175.0 to 3.176.0 (#1231)
