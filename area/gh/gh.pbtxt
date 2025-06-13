@@ -112,7 +112,7 @@ repositories: [
     description: "A template for go services."
 		homepage_url: "https://alexfalkowski.github.io/go-service-template"
     topics: ["golang", "ruby", "make", "cucumber"]
-		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
 		is_template: true
 		pages: {}
