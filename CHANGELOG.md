@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.209.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.209.0) - 2025-06-13
+
+- [`40159f4`](https://github.com/alexfalkowski/infraops/commit/40159f49e11d8279843a0130ac931959ec55b6a6) feat(gh): remove ci/circleci: build for docker (#1233)
+
 ## [v2.208.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.208.0) - 2025-06-13
 
 - [`f282faa`](https://github.com/alexfalkowski/infraops/commit/f282faa70f1986ca6c0e152e4a16ee33afe78aba) feat(apps): update monitoror 1.16 (#1232)
