@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.26
+      - image: alexfalkowski/go:2.27
     working_directory: ~/infraops
     steps:
       - checkout
@@ -60,7 +60,7 @@ jobs:
     resource_class: large
   release:
     docker:
-      - image: alexfalkowski/release:3.24
+      - image: alexfalkowski/release:3.25
     working_directory: ~/infraops
     steps:
       - checkout
@@ -72,7 +72,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -107,7 +107,7 @@ jobs:
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -147,7 +147,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -181,7 +181,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -217,7 +217,7 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -251,7 +251,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -287,7 +287,7 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
@@ -321,7 +321,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:1.61
+      - image: alexfalkowski/k8s:1.62
     working_directory: ~/infraops
     steps:
       - checkout
