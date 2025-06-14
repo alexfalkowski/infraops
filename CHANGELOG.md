@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.223.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.223.0) - 2025-06-14
+
+- [`d2abcea`](https://github.com/alexfalkowski/infraops/commit/d2abcea28f6ff4af115db8b07514f8410cc45c94) feat(apps): remove ping for monitoror (#1249)
+
 ## [v2.222.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.222.0) - 2025-06-14
 
 - [`6010fd0`](https://github.com/alexfalkowski/infraops/commit/6010fd06b1116458dbac6a7c17d7d6c15b756b2e) feat(apps): update monitoror config (#1247)
