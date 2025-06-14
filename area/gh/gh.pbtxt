@@ -216,7 +216,7 @@ repositories: [
     description: "Sasha is site for recording of awesome adventures."
 		homepage_url: "https://alexfalkowski.github.io/sasha"
     topics: ["golang", "ruby", "make", "cucumber", "htmx"]
-		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
     template: {
 		  owner: "alexfalkowski"
