@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.221.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.221.0) - 2025-06-14
+
+- [`ec90059`](https://github.com/alexfalkowski/infraops/commit/ec9005926dad8407c6b6d9982c365963d9cc8959) feat(apps): update automemlimit from 0.7.2 to 0.7.3 (#1246)
+
 ## [v2.220.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.220.0) - 2025-06-14
 
 - [`15dba3e`](https://github.com/alexfalkowski/infraops/commit/15dba3e2d047bbf9674d6c37f2f573516843553e) feat(apps): update sprout to v1.0.1 (#1245)
