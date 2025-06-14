@@ -123,7 +123,7 @@ repositories: [
     description: "Bezeichner takes care of identifiers used in your services."
 		homepage_url: "https://alexfalkowski.github.io/bezeichner"
     topics: ["golang", "ruby", "make", "cucumber"]
-		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
 		pages: {}
     enable_collaborators: true
