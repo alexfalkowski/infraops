@@ -178,7 +178,7 @@ repositories: [
     description: "An alternative to https://httpstat.us/."
 		homepage_url: "https://alexfalkowski.github.io/status"
     topics: ["golang", "ruby", "make", "cucumber"]
-		checks: ["ci/circleci: build-service", "ci/circleci: build-docker"]
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
 		pages: {}
     enable_collaborators: true
