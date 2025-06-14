@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.220.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.220.0) - 2025-06-14
+
+- [`15dba3e`](https://github.com/alexfalkowski/infraops/commit/15dba3e2d047bbf9674d6c37f2f573516843553e) feat(apps): update sprout to v1.0.1 (#1245)
+- [`533c2ad`](https://github.com/alexfalkowski/infraops/commit/533c2adf8fc45ba5f2e5d1e4e8fcdd1bd3c56019) build(ci): use alexfalkowski/k8s:1.63 (#1244)
+
 ## [v2.219.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.219.0) - 2025-06-14
 
 - [`a3df25c`](https://github.com/alexfalkowski/infraops/commit/a3df25c4b8f4294521bf9a8df71efee4f7891e15) feat(gh): update checks for sashactl (#1243)
