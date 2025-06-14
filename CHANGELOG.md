@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.212.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.212.0) - 2025-06-14
+
+- [`290982f`](https://github.com/alexfalkowski/infraops/commit/290982fd41a467cf1eeb5e99012aa881ad384479) feat(gh): update checks for go-client-template (#1236)
+- [`f730c86`](https://github.com/alexfalkowski/infraops/commit/f730c86ff4977fe6b2fb9a318456834ac38cba5e) build(deps): upgraded github.com/alexfalkowski/bin (#1235)
+
 ## [v2.211.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.211.0) - 2025-06-13
 
 - [`1d6457c`](https://github.com/alexfalkowski/infraops/commit/1d6457cf1bda31d09209630e4ea5678c8be1f4da) feat(gh): update checks for go-service-template (#1234)
