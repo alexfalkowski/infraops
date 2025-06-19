@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.229.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.229.0) - 2025-06-19
+
+- [`28e904d`](https://github.com/alexfalkowski/infraops/commit/28e904dafee0d4e24c4279b2fb1bc39639d6ecf7) feat(apps): update go-retryablehttp to v0.7.8 (#1254)
+
 ## [v2.228.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.228.0) - 2025-06-17
 
 - [`990472a`](https://github.com/alexfalkowski/infraops/commit/990472a7b6b890fb25c5c2e0cacb6cb51b673991) feat(apps): update go-sdk-contrib to v0.3.5 (#1253)
