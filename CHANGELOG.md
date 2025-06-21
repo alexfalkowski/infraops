@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.230.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.230.0) - 2025-06-21
+
+- [`123caa6`](https://github.com/alexfalkowski/infraops/commit/123caa604b8ecf95f89befccfa1fc1994fb9d688) feat(apps): restructure meta (#1255)
+
 ## [v2.229.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.229.0) - 2025-06-19
 
 - [`28e904d`](https://github.com/alexfalkowski/infraops/commit/28e904dafee0d4e24c4279b2fb1bc39639d6ecf7) feat(apps): update go-retryablehttp to v0.7.8 (#1254)
