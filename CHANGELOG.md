@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.234.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.234.0) - 2025-06-23
+
+- [`eb1ee1f`](https://github.com/alexfalkowski/infraops/commit/eb1ee1fe1b13a615e4b97f550a3c772f5b1186fb) feat(apps): use new context package (#1259)
+
 ## [v2.233.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.233.0) - 2025-06-22
 
 - [`ecb8a26`](https://github.com/alexfalkowski/infraops/commit/ecb8a26772b7ac2526ff2af23e6e0cd543a98717) feat(apps): update casbin to 2.108.0 (#1258)
