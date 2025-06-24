@@ -150,7 +150,7 @@ repositories: [
     name: "go-service-template"
     description: "A template for go services."
 		homepage_url: "https://alexfalkowski.github.io/go-service-template"
-    topics: ["golang", "ruby", "make", "cucumber"]
+    topics: ["golang", "ruby", "make", "cucumber", "microservice"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
 		is_template: true
@@ -302,6 +302,25 @@ repositories: [
     }
 		pages: {
       enabled: true
+    }
+  },
+  {
+    name: "go-monolith"
+    description: "A template to have a distributed monolith."
+		homepage_url: "https://alexfalkowski.github.io/go-monolith"
+    topics: ["golang", "ruby", "make", "cucumber", "monolith"]
+		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
+		visibility: "public"
+    template: {
+		  owner: "alexfalkowski"
+			repository: "go-service-template"
+		}
+    is_template: true
+    collaborators: {
+      enabled: false
+    }
+		pages: {
+      enabled: false
     }
   }
 ]
