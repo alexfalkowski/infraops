@@ -63,15 +63,20 @@ func ReadConfiguration(path string) (*v2.Github, error) {
 // ConvertRepository converts a v2.Repository to a Repository.
 func ConvertRepository(r *v2.Repository) *Repository {
 	repository := &Repository{
-		Name:                r.GetName(),
-		Description:         r.GetDescription(),
-		HomepageURL:         r.GetHomepageUrl(),
-		Visibility:          Visibility(r.GetVisibility()),
-		Topics:              r.GetTopics(),
-		Checks:              Checks(r.GetChecks()),
-		IsTemplate:          r.GetIsTemplate(),
-		Archived:            r.GetArchived(),
-		EnableCollaborators: r.GetEnableCollaborators(),
+		Name:        r.GetName(),
+		Description: r.GetDescription(),
+		HomepageURL: r.GetHomepageUrl(),
+		Visibility:  Visibility(r.GetVisibility()),
+		Topics:      r.GetTopics(),
+		Checks:      Checks(r.GetChecks()),
+		IsTemplate:  r.GetIsTemplate(),
+		Archived:    r.GetArchived(),
+	}
+
+	if collaborators := r.GetCollaborators(); collaborators != nil {
+		repository.Collaborators = &Collaborators{
+			Enabled: collaborators.GetEnabled(),
+		}
 	}
 
 	if template := r.GetTemplate(); template != nil {
@@ -88,7 +93,8 @@ func ConvertRepository(r *v2.Repository) *Repository {
 
 	if pages := r.GetPages(); pages != nil {
 		repository.Pages = &Pages{
-			CNAME: pages.GetCname(),
+			Enabled: pages.GetEnabled(),
+			CNAME:   pages.GetCname(),
 		}
 	}
 
@@ -117,33 +123,44 @@ type (
 	// Visibility of the repositories.
 	Visibility string
 
+	// Collaborators for gh.
+	Collaborators struct {
+		Enabled bool
+	}
+
 	// Pages for gh.
 	Pages struct {
-		CNAME string
+		CNAME   string
+		Enabled bool
 	}
 )
 
 // Repository for gh.
 type Repository struct {
-	Template            *Template
-	Pages               *Pages
-	Name                string
-	Description         string
-	HomepageURL         string
-	Visibility          Visibility
-	Topics              []string
-	Checks              Checks
-	IsTemplate          bool
-	Archived            bool
-	EnableCollaborators bool
+	Collaborators *Collaborators
+	Template      *Template
+	Pages         *Pages
+	Name          string
+	Description   string
+	HomepageURL   string
+	Visibility    Visibility
+	Topics        []string
+	Checks        Checks
+	IsTemplate    bool
+	Archived      bool
 }
 
-// HasPages for this repository.
-func (r *Repository) HasPages() bool {
-	return r.Pages != nil
+// HasCollaborators for this repository.
+func (r *Repository) HasCollaborators() bool {
+	return r.Collaborators != nil && r.Collaborators.Enabled
 }
 
 // HasTemplate for this repository.
 func (r *Repository) HasTemplate() bool {
 	return r.Template != nil
+}
+
+// HasPages for this repository.
+func (r *Repository) HasPages() bool {
+	return r.Pages != nil && r.Pages.Enabled
 }
