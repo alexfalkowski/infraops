@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.237.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.237.0) - 2025-06-24
+
+- [`154623b`](https://github.com/alexfalkowski/infraops/commit/154623bad8665ea74826975eaa8c3f3c3b297d6d) feat(gh): add pages for go-monolith (#1263)
+
 ## [v2.236.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.236.0) - 2025-06-24
 
 - [`49243b8`](https://github.com/alexfalkowski/infraops/commit/49243b83fdc86f722c1322ae7c94cc8fd2ecc97b) feat(gh): add go-monolith (#1262)
