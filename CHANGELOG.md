@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.235.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.235.0) - 2025-06-24
+
+- [`076a74b`](https://github.com/alexfalkowski/infraops/commit/076a74b66f757487660fcc953ee1c2e18a46b2ee) feat(gh): allow the posibility to extend collaborators (#1260)
+
 ## [v2.234.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.234.0) - 2025-06-23
 
 - [`eb1ee1f`](https://github.com/alexfalkowski/infraops/commit/eb1ee1fe1b13a615e4b97f550a3c772f5b1186fb) feat(apps): use new context package (#1259)
