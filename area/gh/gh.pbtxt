@@ -317,10 +317,10 @@ repositories: [
 		}
     is_template: true
     collaborators: {
-      enabled: false
+      enabled: true
     }
 		pages: {
-      enabled: false
+      enabled: true
     }
   }
 ]
