@@ -6,7 +6,7 @@ import (
 )
 
 func collaborator(ctx *pulumi.Context, repo *Repository) error {
-	if !repo.EnableCollaborators {
+	if !repo.HasCollaborators() {
 		return nil
 	}
 

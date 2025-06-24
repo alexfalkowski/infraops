@@ -7,10 +7,13 @@ repositories: [
     topics: ["jekyll", "ruby"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
+    collaborators: {
+      enabled: true
+    }
 		pages: {
+      enabled: true
       cname: "www.afalkowski.com"
     }
-		enable_collaborators: true
   },
   {
     name: "nonnative"
@@ -19,8 +22,12 @@ repositories: [
     topics: ["ruby", "cucumber", "bdd"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "go-service"
@@ -29,8 +36,12 @@ repositories: [
     topics: ["golang", "grpc", "http", "rpc", "mvc", "postgres", "cache", "redis", "cloudevents"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
-    pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+    pages: {
+      enabled: true
+    }
   },
   {
     name: "go-health"
@@ -39,8 +50,12 @@ repositories: [
     topics: ["golang", "k8s"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "infraops"
@@ -49,8 +64,12 @@ repositories: [
     topics: ["golang", "cloudflare", "digitalocean", "github", "k8s"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "bin"
@@ -59,8 +78,12 @@ repositories: [
     topics: ["bash", "ruby", "docker"]
 		checks: ["ci/circleci: build"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "scripts"
@@ -69,8 +92,12 @@ repositories: [
     topics: ["bash"]
 		checks: ["ci/circleci: lint"]
 		visibility: "public"
-    pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+    pages: {
+      enabled: true
+    }
   },
   {
     name: "app-config"
@@ -78,8 +105,12 @@ repositories: [
 		homepage_url: "https://alexfalkowski.github.io/app-config"
 		checks: ["ci/circleci: verify-config"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+       enabled: true
+    }
     archived: true
   },
   {
@@ -89,8 +120,12 @@ repositories: [
 		topics: ["docker", "ruby", "golang"]
 		checks: ["ci/circleci: lint"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "go-client-template"
@@ -104,8 +139,12 @@ repositories: [
 			repository: "go-service-template"
 		}
 		is_template: true
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "go-service-template"
@@ -115,8 +154,12 @@ repositories: [
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
 		is_template: true
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+       enabled: true
+    }
   },
   {
     name: "bezeichner"
@@ -125,8 +168,12 @@ repositories: [
     topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "konfigctl"
@@ -139,8 +186,12 @@ repositories: [
 		  owner: "alexfalkowski"
 			repository: "go-client-template"
 		}
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+       enabled: true
+    }
     archived: true
   },
   {
@@ -149,8 +200,12 @@ repositories: [
 		homepage_url: "https://alexfalkowski.github.io/konfig"
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker", "ci/circleci: features-grpc", "ci/circleci: features-http", "ci/circleci: features-coverage"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
     archived: true
   },
   {
@@ -160,8 +215,12 @@ repositories: [
     topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "standort"
@@ -170,8 +229,12 @@ repositories: [
     topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "status"
@@ -180,8 +243,12 @@ repositories: [
     topics: ["golang", "ruby", "make", "cucumber"]
 		checks: ["ci/circleci: build-service", "ci/circleci: build-docker-amd64", "ci/circleci: build-docker-arm64"]
 		visibility: "public"
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "web"
@@ -194,8 +261,12 @@ repositories: [
 		  owner: "alexfalkowski"
 			repository: "go-service-template"
 		}
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "sashactl"
@@ -208,8 +279,12 @@ repositories: [
 		  owner: "alexfalkowski"
 			repository: "go-client-template"
 		}
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   },
   {
     name: "sasha"
@@ -222,7 +297,11 @@ repositories: [
 		  owner: "alexfalkowski"
 			repository: "go-service-template"
 		}
-		pages: {}
-    enable_collaborators: true
+    collaborators: {
+      enabled: true
+    }
+		pages: {
+      enabled: true
+    }
   }
 ]

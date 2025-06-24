@@ -29,6 +29,12 @@ message Kubernetes {
   repeated Application applications = 2;
 }
 
+// Collaborators describes whether the repository will have collaborators enabled.
+message Collaborators {
+  bool enabled = 1;
+}
+
+
 // Template represents the template to be used for a repository.
 message Template {
   string owner = 1;
@@ -37,7 +43,8 @@ message Template {
 
 // Pages describes whether the repository will have pages enabled.
 message Pages {
-  string cname = 1;
+  bool enabled = 1;
+  string cname = 2;
 }
 
 // Repository represents the repository to be created.
@@ -48,7 +55,7 @@ message Repository {
   string visibility = 4;
   bool is_template = 5;
   bool archived = 6;
-  bool enable_collaborators = 7;
+  Collaborators collaborators = 7;
   Template template = 8;
   Pages pages = 9;
   repeated string topics = 10;
