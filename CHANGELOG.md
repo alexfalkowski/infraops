@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.236.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.236.0) - 2025-06-24
+
+- [`49243b8`](https://github.com/alexfalkowski/infraops/commit/49243b83fdc86f722c1322ae7c94cc8fd2ecc97b) feat(gh): add go-monolith (#1262)
+- [`2f9de9b`](https://github.com/alexfalkowski/infraops/commit/2f9de9b762cc389c655bc03cbd7528a5b3d88f9e) build(ci): reenable api-breaking (#1261)
+
 ## [v2.235.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.235.0) - 2025-06-24
 
 - [`076a74b`](https://github.com/alexfalkowski/infraops/commit/076a74b66f757487660fcc953ee1c2e18a46b2ee) feat(gh): allow the posibility to extend collaborators (#1260)
