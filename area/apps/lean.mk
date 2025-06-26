@@ -47,7 +47,7 @@ rollout-monitoror:
 	@kubectl rollout restart deployment/monitoror -n lean
 
 # Verify all apps.
-verify-lean: verify-standort verify-bezeichner verify-web verify-sasha verify-monitoror
+verify-lean: verify-standort verify-bezeichner verify-web verify-monitoror
 
 # Verify standort.
 verify-standort:
@@ -60,10 +60,6 @@ verify-bezeichner:
 # Verify web.
 verify-web:
 	@curl -svf https://web.lean-thoughts.com
-
-# Verify sasha.
-verify-sasha:
-	@curl -svf https://sasha.sasha-adventures.com/
 
 # Verify monitoror.
 verify-monitoror:
