@@ -28,20 +28,11 @@ applications: [
     resource: "small"
   },
   {
-    id: "f115d2ee-0700-47be-a423-830bee7750b2"
-    kind: "internal"
-    name: "sasha"
-    namespace: "lean"
-    domain: "sasha-adventures.com"
-    version: "1.110.0"
-    resource: "small"
-  },
-  {
     kind: "external"
     name: "monitoror"
     namespace: "lean"
     domain: "lean-thoughts.com"
-    version: "1.19"
+    version: "1.20"
     env_vars: [
       {
         name: "MO_MONITORABLE_GITHUB_TOKEN"

@@ -78,6 +78,10 @@ func TestCreateBucket(t *testing.T) {
 		bucket := &cf.Bucket{
 			Name:   "test",
 			Region: "eeur",
+			Zone: &cf.BucketZone{
+				ID:     "test",
+				Domain: "www.test.com",
+			},
 		}
 
 		err := cf.CreateBucket(ctx, bucket)

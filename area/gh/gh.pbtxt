@@ -285,6 +285,7 @@ repositories: [
 		pages: {
       enabled: true
     }
+    archived: true
   },
   {
     name: "sasha"
@@ -303,6 +304,7 @@ repositories: [
 		pages: {
       enabled: true
     }
+    archived: true
   },
   {
     name: "go-monolith"
