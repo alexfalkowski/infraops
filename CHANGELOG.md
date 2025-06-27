@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.242.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.242.0) - 2025-06-27
+
+- [`ff5bd0f`](https://github.com/alexfalkowski/infraops/commit/ff5bd0f76c7591ca02000a1f7a85f6b9553a7212) feat(gh): enable collaborators for tausch (#1270)
+
 ## [v2.241.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.241.0) - 2025-06-27
 
 - [`4cd317c`](https://github.com/alexfalkowski/infraops/commit/4cd317c4f11c1ee58cf969d8b15eb6338637dced) feat(gh): add tausch (#1269)
