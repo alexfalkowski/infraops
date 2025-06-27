@@ -324,5 +324,19 @@ repositories: [
 		pages: {
       enabled: true
     }
+  },
+  {
+    name: "tausch"
+    description: "A stub for https://pkg.go.dev/os/exec."
+		homepage_url: "https://alexfalkowski.github.io/tausch"
+    topics: ["golang", "stub", "test"]
+		checks: ["ci/circleci: build"]
+		visibility: "public"
+    collaborators: {
+      enabled: false
+    }
+		pages: {
+      enabled: false
+    }
   }
 ]
