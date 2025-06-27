@@ -333,10 +333,10 @@ repositories: [
 		checks: ["ci/circleci: build"]
 		visibility: "public"
     collaborators: {
-      enabled: false
+      enabled: true
     }
 		pages: {
-      enabled: false
+      enabled: true
     }
   }
 ]
