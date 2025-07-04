@@ -15,6 +15,7 @@ var ErrVersionMismatch = errors.New("version mismatch")
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 	var configuration v2.Kubernetes
+
 	err := config.Read(path, &configuration)
 
 	return &configuration, err
