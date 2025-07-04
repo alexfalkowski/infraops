@@ -16,6 +16,7 @@ var sizes = map[string]digitalocean.DropletSlug{
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 	var configuration v2.DigitalOcean
+
 	err := config.Read(path, &configuration)
 
 	return &configuration, err
