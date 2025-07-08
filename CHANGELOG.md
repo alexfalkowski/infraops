@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.245.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.245.0) - 2025-07-08
+
+- [`9ad6408`](https://github.com/alexfalkowski/infraops/commit/9ad64086271ff19f6b5f05baa257059d23727e44) feat(apps): use config dir (#1275)
+- [`55d63e6`](https://github.com/alexfalkowski/infraops/commit/55d63e6f1abf4f4898e3f1391b005f2dd56458e8) build(ci): use alexfalkowski/go:2.37 (#1274)
+- [`33bc790`](https://github.com/alexfalkowski/infraops/commit/33bc7902e2bf54a4e159155673fbb2168d210ebc) build(ci): use alexfalkowski/k8s:1.70 (#1273)
+
 ## [v2.244.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.244.0) - 2025-07-01
 
 - [`05d2634`](https://github.com/alexfalkowski/infraops/commit/05d26341d8639fde173fae75d76804c943a3f749) feat(apps): update yaml dep as it is deprecated (#1272)
