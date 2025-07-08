@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.251.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.251.0) - 2025-07-08
+
+- [`ef2a1f3`](https://github.com/alexfalkowski/infraops/commit/ef2a1f3951f3ada3445ef4b210175730a2bfb54d) feat(apps): elem from slice (#1281)
+
 ## [v2.250.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.250.0) - 2025-07-08
 
 - [`f910fdb`](https://github.com/alexfalkowski/infraops/commit/f910fdb4cdc073f729f30c80c3c3d94b116bd215) feat(k8s): update nginx to v4.13.0 (#1280)
