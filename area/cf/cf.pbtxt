@@ -4,8 +4,8 @@ balancer_zones: [
     name: "lean-thoughts"
     domain: "lean-thoughts.com"
     record_names: ["konfig", "standort", "bezeichner", "web", "monitoror"]
-    ipv4: "67.207.76.131"
-    ipv6: "2a03:b0c0:3:f0::edba:5000"
+    ipv4: "67.207.76.98"
+    ipv6: "2a03:b0c0:3:f0:0:1:e12:e000"
   }
 ]
 page_zones: [
