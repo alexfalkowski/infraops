@@ -40,20 +40,20 @@ jobs:
           keys:
             - infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-build-go-build-cache-
-      - run: make clean
-      - run: make api-lint
-      - run: make api-breaking
       - restore_cache:
           name: restore go lint cache
           keys:
             - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-build-go-lint-cache-
+      - run: make clean
       - run: make lint
       - save_cache:
           name: save go lint cache
           key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/golangci-lint
+      - run: make api-lint
+      - run: make api-breaking
       - run: make sec
       - run: make specs
       - save_cache:
