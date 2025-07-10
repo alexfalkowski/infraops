@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.39
+      - image: alexfalkowski/go:2.40
     working_directory: ~/infraops
     steps:
       - checkout
@@ -26,19 +26,19 @@ jobs:
       - restore_cache:
           name: restore go cache
           keys:
-            - infraops-build-go-cache-{{ checksum "go.sum" }}
+            - infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-build-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save go cache
-          key: infraops-build-go-cache-{{ checksum "go.sum" }}
+          key: infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-build-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-build-go-build-cache-
       - run: make clean
       - run: make api-lint
@@ -46,19 +46,19 @@ jobs:
       - restore_cache:
           name: restore go lint cache
           keys:
-            - infraops-build-go-lint-cache-{{ checksum "go.sum" }}
+            - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-build-go-lint-cache-
       - run: make lint
       - save_cache:
           name: save go lint cache
-          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}
+          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/golangci-lint
       - run: make sec
       - run: make specs
       - save_cache:
           name: save go build cache
-          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
       - run: make coverage
@@ -70,7 +70,7 @@ jobs:
     resource_class: large
   release:
     docker:
-      - image: alexfalkowski/release:3.29
+      - image: alexfalkowski/release:3.30
     working_directory: ~/infraops
     steps:
       - checkout
@@ -82,7 +82,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -92,32 +92,32 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-apps-go-cache-{{ checksum "go.sum" }}
+            - infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-apps-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-apps-go-cache-{{ checksum "go.sum" }}
+          key: infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-apps-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-apps-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=apps pulumi-preview
       - save_cache:
           name: save go build cache
-          key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -128,19 +128,19 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-apps-go-cache-{{ checksum "go.sum" }}
+            - infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-apps-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-apps-go-cache-{{ checksum "go.sum" }}
+          key: infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-apps-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-apps-go-build-cache-
       - run: make clean
       - run: make pulumi-login
@@ -150,14 +150,14 @@ jobs:
       - run: make -C area/apps lint
       - save_cache:
           name: save go build cache
-          key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -166,32 +166,32 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-cf-go-cache-{{ checksum "go.sum" }}
+            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-cf-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-cf-go-cache-{{ checksum "go.sum" }}
+          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-cf-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-cf-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=cf pulumi-preview
       - save_cache:
           name: save go build cache
-          key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -201,33 +201,33 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-cf-go-cache-{{ checksum "go.sum" }}
+            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-cf-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-cf-go-cache-{{ checksum "go.sum" }}
+          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-cf-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-cf-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=cf pulumi-update
       - save_cache:
           name: save go build cache
-          key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -236,32 +236,32 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-do-go-cache-{{ checksum "go.sum" }}
+            - infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-do-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-do-go-cache-{{ checksum "go.sum" }}
+          key: infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-do-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-do-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-do-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=do pulumi-preview
       - save_cache:
           name: save go build cache
-          key: infraops-do-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-do-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -271,33 +271,33 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-do-go-cache-{{ checksum "go.sum" }}
+            - infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-do-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-do-go-cache-{{ checksum "go.sum" }}
+          key: infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-do-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-do-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-do-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=do pulumi-update
       - save_cache:
           name: save go build cache
-          key: infraops-do-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-do-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -306,32 +306,32 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-gh-go-cache-{{ checksum "go.sum" }}
+            - infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-gh-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-gh-go-cache-{{ checksum "go.sum" }}
+          key: infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-gh-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-gh-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-gh-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=gh pulumi-preview
       - save_cache:
           name: save go build cache
-          key: infraops-gh-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-gh-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:1.71
+      - image: alexfalkowski/k8s:1.72
     working_directory: ~/infraops
     steps:
       - checkout
@@ -341,26 +341,26 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-gh-go-cache-{{ checksum "go.sum" }}
+            - infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-gh-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-gh-go-cache-{{ checksum "go.sum" }}
+          key: infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-gh-go-build-cache-{{ checksum "go.sum" }}
+            - infraops-gh-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-gh-go-build-cache-
       - run: make clean
       - run: make pulumi-login
       - run: make area=gh pulumi-update
       - save_cache:
           name: save go build cache
-          key: infraops-gh-go-build-cache-{{ checksum "go.sum" }}
+          key: infraops-gh-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/.cache/go-build
     resource_class: large
