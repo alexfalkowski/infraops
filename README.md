@@ -132,6 +132,13 @@ The account needs a default VPC. Create one manually under the region you would 
 | ------------ | ------------------------- |
 | default-fra1 | The default vpc for fra1. |
 
+#### DigitalOcean Cluster Upgrade
+
+The process is as follows:
+
+- Patch versions can be updated at [do.go](internal/do/do.go).
+- Minor/major versions should be updated in the [UI](https://docs.digitalocean.com/products/kubernetes/how-to/upgrade-cluster/) and then updated at [do.go](internal/do/do.go).
+
 #### DigitalOcean Configuration
 
 Have a look at [configuration](area/do/do.pbtxt), the format is:
