@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.253.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.253.0) - 2025-07-12
+
+- [`25fc690`](https://github.com/alexfalkowski/infraops/commit/25fc6908735d5b3a6ef409d6f590632a804a3d6a) feat(apps): allow to use network in server address (#1289)
+
 ## [v2.252.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.252.0) - 2025-07-12
 
 - [`60ce836`](https://github.com/alexfalkowski/infraops/commit/60ce836207cbe170c7533cde741712354a6ae5ff) feat(apps): update automemlimit to v0.7.4 (#1288)
