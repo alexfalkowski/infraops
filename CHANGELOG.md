@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.252.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.252.0) - 2025-07-12
+
+- [`60ce836`](https://github.com/alexfalkowski/infraops/commit/60ce836207cbe170c7533cde741712354a6ae5ff) feat(apps): update automemlimit to v0.7.4 (#1288)
+- [`e6c4008`](https://github.com/alexfalkowski/infraops/commit/e6c40084836e32f523a24698d38a43f1115fa795) docs(readme): add cluster upgrade (#1287)
+- [`98885b5`](https://github.com/alexfalkowski/infraops/commit/98885b53a04b27d85fa99ff03a7e7ef37cf2dc87) build(ci): move make clean (#1286)
+- [`8fe19d7`](https://github.com/alexfalkowski/infraops/commit/8fe19d73ccb47c76c44400931dd4889194c8cf3e) build(ci): add checksum ~/.go-version (#1285)
+- [`d1f74b8`](https://github.com/alexfalkowski/infraops/commit/d1f74b8bde23b85ccf52236937e8d1c4e12e9931) build(deps): bump bin from `d0fdcaa` to `07bcffa` (#1284)
+- [`bb53120`](https://github.com/alexfalkowski/infraops/commit/bb53120c014f63cea9de029a6155b7e4ee27dec8) build(deps): bump bin from `ce6b0e8` to `d0fdcaa` (#1283)
+- [`d0d35b3`](https://github.com/alexfalkowski/infraops/commit/d0d35b3c5978d2fcb09aa654eced8c1fcd5d5fe9) build(ci): use alexfalkowski/k8s:1.71 (#1282)
+
 ## [v2.251.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.251.0) - 2025-07-08
 
 - [`ef2a1f3`](https://github.com/alexfalkowski/infraops/commit/ef2a1f3951f3ada3445ef4b210175730a2bfb54d) feat(apps): elem from slice (#1281)
