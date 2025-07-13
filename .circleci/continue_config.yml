@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.40
+      - image: alexfalkowski/go:2.41
     working_directory: ~/infraops
     steps:
       - checkout
@@ -43,13 +43,13 @@ jobs:
       - restore_cache:
           name: restore go lint cache
           keys:
-            - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+            - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}
             - infraops-build-go-lint-cache-
       - run: make clean
       - run: make lint
       - save_cache:
           name: save go lint cache
-          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}
           paths:
             - ~/.cache/golangci-lint
       - run: make api-lint
