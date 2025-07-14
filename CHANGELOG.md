@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.255.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.255.0) - 2025-07-14
+
+- [`ec414ad`](https://github.com/alexfalkowski/infraops/commit/ec414ad90a5afab49d2821031ad7b16baa4e1fb7) feat(apps): add default address (#1293)
+
 ## [v2.254.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.254.0) - 2025-07-14
 
 - [`10cd757`](https://github.com/alexfalkowski/infraops/commit/10cd75781cec16eeb2431ebbc3997aa38ca433d5) feat(apps): use listen from stdlib (#1292)
