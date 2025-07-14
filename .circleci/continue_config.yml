@@ -27,30 +27,30 @@ jobs:
       - restore_cache:
           name: restore go cache
           keys:
-            - infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+            - infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
             - infraops-build-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save go cache
-          key: infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+          key: infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
           name: restore go build cache
           keys:
-            - infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+            - infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
             - infraops-build-go-build-cache-
       - restore_cache:
           name: restore go lint cache
           keys:
-            - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}
+            - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
             - infraops-build-go-lint-cache-
       - run: make clean
       - run: make lint
       - save_cache:
           name: save go lint cache
-          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}
+          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/golangci-lint
       - run: make api-lint
@@ -59,7 +59,7 @@ jobs:
       - run: make specs
       - save_cache:
           name: save go build cache
-          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
       - run: make coverage
@@ -83,7 +83,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
@@ -119,7 +119,7 @@ jobs:
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
@@ -159,7 +159,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
@@ -194,7 +194,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
@@ -230,12 +230,13 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make source-key
       - restore_cache:
           name: restore deps
           keys:
@@ -264,7 +265,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
@@ -300,12 +301,13 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
+      - run: make source-key
       - restore_cache:
           name: restore deps
           keys:
@@ -334,7 +336,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:1.72
+      - image: alexfalkowski/k8s:1.73
     working_directory: ~/infraops
     steps:
       - checkout
