@@ -71,7 +71,7 @@ jobs:
     resource_class: large
   release:
     docker:
-      - image: alexfalkowski/release:3.30
+      - image: alexfalkowski/release:3.31
     working_directory: ~/infraops
     steps:
       - checkout
