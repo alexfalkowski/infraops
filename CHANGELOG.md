@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.254.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.254.0) - 2025-07-14
+
+- [`10cd757`](https://github.com/alexfalkowski/infraops/commit/10cd75781cec16eeb2431ebbc3997aa38ca433d5) feat(apps): use listen from stdlib (#1292)
+- [`f9c2b1c`](https://github.com/alexfalkowski/infraops/commit/f9c2b1c203e950cbcb2c15c0feb64181f2ad5eef) build(ci): use .source-key (#1291)
+- [`c5bd6f3`](https://github.com/alexfalkowski/infraops/commit/c5bd6f38aee322e5da23402baeeb0d1e60382c26) build(ci): use go-lint-version (#1290)
+
 ## [v2.253.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.253.0) - 2025-07-12
 
 - [`25fc690`](https://github.com/alexfalkowski/infraops/commit/25fc6908735d5b3a6ef409d6f590632a804a3d6a) feat(apps): allow to use network in server address (#1289)
