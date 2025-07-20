@@ -19,6 +19,11 @@ func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 	return &configuration, err
 }
 
+// WriteConfiguration writes the configuration to a file.
+func WriteConfiguration(path string, configuration *v2.Kubernetes) error {
+	return config.Write(path, configuration)
+}
+
 // ConvertApplication converts a v2.Application to an App.
 func ConvertApplication(a *v2.Application) *App {
 	app := &App{

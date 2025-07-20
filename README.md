@@ -78,6 +78,20 @@ applications: [
 ]
 ```
 
+#### Applications Version Update
+
+Build the application:
+
+```bash
+❯ make build-bump
+```
+
+To update a version of an app:
+
+```bash
+❯ ./bump -n bezeichner -v 1.559.0 -p area/apps/apps.pbtxt
+```
+
 ### Cloudflare (cf)
 
 The code is bases on the package <https://www.pulumi.com/registry/packages/cloudflare/>.
