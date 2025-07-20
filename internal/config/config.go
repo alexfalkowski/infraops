@@ -8,10 +8,10 @@ import (
 )
 
 // Read the path and return the configuration.
-func Read(path string, config any) error {
+func Read[T proto.Message](path string, config T) error {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
-	return prototext.Unmarshal(bytes, config.(proto.Message))
+	return prototext.Unmarshal(bytes, config)
 }
