@@ -15,7 +15,7 @@ func main() {
 		path string
 	)
 
-	set := flag.NewFlagSet("apps", flag.ContinueOnError)
+	set := flag.NewFlagSet("bump", flag.ContinueOnError)
 	set.StringVar(&name, "n", "", "name of the app")
 	set.StringVar(&ver, "v", "", "version of the app")
 	set.StringVar(&path, "p", "", "path of the config")

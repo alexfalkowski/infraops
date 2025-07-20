@@ -40,4 +40,8 @@ api-generate:
 
 # Build bump.
 build-bump:
-	@go build cmd/bump.go
+	@go build cmd/bump/bump.go
+
+# Build format.
+build-format:
+	@go build cmd/format/format.go

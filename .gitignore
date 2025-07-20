@@ -3,4 +3,5 @@ coverage.html
 *.cov
 *.xml
 *.bin
-bump
+/bump
+/format
