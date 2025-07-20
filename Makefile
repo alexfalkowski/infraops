@@ -37,3 +37,7 @@ api-breaking:
 # Generate the API.
 api-generate:
 	@make -C api generate
+
+# Build bump.
+build-bump:
+	@go build cmd/bump.go
