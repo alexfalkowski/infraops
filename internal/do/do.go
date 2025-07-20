@@ -16,9 +16,7 @@ var sizes = map[string]digitalocean.DropletSlug{
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 	var configuration v2.DigitalOcean
-
 	err := config.Read(path, &configuration)
-
 	return &configuration, err
 }
 
@@ -34,7 +32,6 @@ func (c *Cluster) Size() digitalocean.DropletSlug {
 	if s, ok := sizes[c.Resource]; ok {
 		return s
 	}
-
 	return digitalocean.DropletSlugDropletS2VCPU4GB
 }
 
@@ -55,7 +52,6 @@ func CreateCluster(ctx *pulumi.Context, cluster *Cluster) (err error) {
 	}
 
 	_, err = createCluster(ctx, v, cluster)
-
 	return err
 }
 
@@ -65,7 +61,6 @@ func createVPC(ctx *pulumi.Context, p *Cluster) (*digitalocean.Vpc, error) {
 		Region:      digitalocean.RegionFRA1,
 		Description: pulumi.String(p.Description),
 	}
-
 	return digitalocean.NewVpc(ctx, p.Name, args)
 }
 
@@ -87,6 +82,5 @@ func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster)
 		Version: pulumi.String("1.33.1-do.0"),
 		VpcUuid: vpc.ID(),
 	}
-
 	return digitalocean.NewKubernetesCluster(ctx, cluster.Name, args)
 }

@@ -17,17 +17,14 @@ func createResources(app *App) cv1.ResourceRequirementsArgs {
 		requests["cpu"] = pulumi.String(app.Resources.CPU.Min)
 		limits["cpu"] = pulumi.String(app.Resources.CPU.Max)
 	}
-
 	if app.Resources.Memory != nil {
 		requests["memory"] = pulumi.String(app.Resources.Memory.Min)
 		limits["memory"] = pulumi.String(app.Resources.Memory.Max)
 	}
-
 	if app.Resources.Storage != nil {
 		requests["ephemeral-storage"] = pulumi.String(app.Resources.Storage.Min)
 		limits["ephemeral-storage"] = pulumi.String(app.Resources.Storage.Max)
 	}
-
 	return cv1.ResourceRequirementsArgs{
 		Requests: requests,
 		Limits:   limits,
@@ -51,6 +48,5 @@ func (r ResourcesMap) Resources(name string) *Resources {
 	if ok {
 		return res
 	}
-
 	return r["small"]
 }

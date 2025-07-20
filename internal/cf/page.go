@@ -41,7 +41,6 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		Proxied: inputs.Yes,
 		Ttl:     inputs.Automatic,
 	}
-
 	_, err = cloudflare.NewRecord(ctx, name, r)
 
 	return err

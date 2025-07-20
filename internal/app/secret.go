@@ -19,11 +19,9 @@ func createSecretVolumes(app *App) cv1.VolumeArray {
 			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String(app.Name)},
 		},
 	}
-
 	for _, v := range app.Secrets {
 		volumes = append(volumes, secretVolume(v))
 	}
-
 	return volumes
 }
 

@@ -52,7 +52,6 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 			return err
 		}
 	}
-
 	return nil
 }
 

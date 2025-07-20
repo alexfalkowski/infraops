@@ -10,11 +10,9 @@ import (
 func addEnvironments(app *App, envs cv1.EnvVarArray) cv1.EnvVarArray {
 	for _, envVar := range app.EnvVars {
 		var arg cv1.EnvVarArgs
-
 		if envVar.IsSecret() {
 			value := strings.TrimPrefix(envVar.Value, "secret:")
 			name, value, _ := strings.Cut(value, "/")
-
 			arg = cv1.EnvVarArgs{
 				Name: pulumi.String(envVar.Name),
 				ValueFrom: &cv1.EnvVarSourceArgs{
@@ -30,9 +28,7 @@ func addEnvironments(app *App, envs cv1.EnvVarArray) cv1.EnvVarArray {
 				Value: pulumi.String(envVar.Value),
 			}
 		}
-
 		envs = append(envs, arg)
 	}
-
 	return envs
 }

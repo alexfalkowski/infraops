@@ -16,9 +16,7 @@ var account = pulumi.String(os.Getenv("CLOUDFLARE_ACCOUNT_ID"))
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.Cloudflare, error) {
 	var configuration v2.Cloudflare
-
 	err := config.Read(path, &configuration)
-
 	return &configuration, err
 }
 

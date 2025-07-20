@@ -19,7 +19,6 @@ func createConfigMap(ctx *pulumi.Context, app *App) error {
 	}
 
 	_, err = cv1.NewConfigMap(ctx, app.Name, args)
-
 	return err
 }
 
@@ -33,7 +32,6 @@ func configMap(app *App) (*cv1.ConfigMapArgs, error) {
 		Metadata: metadata(app),
 		Data:     pulumi.StringMap{configFile(app.Name): pulumi.String(d)},
 	}
-
 	return args, nil
 }
 
@@ -60,7 +58,6 @@ func readFile(ns, file string) (string, error) {
 	}
 
 	d, err := os.ReadFile(filepath.Clean(p))
-
 	return string(d), err
 }
 

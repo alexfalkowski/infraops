@@ -13,6 +13,5 @@ func Read(path string, config any) error {
 	if err != nil {
 		return err
 	}
-
 	return prototext.Unmarshal(bytes, config.(proto.Message))
 }
