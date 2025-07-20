@@ -15,9 +15,7 @@ var ErrVersionMismatch = errors.New("version mismatch")
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 	var configuration v2.Kubernetes
-
 	err := config.Read(path, &configuration)
-
 	return &configuration, err
 }
 
@@ -55,13 +53,11 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 		createConfigMap, createPodDisruptionBudget,
 		createDeployment, createService, createIngress,
 	}
-
 	for _, fn := range fns {
 		if err := fn(ctx, app); err != nil {
 			return err
 		}
 	}
-
 	return nil
 }
 

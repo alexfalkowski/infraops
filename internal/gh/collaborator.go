@@ -15,7 +15,6 @@ func collaborator(ctx *pulumi.Context, repo *Repository) error {
 		Repository: pulumi.String("alexfalkowski/" + repo.Name),
 		Username:   pulumi.String("lean-thoughts-ci"),
 	}
-
 	_, err := github.NewRepositoryCollaborator(ctx, repo.Name, args)
 
 	return err

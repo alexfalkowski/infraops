@@ -17,7 +17,6 @@ func createPodDisruptionBudget(ctx *pulumi.Context, app *App) error {
 			},
 		},
 	}
-
 	_, err := pv1.NewPodDisruptionBudget(ctx, app.Name, args)
 
 	return err

@@ -28,7 +28,6 @@ func createService(ctx *pulumi.Context, app *App) error {
 			Type:     pulumi.String("ClusterIP"),
 		},
 	}
-
 	_, err := cv1.NewService(ctx, app.Name, args)
 
 	return err

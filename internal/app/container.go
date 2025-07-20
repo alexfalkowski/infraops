@@ -22,7 +22,6 @@ func internalContainer(app *App) cv1.ContainerArray {
 			SubPath:   pulumi.String(configFile(app.Name)),
 		},
 	}
-
 	for _, v := range app.Secrets {
 		volumeMounts = append(volumeMounts, secretVolumeMount(v))
 	}
@@ -49,7 +48,6 @@ func internalContainer(app *App) cv1.ContainerArray {
 			AllowPrivilegeEscalation: inputs.No,
 		},
 	}
-
 	return cv1.ContainerArray{container}
 }
 
@@ -71,7 +69,6 @@ func externalContainer(app *App) cv1.ContainerArray {
 			AllowPrivilegeEscalation: inputs.No,
 		},
 	}
-
 	return cv1.ContainerArray{container}
 }
 

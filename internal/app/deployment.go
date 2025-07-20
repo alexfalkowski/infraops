@@ -11,7 +11,6 @@ import (
 func createDeployment(ctx *pulumi.Context, app *App) error {
 	m := metadata(app, deploymentLabels(app))
 	m.Annotations = deploymentAnnotations(app)
-
 	args := &av1.DeploymentArgs{
 		Metadata: m,
 		Spec: av1.DeploymentSpecArgs{
@@ -36,7 +35,6 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 			},
 		},
 	}
-
 	_, err := av1.NewDeployment(ctx, app.Name, args)
 
 	return err

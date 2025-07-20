@@ -36,7 +36,6 @@ func (t *Template) Valid() error {
 	if t.Owner == "" || t.Repository == "" {
 		return ErrMissingTemplate
 	}
-
 	return nil
 }
 
@@ -48,16 +47,13 @@ func (c Checks) Valid() error {
 	if len(c) == 0 {
 		return ErrMissingChecks
 	}
-
 	return nil
 }
 
 // ReadConfiguration reads a file and populates a configuration.
 func ReadConfiguration(path string) (*v2.Github, error) {
 	var configuration v2.Github
-
 	err := config.Read(path, &configuration)
-
 	return &configuration, err
 }
 

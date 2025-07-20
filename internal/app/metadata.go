@@ -10,7 +10,6 @@ import (
 
 func metadata(app *App, ms ...pulumi.StringMap) mv1.ObjectMetaArgs {
 	ms = append(ms, recommendedLabels(app))
-
 	return mv1.ObjectMetaArgs{
 		Name:      pulumi.String(app.Name),
 		Namespace: pulumi.String(app.Namespace),
@@ -60,10 +59,8 @@ func deploymentAnnotations(app *App) pulumi.StringMap {
 
 func merge(ms ...pulumi.StringMap) pulumi.StringMap {
 	fm := pulumi.StringMap{}
-
 	for _, m := range ms {
 		maps.Copy(fm, m)
 	}
-
 	return fm
 }
