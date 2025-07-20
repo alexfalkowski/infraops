@@ -27,14 +27,5 @@ func Write[T Config](path string, config T) error {
 		return err
 	}
 
-	opts := prototext.MarshalOptions{
-		Multiline: true,
-		Indent:    "  ",
-	}
-	bytes, err := opts.Marshal(config)
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile(path, bytes, info.Mode())
+	return os.WriteFile(path, []byte(prototext.Format(config)), info.Mode())
 }

@@ -9,6 +9,13 @@ import (
 	"github.com/alexfalkowski/infraops/v2/internal/config"
 )
 
+var configs = map[string]config.Config{
+	"apps": &v2.Kubernetes{},
+	"cf":   &v2.Cloudflare{},
+	"do":   &v2.DigitalOcean{},
+	"gh":   &v2.Github{},
+}
+
 func main() {
 	var (
 		kind string
@@ -22,20 +29,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var cfg config.Config
-
-	switch kind {
-	case "apps":
-		cfg = &v2.Kubernetes{}
-	case "cf":
-		cfg = &v2.Cloudflare{}
-	case "do":
-		cfg = &v2.DigitalOcean{}
-	case "gh":
-		cfg = &v2.Github{}
-	}
-
-	if cfg == nil {
+	cfg, ok := configs[kind]
+	if !ok {
 		log.Fatal("invalid kind")
 	}
 
