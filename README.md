@@ -16,6 +16,24 @@ The following tools are used:
 - <https://helm.sh/>
 - <https://kube-score.com/>
 
+## Configuration
+
+The configuration follows the [prototext](https://protobuf.dev/reference/protobuf/textformat-spec/) format.
+
+### Format
+
+Build the application:
+
+```bash
+❯ make build-format
+```
+
+To format a configuration:
+
+```bash
+❯ ./format -k cf -p area/cf/cf.pbtxt
+```
+
 ## Areas
 
 Each folder takes care of an area of infrastructure. Each area has a package that is used as the entry point, so it is a [facade](https://en.wikipedia.org/wiki/Facade_pattern).
@@ -54,29 +72,7 @@ To remove all the apps, you need to run the following:
 
 #### Applications Configuration
 
-Have a look at [configuration](area/apps/apps.pbtxt), the format is:
-
-```pbtxt
-version: "2.0"
-applications: [
-  {
-    id: id
-    kind: internal/external
-    name: name
-    namespace: namespace
-    domain: domain
-    version: version
-    resource: small | medium | large
-    secrets: ["secrets"]
-    env_vars: [
-      {
-        name: name
-        value: static value or "secret:secrets/value"
-      }
-    ]
-  }
-]
-```
+Have a look at the [configuration](area/apps/apps.pbtxt).
 
 #### Applications Version Update
 
@@ -98,33 +94,7 @@ The code is bases on the package <https://www.pulumi.com/registry/packages/cloud
 
 #### Cloudflare Configuration
 
-Have a look at [configuration](area/cf/cf.pbtxt), the format is:
-
-```pbtxt
-version: "2.0"
-balancer_zones: [
-  {
-    name: name
-    domain: domain
-    record_names: ["name"]
-    ipv4: ip
-    ipv6: ip
-  }
-]
-page_zones: [
-  {
-    name:   name
-    domain: domain
-    host:   host
-  }
-],
-buckets: [
-  {
-    name: name
-    region: region
-  }
-]
-```
+Have a look at the [configuration](area/cf/cf.pbtxt).
 
 ### DigitalOcean (do)
 
@@ -155,18 +125,7 @@ The process is as follows:
 
 #### DigitalOcean Configuration
 
-Have a look at [configuration](area/do/do.pbtxt), the format is:
-
-```pbtxt
-version: "2.0"
-clusters: [
-  {
-    name: name
-    description: description
-    resource: small | medium | large
-  }
-]
-```
+Have a look at the [configuration](area/do/do.pbtxt).
 
 ### GitHub (gh)
 
@@ -235,26 +194,7 @@ collaborators: {
 
 #### GitHub Configuration
 
-Have a look at [configuration](area/gh/gh.pbtxt), the format is:
-
-```pbtxt
-version: "2.0"
-repositories: [
-  {
-    name: name
-    description: description
-    homepage_url: homepage_url
-    checks: ["check"]
-    visibility: "public"
-    template: {
-      owner: owner
-      repository: repository
-    }
-    pages: {}
-    enable_collaborators: true
-  }
-]
-```
+Have a look at the [configuration](area/gh/gh.pbtxt).
 
 ### Kubernetes (k8s)
 

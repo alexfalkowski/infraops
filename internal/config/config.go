@@ -7,8 +7,11 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// Config is just an alias to proto.Message.
+type Config = proto.Message
+
 // Read the path and return the configuration, unless an error occurs.
-func Read[T proto.Message](path string, config T) error {
+func Read[T Config](path string, config T) error {
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		return err
@@ -18,7 +21,7 @@ func Read[T proto.Message](path string, config T) error {
 }
 
 // Write the configuration to the path, unless an error occurs.
-func Write[T proto.Message](path string, config T) error {
+func Write[T Config](path string, config T) error {
 	info, err := os.Stat(path)
 	if err != nil {
 		return err
@@ -26,6 +29,7 @@ func Write[T proto.Message](path string, config T) error {
 
 	opts := prototext.MarshalOptions{
 		Multiline: true,
+		Indent:    "  ",
 	}
 	bytes, err := opts.Marshal(config)
 	if err != nil {

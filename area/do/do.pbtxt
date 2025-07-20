@@ -1,8 +1,6 @@
 version: "2.0"
-clusters: [
-  {
-    name: "lean-thoughts"
-    description: "The lean thoughts domain"
-    resource: "medium"
-  }
-]
+clusters: {
+  name: "lean-thoughts"
+  description: "The lean thoughts domain"
+  resource: "medium"
+}
