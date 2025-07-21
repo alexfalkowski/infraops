@@ -39,9 +39,9 @@ api-generate:
 	@make -C api generate
 
 # Build bump.
-build-bump:
-	@go build cmd/bump/bump.go
+build-bump: dep
+	@go build -ldflags="-s -w" -mod vendor -tags netgo -a cmd/bump/bump.go
 
 # Build format.
-build-format:
-	@go build cmd/format/format.go
+build-format: dep
+	@go build -ldflags="-s -w" -mod vendor -tags netgo -a cmd/format/format.go
