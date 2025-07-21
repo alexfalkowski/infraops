@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.266.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.266.0) - 2025-07-21
+
+- [`90a47dc`](https://github.com/alexfalkowski/infraops/commit/90a47dcd1c637726733a1a53cc0e31f3334b897e) feat(build): use vendor (#1308)
+- [`51e11bc`](https://github.com/alexfalkowski/infraops/commit/51e11bc174d89b42c4bc9b4a721a9acd6cd5d89a) refactor(format): store in map (#1305)
+
 ## [v2.265.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.265.0) - 2025-07-20
 
 - [`2dc112f`](https://github.com/alexfalkowski/infraops/commit/2dc112fbca92b4a7d77d789183c408d5361595fc) feat(format): follow marshal of prototext (#1304)
