@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.42
+      - image: alexfalkowski/go:2.43
     working_directory: ~/infraops
     steps:
       - checkout
@@ -83,7 +83,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -119,7 +119,7 @@ jobs:
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -159,7 +159,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -194,7 +194,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -230,7 +230,7 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -265,7 +265,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -301,7 +301,7 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -336,7 +336,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:1.77
+      - image: alexfalkowski/k8s:1.78
     working_directory: ~/infraops
     steps:
       - checkout
@@ -375,6 +375,7 @@ workflows:
     jobs:
       - build
       - release:
+          serial-group: << pipeline.project.slug >>/release
           requires:
             - build
           filters:
@@ -389,6 +390,7 @@ workflows:
             branches:
               ignore: master
       - apps_update:
+          serial-group: << pipeline.project.slug >>/apps
           context: infraops
           filters:
             branches:
