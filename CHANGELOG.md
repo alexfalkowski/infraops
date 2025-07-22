@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.273.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.273.0) - 2025-07-22
+
+- [`076465b`](https://github.com/alexfalkowski/infraops/commit/076465b47a94585323efeed3cdde9f17572d3320) feat(bezeichner): upgraded to v1.566.0 (#1320)
+- [`cfc3410`](https://github.com/alexfalkowski/infraops/commit/cfc3410b99eacfaead2145f8c21511b0ebe00802) feat(standort): upgraded to v2.556.0 (#1322)
+- [`4c52fbe`](https://github.com/alexfalkowski/infraops/commit/4c52fbe3b17f470340da893e69bcb95c1a5bf087) feat(web): upgraded to v1.127.0 (#1321)
+- [`a7ade8b`](https://github.com/alexfalkowski/infraops/commit/a7ade8bccf19bb6ae1b160e43fa0dc124e19a551) build(ci): add serial-group for apps (#1319)
+
 ## [v2.272.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.272.0) - 2025-07-21
 
 - [`5e3faf0`](https://github.com/alexfalkowski/infraops/commit/5e3faf099a357aab6110b0f9f6fe075c2032091d) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.184.0 to 3.185.0 (#1318)
