@@ -23,7 +23,7 @@ applications: {
   name: "web"
   namespace: "lean"
   domain: "lean-thoughts.com"
-  version: "1.126.0"
+  version: "1.127.0"
   resource: "small"
 }
 applications: {
