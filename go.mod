@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.4.1
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.49.0
-	github.com/pulumi/pulumi-github/sdk/v6 v6.7.2
+	github.com/pulumi/pulumi-github/sdk/v6 v6.7.3
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.23.0
 	github.com/pulumi/pulumi/sdk/v3 v3.185.0
 	github.com/stretchr/testify v1.10.0
