@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.281.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.281.0) - 2025-07-26
+
+- [`a570340`](https://github.com/alexfalkowski/infraops/commit/a5703406ccd0d5c2c0fcb56c62dc1406813fa801) feat(standort): upgraded to v2.561.0 (#1340)
+- [`17a5bb6`](https://github.com/alexfalkowski/infraops/commit/17a5bb680c85d5781dc0bbdf891762c090d7284f) feat(bezeichner): upgraded to v1.571.0 (#1341)
+- [`2b9d532`](https://github.com/alexfalkowski/infraops/commit/2b9d532fdf2d079545f241cd261d899087879e13) feat(web): upgraded to v1.132.0 (#1342)
+- [`d1b40b4`](https://github.com/alexfalkowski/infraops/commit/d1b40b489727197eb07e5338eb5ee934fafe704a) build(ci): use latest published images (#1339)
+
 ## [v2.280.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.280.0) - 2025-07-26
 
 - [`ce1a40c`](https://github.com/alexfalkowski/infraops/commit/ce1a40c1b727cecca6214bbced28bb12e89e5781) feat(do): update cluster to 1.33.1-do.2 (#1338)
