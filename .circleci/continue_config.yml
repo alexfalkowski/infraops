@@ -69,16 +69,15 @@ jobs:
           path: test/reports
       - run: make codecov-upload
     resource_class: large
-  release:
+  version:
     docker:
-      - image: alexfalkowski/release:4.4
+      - image: alexfalkowski/release:5.2
     working_directory: ~/infraops
     steps:
       - checkout
       - run: git submodule sync
       - run: git submodule update --init
-      - run: make pull
-      - run: release
+      - run: version
     resource_class: large
 
   apps_preview:
@@ -374,7 +373,7 @@ workflows:
   infraops:
     jobs:
       - build
-      - release:
+      - version:
           serial-group: << pipeline.project.slug >>/release
           requires:
             - build
