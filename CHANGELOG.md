@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.286.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.286.0) - 2025-07-31
+
+- [`0b46f8e`](https://github.com/alexfalkowski/infraops/commit/0b46f8eff4df7f47b1109b5128e317bc64802811) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.186.0 to 3.187.0 (#1353)
+- [`e8f9270`](https://github.com/alexfalkowski/infraops/commit/e8f92709a66cf28a2192576abba2c5e7a7a1fa88) build(ci): use latest published images (#1352)
+- [`ac899bf`](https://github.com/alexfalkowski/infraops/commit/ac899bf65cc83463389383b6c941aeebe516447d) build(ci): update submodule (#1351)
+- [`c8bdb81`](https://github.com/alexfalkowski/infraops/commit/c8bdb8138fbcdbd13834f8a92ee8bce8a875d887) build(ci): use latest published images (#1349)
+- [`fd8d690`](https://github.com/alexfalkowski/infraops/commit/fd8d690cb1497e8a062f6dbeb9050f0f72b31624) build(ci): use circleci/path-filtering@2.0.2 (#1348)
+
 ## [v2.285.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.285.0) - 2025-07-27
 
 - [`d867789`](https://github.com/alexfalkowski/infraops/commit/d867789a5b63699243bde9f7c583265e216aa74d) feat(gh): allow auto merge (#1347)
