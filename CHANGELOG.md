@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.296.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.296.0) - 2025-08-05
+
+- [`49ee15d`](https://github.com/alexfalkowski/infraops/commit/49ee15d5b5053cca9a35e7f4e1855d35bbd29d7a) feat(bezeichner): upgraded to v1.577.0 (#1371)
+- [`278b9eb`](https://github.com/alexfalkowski/infraops/commit/278b9eb53fe5ba61ce2d340f0c2ef5f3184a8d1b) build(deps): bump bin from `22b4d36` to `4dda9b0` (#1370)
+
 ## [v2.295.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.295.0) - 2025-08-04
 
 - [`9456e50`](https://github.com/alexfalkowski/infraops/commit/9456e50e40082e159d907fb583200b1a8fcebb55) feat(bezeichner): upgraded to v1.576.0 (#1369)
