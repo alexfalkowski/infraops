@@ -19,6 +19,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 	args := &github.RepositoryArgs{
 		AllowMergeCommit:    inputs.No,
 		AllowRebaseMerge:    inputs.No,
+		AllowSquashMerge:    inputs.Yes,
 		AllowUpdateBranch:   inputs.Yes,
 		AutoInit:            inputs.Yes,
 		AllowAutoMerge:      inputs.Yes,
