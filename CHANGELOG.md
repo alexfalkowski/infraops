@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.304.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.304.0) - 2025-08-08
+
+- [`45a5459`](https://github.com/alexfalkowski/infraops/commit/45a54591f8915d88a742e0518ac76335c34895dd) feat(gh): set explicitly AllowSquashMerge (#1387)
+
 ## [v2.303.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.303.0) - 2025-08-08
 
 - [`fc27200`](https://github.com/alexfalkowski/infraops/commit/fc27200e9d3753ec91a718e7f7afdabad338367d) feat(deps): bump google.golang.org/protobuf from 1.36.6 to 1.36.7 (#1386)
