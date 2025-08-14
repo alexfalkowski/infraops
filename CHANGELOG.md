@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.305.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.305.0) - 2025-08-14
+
+- [`d0487f4`](https://github.com/alexfalkowski/infraops/commit/d0487f464344a71c1b9a207f4189f1b2e1741055) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.188.0 to 3.189.0 (#1406)
+- [`8b70095`](https://github.com/alexfalkowski/infraops/commit/8b70095b58d0d72965338e8744c93c5fc5246a21) release(standort): upgraded to v2.575.0 (#1405)
+- [`e096908`](https://github.com/alexfalkowski/infraops/commit/e0969081f2be2342526d2ecf60b26dcc1fbdf1c9) release(bezeichner): upgraded to v1.584.0 (#1404)
+- [`c14580c`](https://github.com/alexfalkowski/infraops/commit/c14580c9bde055e3efa0dee37ec74f7b67a09e60) build(ci): use latest published images (#1403)
+- [`f3c54e0`](https://github.com/alexfalkowski/infraops/commit/f3c54e01eca7d942abfaa759f95b9a6d177ffeb6) release(web): upgraded to v1.144.0 (#1402)
+- [`36b09a4`](https://github.com/alexfalkowski/infraops/commit/36b09a409a6ed1b6a5cd6720800a80b2d425f080) release(standort): upgraded to v2.574.0 (#1400)
+- [`a0c71d1`](https://github.com/alexfalkowski/infraops/commit/a0c71d11e048f6b466afd8fd363244792da2abdc) release(bezeichner): upgraded to v1.583.0 (#1401)
+- [`46adb9a`](https://github.com/alexfalkowski/infraops/commit/46adb9a1a1e719f96404682ad96cdf77a188ab67) release(web): upgraded to v1.143.0 (#1399)
+- [`0572988`](https://github.com/alexfalkowski/infraops/commit/0572988a4c46663e9fa6e1c4da79643db7349270) release(web): upgraded to v1.142.0 (#1397)
+- [`78fea1d`](https://github.com/alexfalkowski/infraops/commit/78fea1dfe17a80f535c575325fe1de5840c19f75) release(standort): upgraded to v2.573.0 (#1398)
+- [`d34d9f2`](https://github.com/alexfalkowski/infraops/commit/d34d9f2324c072eec681143782e1cdb621f225a3) release(bezeichner): upgraded to v1.582.0 (#1396)
+- [`ec40a5d`](https://github.com/alexfalkowski/infraops/commit/ec40a5dcd273e6bf8523cf27109298872a9f8530) build(ci): use latest published images (#1395)
+- [`55de680`](https://github.com/alexfalkowski/infraops/commit/55de680eaf052848422e80fce6f6338fcbb31acd) release(standort): upgraded to v2.572.0 (#1393)
+- [`774cd29`](https://github.com/alexfalkowski/infraops/commit/774cd29afb7ed7d34ff6f154223767e5526bd31c) release(web): upgraded to v1.141.0 (#1394)
+- [`7d9a2b6`](https://github.com/alexfalkowski/infraops/commit/7d9a2b6d745a3bde47d2506a14a0485df4ce34fd) release(bezeichner): upgraded to v1.581.0 (#1392)
+- [`482a4e4`](https://github.com/alexfalkowski/infraops/commit/482a4e4437e3cc1638463d5114d20e495788c66a) build(ci): use latest published images (#1391)
+- [`f8aff06`](https://github.com/alexfalkowski/infraops/commit/f8aff06c507b8413d9c99f3c25b7c6241e5d7717) release(web): upgraded to v1.140.0 (#1390)
+- [`df09031`](https://github.com/alexfalkowski/infraops/commit/df09031e1b676145077a1865d4d2df95d94e36a5) release(standort): upgraded to v2.571.0 (#1389)
+- [`df2cc1a`](https://github.com/alexfalkowski/infraops/commit/df2cc1a28b6e5c648d3950ce4f0ddf69f98ddeba) release(bezeichner): upgraded to v1.580.0 (#1388)
+
 ## [v2.304.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.304.0) - 2025-08-08
 
 - [`45a5459`](https://github.com/alexfalkowski/infraops/commit/45a54591f8915d88a742e0518ac76335c34895dd) feat(gh): set explicitly AllowSquashMerge (#1387)
