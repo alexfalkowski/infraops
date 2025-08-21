@@ -115,6 +115,7 @@ jobs:
           key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
+      - run: make sync push
     resource_class: large
   apps_update:
     docker:
