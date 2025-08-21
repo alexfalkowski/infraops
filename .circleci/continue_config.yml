@@ -68,6 +68,15 @@ jobs:
       - store_artifacts:
           path: test/reports
       - run: make codecov-upload
+    resource_class: large
+  sync:
+    docker:
+      - image: alexfalkowski/go:2.53
+    working_directory: ~/infraops
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
       - run: make sync push
     resource_class: large
   version:
@@ -374,6 +383,12 @@ workflows:
   infraops:
     jobs:
       - build
+      - sync:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
       - version:
           serial-group: << pipeline.project.slug >>/release
           requires:
