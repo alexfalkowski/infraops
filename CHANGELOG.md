@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.309.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.309.0) - 2025-08-21
+
+- [`bf08dbf`](https://github.com/alexfalkowski/infraops/commit/bf08dbf24c8ac183340c7b2d3a6bc407d5371237) feat(deps): bump google.golang.org/protobuf from 1.36.7 to 1.36.8 (#1436)
+- [`82438f4`](https://github.com/alexfalkowski/infraops/commit/82438f4c86acd36e86ce8be73d1e651fe3717d86) build(ci): remove sync as it will cause issues (#1434)
+- [`1a23350`](https://github.com/alexfalkowski/infraops/commit/1a2335092f5d0ad8ec1dc5ffbb247651fd9c203b) build(ci): use sync after build (#1432)
+- [`52b80c4`](https://github.com/alexfalkowski/infraops/commit/52b80c4820c38ebe672bfd5184531c50f8095805) build(ci): use make sync push (#1431)
+- [`93bc794`](https://github.com/alexfalkowski/infraops/commit/93bc79477fed07e6f7647673b6b912901cac5afd) release(web): upgraded to v1.149.0 (#1430)
+- [`04c38de`](https://github.com/alexfalkowski/infraops/commit/04c38de3c32a674aa01fe4ca51dd5b495f211d1a) release(bezeichner): upgraded to v1.589.0 (#1429)
+- [`d9fd234`](https://github.com/alexfalkowski/infraops/commit/d9fd234002b5fa1cb1e7215eb267857445cc12ba) release(standort): upgraded to v2.580.0 (#1428)
+- [`e02e9e8`](https://github.com/alexfalkowski/infraops/commit/e02e9e81b943d1839ad8834d53ec8277ced8069d) release(standort): upgraded to v2.579.0 (#1426)
+- [`e5b2c9d`](https://github.com/alexfalkowski/infraops/commit/e5b2c9db93904445ad53d81327db582dd6e392f4) release(web): upgraded to v1.148.0 (#1427)
+- [`26158a5`](https://github.com/alexfalkowski/infraops/commit/26158a51e40650e9381a63591a407615f714c045) release(bezeichner): upgraded to v1.588.0 (#1425)
+- [`f592d41`](https://github.com/alexfalkowski/infraops/commit/f592d41a402236c0795c2ae5f22da4b37f95ce7e) build(ci): use latest published images (#1424)
+- [`c16f475`](https://github.com/alexfalkowski/infraops/commit/c16f475ae92f4aeb0ef8d5b33687b03826b4c9e7) build(deps): bump bin from `e92253b` to `901fb2b` (#1423)
+- [`a15b6b7`](https://github.com/alexfalkowski/infraops/commit/a15b6b7477de39a67aaa594661cae56726d3d331) release(standort): upgraded to v2.578.0 (#1422)
+
 ## [v2.308.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.308.0) - 2025-08-16
 
 - [`e87d1ba`](https://github.com/alexfalkowski/infraops/commit/e87d1baac9ef0f79a204d6215cea0f41bfbf2011) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.189.0 to 3.190.0 (#1421)
