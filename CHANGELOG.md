@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.313.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.313.0) - 2025-08-27
+
+- [`6026997`](https://github.com/alexfalkowski/infraops/commit/6026997fe21e0c4fb8d00e92af2716e0a729f037) feat(deps): bump github.com/stretchr/testify from 1.11.0 to 1.11.1 (#1449)
+- [`3f86b08`](https://github.com/alexfalkowski/infraops/commit/3f86b08bada393f709ecaa41551fa722eea43d43) test(deps): update github.com/stretchr/testify to v1.11.0 (#1447)
+- [`33593c8`](https://github.com/alexfalkowski/infraops/commit/33593c8de8f6e6e19c13036993a83d976aa0515d) release(standort): upgraded to v2.582.0 (#1446)
+- [`6ff0339`](https://github.com/alexfalkowski/infraops/commit/6ff0339006645fb51731a24d970188854bc2ba41) release(bezeichner): upgraded to v1.591.0 (#1445)
+
 ## [v2.312.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.312.0) - 2025-08-22
 
 - [`2ba22c5`](https://github.com/alexfalkowski/infraops/commit/2ba22c5f8546d56dda16e980265018993863b8b0) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.51.0 to 4.52.0 (#1443)
