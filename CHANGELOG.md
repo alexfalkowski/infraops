@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.314.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.314.0) - 2025-08-28
+
+- [`bf68a18`](https://github.com/alexfalkowski/infraops/commit/bf68a186217f27cc88b85f56b16e4802fb4f87da) feat(do): use 1.33.1-do.3 (#1451)
+- [`e26d355`](https://github.com/alexfalkowski/infraops/commit/e26d355d5f3f1537ae3c453cdc3002d7450452de) release(web): upgraded to v1.152.0 (#1450)
+
 ## [v2.313.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.313.0) - 2025-08-27
 
 - [`6026997`](https://github.com/alexfalkowski/infraops/commit/6026997fe21e0c4fb8d00e92af2716e0a729f037) feat(deps): bump github.com/stretchr/testify from 1.11.0 to 1.11.1 (#1449)
