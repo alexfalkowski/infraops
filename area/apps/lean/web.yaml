@@ -4,10 +4,6 @@ health:
   timeout: 1s
 id:
   kind: ksuid
-limiter:
-  kind: user-agent
-  tokens: 1000
-  interval: 1s
 telemetry:
   logger:
     kind: text
@@ -19,6 +15,10 @@ telemetry:
     url: http://localhost:4318/v1/traces
 transport:
   http:
+    limiter:
+      kind: user-agent
+      tokens: 1000
+      interval: 1s
     retry:
       attempts: 3
       backoff: 100ms
