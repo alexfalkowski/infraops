@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.315.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.315.0) - 2025-08-30
+
+- [`c49b27e`](https://github.com/alexfalkowski/infraops/commit/c49b27e0b8c6c5bb28764094eff39f2f43ad7ce2) feat(apps): move limiter config (#1462)
+- [`79e7c64`](https://github.com/alexfalkowski/infraops/commit/79e7c64087fb3b7908eae9f258673fbd5eba7b00) release(web): upgraded to v1.154.0 (#1461)
+- [`dddeb58`](https://github.com/alexfalkowski/infraops/commit/dddeb582edfc51848ee682b01a4427b83ee5b44f) release(standort): upgraded to v2.584.0 (#1459)
+- [`47c5235`](https://github.com/alexfalkowski/infraops/commit/47c5235729e7f45117062f22358f07ccd9a2eebd) release(bezeichner): upgraded to v1.594.0 (#1460)
+- [`2ad9cef`](https://github.com/alexfalkowski/infraops/commit/2ad9cef4a815c23ce4563e35468536d644df0079) release(bezeichner): upgraded to v1.593.0 (#1456)
+- [`d347f01`](https://github.com/alexfalkowski/infraops/commit/d347f018e012e214223b9e6603cead2a2e3d766b) build(ci): use latest published images (#1455)
+- [`7931993`](https://github.com/alexfalkowski/infraops/commit/79319933f0a5d90954899ce460adedb2abf06505) release(web): upgraded to v1.153.0 (#1454)
+- [`15555b9`](https://github.com/alexfalkowski/infraops/commit/15555b988ccaa1825494c6d9d4e58fdb930d8643) release(standort): upgraded to v2.583.0 (#1453)
+- [`141f1dc`](https://github.com/alexfalkowski/infraops/commit/141f1dcee76e55e90740bb40e1c269fd16e34e33) release(bezeichner): upgraded to v1.592.0 (#1452)
+
 ## [v2.314.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.314.0) - 2025-08-28
 
 - [`bf68a18`](https://github.com/alexfalkowski/infraops/commit/bf68a186217f27cc88b85f56b16e4802fb4f87da) feat(do): use 1.33.1-do.3 (#1451)
