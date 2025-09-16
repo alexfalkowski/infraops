@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.57
+      - image: alexfalkowski/go:2.58
     working_directory: ~/infraops
     environment:
       GOGC: 10
@@ -73,7 +73,7 @@ jobs:
     resource_class: large
   version:
     docker:
-      - image: alexfalkowski/release:5.11
+      - image: alexfalkowski/release:5.12
     working_directory: ~/infraops
     steps:
       - checkout
@@ -84,7 +84,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
@@ -120,7 +120,7 @@ jobs:
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
@@ -160,7 +160,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     environment:
       GOGC: 10
     working_directory: ~/infraops
@@ -197,7 +197,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
@@ -233,7 +233,7 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
@@ -268,7 +268,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
@@ -304,7 +304,7 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
@@ -339,7 +339,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:1.99
+      - image: alexfalkowski/k8s:1.100
     working_directory: ~/infraops
     steps:
       - checkout
