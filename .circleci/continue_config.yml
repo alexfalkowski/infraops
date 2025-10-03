@@ -22,7 +22,8 @@ jobs:
     environment:
       GOGC: 10
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -76,7 +77,8 @@ jobs:
       - image: alexfalkowski/release:5.16
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
@@ -87,7 +89,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -123,7 +126,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -165,7 +169,8 @@ jobs:
       GOGC: 10
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -200,7 +205,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -236,7 +242,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -271,7 +278,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -307,7 +315,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -342,7 +351,8 @@ jobs:
       - image: alexfalkowski/k8s:1.106
     working_directory: ~/infraops
     steps:
-      - checkout
+      - checkout:
+          method: blobless
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
