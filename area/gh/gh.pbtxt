@@ -84,7 +84,7 @@ repositories: {
   topics: "digitalocean"
   topics: "github"
   topics: "k8s"
-  checks: "ci/circleci: build"
+  checks: "ci/circleci: sync"
 }
 repositories: {
   name: "bin"
