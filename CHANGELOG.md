@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.333.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.333.0) - 2025-10-04
+
+- [`1c6c938`](https://github.com/alexfalkowski/infraops/commit/1c6c938d3b23365131204bbe74cfd83cab2305af) feat(gh): add go-signal (#1571)
+- [`f2cfaf1`](https://github.com/alexfalkowski/infraops/commit/f2cfaf179170802c289d2059fa52a23ebc93b374) release(web): upgraded to v1.177.0 (#1568)
+- [`fcd7fc1`](https://github.com/alexfalkowski/infraops/commit/fcd7fc1740f6b48a50609c0062fed5fdbd88436f) release(standort): upgraded to v2.607.0 (#1569)
+- [`7ee7d51`](https://github.com/alexfalkowski/infraops/commit/7ee7d51c0e5695c889889436cc7ead7c936e01d8) build(ci): use alexfalkowski/release:5.16 for sync (#1570)
+- [`ad5fc41`](https://github.com/alexfalkowski/infraops/commit/ad5fc41190eef10aa0247b1d372126ea85e1dbaf) release(bezeichner): upgraded to v1.616.0 (#1567)
+
 ## [v2.332.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.332.0) - 2025-10-04
 
 - [`7852b05`](https://github.com/alexfalkowski/infraops/commit/7852b054d0a98c7424761ba2fde220172fb8104d) feat(gh): add sync to rebase changes (#1566)
