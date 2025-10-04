@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.331.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.331.0) - 2025-10-04
+
+- [`e26077c`](https://github.com/alexfalkowski/infraops/commit/e26077c15b43cd578a9df01dced57d5793045b11) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.199.0 to 3.200.0 (#1565)
+- [`300e516`](https://github.com/alexfalkowski/infraops/commit/300e5166d27d35163af981222ffc0dfbab39bd15) build(ci): use latest published images (#1564)
+- [`59676df`](https://github.com/alexfalkowski/infraops/commit/59676df3105fb0e6c07b27a9d13b6c10da93f36f) build(ci): use blobless (#1563)
+- [`c63c1c8`](https://github.com/alexfalkowski/infraops/commit/c63c1c8f218a8d6ce9364aae94e1c2d051eae288) build(deps): bump bin from `d437cb4` to `7794421` (#1562)
+
 ## [v2.330.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.330.0) - 2025-10-03
 
 - [`d18461d`](https://github.com/alexfalkowski/infraops/commit/d18461d3b7a141a27af05ce41c41e678bfafb9c2) feat(deps): bump github.com/pulumi/pulumi-cloudflare/sdk/v6 from 6.9.1 to 6.10.0 (#1561)
