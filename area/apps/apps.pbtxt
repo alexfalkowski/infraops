@@ -5,7 +5,7 @@ applications: {
   name: "bezeichner"
   namespace: "lean"
   domain: "lean-thoughts.com"
-  version: "1.618.0"
+  version: "1.619.0"
   resource: "small"
 }
 applications: {
