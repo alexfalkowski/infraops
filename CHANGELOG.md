@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.340.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.340.0) - 2025-10-16
+
+- [`992aeae`](https://github.com/alexfalkowski/infraops/commit/992aeaedb6b499eccf42f7625806c9dcc5018ae5) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.202.0 to 3.203.0 (#1606)
+- [`a1d0231`](https://github.com/alexfalkowski/infraops/commit/a1d0231592638749b531ed30db052001870d2e30) build(ci): use latest published images (#1607)
+- [`e336826`](https://github.com/alexfalkowski/infraops/commit/e336826affe70292e3cb1c5490a3cc7ab0e5fbf6) release(web): upgraded to v1.184.0 (#1605)
+- [`28eaad6`](https://github.com/alexfalkowski/infraops/commit/28eaad6949c79a5c78659f5e1034b380559683c1) release(bezeichner): upgraded to v1.623.0 (#1604)
+- [`67621ae`](https://github.com/alexfalkowski/infraops/commit/67621aebb0ec5064290f3611424083e1759ecdb2) release(standort): upgraded to v2.614.0 (#1603)
+- [`a450da1`](https://github.com/alexfalkowski/infraops/commit/a450da14687e9b75bf3cbbdaaf6bc94dd63dfda9) build(deps): bump bin from `09a61a1` to `5563606` (#1602)
+
 ## [v2.339.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.339.0) - 2025-10-15
 
 - [`ba84183`](https://github.com/alexfalkowski/infraops/commit/ba841830ed6859ff1c0c5eb20e0791e8ce035a33) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.53.0 to 4.54.0 (#1600)
