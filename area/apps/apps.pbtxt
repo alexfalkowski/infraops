@@ -14,7 +14,7 @@ applications: {
   name: "standort"
   namespace: "lean"
   domain: "lean-thoughts.com"
-  version: "2.615.0"
+  version: "2.616.0"
   resource: "small"
 }
 applications: {
