@@ -74,7 +74,7 @@ jobs:
     resource_class: large
   sync:
     docker:
-      - image: alexfalkowski/release:5.19
+      - image: alexfalkowski/release:5.20
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -85,7 +85,7 @@ jobs:
     resource_class: large
   version:
     docker:
-      - image: alexfalkowski/release:5.19
+      - image: alexfalkowski/release:5.20
     working_directory: ~/infraops
     steps:
       - checkout:
