@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.344.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.344.0) - 2025-10-30
+
+- [`cefef4f`](https://github.com/alexfalkowski/infraops/commit/cefef4f15ba705be06af89480982a88d002c896d) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.204.0 to 3.205.0 (#1632)
+- [`861362a`](https://github.com/alexfalkowski/infraops/commit/861362a379116a0b922268943198ac6419d1f1a4) build(ci): use latest published images (#1631)
+- [`29f501a`](https://github.com/alexfalkowski/infraops/commit/29f501aaf9e1870659921ee5b6a157c5bd94845e) release(web): upgraded to v1.189.0 (#1628)
+- [`a5c38d8`](https://github.com/alexfalkowski/infraops/commit/a5c38d857619906e4733d4e54ea8249f73cfbc23) release(bezeichner): upgraded to v1.628.0 (#1630)
+- [`dfa516f`](https://github.com/alexfalkowski/infraops/commit/dfa516f6de7b0840c15f063844a2d642e9523c51) release(standort): upgraded to v2.619.0 (#1629)
+- [`e8d9c44`](https://github.com/alexfalkowski/infraops/commit/e8d9c449f0c8ae8daa9fb75b53fdee9d9a8cf74f) build(ci): use latest published images (#1627)
+- [`543d840`](https://github.com/alexfalkowski/infraops/commit/543d840f1a62e72216c46cae821fe2c8a641ad68) build(ci): use latest published images (#1626)
+- [`15d29d5`](https://github.com/alexfalkowski/infraops/commit/15d29d5a8b0787f33ef77713815fbfd70c5c7f57) release(web): upgraded to v1.188.0 (#1625)
+- [`df995c8`](https://github.com/alexfalkowski/infraops/commit/df995c834acb3223065628fff8d8ea4bdb80c9eb) release(standort): upgraded to v2.618.0 (#1624)
+- [`7973dba`](https://github.com/alexfalkowski/infraops/commit/7973dba83d4f2b27b0de4ab8399593b2b8cc91c7) release(bezeichner): upgraded to v1.627.0 (#1623)
+
 ## [v2.343.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.343.0) - 2025-10-27
 
 - [`cf99518`](https://github.com/alexfalkowski/infraops/commit/cf9951843690587dceda662751feb7fc5df019b5) feat(deps): bump github.com/pulumi/pulumi-cloudflare/sdk/v6 from 6.10.0 to 6.10.1 (#1622)
