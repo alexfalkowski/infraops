@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.347.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.347.0) - 2025-11-06
+
+- [`b7c944e`](https://github.com/alexfalkowski/infraops/commit/b7c944e0ab9e52f853201f485daba1ca4ef863fd) feat(deps): bump github.com/pulumi/pulumi-kubernetes/sdk/v4 from 4.23.0 to 4.24.0 (#1649)
+- [`1617a3c`](https://github.com/alexfalkowski/infraops/commit/1617a3c63120f5864619e459ece8b0d377dde15c) build(deps): bump bin from `5563606` to `ecccdf6` (#1648)
+- [`d1baf2e`](https://github.com/alexfalkowski/infraops/commit/d1baf2ed3f93694681d71bc780abd61ec9f492dc) build(ci): use latest published images (#1651)
+- [`2b5bdce`](https://github.com/alexfalkowski/infraops/commit/2b5bdce81e0f5cb185a5b27673a7d4725140ec8d) release(web): upgraded to v1.193.0 (#1647)
+- [`68283ea`](https://github.com/alexfalkowski/infraops/commit/68283ea16311d193643617101340f6603f2d4b70) release(standort): upgraded to v2.623.0 (#1646)
+- [`5f540a5`](https://github.com/alexfalkowski/infraops/commit/5f540a59855c9106ad20235f73e7205a6bbc36b8) release(bezeichner): upgraded to v1.631.0 (#1645)
+- [`0d61b6e`](https://github.com/alexfalkowski/infraops/commit/0d61b6e3dc665231d49dd40e05cc223b9c107973) build(ci): use latest published images (#1644)
+- [`9931be7`](https://github.com/alexfalkowski/infraops/commit/9931be740fa98f26d26d4c5358b11ec4e8ac8c5a) release(bezeichner): upgraded to v1.630.0 (#1643)
+- [`b71c944`](https://github.com/alexfalkowski/infraops/commit/b71c9448687c8da582d13c2224b378c1306d2988) release(web): upgraded to v1.192.0 (#1642)
+- [`b465bb2`](https://github.com/alexfalkowski/infraops/commit/b465bb2c2aca12cf7345861d3413418b9d9b9a6b) release(standort): upgraded to v2.622.0 (#1641)
+
 ## [v2.346.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.346.0) - 2025-11-03
 
 - [`6f548dc`](https://github.com/alexfalkowski/infraops/commit/6f548dce9119a3deff7c05ee131151cfb9766b95) feat(deps): bump github.com/pulumi/pulumi-cloudflare/sdk/v6 from 6.10.1 to 6.11.0 (#1639)
