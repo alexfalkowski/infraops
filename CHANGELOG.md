@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.350.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.350.0) - 2025-11-08
+
+- [`84394fa`](https://github.com/alexfalkowski/infraops/commit/84394faa525b27f97785c4b3ae64fee6ee2f0880) feat(k8s): update helm deps (#1659)
+
 ## [v2.349.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.349.0) - 2025-11-08
 
 - [`ba31863`](https://github.com/alexfalkowski/infraops/commit/ba31863bf5e839551528f1d4e592cfb8a2369aa2) feat(do): use 1.33.1-do.5 (#1658)
