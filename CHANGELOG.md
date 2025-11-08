@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.352.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.352.0) - 2025-11-08
+
+- [`fe9fd02`](https://github.com/alexfalkowski/infraops/commit/fe9fd02bac8873f1979e1d6a480d5b4e93bb7385) feat(gh): enable collaborators and pages (#1661)
+
 ## [v2.351.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.351.0) - 2025-11-08
 
 - [`f945ca8`](https://github.com/alexfalkowski/infraops/commit/f945ca86dafecbbb7e6b334c68d94d060985fe8a) feat(gh): add go-sync (#1660)
