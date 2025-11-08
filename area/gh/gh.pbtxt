@@ -89,10 +89,10 @@ repositories: {
   homepage_url: "https://alexfalkowski.github.io/go-sync"
   visibility: "public"
   collaborators: {
-    enabled: false
+    enabled: true
   }
   pages: {
-    enabled: false
+    enabled: true
   }
   topics: "golang"
   topics: "sync"
