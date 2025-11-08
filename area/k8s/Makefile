@@ -22,11 +22,11 @@ install-circleci:
 
 # Install metrics server.
 install-metrics-server:
-	@helm upgrade --install metrics-server-release metrics-server/metrics-server --create-namespace --namespace metrics-server --version 3.12.2
+	@helm upgrade --install metrics-server-release metrics-server/metrics-server --create-namespace --namespace metrics-server --version 3.13.0
 
 # Install nginx ingress controller.
 install-nginx-ingress:
-	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.13.0 -f nginx/values.yaml
+	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.14.0 -f nginx/values.yaml
 
 # Install helm.
 install-helm: install-circleci install-metrics-server install-nginx-ingress
