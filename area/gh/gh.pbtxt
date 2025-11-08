@@ -84,6 +84,21 @@ repositories: {
   checks: "ci/circleci: build"
 }
 repositories: {
+  name: "go-sync"
+  description: "A library to handle concurrency."
+  homepage_url: "https://alexfalkowski.github.io/go-sync"
+  visibility: "public"
+  collaborators: {
+    enabled: false
+  }
+  pages: {
+    enabled: false
+  }
+  topics: "golang"
+  topics: "sync"
+  checks: "ci/circleci: build"
+}
+repositories: {
   name: "infraops"
   description: "A place where all infrastructure is taken care of."
   homepage_url: "https://alexfalkowski.github.io/infraops"
