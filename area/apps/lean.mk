@@ -20,8 +20,12 @@ create-lean:
 setup-gh:
 	@kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
 
+# Setup OTLP.
+setup-otlp:
+	@kubectl create secret generic otlp-secret --from-literal=token="Bearer $(BETTER_STACK_OTLP_TOKEN)" --namespace lean
+
 # Setup lean.
-setup-lean: create-lean setup-gh
+setup-lean: create-lean setup-gh setup-otlp
 
 # Rollout lean.
 rollout-lean: rollout-standort rollout-bezeichner rollout-web rollout-sasha rollout-monitoror

@@ -29,11 +29,9 @@ message Kubernetes {
   repeated Application applications = 2;
 }
 
-// Collaborators describes whether the repository will have collaborators enabled.
-message Collaborators {
-  bool enabled = 1;
-}
-
+// Collaborators describes whether the repository will have collaborators
+// enabled.
+message Collaborators { bool enabled = 1; }
 
 // Template represents the template to be used for a repository.
 message Template {
@@ -90,7 +88,8 @@ message BucketZone {
   string domain = 2;
 }
 
-// Bucket defines an R2 bucket with name, region (location, e.g EEUR) and a zone.
+// Bucket defines an R2 bucket with name, region (location, e.g EEUR) and a
+// zone.
 message Bucket {
   string name = 1;
   string region = 2;
