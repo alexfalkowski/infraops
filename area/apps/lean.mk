@@ -28,7 +28,7 @@ setup-otlp:
 setup-lean: create-lean setup-gh setup-otlp
 
 # Rollout lean.
-rollout-lean: rollout-standort rollout-bezeichner rollout-web rollout-sasha rollout-monitoror
+rollout-lean: rollout-standort rollout-bezeichner rollout-web rollout-monitoror
 
 # Rollout standort.
 rollout-standort:
@@ -41,10 +41,6 @@ rollout-bezeichner:
 # Rollout web.
 rollout-web:
 	@kubectl rollout restart deployment/web -n lean
-
-# Rollout sasha.
-rollout-sasha:
-	@kubectl rollout restart deployment/sasha -n lean
 
 # Rollout monitoror.
 rollout-monitoror:
