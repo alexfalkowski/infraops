@@ -7,6 +7,7 @@ applications: {
   domain: "lean-thoughts.com"
   version: "1.635.0"
   resource: "small"
+  secrets: "otlp"
 }
 applications: {
   id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
@@ -16,6 +17,7 @@ applications: {
   domain: "lean-thoughts.com"
   version: "2.627.0"
   resource: "small"
+  secrets: "otlp"
 }
 applications: {
   id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
@@ -25,6 +27,7 @@ applications: {
   domain: "lean-thoughts.com"
   version: "1.197.0"
   resource: "small"
+  secrets: "otlp"
 }
 applications: {
   kind: "external"
