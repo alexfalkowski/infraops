@@ -26,17 +26,17 @@ telemetry:
     level: info
     url: https://s1586281.eu-nbg-2.betterstackdata.com/v1/logs
     headers:
-      Authorization: /etc/secrets/otlp/token
+      Authorization: file:/etc/secrets/otlp/token
   metrics:
     kind: otlp
     url: https://s1586281.eu-nbg-2.betterstackdata.com/v1/metrics
     headers:
-      Authorization: /etc/secrets/otlp/token
+      Authorization: file:/etc/secrets/otlp/token
   tracer:
     kind: otlp
     url: https://s1586281.eu-nbg-2.betterstackdata.com/v1/traces
     headers:
-      Authorization: /etc/secrets/otlp/token
+      Authorization: file:/etc/secrets/otlp/token
 transport:
   http:
     limiter:
