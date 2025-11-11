@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.353.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.353.0) - 2025-11-11
+
+- [`5111253`](https://github.com/alexfalkowski/infraops/commit/511125351608b706253b2f17886ff95b8984768b) feat(apps): add oltp secret (#1668)
+- [`4cd3c62`](https://github.com/alexfalkowski/infraops/commit/4cd3c62a01902922f28557469ada8294bf5ec6ca) release(web): upgraded to v1.197.0 (#1667)
+- [`80d2ec7`](https://github.com/alexfalkowski/infraops/commit/80d2ec7c120714b86213a374595644401ae2ec22) release(standort): upgraded to v2.627.0 (#1666)
+- [`03876ce`](https://github.com/alexfalkowski/infraops/commit/03876ce08fc6a9bd48d6f778fdcf1d899e97f953) release(bezeichner): upgraded to v1.635.0 (#1665)
+- [`aeb854c`](https://github.com/alexfalkowski/infraops/commit/aeb854cf25e708c28a7d3d2bd69805d269524e88) release(web): upgraded to v1.196.0 (#1664)
+- [`27c0464`](https://github.com/alexfalkowski/infraops/commit/27c046411a5e417df2261dea81dfc78ea3dde709) release(standort): upgraded to v2.626.0 (#1663)
+- [`e24362e`](https://github.com/alexfalkowski/infraops/commit/e24362e80e6080de23a5ffda6720baca824c8b5b) release(bezeichner): upgraded to v1.634.0 (#1662)
+
 ## [v2.352.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.352.0) - 2025-11-08
 
 - [`fe9fd02`](https://github.com/alexfalkowski/infraops/commit/fe9fd02bac8873f1979e1d6a480d5b4e93bb7385) feat(gh): enable collaborators and pages (#1661)
