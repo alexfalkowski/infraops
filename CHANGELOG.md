@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.353.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.353.1) - 2025-11-11
+
+- [`303d59f`](https://github.com/alexfalkowski/infraops/commit/303d59ffb3d5acd95bd9c0ded7a20cca7a26a293) fix(apps): add file kind as source (#1669)
+
 ## [v2.353.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.353.0) - 2025-11-11
 
 - [`5111253`](https://github.com/alexfalkowski/infraops/commit/511125351608b706253b2f17886ff95b8984768b) feat(apps): add oltp secret (#1668)
