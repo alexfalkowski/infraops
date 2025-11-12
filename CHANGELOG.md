@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.354.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.354.0) - 2025-11-12
+
+- [`268f91c`](https://github.com/alexfalkowski/infraops/commit/268f91c020ab116809a7998ecd0b36ee8388e81d) feat(k8s): add better stack collector (#1673)
+- [`7008726`](https://github.com/alexfalkowski/infraops/commit/7008726ce9464c3aca46badb8995c1c2b4532cad) release(web): upgraded to v1.198.0 (#1672)
+- [`a020215`](https://github.com/alexfalkowski/infraops/commit/a020215131802a24f2fa1fe07ab8aabfb8f910f6) release(standort): upgraded to v2.628.0 (#1671)
+- [`93c45d5`](https://github.com/alexfalkowski/infraops/commit/93c45d5b3eb2203be65fcba3f14f2a66a4963a3c) release(bezeichner): upgraded to v1.636.0 (#1670)
+
 ## [v2.353.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.353.1) - 2025-11-11
 
 - [`303d59f`](https://github.com/alexfalkowski/infraops/commit/303d59ffb3d5acd95bd9c0ded7a20cca7a26a293) fix(apps): add file kind as source (#1669)
