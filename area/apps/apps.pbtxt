@@ -5,7 +5,7 @@ applications: {
   name: "bezeichner"
   namespace: "lean"
   domain: "lean-thoughts.com"
-  version: "1.636.0"
+  version: "1.637.0"
   resource: "small"
   secrets: "otlp"
 }
