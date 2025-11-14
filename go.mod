@@ -4,7 +4,7 @@ go 1.24.7
 
 require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.11.0
-	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.54.0
+	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.55.0
 	github.com/pulumi/pulumi-github/sdk/v6 v6.9.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.24.0
 	github.com/pulumi/pulumi/sdk/v3 v3.207.0
