@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.358.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.358.0) - 2025-11-14
+
+- [`f7d2172`](https://github.com/alexfalkowski/infraops/commit/f7d2172e09688cbc46e04a7a0cbbc7a6ee47dc76) feat(apps): load test other apps (#1693)
+- [`469e821`](https://github.com/alexfalkowski/infraops/commit/469e82116f291656276483fd10901cec3c8d794d) release(standort): upgraded to v2.633.0 (#1692)
+- [`45d7c2f`](https://github.com/alexfalkowski/infraops/commit/45d7c2f7bb5d49d3730704e7318844be56283b4e) release(web): upgraded to v1.203.0 (#1691)
+- [`4f45885`](https://github.com/alexfalkowski/infraops/commit/4f458859aa0ee29d27d35a6677a0d697418b5c93) release(bezeichner): upgraded to v1.641.0 (#1690)
+
 ## [v2.357.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.357.0) - 2025-11-14
 
 - [`541f29c`](https://github.com/alexfalkowski/infraops/commit/541f29cdf896f4af40cca1607effe873c32098c8) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.54.0 to 4.55.0 (#1689)
