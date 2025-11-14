@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.356.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.356.0) - 2025-11-14
+
+- [`25b0a68`](https://github.com/alexfalkowski/infraops/commit/25b0a6833237e47102487370ee5532c35fd2f59a) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.206.0 to 3.207.0 (#1675)
+- [`7a0545f`](https://github.com/alexfalkowski/infraops/commit/7a0545ffebe2e75d996dfec552302782b97ff6c8) build(ci): use latest published images (#1685)
+- [`8313821`](https://github.com/alexfalkowski/infraops/commit/83138210b3e03849b82696163a67b6832fe1678d) release(web): upgraded to v1.201.0 (#1684)
+- [`05bdfa7`](https://github.com/alexfalkowski/infraops/commit/05bdfa71efc38b94cddd9f3b253ab5e1491ea7e8) release(standort): upgraded to v2.631.0 (#1683)
+- [`6eafa74`](https://github.com/alexfalkowski/infraops/commit/6eafa74e35d074d9585905bf974558a7deb97191) release(bezeichner): upgraded to v1.639.0 (#1682)
+- [`794ccaa`](https://github.com/alexfalkowski/infraops/commit/794ccaa25ddeef2f7fffe1bcec953b646540621b) release(web): upgraded to v1.200.0 (#1681)
+- [`37f3de1`](https://github.com/alexfalkowski/infraops/commit/37f3de14c36bf37d1a46d8155760a255dd962711) release(bezeichner): upgraded to v1.638.0 (#1680)
+- [`636e937`](https://github.com/alexfalkowski/infraops/commit/636e937dd2ae162c757364bc54c455180d99c9f2) release(standort): upgraded to v2.630.0 (#1679)
+- [`197e68b`](https://github.com/alexfalkowski/infraops/commit/197e68be84f57b8de0a573cfdd4fdab81584a773) release(web): upgraded to v1.199.0 (#1678)
+- [`520e26b`](https://github.com/alexfalkowski/infraops/commit/520e26bc5ef9bee5ee3b147a66eda4adcaad7c07) release(standort): upgraded to v2.629.0 (#1677)
+- [`291664d`](https://github.com/alexfalkowski/infraops/commit/291664d4c7d0fd61e8afe98642cf2bb27d01d895) release(bezeichner): upgraded to v1.637.0 (#1676)
+
 ## [v2.355.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.355.0) - 2025-11-13
 
 - [`ff1a175`](https://github.com/alexfalkowski/infraops/commit/ff1a1756f412bfdb24401c411503d95b0590b7bc) feat(deps): bump github.com/pulumi/pulumi-github/sdk/v6 from 6.8.1 to 6.9.0 (#1674)
