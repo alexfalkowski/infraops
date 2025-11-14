@@ -66,7 +66,7 @@ verify-monitoror:
 	@curl -svf https://monitoror.lean-thoughts.com
 
 # Load test lean.
-load-lean: load-standort load-bezeichner
+load-lean: load-standort load-bezeichner load-web load-monitoror
 
 # Load test standort.
 load-standort:
@@ -75,3 +75,11 @@ load-standort:
 # Load test bezeichner.
 load-bezeichner:
 	@echo "POST https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers" | vegeta attack -duration=30s -body "lean/bezeichner.json" -header "Content-Type: application/json" | tee "lean/bezeichner.bin" | vegeta report
+
+# Load test web.
+load-web:
+	@echo "GET https://web.lean-thoughts.com" | vegeta attack -duration=30s | tee "lean/web.bin" | vegeta report
+
+# Load test monitoror.
+load-monitoror:
+	@echo "GET https://monitoror.lean-thoughts.com" | vegeta attack -duration=30s | tee "lean/monitoror.bin" | vegeta report
