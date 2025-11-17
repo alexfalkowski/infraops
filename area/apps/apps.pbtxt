@@ -15,7 +15,7 @@ applications: {
   name: "standort"
   namespace: "lean"
   domain: "lean-thoughts.com"
-  version: "2.633.0"
+  version: "2.634.0"
   resource: "small"
   secrets: "otlp"
 }
