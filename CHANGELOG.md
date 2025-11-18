@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.359.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.359.0) - 2025-11-18
+
+- [`95fe984`](https://github.com/alexfalkowski/infraops/commit/95fe984ffd1c183ff1823f67b21ed65507f1dc97) feat(deps): bump github.com/pulumi/pulumi-github/sdk/v6 from 6.9.0 to 6.9.1 (#1704)
+- [`3f3355b`](https://github.com/alexfalkowski/infraops/commit/3f3355bf603e5cf7e988d44c679e58cc8247bcec) release(web): upgraded to v1.206.0 (#1703)
+- [`1cec62a`](https://github.com/alexfalkowski/infraops/commit/1cec62aa745fea82c14c8e5310794e2ef9088758) release(bezeichner): upgraded to v1.644.0 (#1701)
+- [`1364c51`](https://github.com/alexfalkowski/infraops/commit/1364c51632f78e4bf20d90e4f7b558a901d8367a) release(standort): upgraded to v2.636.0 (#1702)
+- [`672bf87`](https://github.com/alexfalkowski/infraops/commit/672bf8765d5bcb5da50eda9d87cdeee107346a93) release(bezeichner): upgraded to v1.643.0 (#1700)
+- [`a9b5934`](https://github.com/alexfalkowski/infraops/commit/a9b59348d04b947f722bea849a79e9b5126e676c) release(standort): upgraded to v2.635.0 (#1698)
+- [`38f6160`](https://github.com/alexfalkowski/infraops/commit/38f616035a8da83d3fb3164a443ed1629d8c23cf) release(web): upgraded to v1.205.0 (#1699)
+- [`b6fe278`](https://github.com/alexfalkowski/infraops/commit/b6fe2780f85dd7e129dec6807664e7762b0271b4) release(web): upgraded to v1.204.0 (#1697)
+- [`df8541f`](https://github.com/alexfalkowski/infraops/commit/df8541fb09f3dbcf15cf45408005129a541184db) release(bezeichner): upgraded to v1.642.0 (#1695)
+- [`b48e68b`](https://github.com/alexfalkowski/infraops/commit/b48e68bf88084d6d3e486327b4be0844525601b5) release(standort): upgraded to v2.634.0 (#1696)
+- [`41a8bc3`](https://github.com/alexfalkowski/infraops/commit/41a8bc3c1720f7fbcfbb659c1cb9cd5424417f7a) build(ci): use latest published images (#1694)
+
 ## [v2.358.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.358.0) - 2025-11-14
 
 - [`f7d2172`](https://github.com/alexfalkowski/infraops/commit/f7d2172e09688cbc46e04a7a0cbbc7a6ee47dc76) feat(apps): load test other apps (#1693)
