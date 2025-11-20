@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.360.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.360.0) - 2025-11-20
+
+- [`09a708d`](https://github.com/alexfalkowski/infraops/commit/09a708d6452af2bd9142a92538e012c8720f6407) feat(deps): bump golang.org/x/crypto from 0.40.0 to 0.45.0 (#1714)
+- [`24cf0e7`](https://github.com/alexfalkowski/infraops/commit/24cf0e76be720378e27c81fb6449d6587162d25b) release(web): upgraded to v1.209.0 (#1713)
+- [`5c44288`](https://github.com/alexfalkowski/infraops/commit/5c44288a30eaa8773a77e2cdb3c040c1fd5bab3b) release(standort): upgraded to v2.639.0 (#1712)
+- [`c6e6681`](https://github.com/alexfalkowski/infraops/commit/c6e6681a013af19cd352d4d82f6fc313412a2f2e) release(bezeichner): upgraded to v1.647.0 (#1711)
+- [`12b2bb0`](https://github.com/alexfalkowski/infraops/commit/12b2bb0bb0735fd52033b55326cca53635ec33af) release(standort): upgraded to v2.638.0 (#1709)
+- [`4c3a29c`](https://github.com/alexfalkowski/infraops/commit/4c3a29ca9128f25af4188d9a2b29deaecd610658) release(bezeichner): upgraded to v1.646.0 (#1710)
+- [`7066ce2`](https://github.com/alexfalkowski/infraops/commit/7066ce2c438adc45ab50757cf4cebc45c2d07348) release(web): upgraded to v1.208.0 (#1708)
+- [`44f5d5e`](https://github.com/alexfalkowski/infraops/commit/44f5d5eee38e29b42e5f2fbb490a95d020fc4883) release(standort): upgraded to v2.637.0 (#1707)
+- [`f9eda41`](https://github.com/alexfalkowski/infraops/commit/f9eda4124b448d028e8d26e08cf0bd78800955a3) release(web): upgraded to v1.207.0 (#1705)
+- [`87d3b6e`](https://github.com/alexfalkowski/infraops/commit/87d3b6e3d1eef1c105bc13afccc579fdc1ba3c6c) release(bezeichner): upgraded to v1.645.0 (#1706)
+
 ## [v2.359.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.359.0) - 2025-11-18
 
 - [`95fe984`](https://github.com/alexfalkowski/infraops/commit/95fe984ffd1c183ff1823f67b21ed65507f1dc97) feat(deps): bump github.com/pulumi/pulumi-github/sdk/v6 from 6.9.0 to 6.9.1 (#1704)
