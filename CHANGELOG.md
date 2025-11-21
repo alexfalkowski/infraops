@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.361.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.361.0) - 2025-11-21
+
+- [`fc45678`](https://github.com/alexfalkowski/infraops/commit/fc45678f2870f8ba69c482e586818c2202e4710f) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.207.0 to 3.208.0 (#1719)
+- [`495722e`](https://github.com/alexfalkowski/infraops/commit/495722e94db759c51c2b05734664e3b185698a58) release(web): upgraded to v1.210.0 (#1718)
+- [`eaab1db`](https://github.com/alexfalkowski/infraops/commit/eaab1dbb1ee6be13f39981ec893339951ed82c45) release(standort): upgraded to v2.640.0 (#1717)
+- [`9d9fd4a`](https://github.com/alexfalkowski/infraops/commit/9d9fd4a76d1bd13bfad856156f5628a90f40e41a) release(bezeichner): upgraded to v1.648.0 (#1716)
+- [`3927a1e`](https://github.com/alexfalkowski/infraops/commit/3927a1e19972c678f2797364eff0e61e5f235291) build(ci): use latest published images (#1715)
+
 ## [v2.360.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.360.0) - 2025-11-20
 
 - [`09a708d`](https://github.com/alexfalkowski/infraops/commit/09a708d6452af2bd9142a92538e012c8720f6407) feat(deps): bump golang.org/x/crypto from 0.40.0 to 0.45.0 (#1714)
