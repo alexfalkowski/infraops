@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.80
+      - image: alexfalkowski/go:2.81
     working_directory: ~/infraops
     environment:
       GOGC: 10
