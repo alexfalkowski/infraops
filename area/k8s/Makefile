@@ -27,11 +27,11 @@ install-metrics-server:
 
 # Install nginx ingress controller.
 install-nginx-ingress:
-	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.14.0 -f nginx/values.yaml
+	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.14.1 -f nginx/values.yaml
 
 # Install better stack.
 install-better-stack:
-	@helm upgrade --install better-stack-release better-stack/collector --set collector.env.COLLECTOR_SECRET=$(BETTER_STACK_COLLECTOR_SECRET) --create-namespace --namespace better-stack --version v0.1.21
+	@helm upgrade --install better-stack-release better-stack/collector --set collector.env.COLLECTOR_SECRET=$(BETTER_STACK_COLLECTOR_SECRET) --create-namespace --namespace better-stack --version v0.1.26
 
 # Install helm.
 install-helm: install-circleci install-metrics-server install-nginx-ingress install-better-stack
