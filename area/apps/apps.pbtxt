@@ -1,42 +1,42 @@
-version: "2.0"
-applications: {
-  id: "98968ca0-4ada-4856-8547-210f92b838ea"
-  kind: "internal"
-  name: "bezeichner"
-  namespace: "lean"
-  domain: "lean-thoughts.com"
-  version: "1.655.0"
-  resource: "small"
-  secrets: "otlp"
+version:  "2.0"
+applications:  {
+  id:  "98968ca0-4ada-4856-8547-210f92b838ea"
+  kind:  "internal"
+  name:  "bezeichner"
+  namespace:  "lean"
+  domain:  "lean-thoughts.com"
+  version:  "1.655.0"
+  resource:  "small"
+  secrets:  "otlp"
 }
-applications: {
-  id: "28c679dc-5924-47e8-ac48-73cd842ba5cd"
-  kind: "internal"
-  name: "standort"
-  namespace: "lean"
-  domain: "lean-thoughts.com"
-  version: "2.648.0"
-  resource: "small"
-  secrets: "otlp"
+applications:  {
+  id:  "28c679dc-5924-47e8-ac48-73cd842ba5cd"
+  kind:  "internal"
+  name:  "standort"
+  namespace:  "lean"
+  domain:  "lean-thoughts.com"
+  version:  "2.649.0"
+  resource:  "small"
+  secrets:  "otlp"
 }
-applications: {
-  id: "b46608ae-950a-46bb-b37a-4dfe68a95b52"
-  kind: "internal"
-  name: "web"
-  namespace: "lean"
-  domain: "lean-thoughts.com"
-  version: "1.216.0"
-  resource: "small"
-  secrets: "otlp"
+applications:  {
+  id:  "b46608ae-950a-46bb-b37a-4dfe68a95b52"
+  kind:  "internal"
+  name:  "web"
+  namespace:  "lean"
+  domain:  "lean-thoughts.com"
+  version:  "1.216.0"
+  resource:  "small"
+  secrets:  "otlp"
 }
-applications: {
-  kind: "external"
-  name: "monitoror"
-  namespace: "lean"
-  domain: "lean-thoughts.com"
-  version: "1.20"
-  env_vars: {
-    name: "MO_MONITORABLE_GITHUB_TOKEN"
-    value: "secret:gh/token"
+applications:  {
+  kind:  "external"
+  name:  "monitoror"
+  namespace:  "lean"
+  domain:  "lean-thoughts.com"
+  version:  "1.20"
+  env_vars:  {
+    name:  "MO_MONITORABLE_GITHUB_TOKEN"
+    value:  "secret:gh/token"
   }
 }
