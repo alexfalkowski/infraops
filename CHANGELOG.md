@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.375.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.375.0) - 2025-12-18
+
+- [`b42822a`](https://github.com/alexfalkowski/infraops/commit/b42822afcd6d75611cab00f78cc6d6dfb854722b) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.212.0 to 3.213.0 (#1789)
+- [`00b9f9f`](https://github.com/alexfalkowski/infraops/commit/00b9f9f2838d4e23f46619d5596f8502bacb06f8) build(deps): upgraded github.com/alexfalkowski/bin (#1791)
+- [`54d30b4`](https://github.com/alexfalkowski/infraops/commit/54d30b4013ad89dcf9b6fc014f53e0346afd4cef) build(ci): use latest published images (#1790)
+- [`7c63d67`](https://github.com/alexfalkowski/infraops/commit/7c63d67d518f564dcb560340d47f7026a17ae113) release(web): upgraded to v1.223.0 (#1788)
+- [`a4eabbb`](https://github.com/alexfalkowski/infraops/commit/a4eabbbe652b2d69be163dfe83e34e12ad8574a3) release(standort): upgraded to v2.655.0 (#1787)
+- [`0f20197`](https://github.com/alexfalkowski/infraops/commit/0f2019786cd8be759638e65f50a827ea7e3f5b42) release(bezeichner): upgraded to v1.662.0 (#1786)
+- [`5dab643`](https://github.com/alexfalkowski/infraops/commit/5dab6438be2830c3fb4edff1266775aa75e11ec6) release(web): upgraded to v1.222.0 (#1785)
+- [`2d83693`](https://github.com/alexfalkowski/infraops/commit/2d83693203d893100ee419445b0643a8a888d9a7) release(standort): upgraded to v2.654.0 (#1784)
+- [`d7c5058`](https://github.com/alexfalkowski/infraops/commit/d7c505817e85de04d95b8cb5eddb737c520b398d) release(bezeichner): upgraded to v1.661.0 (#1783)
+
 ## [v2.374.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.374.0) - 2025-12-15
 
 - [`24eda24`](https://github.com/alexfalkowski/infraops/commit/24eda24baa3cfa8a5337f984359c01fc8408bc07) feat(deps): bump google.golang.org/protobuf from 1.36.10 to 1.36.11 (#1782)
