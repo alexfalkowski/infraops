@@ -4,6 +4,7 @@ linters:
   disable:
     - bodyclose
     - depguard
+    - err113
     - exhaustruct
     - forcetypeassert
     - gochecknoglobals
