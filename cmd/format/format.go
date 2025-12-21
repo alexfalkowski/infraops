@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"log"
+	"fmt"
 	"os"
 
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/v2/internal/config"
+	"github.com/alexfalkowski/infraops/v2/internal/log"
 )
 
 var configs = map[string]config.Config{
@@ -16,7 +17,7 @@ var configs = map[string]config.Config{
 	"gh":   &v2.Github{},
 }
 
-func main() {
+func run() error {
 	var (
 		kind string
 		path string
@@ -26,19 +27,30 @@ func main() {
 	set.StringVar(&kind, "k", "", "kind of config")
 	set.StringVar(&path, "p", "", "path of the config")
 	if err := set.Parse(os.Args[1:]); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	cfg, ok := configs[kind]
 	if !ok {
-		log.Fatal("invalid kind")
+		return fmt.Errorf("%s: invalid kind", kind)
 	}
 
 	if err := config.Read(path, cfg); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	if err := config.Write(path, cfg); err != nil {
-		log.Fatal(err)
+		return err
+	}
+
+	return nil
+}
+
+func main() {
+	logger := log.NewLogger()
+
+	if err := run(); err != nil {
+		logger.Error("could not format config", "error", err)
+		os.Exit(1)
 	}
 }
