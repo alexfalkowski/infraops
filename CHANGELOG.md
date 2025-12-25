@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.379.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.379.0) - 2025-12-25
+
+- [`be43310`](https://github.com/alexfalkowski/infraops/commit/be4331057df427ff9eb2bbf9b5248830ccdb0600) feat(deps): bump github.com/pulumi/pulumi-cloudflare/sdk/v6 from 6.11.0 to 6.12.0 (#1808)
+- [`36894f9`](https://github.com/alexfalkowski/infraops/commit/36894f9404f55e2c4f3f67e2bf62eefcdc8e8911) release(web): upgraded to v1.226.0 (#1807)
+- [`9fb319f`](https://github.com/alexfalkowski/infraops/commit/9fb319ffd63679eb66eaeac2d1affd7d43a639d7) release(bezeichner): upgraded to v1.665.0 (#1806)
+- [`9c3ddde`](https://github.com/alexfalkowski/infraops/commit/9c3ddde8320419bb2db2f44887d89c36b8ad6330) release(standort): upgraded to v2.658.0 (#1805)
+
 ## [v2.378.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.378.0) - 2025-12-23
 
 - [`2432653`](https://github.com/alexfalkowski/infraops/commit/24326536e1661144744d18eb062053b2707b45f6) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.55.0 to 4.56.0 (#1804)
