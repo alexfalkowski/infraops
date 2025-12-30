@@ -7,7 +7,7 @@ require (
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.56.0
 	github.com/pulumi/pulumi-github/sdk/v6 v6.10.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.24.1
-	github.com/pulumi/pulumi/sdk/v3 v3.213.0
+	github.com/pulumi/pulumi/sdk/v3 v3.214.0
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/protobuf v1.36.11
 )
