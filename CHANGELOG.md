@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.381.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.381.0) - 2025-12-30
+
+- [`c842bd8`](https://github.com/alexfalkowski/infraops/commit/c842bd8bdcccda76f614f33ac3574ae12afc644d) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.213.0 to 3.214.0 (#1821)
+- [`1fc3a0d`](https://github.com/alexfalkowski/infraops/commit/1fc3a0d94785c2c85e77a4c39c6c32075c8faae6) build(ci): use latest published images (#1822)
+- [`38fec1b`](https://github.com/alexfalkowski/infraops/commit/38fec1b4add406d9c82e3f8fa1ec1e94e21890cd) build(deps): upgraded github.com/alexfalkowski/bin (#1820)
+- [`9c590b0`](https://github.com/alexfalkowski/infraops/commit/9c590b0cbe56f675f1ae84750776afec62645df7) release(standort): upgraded to v2.661.0 (#1819)
+- [`fc0497d`](https://github.com/alexfalkowski/infraops/commit/fc0497dfbd88e346d40451beac9e76eb802c871e) release(bezeichner): upgraded to v1.667.0 (#1818)
+- [`5391443`](https://github.com/alexfalkowski/infraops/commit/5391443212ad7feea571fec619e3ee6e8c88536c) release(web): upgraded to v1.229.0 (#1817)
+- [`89c4747`](https://github.com/alexfalkowski/infraops/commit/89c4747ce2b49b2ec1df93dcde4b8a69247d4054) build(deps): upgraded github.com/alexfalkowski/bin (#1816)
+- [`f237873`](https://github.com/alexfalkowski/infraops/commit/f237873ac895d913d3386d69bcad288d95374e07) build(ci): use latest published images (#1815)
+- [`1761e90`](https://github.com/alexfalkowski/infraops/commit/1761e90c17c1e31c1f5e398730b160a85dfa5ded) release(web): upgraded to v1.228.0 (#1814)
+- [`e47700e`](https://github.com/alexfalkowski/infraops/commit/e47700e0f6de1b33305814ee1af13f5ec5df3f12) release(standort): upgraded to v2.659.0 (#1813)
+- [`6da61b0`](https://github.com/alexfalkowski/infraops/commit/6da61b01237118e6b46c3f043fa185c7fffa8db6) release(web): upgraded to v1.227.0 (#1812)
+- [`d47b407`](https://github.com/alexfalkowski/infraops/commit/d47b40738057ccd1d7ac25d7c4b51de9466fd2ea) release(bezeichner): upgraded to v1.666.0 (#1811)
+
 ## [v2.380.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.380.0) - 2025-12-25
 
 - [`784c4f0`](https://github.com/alexfalkowski/infraops/commit/784c4f0d17df19b0a22c77df832e20d12f34c312) feat(deps): update go to v1.25.0 (#1810)
