@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.383.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.383.0) - 2026-01-03
+
+- [`9446dc9`](https://github.com/alexfalkowski/infraops/commit/9446dc9bdcc582e54a974adae9adcf47a4aad543) feat(deps): upgraded google.golang.org/grpc v1.77.0 => v1.78.0 (#1829)
+
 ## [v2.382.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.382.0) - 2026-01-02
 
 - [`c1146df`](https://github.com/alexfalkowski/infraops/commit/c1146dfac343f978bb4091f4c3316f28bb726433) feat(do): update to 1.34.1-do.2 (#1828)
