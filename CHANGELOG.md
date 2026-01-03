@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.384.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.384.0) - 2026-01-03
+
+- [`07e063b`](https://github.com/alexfalkowski/infraops/commit/07e063b17041419ab68ce5b65bf02dac87f0c587) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.214.0 to 3.214.1 (#1831)
+- [`5049310`](https://github.com/alexfalkowski/infraops/commit/50493104cc7e7a0c7a70fbbb087d27cfc977ff4e) build(ci): use latest published images (#1830)
+
 ## [v2.383.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.383.0) - 2026-01-03
 
 - [`9446dc9`](https://github.com/alexfalkowski/infraops/commit/9446dc9bdcc582e54a974adae9adcf47a4aad543) feat(deps): upgraded google.golang.org/grpc v1.77.0 => v1.78.0 (#1829)
