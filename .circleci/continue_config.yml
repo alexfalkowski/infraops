@@ -177,7 +177,7 @@ jobs:
     docker:
       - image: alexfalkowski/k8s:2.6
     environment:
-      GOGC: 10
+      GOGC: 5
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -215,7 +215,7 @@ jobs:
     docker:
       - image: alexfalkowski/k8s:2.6
     environment:
-      GOGC: 10
+      GOGC: 5
     working_directory: ~/infraops
     steps:
       - checkout:
