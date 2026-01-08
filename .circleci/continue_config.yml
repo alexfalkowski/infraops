@@ -214,6 +214,8 @@ jobs:
   cf_update:
     docker:
       - image: alexfalkowski/k8s:2.6
+    environment:
+      GOGC: 10
     working_directory: ~/infraops
     steps:
       - checkout:
