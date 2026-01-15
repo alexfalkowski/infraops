@@ -31,7 +31,7 @@ install-nginx-ingress:
 
 # Install better stack.
 install-better-stack:
-	@helm upgrade --install better-stack-release better-stack/collector --set collector.env.COLLECTOR_SECRET=$(BETTER_STACK_COLLECTOR_SECRET) --create-namespace --namespace better-stack --version v0.1.26
+	@helm upgrade --install better-stack-release better-stack/collector --set collector.env.COLLECTOR_SECRET=$(BETTER_STACK_COLLECTOR_SECRET) --create-namespace --namespace better-stack --version v0.1.29
 
 # Install helm.
 install-helm: install-circleci install-metrics-server install-nginx-ingress install-better-stack
