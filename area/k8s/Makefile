@@ -4,7 +4,7 @@ save-config:
 
 # Delete all.
 delete:
-	@kubectl delete namespaces nginx-ingress circleci metrics-server
+	@kubectl delete namespaces nginx-ingress circleci metrics-server better-stack
 
 # Setup everything.
 setup: setup-helm install-helm
