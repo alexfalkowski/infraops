@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.388.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.388.0) - 2026-01-15
+
+- [`b058713`](https://github.com/alexfalkowski/infraops/commit/b0587136092b8eb42b79bb4ebc9c7562404fe93a) feat(k8s): update better-stack to v0.1.29 (#1857)
+- [`e683594`](https://github.com/alexfalkowski/infraops/commit/e6835943e718a780d14c606c26558e4c579ddb6c) build(ci): use latest published images (#1856)
+
 ## [v2.387.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.387.0) - 2026-01-14
 
 - [`7c41bcc`](https://github.com/alexfalkowski/infraops/commit/7c41bcc4db3018838a74cb10be2b031203dd5e1f) feat(deps): upgraded golang.org/x/net v0.48.0 => v0.49.0 (#1855)
