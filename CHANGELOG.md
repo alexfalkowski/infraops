@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.388.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.388.1) - 2026-01-15
+
+- [`682a2ff`](https://github.com/alexfalkowski/infraops/commit/682a2ff3d8a8d84e9589f54ca0841552916d7206) fix(k8s): forgot better-stack namespace in delete (#1858)
+
 ## [v2.388.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.388.0) - 2026-01-15
 
 - [`b058713`](https://github.com/alexfalkowski/infraops/commit/b0587136092b8eb42b79bb4ebc9c7562404fe93a) feat(k8s): update better-stack to v0.1.29 (#1857)
