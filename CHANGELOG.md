@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.391.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.391.0) - 2026-01-16
+
+- [`774198c`](https://github.com/alexfalkowski/infraops/commit/774198c4f858fae55c81e8cc136e23cef4bca648) feat(config): move to use hjson (#1873)
+- [`4120e59`](https://github.com/alexfalkowski/infraops/commit/4120e5959b11c7bed132c8c618d3f1206f4d3ad4) build(ci): use latest published images (#1872)
+
 ## [v2.390.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.390.0) - 2026-01-16
 
 - [`007b564`](https://github.com/alexfalkowski/infraops/commit/007b564bb85cd16bb8984bfd7bb433314000c0cb) feat(cmd): allow default to path (#1871)
