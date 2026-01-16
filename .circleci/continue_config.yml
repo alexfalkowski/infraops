@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.95
+      - image: alexfalkowski/go:2.96
     working_directory: ~/infraops
     environment:
       GOGC: 10
@@ -74,7 +74,7 @@ jobs:
     resource_class: large
   sync:
     docker:
-      - image: alexfalkowski/release:5.38
+      - image: alexfalkowski/release:5.39
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -85,7 +85,7 @@ jobs:
     resource_class: large
   version:
     docker:
-      - image: alexfalkowski/release:5.38
+      - image: alexfalkowski/release:5.39
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -97,7 +97,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -134,7 +134,7 @@ jobs:
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -175,7 +175,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     environment:
       GOGC: 5
     working_directory: ~/infraops
@@ -213,7 +213,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     environment:
       GOGC: 5
     working_directory: ~/infraops
@@ -252,7 +252,7 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -288,7 +288,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -325,7 +325,7 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -361,7 +361,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:2.7
+      - image: alexfalkowski/k8s:2.8
     working_directory: ~/infraops
     steps:
       - checkout:
