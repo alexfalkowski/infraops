@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.389.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.389.0) - 2026-01-16
+
+- [`7d88053`](https://github.com/alexfalkowski/infraops/commit/7d880538e57430f78f76de4b7e2731a3d19c778c) feat(config): move to yaml (#1866)
+- [`56ad50e`](https://github.com/alexfalkowski/infraops/commit/56ad50e4cf6b96d4773e50931a020e6beb9c8114) release(web): upgraded to v1.236.0 (#1865)
+- [`e606ff9`](https://github.com/alexfalkowski/infraops/commit/e606ff91a67aba86086483f10bcb7456e29c6e41) release(standort): upgraded to v2.667.0 (#1864)
+- [`ab9b0c4`](https://github.com/alexfalkowski/infraops/commit/ab9b0c4c0cb5da780261a8cb061b5cc2a59c3d7c) release(bezeichner): upgraded to v1.673.0 (#1862)
+- [`4d8ecf4`](https://github.com/alexfalkowski/infraops/commit/4d8ecf4049ac276d1a4d81ccb883a0d64a288e50) build(deps): bump bin from `42dc7ae` to `07eff55` (#1859)
+- [`6c2f66d`](https://github.com/alexfalkowski/infraops/commit/6c2f66dca8ad9257dee6d2a64b62f8da44a816c7) build(ci): use latest published images (#1860)
+
 ## [v2.388.1](https://github.com/alexfalkowski/infraops/releases/tag/v2.388.1) - 2026-01-15
 
 - [`682a2ff`](https://github.com/alexfalkowski/infraops/commit/682a2ff3d8a8d84e9589f54ca0841552916d7206) fix(k8s): forgot better-stack namespace in delete (#1858)
