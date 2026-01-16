@@ -20,7 +20,7 @@ jobs:
       - image: alexfalkowski/go:2.96
     working_directory: ~/infraops
     environment:
-      GOGC: 10
+      GOGC: 5
     steps:
       - checkout:
           method: blobless

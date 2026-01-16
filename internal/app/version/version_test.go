@@ -8,16 +8,16 @@ import (
 )
 
 func TestValidUpdate(t *testing.T) {
-	err := version.Update("app1", "1.1.0", "../test/apps.pbtxt")
+	err := version.Update("app1", "1.1.0", "../test/apps.yaml")
 	require.NoError(t, err)
 }
 
 func TestInvalidUpdate(t *testing.T) {
-	err := version.Update("app1", "1.1.0", "../test/none.pbtxt")
+	err := version.Update("app1", "1.1.0", "../test/none.yaml")
 	require.Error(t, err)
 }
 
 func TestMissingUpdate(t *testing.T) {
-	err := version.Update("none", "1.1.0", "../test/apps.pbtxt")
+	err := version.Update("none", "1.1.0", "../test/apps.yaml")
 	require.Error(t, err)
 }

@@ -7,7 +7,7 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		config, err := cf.ReadConfiguration("cf.pbtxt")
+		config, err := cf.ReadConfiguration("cf.yaml")
 		if err != nil {
 			return err
 		}

@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateCluster(t *testing.T) {
-	config, err := do.ReadConfiguration("do.pbtxt")
+	config, err := do.ReadConfiguration("do.yaml")
 	require.NoError(t, err)
 
 	clusters := config.GetClusters()
