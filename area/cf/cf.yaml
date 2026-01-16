@@ -1,0 +1,17 @@
+version: "2.0"
+balancerzones:
+    - name: lean-thoughts
+      domain: lean-thoughts.com
+      ipv4: 67.207.76.98
+      ipv6: 2a03:b0c0:3:f0:0:1:e12:e000
+      recordnames:
+        - konfig
+        - standort
+        - bezeichner
+        - web
+        - monitoror
+pagezones:
+    - name: afalkowski
+      domain: afalkowski.com
+      host: alexfalkowski.github.io
+buckets: []

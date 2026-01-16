@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	config, err := app.ReadConfiguration("apps.pbtxt")
+	config, err := app.ReadConfiguration("apps.yaml")
 	require.NoError(t, err)
 
 	applications := config.GetApplications()

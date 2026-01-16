@@ -1,0 +1,43 @@
+version: "2.0"
+applications:
+    - id: 98968ca0-4ada-4856-8547-210f92b838ea
+      kind: internal
+      name: bezeichner
+      namespace: lean
+      domain: lean-thoughts.com
+      version: 1.673.0
+      resource: small
+      secrets:
+        - otlp
+      envvars: []
+    - id: 28c679dc-5924-47e8-ac48-73cd842ba5cd
+      kind: internal
+      name: standort
+      namespace: lean
+      domain: lean-thoughts.com
+      version: 2.667.0
+      resource: small
+      secrets:
+        - otlp
+      envvars: []
+    - id: b46608ae-950a-46bb-b37a-4dfe68a95b52
+      kind: internal
+      name: web
+      namespace: lean
+      domain: lean-thoughts.com
+      version: 1.236.0
+      resource: small
+      secrets:
+        - otlp
+      envvars: []
+    - id: ""
+      kind: external
+      name: monitoror
+      namespace: lean
+      domain: lean-thoughts.com
+      version: "1.20"
+      resource: ""
+      secrets: []
+      envvars:
+        - name: MO_MONITORABLE_GITHUB_TOKEN
+          value: secret:gh/token

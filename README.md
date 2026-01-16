@@ -31,7 +31,7 @@ Build the application:
 To format a configuration:
 
 ```bash
-❯ ./format -k cf -p area/cf/cf.pbtxt
+❯ ./format -k cf -p area/cf/cf.yaml
 ```
 
 ## Areas
@@ -72,7 +72,7 @@ To remove all the apps, you need to run the following:
 
 #### Applications Configuration
 
-Have a look at the [configuration](area/apps/apps.pbtxt).
+Have a look at the [configuration](area/apps/apps.yaml).
 
 #### Applications Version Update
 
@@ -85,7 +85,7 @@ Build the application:
 To update a version of an app:
 
 ```bash
-❯ ./bump -n bezeichner -v 1.559.0 -p area/apps/apps.pbtxt
+❯ ./bump -n bezeichner -v 1.559.0 -p area/apps/apps.yaml
 ```
 
 ### Cloudflare (cf)
@@ -94,7 +94,7 @@ The code is bases on the package <https://www.pulumi.com/registry/packages/cloud
 
 #### Cloudflare Configuration
 
-Have a look at the [configuration](area/cf/cf.pbtxt).
+Have a look at the [configuration](area/cf/cf.yaml).
 
 ### DigitalOcean (do)
 
@@ -125,7 +125,7 @@ The process is as follows:
 
 #### DigitalOcean Configuration
 
-Have a look at the [configuration](area/do/do.pbtxt).
+Have a look at the [configuration](area/do/do.yaml).
 
 ### GitHub (gh)
 
@@ -143,27 +143,24 @@ Pages can only be created after the repository is present.
 
 So, the first step is to disable it or  leave pages out.
 
-```pbtxt
-pages: {
-  enabled: false
-}
+```yaml
+pages:
+    enabled: false
 ```
 
 Then the second PR, we enable it:
 
-```pbtxt
-pages: {
-  enabled: true
-}
+```yaml
+pages:
+    enabled: true
 ```
 
 If this repository will be used to host site with a cname, we need to add this:
 
-```pbtxt
-pages: {
-  enabled: true
-  cname: "www.yoursite.com"
-}
+```yaml
+pages:
+    enabled: true
+    cname: www.yoursite.com
 ```
 
 > [!NOTE]
@@ -175,18 +172,16 @@ As with pages the repository needs to be present.
 
 So, the first step is to have:
 
-```pbtxt
-collaborators: {
-  enabled: false
-}
+```yaml
+collaborators:
+    enabled: false
 ```
 
 Then the second PR, we set it to:
 
-```pbtxt
-collaborators: {
-  enabled: true
-}
+```yaml
+collaborators:
+    enabled: true
 ```
 
 > [!NOTE]
@@ -194,7 +189,7 @@ collaborators: {
 
 #### GitHub Configuration
 
-Have a look at the [configuration](area/gh/gh.pbtxt).
+Have a look at the [configuration](area/gh/gh.yaml).
 
 ### Kubernetes (k8s)
 
