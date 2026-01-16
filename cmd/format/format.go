@@ -36,7 +36,7 @@ func run() error {
 	}
 
 	if len(path) == 0 {
-		path = fmt.Sprintf("area/%s/%s.yaml", kind, kind)
+		path = fmt.Sprintf("area/%s/%s.hjson", kind, kind)
 	}
 
 	if err := config.Read(path, cfg); err != nil {

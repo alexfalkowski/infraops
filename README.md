@@ -31,7 +31,7 @@ Build the application:
 To format a configuration:
 
 ```bash
-❯ ./format -k cf -p area/cf/cf.yaml
+❯ ./format -k cf
 ```
 
 ## Areas
@@ -72,7 +72,7 @@ To remove all the apps, you need to run the following:
 
 #### Applications Configuration
 
-Have a look at the [configuration](area/apps/apps.yaml).
+Have a look at the [configuration](area/apps/apps.hjson).
 
 #### Applications Version Update
 
@@ -85,7 +85,7 @@ Build the application:
 To update a version of an app:
 
 ```bash
-❯ ./bump -n bezeichner -v 1.559.0 -p area/apps/apps.yaml
+❯ ./bump -n bezeichner -v 1.559.0
 ```
 
 ### Cloudflare (cf)
@@ -94,7 +94,7 @@ The code is bases on the package <https://www.pulumi.com/registry/packages/cloud
 
 #### Cloudflare Configuration
 
-Have a look at the [configuration](area/cf/cf.yaml).
+Have a look at the [configuration](area/cf/cf.hjson).
 
 ### DigitalOcean (do)
 
@@ -125,7 +125,7 @@ The process is as follows:
 
 #### DigitalOcean Configuration
 
-Have a look at the [configuration](area/do/do.yaml).
+Have a look at the [configuration](area/do/do.hjson).
 
 ### GitHub (gh)
 
@@ -143,24 +143,27 @@ Pages can only be created after the repository is present.
 
 So, the first step is to disable it or  leave pages out.
 
-```yaml
-pages:
-    enabled: false
+```hjson
+pages: {
+  enabled: false
+}
 ```
 
 Then the second PR, we enable it:
 
-```yaml
-pages:
-    enabled: true
+```hjson
+pages: {
+  enabled: true
+}
 ```
 
 If this repository will be used to host site with a cname, we need to add this:
 
-```yaml
-pages:
-    enabled: true
-    cname: www.yoursite.com
+```hjson
+pages: {
+  enabled: true
+  cname: www.yoursite.com
+}
 ```
 
 > [!NOTE]
@@ -172,16 +175,18 @@ As with pages the repository needs to be present.
 
 So, the first step is to have:
 
-```yaml
-collaborators:
-    enabled: false
+```hjson
+collaborators: {
+  enabled: false
+}
 ```
 
 Then the second PR, we set it to:
 
-```yaml
-collaborators:
-    enabled: true
+```hjson
+collaborators: {
+  enabled: true
+}
 ```
 
 > [!NOTE]
@@ -189,7 +194,7 @@ collaborators:
 
 #### GitHub Configuration
 
-Have a look at the [configuration](area/gh/gh.yaml).
+Have a look at the [configuration](area/gh/gh.hjson).
 
 ### Kubernetes (k8s)
 

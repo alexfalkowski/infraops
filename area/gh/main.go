@@ -7,7 +7,7 @@ import (
 
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
-		config, err := gh.ReadConfiguration("gh.yaml")
+		config, err := gh.ReadConfiguration("gh.hjson")
 		if err != nil {
 			return err
 		}

@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateCluster(t *testing.T) {
-	config, err := do.ReadConfiguration("do.yaml")
+	config, err := do.ReadConfiguration("do.hjson")
 	require.NoError(t, err)
 
 	clusters := config.GetClusters()

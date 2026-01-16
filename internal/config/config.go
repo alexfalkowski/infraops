@@ -3,7 +3,7 @@ package config
 import (
 	"os"
 
-	"go.yaml.in/yaml/v3"
+	"github.com/hjson/hjson-go/v4"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -17,7 +17,7 @@ func Read[T Config](path string, config T) error {
 		return err
 	}
 
-	return yaml.Unmarshal(bytes, config)
+	return hjson.Unmarshal(bytes, config)
 }
 
 // Write the configuration to the path, unless an error occurs.
@@ -27,10 +27,11 @@ func Write[T Config](path string, config T) error {
 		return err
 	}
 
-	out, err := yaml.Marshal(config)
+	out, err := hjson.Marshal(config)
 	if err != nil {
 		return err
 	}
 
+	out = append(out, "\n"...)
 	return os.WriteFile(path, out, info.Mode())
 }
