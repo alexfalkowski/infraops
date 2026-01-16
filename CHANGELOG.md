@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.390.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.390.0) - 2026-01-16
+
+- [`007b564`](https://github.com/alexfalkowski/infraops/commit/007b564bb85cd16bb8984bfd7bb433314000c0cb) feat(cmd): allow default to path (#1871)
+- [`48c9643`](https://github.com/alexfalkowski/infraops/commit/48c96439a0ebf26c8e71b30a210d4197d660e578) release(standort): upgraded to v2.668.0 (#1870)
+- [`3df9618`](https://github.com/alexfalkowski/infraops/commit/3df96183159815a86a75fd95aab054da1fda25e6) release(web): upgraded to v1.237.0 (#1869)
+- [`5e3c939`](https://github.com/alexfalkowski/infraops/commit/5e3c939bdcf2840dbda7a4a2f95640c25f9a30ba) release(bezeichner): upgraded to v1.674.0 (#1868)
+- [`e4af785`](https://github.com/alexfalkowski/infraops/commit/e4af7854dffe43bd3746b02fac1eca199a61b417) build(ci): use latest published images (#1867)
+
 ## [v2.389.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.389.0) - 2026-01-16
 
 - [`7d88053`](https://github.com/alexfalkowski/infraops/commit/7d880538e57430f78f76de4b7e2731a3d19c778c) feat(config): move to yaml (#1866)
