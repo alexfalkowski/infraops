@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.392.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.392.0) - 2026-01-16
+
+- [`83dec4a`](https://github.com/alexfalkowski/infraops/commit/83dec4ad898b83e38bfa15328b76f82ad1be0a16) feat(deps): bump github.com/pulumi/pulumi-kubernetes/sdk/v4 from 4.24.1 to 4.25.0 (#1877)
+- [`c81148c`](https://github.com/alexfalkowski/infraops/commit/c81148c34fe867c2b19c47a4df7c96171a297b19) build(ci): use latest published images (#1875)
+- [`abb147a`](https://github.com/alexfalkowski/infraops/commit/abb147a74ad859fc8dce8d88c44e636346e2127d) docs(readme): make diagrams (#1874)
+
 ## [v2.391.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.391.0) - 2026-01-16
 
 - [`774198c`](https://github.com/alexfalkowski/infraops/commit/774198c4f858fae55c81e8cc136e23cef4bca648) feat(config): move to use hjson (#1873)
