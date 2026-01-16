@@ -24,7 +24,7 @@ func run() error {
 	}
 
 	if len(path) == 0 {
-		path = "area/apps/apps.yaml"
+		path = "area/apps/apps.hjson"
 	}
 
 	if err := version.Update(name, ver, path); err != nil {

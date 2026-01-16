@@ -3,13 +3,13 @@ module github.com/alexfalkowski/infraops/v2
 go 1.25.0
 
 require (
+	github.com/hjson/hjson-go/v4 v4.5.0
 	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.12.0
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.56.0
 	github.com/pulumi/pulumi-github/sdk/v6 v6.10.1
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.24.1
 	github.com/pulumi/pulumi/sdk/v3 v3.215.0
 	github.com/stretchr/testify v1.11.1
-	go.yaml.in/yaml/v3 v3.0.4
 	google.golang.org/protobuf v1.36.11
 )
 

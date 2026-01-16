@@ -20,7 +20,7 @@ jobs:
       - image: alexfalkowski/go:2.96
     working_directory: ~/infraops
     environment:
-      GOGC: 5
+      GOGC: 10
     steps:
       - checkout:
           method: blobless
@@ -177,7 +177,7 @@ jobs:
     docker:
       - image: alexfalkowski/k8s:2.8
     environment:
-      GOGC: 5
+      GOGC: 10
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -215,7 +215,7 @@ jobs:
     docker:
       - image: alexfalkowski/k8s:2.8
     environment:
-      GOGC: 5
+      GOGC: 10
     working_directory: ~/infraops
     steps:
       - checkout:

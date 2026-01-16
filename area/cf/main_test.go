@@ -11,7 +11,7 @@ import (
 
 //nolint:dupl
 func TestBalancerZones(t *testing.T) {
-	config, err := cf.ReadConfiguration("cf.yaml")
+	config, err := cf.ReadConfiguration("cf.hjson")
 	require.NoError(t, err)
 
 	zones := config.GetBalancerZones()
@@ -39,7 +39,7 @@ func TestBalancerZones(t *testing.T) {
 
 //nolint:dupl
 func TestPageZones(t *testing.T) {
-	config, err := cf.ReadConfiguration("cf.yaml")
+	config, err := cf.ReadConfiguration("cf.hjson")
 	require.NoError(t, err)
 
 	zones := config.GetPageZones()
@@ -66,7 +66,7 @@ func TestPageZones(t *testing.T) {
 }
 
 func TestBuckets(t *testing.T) {
-	config, err := cf.ReadConfiguration("cf.yaml")
+	config, err := cf.ReadConfiguration("cf.hjson")
 	require.NoError(t, err)
 
 	buckets := config.GetBuckets()

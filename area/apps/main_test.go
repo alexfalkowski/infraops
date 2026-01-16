@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	config, err := app.ReadConfiguration("apps.yaml")
+	config, err := app.ReadConfiguration("apps.hjson")
 	require.NoError(t, err)
 
 	applications := config.GetApplications()

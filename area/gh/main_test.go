@@ -10,7 +10,7 @@ import (
 )
 
 func TestCreateRepository(t *testing.T) {
-	config, err := gh.ReadConfiguration("gh.yaml")
+	config, err := gh.ReadConfiguration("gh.hjson")
 	require.NoError(t, err)
 
 	repositories := config.GetRepositories()
