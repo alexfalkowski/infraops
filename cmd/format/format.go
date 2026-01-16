@@ -35,6 +35,10 @@ func run() error {
 		return fmt.Errorf("%s: invalid kind", kind)
 	}
 
+	if len(path) == 0 {
+		path = fmt.Sprintf("area/%s/%s.yaml", kind, kind)
+	}
+
 	if err := config.Read(path, cfg); err != nil {
 		return err
 	}

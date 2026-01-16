@@ -23,6 +23,10 @@ func run() error {
 		return err
 	}
 
+	if len(path) == 0 {
+		path = "area/apps/apps.yaml"
+	}
+
 	if err := version.Update(name, ver, path); err != nil {
 		return err
 	}
