@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.394.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.394.0) - 2026-01-21
+
+- [`bfb7fd4`](https://github.com/alexfalkowski/infraops/commit/bfb7fd4ce2d28926ab452b065fad3c62c18d992c) feat(deps): bump github.com/pulumi/pulumi-github/sdk/v6 from 6.10.1 to 6.11.0 (#1888)
+- [`ba0baa6`](https://github.com/alexfalkowski/infraops/commit/ba0baa6a4582faf6fdd65b0e1bad3e19b71a2221) release(standort): upgraded to v2.671.0 (#1887)
+- [`7a64a20`](https://github.com/alexfalkowski/infraops/commit/7a64a20203ecc76e4b8e69edec2550633849b4bb) build(ci): add AGENTS.md (#1886)
+- [`b6f0dd3`](https://github.com/alexfalkowski/infraops/commit/b6f0dd35b28323ccc9a36e6e40ce78096b372d3a) release(standort): upgraded to v2.670.0 (#1885)
+- [`f5378a8`](https://github.com/alexfalkowski/infraops/commit/f5378a8e447c8828e224c2f43d526935815c2991) release(web): upgraded to v1.239.0 (#1884)
+- [`9219852`](https://github.com/alexfalkowski/infraops/commit/9219852c3fd048bb275136df73b1a7773847aea6) release(bezeichner): upgraded to v1.676.0 (#1883)
+- [`4a3cdc5`](https://github.com/alexfalkowski/infraops/commit/4a3cdc53ea1e97f66421a6a802ebf3a3ba61e3ce) build(ci): use latest published images (#1882)
+- [`7229690`](https://github.com/alexfalkowski/infraops/commit/7229690782c6f8a6c8859f4e58b1dcd32058ccfa) build(ci): use latest published images (#1881)
+- [`d7578b1`](https://github.com/alexfalkowski/infraops/commit/d7578b18a0e7bbfc425cc293eb1a682dd606bf95) build(deps): upgraded github.com/alexfalkowski/bin (#1880)
+- [`ae05b09`](https://github.com/alexfalkowski/infraops/commit/ae05b09732ff21b6af817d8f584b8810a5df3b78) build(ci): try GOGC: 9 (#1879)
+
 ## [v2.393.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.393.0) - 2026-01-16
 
 - [`ac991fa`](https://github.com/alexfalkowski/infraops/commit/ac991fa41494771848ba33c504912b1bba862acf) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.215.0 to 3.216.0 (#1876)
