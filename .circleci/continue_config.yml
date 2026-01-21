@@ -50,7 +50,9 @@ jobs:
             - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
             - infraops-build-go-lint-cache-
       - run: make clean
-      - run: make lint
+      - run:
+          command: make lint
+          no_output_timeout: 30m
       - save_cache:
           name: save go lint cache
           key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
@@ -59,7 +61,9 @@ jobs:
       - run: make api-lint
       - run: make api-breaking
       - run: make sec
-      - run: make specs
+      - run:
+          command: make specs
+          no_output_timeout: 30m
       - save_cache:
           name: save go build cache
           key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
