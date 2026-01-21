@@ -21,6 +21,7 @@ jobs:
     working_directory: ~/infraops
     environment:
       GOGC: 10
+      GOEXPERIMENT: greenteagc
     steps:
       - checkout:
           method: blobless
@@ -178,6 +179,7 @@ jobs:
       - image: alexfalkowski/k8s:2.9
     environment:
       GOGC: 9
+      GOEXPERIMENT: greenteagc
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -216,6 +218,7 @@ jobs:
       - image: alexfalkowski/k8s:2.9
     environment:
       GOGC: 9
+      GOEXPERIMENT: greenteagc
     working_directory: ~/infraops
     steps:
       - checkout:
