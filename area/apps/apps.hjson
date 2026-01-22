@@ -31,7 +31,7 @@
       name: web
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.239.0
+      version: 1.240.0
       resource: small
       secrets: [
         otlp
