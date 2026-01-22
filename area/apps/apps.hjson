@@ -19,7 +19,7 @@
       name: standort
       namespace: lean
       domain: lean-thoughts.com
-      version: 2.672.1
+      version: 2.673.0
       resource: small
       secrets: [
         otlp
