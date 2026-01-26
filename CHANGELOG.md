@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.396.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.396.0) - 2026-01-26
+
+- [`412a2e0`](https://github.com/alexfalkowski/infraops/commit/412a2e08b9cc943c81cb48ba72988a2110cabd6a) feat(deps): bump github.com/hjson/hjson-go/v4 from 4.5.0 to 4.6.0 (#1909)
+- [`a9e1cc7`](https://github.com/alexfalkowski/infraops/commit/a9e1cc799a2764d197580afe16e66b853b34a131) release(web): upgraded to v1.242.0 (#1908)
+- [`3b637eb`](https://github.com/alexfalkowski/infraops/commit/3b637ebc0a944e21d36a5f505d92a2dacaada91e) build(ci): use latest published images (#1907)
+- [`77df0dc`](https://github.com/alexfalkowski/infraops/commit/77df0dc8216e00bd6ecf7be4ffe28446b21162e2) release(bezeichner): upgraded to v1.683.0 (#1906)
+- [`bba02f6`](https://github.com/alexfalkowski/infraops/commit/bba02f6d22e3432e07292c8393c520159d974743) build(ci): use latest published images (#1905)
+- [`69b3d3c`](https://github.com/alexfalkowski/infraops/commit/69b3d3c929c4ebc397a2cd3b3df500e01922f74c) release(standort): upgraded to v2.673.0 (#1904)
+- [`c03c5b7`](https://github.com/alexfalkowski/infraops/commit/c03c5b78426f6ffcdb7e81d5833b7bd46e09b72c) release(web): upgraded to v1.241.0 (#1903)
+- [`f1669d9`](https://github.com/alexfalkowski/infraops/commit/f1669d9df2a9d4ca627e3418bf389b4f9eeaf235) release(bezeichner): upgraded to v1.682.0 (#1902)
+
 ## [v2.395.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.395.0) - 2026-01-22
 
 - [`39755f9`](https://github.com/alexfalkowski/infraops/commit/39755f9dd1082f4e7fd04e9aa795b6dca8f11157) feat(deps): bump github.com/pulumi/pulumi-cloudflare/sdk/v6 from 6.12.0 to 6.13.0 (#1901)
