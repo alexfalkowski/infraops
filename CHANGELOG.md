@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.400.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.400.0) - 2026-01-31
+
+- [`0766110`](https://github.com/alexfalkowski/infraops/commit/0766110ef9f8eec4642a0d0e17c981a8d8b7b094) feat(deps): upgraded github.com/cloudflare/circl v1.6.2 => v1.6.3 (#1918)
+- [`308e8fe`](https://github.com/alexfalkowski/infraops/commit/308e8fee2633e4632dfb4cf2d910b69806cab7dc) build(ci): use latest published images (#1917)
+
 ## [v2.399.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.399.0) - 2026-01-31
 
 - [`2f0f601`](https://github.com/alexfalkowski/infraops/commit/2f0f601a95b28df2fc0a9c54fd97c44e43154c11) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.217.1 to 3.218.0 (#1916)
