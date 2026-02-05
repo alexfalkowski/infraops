@@ -7,7 +7,7 @@
       name: bezeichner
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.688.0
+      version: 1.689.0
       resource: small
       secrets: [
         otlp
