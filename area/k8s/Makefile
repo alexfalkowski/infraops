@@ -4,7 +4,7 @@ save-config:
 
 # Delete all.
 delete:
-	@kubectl delete namespaces nginx-ingress circleci metrics-server better-stack
+	@kubectl delete namespaces nginx-ingress circleci metrics-server
 
 # Setup everything.
 setup: setup-helm install-helm
@@ -14,7 +14,6 @@ setup-helm:
 	@helm repo add nginx https://kubernetes.github.io/ingress-nginx
 	@helm repo add circleci https://circleci-public.github.io/cci-k8s-release-agent
 	@helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-	@helm repo add better-stack https://betterstackhq.github.io/collector-helm-chart
 	@helm repo update
 
 # Install circleci.
@@ -29,12 +28,8 @@ install-metrics-server:
 install-nginx-ingress:
 	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.14.1 -f nginx/values.yaml
 
-# Install better stack.
-install-better-stack:
-	@helm upgrade --install better-stack-release better-stack/collector --set collector.env.COLLECTOR_SECRET=$(BETTER_STACK_COLLECTOR_SECRET) --create-namespace --namespace better-stack --version v0.1.29
-
 # Install helm.
-install-helm: install-circleci install-metrics-server install-nginx-ingress install-better-stack
+install-helm: install-circleci install-metrics-server install-nginx-ingress
 
 # All pods.
 pods:
