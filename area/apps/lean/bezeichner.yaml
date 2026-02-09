@@ -22,21 +22,13 @@ id:
   kind: ksuid
 telemetry:
   logger:
-    kind: otlp
+    kind: text
     level: info
-    url: https://s1586281.eu-nbg-2.betterstackdata.com/v1/logs
-    headers:
-      Authorization: file:/etc/secrets/otlp/token
   metrics:
-    kind: otlp
-    url: https://s1586281.eu-nbg-2.betterstackdata.com/v1/metrics
-    headers:
-      Authorization: file:/etc/secrets/otlp/token
+    kind: prometheus
   tracer:
     kind: otlp
-    url: https://s1586281.eu-nbg-2.betterstackdata.com/v1/traces
-    headers:
-      Authorization: file:/etc/secrets/otlp/token
+    url: http://localhost:4318/v1/traces
 transport:
   http:
     limiter:
