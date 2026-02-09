@@ -9,9 +9,6 @@
       domain: lean-thoughts.com
       version: 1.690.0
       resource: small
-      secrets: [
-        otlp
-      ]
     }
     {
       id: 28c679dc-5924-47e8-ac48-73cd842ba5cd
@@ -21,9 +18,6 @@
       domain: lean-thoughts.com
       version: 2.681.0
       resource: small
-      secrets: [
-        otlp
-      ]
     }
     {
       id: b46608ae-950a-46bb-b37a-4dfe68a95b52
@@ -33,9 +27,6 @@
       domain: lean-thoughts.com
       version: 1.248.0
       resource: small
-      secrets: [
-        otlp
-      ]
     }
     {
       kind: external
