@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.405.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.405.0) - 2026-02-10
+
+- [`e81fc10`](https://github.com/alexfalkowski/infraops/commit/e81fc1040227602f6ac1e162163fd53e2fee80ad) feat(deps): bump github.com/go-git/go-git/v5 from 5.16.4 to 5.16.5 (#1948)
+
 ## [v2.404.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.404.0) - 2026-02-09
 
 - [`2f19717`](https://github.com/alexfalkowski/infraops/commit/2f19717822a28046251f0a08a806ee03f8359b08) feat(apps): remove otlp (#1947)
