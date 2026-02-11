@@ -101,7 +101,7 @@ jobs:
 
   apps_preview:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -138,7 +138,7 @@ jobs:
     resource_class: large
   apps_update:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -179,7 +179,7 @@ jobs:
 
   cf_preview:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     environment:
       GOGC: 9
     working_directory: ~/infraops
@@ -217,7 +217,7 @@ jobs:
     resource_class: large
   cf_update:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     environment:
       GOGC: 9
     working_directory: ~/infraops
@@ -256,7 +256,7 @@ jobs:
 
   do_preview:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -292,7 +292,7 @@ jobs:
     resource_class: large
   do_update:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -329,7 +329,7 @@ jobs:
 
   gh_preview:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -365,7 +365,7 @@ jobs:
     resource_class: large
   gh_update:
     docker:
-      - image: alexfalkowski/k8s:2.19
+      - image: alexfalkowski/k8s:2.20
     working_directory: ~/infraops
     steps:
       - checkout:
