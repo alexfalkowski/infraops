@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.406.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.406.0) - 2026-02-11
+
+- [`0e198fa`](https://github.com/alexfalkowski/infraops/commit/0e198fa883048374be7a5002a54b76ed6ffc11bf) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.219.0 to 3.220.0 (#1955)
+- [`3990434`](https://github.com/alexfalkowski/infraops/commit/39904340f7ba9c6809ed0aff0b072c7e08b660d2) release(web): upgraded to v1.250.0 (#1952)
+- [`165f685`](https://github.com/alexfalkowski/infraops/commit/165f685fdb9f477e59a61722f793f4a1aa355de3) build(ci): use latest published images (#1956)
+- [`c88d2a9`](https://github.com/alexfalkowski/infraops/commit/c88d2a928cccaf692e2b61239a77285ec1ef7ce8) release(standort): upgraded to v2.683.0 (#1953)
+- [`528ee23`](https://github.com/alexfalkowski/infraops/commit/528ee2386eaac3ac3311df50fe1f4b65877bd088) release(bezeichner): upgraded to v1.692.0 (#1954)
+- [`513011a`](https://github.com/alexfalkowski/infraops/commit/513011a33e35efad2cecae45d0c614de79254940) release(web): upgraded to v1.249.0 (#1951)
+- [`5ad1f4f`](https://github.com/alexfalkowski/infraops/commit/5ad1f4fa48e745256d568bff2c6d4d82b4087c00) release(standort): upgraded to v2.682.0 (#1950)
+- [`e15599f`](https://github.com/alexfalkowski/infraops/commit/e15599f6cedc200bf819bd8688ba7ce452467219) release(bezeichner): upgraded to v1.691.0 (#1949)
+
 ## [v2.405.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.405.0) - 2026-02-10
 
 - [`e81fc10`](https://github.com/alexfalkowski/infraops/commit/e81fc1040227602f6ac1e162163fd53e2fee80ad) feat(deps): bump github.com/go-git/go-git/v5 from 5.16.4 to 5.16.5 (#1948)
