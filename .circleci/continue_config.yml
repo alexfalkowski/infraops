@@ -48,32 +48,32 @@ jobs:
             - infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
             - infraops-build-go-lint-cache-
       - run: make clean
-      # - run:
-      #     command: make lint
-      #     no_output_timeout: 30m
-      # - save_cache:
-      #     name: save go lint cache
-      #     key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
-      #     paths:
-      #       - ~/.cache/golangci-lint
+      - run:
+          command: make lint
+          no_output_timeout: 30m
+      - save_cache:
+          name: save go lint cache
+          key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/.cache/golangci-lint
       - run: make api-lint
       - run: make api-breaking
       - run: make sec
-      # - run:
-      #     command: make specs
-      #     no_output_timeout: 30m
-      # - save_cache:
-      #     name: save go build cache
-      #     key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-      #     paths:
-      #       - ~/.cache/go-build
-      # - run: make coverage
-      # - store_test_results:
-      #     path: test/reports
-      # - store_artifacts:
-      #     path: test/reports
-      # - run: make codecov-upload
-    resource_class: large
+      - run:
+          command: make specs
+          no_output_timeout: 30m
+      - save_cache:
+          name: save go build cache
+          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/.cache/go-build
+      - run: make coverage
+      - store_test_results:
+          path: test/reports
+      - store_artifacts:
+          path: test/reports
+      - run: make codecov-upload
+    resource_class: arm.large
   sync:
     docker:
       - image: alexfalkowski/release:5.46
@@ -175,78 +175,78 @@ jobs:
             - ~/.cache/go-build
     resource_class: large
 
-  # cf_preview:
-  #   docker:
-  #     - image: alexfalkowski/k8s:2.21
-  #   working_directory: ~/infraops
-  #   steps:
-  #     - checkout:
-  #         method: blobless
-  #     - run: git submodule sync
-  #     - run: git submodule update --init
-  #     - run: make source-key
-  #     - restore_cache:
-  #         name: restore deps
-  #         keys:
-  #           - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #           - infraops-cf-go-cache-
-  #     - run: make clean
-  #     - run: make dep
-  #     - save_cache:
-  #         name: save deps
-  #         key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #         paths:
-  #           - ~/go/pkg/mod
-  #     - restore_cache:
-  #         name: restore go build cache
-  #         keys:
-  #           - infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #           - infraops-cf-go-build-cache-
-  #     - run: make clean
-  #     - run: make pulumi-login
-  #     - run: make area=cf pulumi-preview
-  #     - save_cache:
-  #         name: save go build cache
-  #         key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #         paths:
-  #           - ~/.cache/go-build
-  #   resource_class: large
-  # cf_update:
-  #   docker:
-  #     - image: alexfalkowski/k8s:2.21
-  #   working_directory: ~/infraops
-  #   steps:
-  #     - checkout:
-  #         method: blobless
-  #     - run: git submodule sync
-  #     - run: git submodule update --init
-  #     - run: make source-key
-  #     - restore_cache:
-  #         name: restore deps
-  #         keys:
-  #           - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #           - infraops-cf-go-cache-
-  #     - run: make clean
-  #     - run: make dep
-  #     - save_cache:
-  #         name: save deps
-  #         key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #         paths:
-  #           - ~/go/pkg/mod
-  #     - restore_cache:
-  #         name: restore go build cache
-  #         keys:
-  #           - infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #           - infraops-cf-go-build-cache-
-  #     - run: make clean
-  #     - run: make pulumi-login
-  #     - run: make area=cf pulumi-update
-  #     - save_cache:
-  #         name: save go build cache
-  #         key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
-  #         paths:
-  #           - ~/.cache/go-build
-  #   resource_class: large
+  cf_preview:
+    docker:
+      - image: alexfalkowski/k8s:2.21
+    working_directory: ~/infraops
+    steps:
+      - checkout:
+          method: blobless
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make source-key
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-cf-go-cache-
+      - run: make clean
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/go/pkg/mod
+      - restore_cache:
+          name: restore go build cache
+          keys:
+            - infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-cf-go-build-cache-
+      - run: make clean
+      - run: make pulumi-login
+      - run: make area=cf pulumi-preview
+      - save_cache:
+          name: save go build cache
+          key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/.cache/go-build
+    resource_class: arm.large
+  cf_update:
+    docker:
+      - image: alexfalkowski/k8s:2.21
+    working_directory: ~/infraops
+    steps:
+      - checkout:
+          method: blobless
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run: make source-key
+      - restore_cache:
+          name: restore deps
+          keys:
+            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-cf-go-cache-
+      - run: make clean
+      - run: make dep
+      - save_cache:
+          name: save deps
+          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/go/pkg/mod
+      - restore_cache:
+          name: restore go build cache
+          keys:
+            - infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-cf-go-build-cache-
+      - run: make clean
+      - run: make pulumi-login
+      - run: make area=cf pulumi-update
+      - save_cache:
+          name: save go build cache
+          key: infraops-cf-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/.cache/go-build
+    resource_class: arm.large
 
   do_preview:
     docker:
@@ -425,20 +425,19 @@ workflows:
           filters:
             branches:
               only: master
-
-  # cf:
-  #   when: << pipeline.parameters.cf >>
-  #   jobs:
-  #     - cf_preview:
-  #         context: infraops
-  #         filters:
-  #           branches:
-  #             ignore: master
-  #     - cf_update:
-  #         context: infraops
-  #         filters:
-  #           branches:
-  #             only: master
+  cf:
+    when: << pipeline.parameters.cf >>
+    jobs:
+      - cf_preview:
+          context: infraops
+          filters:
+            branches:
+              ignore: master
+      - cf_update:
+          context: infraops
+          filters:
+            branches:
+              only: master
   do:
     when: << pipeline.parameters.do >>
     jobs:
