@@ -1,3 +1,12 @@
+// Command bump updates an application's version inside the apps configuration file.
+//
+// By default it edits `area/apps/apps.hjson`, but you can override the location via `-p`.
+//
+// Usage:
+//
+//	bump -n <appName> -v <version> [-p <path>]
+//
+// Exit status is non-zero on error.
 package main
 
 import (
@@ -8,6 +17,7 @@ import (
 	"github.com/alexfalkowski/infraops/v2/internal/log"
 )
 
+// run parses CLI flags and updates the application version in the configuration file.
 func run() error {
 	var (
 		name string

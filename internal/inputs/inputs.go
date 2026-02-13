@@ -3,30 +3,30 @@ package inputs
 import "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 
 const (
-	// Always for inputs.
+	// Always is the string value "Always" as a Pulumi input.
 	Always = pulumi.String("Always")
 
-	// On for inputs.
+	// On is the string value "on" as a Pulumi input.
 	On = pulumi.String("on")
 
-	// Off for inputs.
+	// Off is the string value "off" as a Pulumi input.
 	Off = pulumi.String("off")
 
-	// Yes for inputs.
+	// Yes is the boolean value true as a Pulumi input.
 	Yes = pulumi.Bool(true)
 
-	// No for inputs.
+	// No is the boolean value false as a Pulumi input.
 	No = pulumi.Bool(false)
 
-	// Enabled for inputs.
+	// Enabled is the string value "enabled" as a Pulumi input.
 	Enabled = pulumi.String("enabled")
 
-	// False for inputs.
+	// False is the string value "false" as a Pulumi input.
 	False = pulumi.String("false")
 
-	// One for inputs.
+	// One is the integer value 1 as a Pulumi input.
 	One = pulumi.Int(1)
 
-	// Automatic for inputs.
+	// Automatic is the float64 value 1 as a Pulumi input.
 	Automatic = pulumi.Float64(1)
 )

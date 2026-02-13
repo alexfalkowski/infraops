@@ -6,6 +6,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// repository creates or updates a GitHub repository and applies the baseline repository settings.
+//
+// It validates repo.Checks (required for branch protection) and, when configured, attaches a
+// repository template and GitHub Pages configuration.
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
 	t, err := template(repo)
 	if err != nil {
@@ -53,6 +57,10 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 	return github.NewRepository(ctx, repo.Name, args)
 }
 
+// template returns GitHub template repository arguments when repo is configured to be created from a template.
+//
+// If repo has no template configured, template returns (nil, nil).
+// If the template configuration is incomplete, it returns ErrMissingTemplate.
 func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	if !repo.HasTemplate() {
 		return nil, nil
@@ -70,6 +78,9 @@ func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	return args, nil
 }
 
+// pages returns GitHub Pages arguments when Pages management is enabled for repo.
+//
+// If repo has Pages disabled, pages returns nil.
 func pages(repo *Repository) *github.RepositoryPagesArgs {
 	if !repo.HasPages() {
 		return nil

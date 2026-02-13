@@ -4,6 +4,17 @@
 // 	protoc        (unknown)
 // source: infraops/v2/service.proto
 
+// Schema for infraops "area" configuration files.
+//
+// Each area under `area/<name>/` has a corresponding `<name>.hjson` file that is decoded into one
+// of the top-level messages (Kubernetes, Github, Cloudflare, DigitalOcean). Pulumi programs then
+// convert these protobuf messages into internal Go models and provision resources.
+//
+// Notes:
+// - This schema is intentionally configuration-oriented (it models desired state, not provider API objects).
+// - For each top-level configuration message, `version` is a config/schema version string used by tooling;
+//   it is not necessarily the same as a runtime, provider, or Kubernetes version.
+
 package v2
 
 import (
@@ -21,11 +32,23 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// EnvVar represents the env variables for an application.
+// EnvVar defines an environment variable for an application.
+//
+// The value field supports plain literals as well as repository-specific conventions.
+// In particular, the Go implementation treats values prefixed with "secret:" as references
+// that are resolved into Kubernetes SecretKeyRefs during deployment.
+//
+// Secret reference format:
+//   - "secret:<secretName>/<key>"
+//
+// The Kubernetes Secret name used by the implementation is "<secretName>-secret" and the key is <key>.
 type EnvVar struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Name is the environment variable name (for example "LOG_LEVEL").
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Value is the environment variable value.
+	// If it starts with "secret:", it is interpreted as a secret reference rather than a literal.
+	Value         string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,18 +97,48 @@ func (x *EnvVar) GetValue() string {
 	return ""
 }
 
-// Application represents the application to be released.
+// Application describes a Kubernetes application to deploy.
+//
+// This configuration is consumed by the `area/apps` Pulumi program, which creates Kubernetes
+// resources such as ServiceAccount, ConfigMap, Deployment, Service, Ingress, and related policies.
 type Application struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Kind          string                 `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Namespace     string                 `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	Domain        string                 `protobuf:"bytes,5,opt,name=domain,proto3" json:"domain,omitempty"`
-	Version       string                 `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
-	Resource      string                 `protobuf:"bytes,7,opt,name=resource,proto3" json:"resource,omitempty"`
-	Secrets       []string               `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
-	EnvVars       []*EnvVar              `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Id is an optional identifier for the application in configuration.
+	// It is available for callers/tools but may not be used by all provisioners.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Kind determines the deployment model for this application.
+	// The Go implementation recognizes values like "internal" and "external".
+	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
+	// Name is the Kubernetes resource name base for this application.
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	// Namespace is the Kubernetes namespace to deploy into.
+	Namespace string `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Domain is the external DNS name/host used for ingress routing (for example "api.example.com").
+	Domain string `protobuf:"bytes,5,opt,name=domain,proto3" json:"domain,omitempty"`
+	// Version is the application version to deploy (for example a container image tag).
+	Version string `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
+	// Resource selects the resource profile to apply to the application pod.
+	//
+	// Implementation mapping (current):
+	//   - "small" (default): cpu 125m-250m, memory 64Mi-128Mi, ephemeral-storage 1Gi-2Gi
+	//
+	// If an unknown value is provided, the implementation falls back to "small".
+	Resource string `protobuf:"bytes,7,opt,name=resource,proto3" json:"resource,omitempty"`
+	// Secrets is a list of logical secret names referenced by this application.
+	//
+	// Clarification:
+	//   - This field is an application-level dependency list used by the deployment implementation to
+	//     provision and/or wire Secret resources (for example as volumes or other attachments).
+	//   - This list is related to, but distinct from, secret references in EnvVars:
+	//   - EnvVar values of the form "secret:<secretName>/<key>" reference a specific key within a secret.
+	//   - This Secrets list enumerates which logical secrets the application depends on (often the
+	//     same <secretName> values), but does not by itself specify which keys are consumed.
+	//
+	// In the current implementation, these names are typically materialized as Kubernetes Secrets
+	// with a "-secret" suffix and are used for volume/env wiring where applicable.
+	Secrets []string `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	// EnvVars is the list of environment variables to inject into the application container.
+	EnvVars       []*EnvVar `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -183,11 +236,13 @@ func (x *Application) GetEnvVars() []*EnvVar {
 	return nil
 }
 
-// Kubernetes applications to be released.
+// Kubernetes is the top-level configuration for the `area/apps` Pulumi program.
 type Kubernetes struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       string                 `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
-	Applications  []*Application         `protobuf:"bytes,2,rep,name=applications,proto3" json:"applications,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Version is a configuration/schema version identifier for this file.
+	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
+	// Applications is the set of applications to be deployed to the cluster.
+	Applications  []*Application `protobuf:"bytes,2,rep,name=applications,proto3" json:"applications,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -236,11 +291,13 @@ func (x *Kubernetes) GetApplications() []*Application {
 	return nil
 }
 
-// Collaborators describes whether the repository will have collaborators
-// enabled.
+// Collaborators toggles whether repository collaborators are managed for a repository.
+//
+// When enabled, the infra code may create collaborator resources (for example for CI users).
 type Collaborators struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Enabled controls whether collaborator resources should be created/managed.
+	Enabled       bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -282,11 +339,15 @@ func (x *Collaborators) GetEnabled() bool {
 	return false
 }
 
-// Template represents the template to be used for a repository.
+// Template identifies a GitHub template repository.
+//
+// When provided, a repository may be created from this template rather than as a blank repository.
 type Template struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Owner         string                 `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
-	Repository    string                 `protobuf:"bytes,2,opt,name=repository,proto3" json:"repository,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Owner is the organization or user that owns the template repository.
+	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	// Repository is the template repository name.
+	Repository    string `protobuf:"bytes,2,opt,name=repository,proto3" json:"repository,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -335,11 +396,13 @@ func (x *Template) GetRepository() string {
 	return ""
 }
 
-// Pages describes whether the repository will have pages enabled.
+// Pages describes GitHub Pages configuration for a repository.
 type Pages struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Cname         string                 `protobuf:"bytes,2,opt,name=cname,proto3" json:"cname,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Enabled controls whether Pages should be enabled/managed.
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// Cname is an optional custom domain for the Pages site.
+	Cname         string `protobuf:"bytes,2,opt,name=cname,proto3" json:"cname,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -388,20 +451,36 @@ func (x *Pages) GetCname() string {
 	return ""
 }
 
-// Repository represents the repository to be created.
+// Repository describes the desired state of a GitHub repository.
+//
+// This configuration is consumed by the `area/gh` Pulumi program, which creates the repository
+// and applies additional settings such as branch protection, Pages, and collaborators.
 type Repository struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	HomepageUrl   string                 `protobuf:"bytes,3,opt,name=homepage_url,json=homepageUrl,proto3" json:"homepage_url,omitempty"`
-	Visibility    string                 `protobuf:"bytes,4,opt,name=visibility,proto3" json:"visibility,omitempty"`
-	IsTemplate    bool                   `protobuf:"varint,5,opt,name=is_template,json=isTemplate,proto3" json:"is_template,omitempty"`
-	Archived      bool                   `protobuf:"varint,6,opt,name=archived,proto3" json:"archived,omitempty"`
-	Collaborators *Collaborators         `protobuf:"bytes,7,opt,name=collaborators,proto3" json:"collaborators,omitempty"`
-	Template      *Template              `protobuf:"bytes,8,opt,name=template,proto3" json:"template,omitempty"`
-	Pages         *Pages                 `protobuf:"bytes,9,opt,name=pages,proto3" json:"pages,omitempty"`
-	Topics        []string               `protobuf:"bytes,10,rep,name=topics,proto3" json:"topics,omitempty"`
-	Checks        []string               `protobuf:"bytes,11,rep,name=checks,proto3" json:"checks,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Name is the repository name.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Description is the repository description.
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// HomepageUrl is the repository homepage URL.
+	HomepageUrl string `protobuf:"bytes,3,opt,name=homepage_url,json=homepageUrl,proto3" json:"homepage_url,omitempty"`
+	// Visibility is the GitHub visibility string (for example "public" or "private").
+	Visibility string `protobuf:"bytes,4,opt,name=visibility,proto3" json:"visibility,omitempty"`
+	// IsTemplate marks this repository as a template repository.
+	IsTemplate bool `protobuf:"varint,5,opt,name=is_template,json=isTemplate,proto3" json:"is_template,omitempty"`
+	// Archived controls whether the repository should be archived.
+	Archived bool `protobuf:"varint,6,opt,name=archived,proto3" json:"archived,omitempty"`
+	// Collaborators optionally enables collaborator management for this repository.
+	Collaborators *Collaborators `protobuf:"bytes,7,opt,name=collaborators,proto3" json:"collaborators,omitempty"`
+	// Template optionally configures a template repository to use when creating this repository.
+	Template *Template `protobuf:"bytes,8,opt,name=template,proto3" json:"template,omitempty"`
+	// Pages optionally enables/manages GitHub Pages for this repository.
+	Pages *Pages `protobuf:"bytes,9,opt,name=pages,proto3" json:"pages,omitempty"`
+	// Topics is the set of repository topics to apply.
+	Topics []string `protobuf:"bytes,10,rep,name=topics,proto3" json:"topics,omitempty"`
+	// Checks is the set of required status check contexts enforced by branch protection.
+	//
+	// In the current implementation, an empty list is invalid and will cause provisioning to fail.
+	Checks        []string `protobuf:"bytes,11,rep,name=checks,proto3" json:"checks,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -513,11 +592,13 @@ func (x *Repository) GetChecks() []string {
 	return nil
 }
 
-// Github specific configuration.
+// Github is the top-level configuration for the `area/gh` Pulumi program.
 type Github struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       string                 `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
-	Repositories  []*Repository          `protobuf:"bytes,2,rep,name=repositories,proto3" json:"repositories,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Version is a configuration/schema version identifier for this file.
+	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
+	// Repositories is the set of repositories to create/manage.
+	Repositories  []*Repository `protobuf:"bytes,2,rep,name=repositories,proto3" json:"repositories,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -566,14 +647,22 @@ func (x *Github) GetRepositories() []*Repository {
 	return nil
 }
 
-// BalancerZone represents the zone for a balancer.
+// BalancerZone describes a Cloudflare-managed DNS zone for proxied records.
+//
+// The `area/cf` Pulumi program creates the zone and then creates proxied A/AAAA records for the
+// subdomains listed in record_names.
 type BalancerZone struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Domain        string                 `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
-	Ipv4          string                 `protobuf:"bytes,3,opt,name=ipv4,proto3" json:"ipv4,omitempty"`
-	Ipv6          string                 `protobuf:"bytes,4,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
-	RecordNames   []string               `protobuf:"bytes,5,rep,name=record_names,json=recordNames,proto3" json:"record_names,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Name is the Pulumi resource name prefix for resources created for this zone.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Domain is the apex domain for the zone (for example "example.com").
+	Domain string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
+	// Ipv4 is the IPv4 address used for A records.
+	Ipv4 string `protobuf:"bytes,3,opt,name=ipv4,proto3" json:"ipv4,omitempty"`
+	// Ipv6 is the IPv6 address used for AAAA records.
+	Ipv6 string `protobuf:"bytes,4,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
+	// RecordNames are subdomain labels (for example ["api", "app"]) used to create records under domain.
+	RecordNames   []string `protobuf:"bytes,5,rep,name=record_names,json=recordNames,proto3" json:"record_names,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -643,12 +732,18 @@ func (x *BalancerZone) GetRecordNames() []string {
 	return nil
 }
 
-// PageZone represents the zone for a page.
+// PageZone describes a Cloudflare zone used for a Cloudflare Pages site.
+//
+// The infra code creates the zone (with strict SSL mode) and creates a proxied CNAME from
+// "www.<domain>" to host.
 type PageZone struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Domain        string                 `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
-	Host          string                 `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Name is the Pulumi resource name prefix for resources created for this zone.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Domain is the apex domain for the zone (for example "example.com").
+	Domain string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
+	// Host is the Cloudflare Pages hostname to CNAME to (for example "<project>.pages.dev").
+	Host          string `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -704,11 +799,15 @@ func (x *PageZone) GetHost() string {
 	return ""
 }
 
-// BucketZone defines the zone id and a domain to use.
+// BucketZone describes the Cloudflare zone and domain used to attach a custom/public domain to an R2 bucket.
+//
+// If omitted, the bucket will be created without a custom domain.
 type BucketZone struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Domain        string                 `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Id is the Cloudflare zone identifier.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Domain is the fully-qualified domain name to associate with the bucket.
+	Domain        string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -757,13 +856,17 @@ func (x *BucketZone) GetDomain() string {
 	return ""
 }
 
-// Bucket defines an R2 bucket with name, region (location, e.g EEUR) and a
-// zone.
+// Bucket describes a Cloudflare R2 bucket.
+//
+// If zone is provided, the infra code also provisions an R2 custom domain to expose the bucket publicly.
 type Bucket struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Region        string                 `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
-	Zone          *BucketZone            `protobuf:"bytes,3,opt,name=zone,proto3,oneof" json:"zone,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Name is the R2 bucket name.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Region is the R2 data location hint (for example "EEUR").
+	Region string `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
+	// Zone is optional; when present, it enables provisioning of an R2 custom domain for the bucket.
+	Zone          *BucketZone `protobuf:"bytes,3,opt,name=zone,proto3,oneof" json:"zone,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -819,13 +922,17 @@ func (x *Bucket) GetZone() *BucketZone {
 	return nil
 }
 
-// Cloudflare specific configuration.
+// Cloudflare is the top-level configuration for the `area/cf` Pulumi program.
 type Cloudflare struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       string                 `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
-	BalancerZones []*BalancerZone        `protobuf:"bytes,2,rep,name=balancer_zones,json=balancerZones,proto3" json:"balancer_zones,omitempty"`
-	PageZones     []*PageZone            `protobuf:"bytes,3,rep,name=page_zones,json=pageZones,proto3" json:"page_zones,omitempty"`
-	Buckets       []*Bucket              `protobuf:"bytes,4,rep,name=buckets,proto3" json:"buckets,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Version is a configuration/schema version identifier for this file.
+	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
+	// BalancerZones is the set of zones for which proxied A/AAAA records are managed.
+	BalancerZones []*BalancerZone `protobuf:"bytes,2,rep,name=balancer_zones,json=balancerZones,proto3" json:"balancer_zones,omitempty"`
+	// PageZones is the set of zones configured for Cloudflare Pages sites.
+	PageZones []*PageZone `protobuf:"bytes,3,rep,name=page_zones,json=pageZones,proto3" json:"page_zones,omitempty"`
+	// Buckets is the set of R2 buckets to create/manage, optionally with custom domains.
+	Buckets       []*Bucket `protobuf:"bytes,4,rep,name=buckets,proto3" json:"buckets,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -888,12 +995,17 @@ func (x *Cloudflare) GetBuckets() []*Bucket {
 	return nil
 }
 
-// Cluster represents the cluster to be created.
+// Cluster describes a DigitalOcean Kubernetes cluster to provision.
+//
+// The `area/do` Pulumi program currently provisions a VPC and then a Kubernetes cluster attached to it.
 type Cluster struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Resource      string                 `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Name is the cluster name used for resource naming.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Description is an optional description (used for related resources such as the VPC).
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// Resource is a size label (for example "small" or "medium") used to select a droplet size slug.
+	Resource      string `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -949,11 +1061,13 @@ func (x *Cluster) GetResource() string {
 	return ""
 }
 
-// DigitalOcean specific configuration.
+// DigitalOcean is the top-level configuration for the `area/do` Pulumi program.
 type DigitalOcean struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       string                 `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
-	Clusters      []*Cluster             `protobuf:"bytes,2,rep,name=clusters,proto3" json:"clusters,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Version is a configuration/schema version identifier for this file.
+	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
+	// Clusters is the set of Kubernetes clusters to create/manage.
+	Clusters      []*Cluster `protobuf:"bytes,2,rep,name=clusters,proto3" json:"clusters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
