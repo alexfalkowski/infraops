@@ -1,118 +1,271 @@
 syntax = "proto3";
 
+// Schema for infraops "area" configuration files.
+//
+// Each area under `area/<name>/` has a corresponding `<name>.hjson` file that is decoded into one
+// of the top-level messages (Kubernetes, Github, Cloudflare, DigitalOcean). Pulumi programs then
+// convert these protobuf messages into internal Go models and provision resources.
+//
+// Notes:
+// - This schema is intentionally configuration-oriented (it models desired state, not provider API objects).
+// - For each top-level configuration message, `version` is a config/schema version string used by tooling;
+//   it is not necessarily the same as a runtime, provider, or Kubernetes version.
 package infraops.v2;
 
 option go_package = "github.com/alexfalkowski/infraops/v2/api/infraops/v2";
 
-// EnvVar represents the env variables for an application.
+// EnvVar defines an environment variable for an application.
+//
+// The value field supports plain literals as well as repository-specific conventions.
+// In particular, the Go implementation treats values prefixed with "secret:" as references
+// that are resolved into Kubernetes SecretKeyRefs during deployment.
+//
+// Secret reference format:
+//   - "secret:<secretName>/<key>"
+//
+// The Kubernetes Secret name used by the implementation is "<secretName>-secret" and the key is <key>.
 message EnvVar {
+  // Name is the environment variable name (for example "LOG_LEVEL").
   string name = 1;
+
+  // Value is the environment variable value.
+  // If it starts with "secret:", it is interpreted as a secret reference rather than a literal.
   string value = 2;
 }
 
-// Application represents the application to be released.
+// Application describes a Kubernetes application to deploy.
+//
+// This configuration is consumed by the `area/apps` Pulumi program, which creates Kubernetes
+// resources such as ServiceAccount, ConfigMap, Deployment, Service, Ingress, and related policies.
 message Application {
+  // Id is an optional identifier for the application in configuration.
+  // It is available for callers/tools but may not be used by all provisioners.
   string id = 1;
+
+  // Kind determines the deployment model for this application.
+  // The Go implementation recognizes values like "internal" and "external".
   string kind = 2;
+
+  // Name is the Kubernetes resource name base for this application.
   string name = 3;
+
+  // Namespace is the Kubernetes namespace to deploy into.
   string namespace = 4;
+
+  // Domain is the external DNS name/host used for ingress routing (for example "api.example.com").
   string domain = 5;
+
+  // Version is the application version to deploy (for example a container image tag).
   string version = 6;
+
+  // Resource selects the resource profile to apply to the application pod.
+  //
+  // Implementation mapping (current):
+  //   - "small" (default): cpu 125m-250m, memory 64Mi-128Mi, ephemeral-storage 1Gi-2Gi
+  //
+  // If an unknown value is provided, the implementation falls back to "small".
   string resource = 7;
+
+  // Secrets is a list of logical secret names referenced by this application.
+  //
+  // Clarification:
+  //   - This field is an application-level dependency list used by the deployment implementation to
+  //     provision and/or wire Secret resources (for example as volumes or other attachments).
+  //   - This list is related to, but distinct from, secret references in EnvVars:
+  //       - EnvVar values of the form "secret:<secretName>/<key>" reference a specific key within a secret.
+  //       - This Secrets list enumerates which logical secrets the application depends on (often the
+  //         same <secretName> values), but does not by itself specify which keys are consumed.
+  //
+  // In the current implementation, these names are typically materialized as Kubernetes Secrets
+  // with a "-secret" suffix and are used for volume/env wiring where applicable.
   repeated string secrets = 8;
+
+  // EnvVars is the list of environment variables to inject into the application container.
   repeated EnvVar env_vars = 9;
 }
 
-// Kubernetes applications to be released.
+// Kubernetes is the top-level configuration for the `area/apps` Pulumi program.
 message Kubernetes {
+  // Version is a configuration/schema version identifier for this file.
   string version = 1;
+
+  // Applications is the set of applications to be deployed to the cluster.
   repeated Application applications = 2;
 }
 
-// Collaborators describes whether the repository will have collaborators
-// enabled.
-message Collaborators { bool enabled = 1; }
+// Collaborators toggles whether repository collaborators are managed for a repository.
+//
+// When enabled, the infra code may create collaborator resources (for example for CI users).
+message Collaborators {
+  // Enabled controls whether collaborator resources should be created/managed.
+  bool enabled = 1;
+}
 
-// Template represents the template to be used for a repository.
+// Template identifies a GitHub template repository.
+//
+// When provided, a repository may be created from this template rather than as a blank repository.
 message Template {
+  // Owner is the organization or user that owns the template repository.
   string owner = 1;
+
+  // Repository is the template repository name.
   string repository = 2;
 }
 
-// Pages describes whether the repository will have pages enabled.
+// Pages describes GitHub Pages configuration for a repository.
 message Pages {
+  // Enabled controls whether Pages should be enabled/managed.
   bool enabled = 1;
+
+  // Cname is an optional custom domain for the Pages site.
   string cname = 2;
 }
 
-// Repository represents the repository to be created.
+// Repository describes the desired state of a GitHub repository.
+//
+// This configuration is consumed by the `area/gh` Pulumi program, which creates the repository
+// and applies additional settings such as branch protection, Pages, and collaborators.
 message Repository {
+  // Name is the repository name.
   string name = 1;
+
+  // Description is the repository description.
   string description = 2;
+
+  // HomepageUrl is the repository homepage URL.
   string homepage_url = 3;
+
+  // Visibility is the GitHub visibility string (for example "public" or "private").
   string visibility = 4;
+
+  // IsTemplate marks this repository as a template repository.
   bool is_template = 5;
+
+  // Archived controls whether the repository should be archived.
   bool archived = 6;
+
+  // Collaborators optionally enables collaborator management for this repository.
   Collaborators collaborators = 7;
+
+  // Template optionally configures a template repository to use when creating this repository.
   Template template = 8;
+
+  // Pages optionally enables/manages GitHub Pages for this repository.
   Pages pages = 9;
+
+  // Topics is the set of repository topics to apply.
   repeated string topics = 10;
+
+  // Checks is the set of required status check contexts enforced by branch protection.
+  //
+  // In the current implementation, an empty list is invalid and will cause provisioning to fail.
   repeated string checks = 11;
 }
 
-// Github specific configuration.
+// Github is the top-level configuration for the `area/gh` Pulumi program.
 message Github {
+  // Version is a configuration/schema version identifier for this file.
   string version = 1;
+
+  // Repositories is the set of repositories to create/manage.
   repeated Repository repositories = 2;
 }
 
-// BalancerZone represents the zone for a balancer.
+// BalancerZone describes a Cloudflare-managed DNS zone for proxied records.
+//
+// The `area/cf` Pulumi program creates the zone and then creates proxied A/AAAA records for the
+// subdomains listed in record_names.
 message BalancerZone {
+  // Name is the Pulumi resource name prefix for resources created for this zone.
   string name = 1;
+
+  // Domain is the apex domain for the zone (for example "example.com").
   string domain = 2;
+
+  // Ipv4 is the IPv4 address used for A records.
   string ipv4 = 3;
+
+  // Ipv6 is the IPv6 address used for AAAA records.
   string ipv6 = 4;
+
+  // RecordNames are subdomain labels (for example ["api", "app"]) used to create records under domain.
   repeated string record_names = 5;
 }
 
-// PageZone represents the zone for a page.
+// PageZone describes a Cloudflare zone used for a Cloudflare Pages site.
+//
+// The infra code creates the zone (with strict SSL mode) and creates a proxied CNAME from
+// "www.<domain>" to host.
 message PageZone {
+  // Name is the Pulumi resource name prefix for resources created for this zone.
   string name = 1;
+
+  // Domain is the apex domain for the zone (for example "example.com").
   string domain = 2;
+
+  // Host is the Cloudflare Pages hostname to CNAME to (for example "<project>.pages.dev").
   string host = 3;
 }
 
-// BucketZone defines the zone id and a domain to use.
+// BucketZone describes the Cloudflare zone and domain used to attach a custom/public domain to an R2 bucket.
+//
+// If omitted, the bucket will be created without a custom domain.
 message BucketZone {
+  // Id is the Cloudflare zone identifier.
   string id = 1;
+
+  // Domain is the fully-qualified domain name to associate with the bucket.
   string domain = 2;
 }
 
-// Bucket defines an R2 bucket with name, region (location, e.g EEUR) and a
-// zone.
+// Bucket describes a Cloudflare R2 bucket.
+//
+// If zone is provided, the infra code also provisions an R2 custom domain to expose the bucket publicly.
 message Bucket {
+  // Name is the R2 bucket name.
   string name = 1;
+
+  // Region is the R2 data location hint (for example "EEUR").
   string region = 2;
+
+  // Zone is optional; when present, it enables provisioning of an R2 custom domain for the bucket.
   optional BucketZone zone = 3;
 }
 
-// Cloudflare specific configuration.
+// Cloudflare is the top-level configuration for the `area/cf` Pulumi program.
 message Cloudflare {
+  // Version is a configuration/schema version identifier for this file.
   string version = 1;
+
+  // BalancerZones is the set of zones for which proxied A/AAAA records are managed.
   repeated BalancerZone balancer_zones = 2;
+
+  // PageZones is the set of zones configured for Cloudflare Pages sites.
   repeated PageZone page_zones = 3;
+
+  // Buckets is the set of R2 buckets to create/manage, optionally with custom domains.
   repeated Bucket buckets = 4;
 }
 
-// Cluster represents the cluster to be created.
+// Cluster describes a DigitalOcean Kubernetes cluster to provision.
+//
+// The `area/do` Pulumi program currently provisions a VPC and then a Kubernetes cluster attached to it.
 message Cluster {
+  // Name is the cluster name used for resource naming.
   string name = 1;
+
+  // Description is an optional description (used for related resources such as the VPC).
   string description = 2;
+
+  // Resource is a size label (for example "small" or "medium") used to select a droplet size slug.
   string resource = 3;
 }
 
-// DigitalOcean specific configuration.
+// DigitalOcean is the top-level configuration for the `area/do` Pulumi program.
 message DigitalOcean {
+  // Version is a configuration/schema version identifier for this file.
   string version = 1;
+
+  // Clusters is the set of Kubernetes clusters to create/manage.
   repeated Cluster clusters = 2;
 }

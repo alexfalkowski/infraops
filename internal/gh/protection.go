@@ -6,6 +6,14 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// branchProtection applies branch protection rules to the default branch for repo.
+//
+// It enforces:
+//   - linear history
+//   - pull request reviews (with stale reviews dismissed)
+//   - required status checks as specified by repo.Checks (strict mode enabled)
+//
+// The branch name is taken from the package-level master constant.
 func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
 	args := &github.BranchProtectionArgs{
 		Pattern:               pulumi.String(master),

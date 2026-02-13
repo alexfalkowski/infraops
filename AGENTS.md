@@ -7,12 +7,17 @@ Key concepts:
 - Each infrastructure “area” lives under `area/<name>/` and has a Pulumi entrypoint `area/<name>/main.go`.
 - Shared implementation lives under `internal/` (e.g. `internal/cf`, `internal/do`, `internal/gh`, `internal/app`).
 - Area configuration is stored as **HJSON** (e.g. `area/cf/cf.hjson`) and maps to protobuf types defined in `api/infraops/v2/service.proto`.
+- Package-level GoDocs are centralized in per-package `doc.go` files (not scattered across arbitrary `*.go` files).
 
 ## Quick orientation (where things live)
 - `area/`
   - `apps/`, `cf/`, `do/`, `gh/`: Pulumi programs (each has `Pulumi.yaml`, `*.hjson`, `main.go`, `main_test.go`).
   - `k8s/`: cluster add-ons installed via `helm`/`kubectl` (Makefile-driven).
 - `internal/`
+  - `app/`: Kubernetes application deployment logic (Pulumi Kubernetes resources).
+  - `cf/`: Cloudflare provisioning logic (Pulumi Cloudflare provider).
+  - `do/`: DigitalOcean provisioning logic (Pulumi DigitalOcean provider).
+  - `gh/`: GitHub provisioning logic (Pulumi GitHub provider).
   - `config/`: HJSON read/write helpers for protobuf messages (`internal/config/config.go`).
   - `inputs/`: shared Pulumi input constants (`internal/inputs/inputs.go`).
   - `log/`: minimal slog logger used by CLI tools (`internal/log/log.go`).
@@ -61,6 +66,10 @@ make -C api generate
 
 Proto sources: `api/infraops/v2/service.proto`.
 Generated Go output: `api/infraops/v2/service.pb.go` (regenerate via `make api-generate` rather than editing).
+
+Notes:
+- Protobuf message/field comments are treated as part of the configuration contract and are kept detailed/implementation-accurate.
+- After modifying `service.proto`, regenerate code with `make api-generate` (or `make -C api generate`) and run tests.
 
 ### Pulumi (preview/update per area)
 From the repo root:
@@ -190,5 +199,15 @@ If reproducing locally, mirror the same Make targets used in CI.
 - **Apps config maps read files relative to the Pulumi working directory**:
   - `internal/app/config.go` reads `<namespace>/<app>.yaml` using `os.Getwd()` + `filepath.Join(wd, ns, file)`.
   - When running Pulumi via `make area=apps pulumi-*`, Pulumi runs with `--cwd area/apps`, so ensure the expected files exist under `area/apps/<namespace>/`.
+- **Apps env var secret references**:
+  - `EnvVar.value` supports the convention `secret:<secretName>/<key>`.
+  - At deploy time this is converted into a Kubernetes `SecretKeyRef` with Secret name `<secretName>-secret` and key `<key>` (see `internal/app/environment.go` and `internal/app/secret.go`).
+- **`Application.secrets` vs secret env vars**:
+  - `Application.secrets` is an application-level dependency list used by the deployment implementation to provision and/or wire Secret resources (for example volumes/attachments).
+  - Secret references in `env_vars` (`secret:<secretName>/<key>`) target specific keys; the `secrets` list does not specify keys.
+  - These behaviors are documented in `api/infraops/v2/service.proto` and should be kept in sync with implementation.
+- **Apps resource sizing**:
+  - `Application.resource` selects a resource profile; unknown values fall back to `"small"` (see `internal/app/resource.go`).
+  - Current mapping includes `"small"`: cpu 125m-250m, memory 64Mi-128Mi, ephemeral-storage 1Gi-2Gi.
 - **GitHub repository creation has a 2-step process for some features** (from `README.md`):
   - Pages and collaborators may need to be disabled on first creation and enabled in a follow-up change to avoid timing issues.

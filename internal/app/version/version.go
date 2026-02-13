@@ -8,10 +8,13 @@ import (
 	"github.com/alexfalkowski/infraops/v2/internal/app"
 )
 
-// ErrNotFound for version.
+// ErrNotFound is returned by Update when the named application does not exist in the configuration.
 var ErrNotFound = errors.New("name not found")
 
-// Update name with a version by providing the path to the config.
+// Update sets the version for the application identified by name in the configuration at path.
+//
+// The configuration is loaded using app.ReadConfiguration and persisted using app.WriteConfiguration.
+// If no application matches name, Update returns ErrNotFound.
 func Update(name, version, path string) error {
 	config, err := app.ReadConfiguration(path)
 	if err != nil {

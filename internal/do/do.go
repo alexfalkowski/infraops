@@ -8,26 +8,34 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// sizes maps a cluster resource size label from configuration to a DigitalOcean droplet size slug.
 var sizes = map[string]digitalocean.DropletSlug{
 	"small":  digitalocean.DropletSlugDropletS2VCPU4GB,
 	"medium": digitalocean.DropletSlugDropletS4VCPU8GB,
 }
 
-// ReadConfiguration reads a file and populates a configuration.
+// ReadConfiguration reads the DigitalOcean area configuration from path.
+//
+// The file is expected to be HJSON matching the v2.DigitalOcean protobuf schema.
 func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 	var configuration v2.DigitalOcean
 	err := config.Read(path, &configuration)
 	return &configuration, err
 }
 
-// Cluster for do.
+// Cluster describes a DigitalOcean Kubernetes cluster configuration.
 type Cluster struct {
-	Name        string
+	// Name is the cluster name used for resource naming.
+	Name string
+	// Description is an optional description for cluster-related resources (for example the VPC).
 	Description string
-	Resource    string
+	// Resource is a size label (for example "small" or "medium") used to select a droplet size slug.
+	Resource string
 }
 
-// Size of the cluster.
+// Size returns the DigitalOcean droplet size slug selected by c.Resource.
+//
+// If c.Resource is not recognized, Size returns a sensible default.
 func (c *Cluster) Size() digitalocean.DropletSlug {
 	if s, ok := sizes[c.Resource]; ok {
 		return s
@@ -35,7 +43,7 @@ func (c *Cluster) Size() digitalocean.DropletSlug {
 	return digitalocean.DropletSlugDropletS2VCPU4GB
 }
 
-// ConvertCluster converts a v2.Cluster to a Cluster.
+// ConvertCluster converts a protobuf v2.Cluster into the internal Cluster model.
 func ConvertCluster(cluster *v2.Cluster) *Cluster {
 	return &Cluster{
 		Name:        cluster.GetName(),
@@ -44,7 +52,9 @@ func ConvertCluster(cluster *v2.Cluster) *Cluster {
 	}
 }
 
-// CreateCluster for do.
+// CreateCluster provisions the networking and Kubernetes cluster resources for cluster.
+//
+// It creates a VPC and then creates a Kubernetes cluster attached to that VPC.
 func CreateCluster(ctx *pulumi.Context, cluster *Cluster) (err error) {
 	v, err := createVPC(ctx, cluster)
 	if err != nil {

@@ -11,21 +11,34 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+// account is the Cloudflare account identifier sourced from the CLOUDFLARE_ACCOUNT_ID
+// environment variable.
+//
+// It is intentionally a package-level Pulumi input to avoid threading the value through
+// every resource constructor.
 var account = pulumi.String(os.Getenv("CLOUDFLARE_ACCOUNT_ID"))
 
-// ReadConfiguration reads a file and populates a configuration.
+// ReadConfiguration reads the Cloudflare area configuration from path.
+//
+// The file is expected to be HJSON matching the v2.Cloudflare protobuf schema.
 func ReadConfiguration(path string) (*v2.Cloudflare, error) {
 	var configuration v2.Cloudflare
 	err := config.Read(path, &configuration)
 	return &configuration, err
 }
 
-// ZoneSetting is a name value.
+// ZoneSetting represents a single Cloudflare zone setting name/value pair.
+//
+// It is used to apply a consistent baseline of zone settings during provisioning.
 type ZoneSetting struct {
 	Name  string
 	Value pulumi.String
 }
 
+// settings applies a baseline set of Cloudflare zone settings to the given zone.
+//
+// The resource names are derived from the provided name plus the setting identifier to keep
+// them stable across updates. The ssl argument is applied to the zone "ssl" setting.
 func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
 	settings := []*ZoneSetting{
 		{Name: "always_use_https", Value: inputs.On},

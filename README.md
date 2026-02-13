@@ -5,159 +5,294 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/alexfalkowski/infraops/v2.svg)](https://pkg.go.dev/github.com/alexfalkowski/infraops/v2)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 
-A place where all infrastructure is taken care of.
+A Go-based infrastructure “monorepo” powered by **Pulumi**, with configuration stored as **HJSON** and validated/decoded using a **protobuf schema**.
 
-## Background
+## Overview
 
-The following tools are used:
+This repository manages multiple infrastructure “areas”:
 
-- <https://www.pulumi.com/>
-- <https://kubernetes.io/docs/reference/kubectl/>
-- <https://helm.sh/>
-- <https://kube-score.com/>
+- `area/apps`: Kubernetes applications deployed to a cluster.
+- `area/cf`: Cloudflare resources (zones, DNS records, R2 buckets/custom domains).
+- `area/do`: DigitalOcean resources (VPC + Kubernetes clusters).
+- `area/gh`: GitHub repositories and settings (branch protection, Pages, collaborators).
+- `area/k8s`: Cluster add-ons installed via `helm`/`kubectl` (Makefile driven, not Pulumi).
 
-## Configuration
+Each Pulumi area has:
+- a Pulumi entrypoint at `area/<name>/main.go`
+- a config file at `area/<name>/<name>.hjson`
+- a Pulumi project file `area/<name>/Pulumi.yaml`
 
-The configuration follows the [prototext](https://protobuf.dev/reference/protobuf/textformat-spec/) format.
+Shared implementation lives under `internal/` (e.g. `internal/app`, `internal/cf`, `internal/do`, `internal/gh`).
 
-### Format
+## Tooling
 
-Build the application:
+Primary tools used:
+
+- Pulumi: <https://www.pulumi.com/>
+- kubectl: <https://kubernetes.io/docs/reference/kubectl/>
+- Helm: <https://helm.sh/>
+- kube-score: <https://kube-score.com/>
+
+## Configuration (HJSON + protobuf schema)
+
+All area configuration files are **HJSON** (`*.hjson`). They are decoded into protobuf messages defined in:
+
+- `api/infraops/v2/service.proto`
+
+Those protobuf messages are then converted into internal Go types and used to provision resources.
+
+### Format and normalize config
+
+This repo includes a small CLI to normalize/format config files by:
+1) decoding the HJSON into the appropriate protobuf message
+2) writing it back out in a canonical form
+
+Build:
 
 ```bash
-❯ make build-format
+make build-format
 ```
 
-To format a configuration:
+Format a config kind (`apps|cf|do|gh`), using the default location `area/<kind>/<kind>.hjson`:
 
 ```bash
-❯ ./format -k cf
+./format -k cf
 ```
+
+Override the path:
+
+```bash
+./format -k cf -p area/cf/cf.hjson
+```
+
+### Config schema notes (practical)
+
+A few conventions are implemented by the Go code and are worth knowing when editing HJSON:
+
+#### `EnvVar.value` secret references (apps)
+
+Environment variables support literal values, and a secret reference format:
+
+- `secret:<secretName>/<key>`
+
+At deploy time, this becomes a Kubernetes `SecretKeyRef`:
+- Secret name: `<secretName>-secret`
+- Secret key: `<key>`
+
+Example:
+
+```hjson
+env_vars: [
+  { name: "DATABASE_URL", value: "secret:db/url" }
+]
+```
+
+#### `Application.secrets` vs secret env vars (apps)
+
+- `Application.secrets` is an **application-level dependency list** used by the deployment implementation to provision and/or wire Secret resources (for example as volumes or attachments).
+- Secret references in `env_vars` (the `secret:<secretName>/<key>` format) reference **specific keys** in those secrets.
+- They often use the same `<secretName>` values, but they serve different purposes.
+
+#### `Application.resource` sizing (apps)
+
+`Application.resource` selects a resource profile. Current mapping:
+
+- `"small"` (default): cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`
+
+Unknown values fall back to `"small"`.
+
+## Common workflows
+
+### Dependencies, linting, tests, and security
+
+From the repository root:
+
+```bash
+make dep          # download/tidy/vendor deps
+make lint         # lint (including field alignment)
+make sec          # govulncheck -test ./...
+make specs        # gotestsum + go test (junit/coverage under test/reports)
+make coverage     # HTML + function coverage under test/reports
+```
+
+### Protobuf / API
+
+Do not edit generated Go code under `api/infraops/v2/*.pb.go` directly.
+
+Instead:
+
+```bash
+make api-lint
+make api-breaking
+make api-generate
+```
+
+(Or: `make -C api lint|breaking|generate`.)
+
+## Pulumi: preview/update per area
+
+Pulumi is typically run via Makefile targets from the repo root.
+
+Login:
+
+```bash
+make pulumi-login
+```
+
+Preview/update:
+
+```bash
+make area=cf pulumi-preview
+make area=cf pulumi-update
+```
+
+Supported areas for these targets:
+
+- `apps`, `cf`, `do`, `gh`
+
+The Makefile runs Pulumi with:
+- stack: `alexfalkowski/<area>/prod`
+- working directory: `area/<area>`
+
+That working directory matters because the programs read `<area>.hjson` via a relative path.
 
 ## Areas
 
-Each folder takes care of an area of infrastructure. Each area has a package that is used as the entry point, so it is a [facade](https://en.wikipedia.org/wiki/Facade_pattern).
+### Applications (`area/apps`)
 
-### Areas Setup
+Deploys Kubernetes applications described in `area/apps/apps.hjson`.
 
-To setup a new area follow the following:
+#### Configure
 
-- Run `pulumi new`.
-- Choose the template you need, if in doubt choose `go`.
-- The stack name should always be `prod`.
+See:
 
-### Areas Configuration
+- `area/apps/apps.hjson`
 
-Each area is defined by the configuration that is generated from the [protobuf](api/infraops/v1/service.proto) and the format used is the [Text Format](https://protobuf.dev/reference/protobuf/textformat-spec/).
+This file uses the `Kubernetes` message in `api/infraops/v2/service.proto`.
 
-### Applications (apps)
+#### Install / Setup
 
-This consists of my open source projects <https://github.com/alexfalkowski> being deployed to kubernetes.
-
-#### Applications Install
-
-The above is for a new application. If you want to setup all current apps, run the following.
+For a full “apply” of what’s in config:
 
 ```bash
-❯ make -C area/apps setup
+make -C area/apps setup
 ```
 
-#### Applications Delete
-
-To remove all the apps, you need to run the following:
+#### Delete
 
 ```bash
-❯ make -C area/apps delete
+make -C area/apps delete
 ```
 
-#### Applications Configuration
+#### Update an application version (bump tool)
 
-Have a look at the [configuration](area/apps/apps.hjson).
-
-#### Applications Version Update
-
-Build the application:
+Build:
 
 ```bash
-❯ make build-bump
+make build-bump
 ```
 
-To update a version of an app:
+Update a single app version in config:
 
 ```bash
-❯ ./bump -n bezeichner -v 1.559.0
+./bump -n bezeichner -v 1.559.0
 ```
 
-### Cloudflare (cf)
+By default it edits `area/apps/apps.hjson`. Override path:
 
-The code is bases on the package <https://www.pulumi.com/registry/packages/cloudflare/>.
+```bash
+./bump -n bezeichner -v 1.559.0 -p area/apps/apps.hjson
+```
 
-#### Cloudflare Configuration
+> Tip: run `./format -k apps` after edits to keep config normalized.
 
-Have a look at the [configuration](area/cf/cf.hjson).
+### Cloudflare (`area/cf`)
 
-### DigitalOcean (do)
+Manages Cloudflare resources using Pulumi’s Cloudflare provider:
 
-The code is bases on the package <https://www.pulumi.com/registry/packages/digitalocean/>.
+- <https://www.pulumi.com/registry/packages/cloudflare/>
 
-#### DigitalOcean Project
+Config:
 
-Create manually a default project with a name and description, example:
+- `area/cf/cf.hjson`
+
+#### Required environment variables
+
+The implementation requires:
+
+- `CLOUDFLARE_ACCOUNT_ID`
+
+(Used for account-scoped resources like R2 buckets.)
+
+### DigitalOcean (`area/do`)
+
+Manages DigitalOcean resources using Pulumi’s DigitalOcean provider:
+
+- <https://www.pulumi.com/registry/packages/digitalocean/>
+
+Config:
+
+- `area/do/do.hjson`
+
+#### Manual prerequisites (DigitalOcean UI)
+
+Some items may be created manually depending on account setup:
+
+- A default project (example):
 
 | Name          | Description                           |
 | ------------- | ------------------------------------- |
 | lean-thoughts | All of experiments for lean-thoughts. |
 
-#### DigitalOcean VPC
-
-The account needs a default VPC. Create one manually under the region you would like with a name and description, example:
+- A default VPC in your target region (example):
 
 | Name         | Description               |
 | ------------ | ------------------------- |
 | default-fra1 | The default vpc for fra1. |
 
-#### DigitalOcean Cluster Upgrade
+#### Kubernetes cluster upgrades
 
-The process is as follows:
+Cluster version is pinned in code:
 
-- Patch versions can be updated at [do.go](internal/do/do.go).
-- Minor/major versions should be updated in the [UI](https://docs.digitalocean.com/products/kubernetes/how-to/upgrade-cluster/) and then updated at [do.go](internal/do/do.go).
+- `internal/do/do.go`
 
-#### DigitalOcean Configuration
+Guidance:
+- Patch versions can be updated in code.
+- Minor/major upgrades should be initiated via the DigitalOcean UI (per DO guidance), then aligned in code.
 
-Have a look at the [configuration](area/do/do.hjson).
+### GitHub (`area/gh`)
 
-### GitHub (gh)
+Manages GitHub resources using Pulumi’s GitHub provider:
 
-The code is based on the package <https://www.pulumi.com/registry/packages/github/>.
+- <https://www.pulumi.com/registry/packages/github/>
 
-The original idea was inspired from <https://github.com/dirien/pulumi-github>.
+Config:
 
-#### GitHub Creation
+- `area/gh/gh.hjson`
 
-There is a caveat when creating repositories, that requires a 2 step process.
+This area was inspired by:
+
+- <https://github.com/dirien/pulumi-github>
+
+#### Repository creation caveat (2-step enablement)
+
+Some repository features may require a two-step approach: create the repository first, then enable features in a follow-up change. This avoids timing issues around initial default branch creation.
 
 ##### GitHub Pages
 
-Pages can only be created after the repository is present.
-
-So, the first step is to disable it or  leave pages out.
+First change: disable Pages (or omit pages config):
 
 ```hjson
-pages: {
-  enabled: false
-}
+pages: { enabled: false }
 ```
 
-Then the second PR, we enable it:
+Second change: enable Pages:
 
 ```hjson
-pages: {
-  enabled: true
-}
+pages: { enabled: true }
 ```
 
-If this repository will be used to host site with a cname, we need to add this:
+Optional CNAME:
 
 ```hjson
 pages: {
@@ -166,59 +301,62 @@ pages: {
 }
 ```
 
-> [!NOTE]
-> The reason for this is that there seems to be a timing issue with creating the `master` branch.
+##### Collaborators
 
-##### GitHub Collaborators
-
-As with pages the repository needs to be present.
-
-So, the first step is to have:
+First change:
 
 ```hjson
-collaborators: {
-  enabled: false
-}
+collaborators: { enabled: false }
 ```
 
-Then the second PR, we set it to:
+Second change:
 
 ```hjson
-collaborators: {
-  enabled: true
-}
+collaborators: { enabled: true }
 ```
 
-> [!NOTE]
-> This also seems like a timing issue, as rerunning the pipeline fixes it.
+If the pipeline fails due to timing, a rerun often succeeds.
 
-#### GitHub Configuration
+### Kubernetes add-ons (`area/k8s`)
 
-Have a look at the [configuration](area/gh/gh.hjson).
-
-### Kubernetes (k8s)
-
-This contains all the packages our cluster needs.
+This is not a Pulumi area. It contains cluster add-ons installed via `helm`/`kubectl`.
 
 > [!CAUTION]
-> This needs to be run once you have a cluster in DigitalOcean.
+> Run this only after you have a Kubernetes cluster (for example from `area/do`).
 
-#### Kubernetes Setup
-
-To ge the cluster ready, you need to run the following:
+Setup:
 
 ```bash
-❯ make -C area/k8s setup
+make -C area/k8s setup
 ```
 
-#### Kubernetes Delete
-
-To remove all the apps, you need to run the following:
+Delete:
 
 ```bash
-❯ make -C area/k8s delete
+make -C area/k8s delete
 ```
 
-### Dependencies
+Useful debugging:
+
+```bash
+make -C area/k8s pods
+```
+
+#### Required environment variables (some add-ons)
+
+Depending on what you install, the k8s add-ons Makefile expects secrets like:
+
+- `CIRCLECI_K8S_TOKEN` (CircleCI release agent)
+- `BETTER_STACK_COLLECTOR_SECRET` (Better Stack collector)
+
+## Repository structure
+
+- `area/`: Pulumi programs and k8s add-ons
+- `internal/`: shared implementation (convert + create patterns per area)
+- `api/`: protobuf schema and generated code
+- `cmd/`: small helper CLIs (`format`, `bump`)
+- `bin/`: shared build tooling (git submodule)
+
+## Dependencies graph
 
 ![Dependencies](./assets/..png)

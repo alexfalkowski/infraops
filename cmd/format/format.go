@@ -1,3 +1,13 @@
+// Command format normalizes/rewrites an area configuration file in a consistent HJSON form.
+//
+// It reads a configuration into the corresponding protobuf message and writes it back out
+// using the repository's canonical HJSON formatting rules.
+//
+// Usage:
+//
+//	format -k <apps|cf|do|gh> [-p <path>]
+//
+// By default, the path is `area/<kind>/<kind>.hjson`.
 package main
 
 import (
@@ -10,6 +20,8 @@ import (
 	"github.com/alexfalkowski/infraops/v2/internal/log"
 )
 
+// configs maps a supported config kind (as provided by the `-k` flag) to the protobuf
+// message type used to decode/encode that configuration.
 var configs = map[string]config.Config{
 	"apps": &v2.Kubernetes{},
 	"cf":   &v2.Cloudflare{},
@@ -17,6 +29,10 @@ var configs = map[string]config.Config{
 	"gh":   &v2.Github{},
 }
 
+// run parses CLI flags, loads the selected configuration, and writes it back out.
+//
+// The `-k` flag selects which protobuf message schema to use for decoding/encoding.
+// If `-p` is not provided, the default path is `area/<kind>/<kind>.hjson`.
 func run() error {
 	var (
 		kind string

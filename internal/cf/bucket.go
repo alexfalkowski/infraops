@@ -8,23 +8,31 @@ import (
 )
 
 type (
-	// BucketZone defines a zone to be used by buckets.
-	// This is optional and defined under https://developers.cloudflare.com/r2/buckets/public-buckets/
+	// BucketZone identifies the Cloudflare zone used to attach a public/custom domain to an R2 bucket.
+	//
+	// This is optional; when provided, CreateBucket will also provision an R2 custom domain.
+	// See: https://developers.cloudflare.com/r2/buckets/public-buckets/
 	BucketZone struct {
-		ID     string
+		// ID is the Cloudflare zone identifier.
+		ID string
+		// Domain is the fully-qualified domain name to associate with the bucket.
 		Domain string
 	}
 
-	// Bucket represents an R2 bucket in Cloudflare.
-	// Regions are defined under https://developers.cloudflare.com/r2/reference/data-location/#available-hints.
+	// Bucket represents an R2 bucket configuration in Cloudflare.
+	//
+	// Regions are defined under: https://developers.cloudflare.com/r2/reference/data-location/#available-hints
 	Bucket struct {
-		Zone   *BucketZone
-		Name   string
+		// Zone is optional; when nil, no custom domain is created for the bucket.
+		Zone *BucketZone
+		// Name is the R2 bucket name.
+		Name string
+		// Region is the R2 data location hint.
 		Region string
 	}
 )
 
-// ConvertBucket converts a v2.Bucket to a Bucket.
+// ConvertBucket converts a protobuf v2.Bucket into the internal Bucket model.
 func ConvertBucket(bucket *v2.Bucket) *Bucket {
 	b := &Bucket{
 		Name:   bucket.GetName(),
@@ -42,7 +50,10 @@ func ConvertBucket(bucket *v2.Bucket) *Bucket {
 	return b
 }
 
-// CreateBucket for cf.
+// CreateBucket provisions an R2 bucket and, optionally, an R2 custom domain.
+//
+// If bucket.Zone is nil, CreateBucket only creates the bucket.
+// If bucket.Zone is non-nil, CreateBucket also creates an R2 custom domain using Zone.ID and Zone.Domain.
 func CreateBucket(ctx *pulumi.Context, bucket *Bucket) error {
 	args := &cloudflare.R2BucketArgs{
 		AccountId:    account,
@@ -62,6 +73,9 @@ func CreateBucket(ctx *pulumi.Context, bucket *Bucket) error {
 	return newDomain(ctx, bucket)
 }
 
+// newDomain creates an R2 custom domain for bucket.
+//
+// It enables the domain and sets a minimum TLS version of 1.2.
 func newDomain(ctx *pulumi.Context, bucket *Bucket) error {
 	args := &cloudflare.R2CustomDomainArgs{
 		AccountId:  account,
