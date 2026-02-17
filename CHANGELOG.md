@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.411.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.411.0) - 2026-02-17
+
+- [`2139ee6`](https://github.com/alexfalkowski/infraops/commit/2139ee6257bd90119989b9c8375d4e0d83b6784a) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.57.0 to 4.58.0 (#1987)
+- [`e0d5d61`](https://github.com/alexfalkowski/infraops/commit/e0d5d6111c6eb1f6596cb6c88682ec1e42826e6c) release(web): upgraded to v1.256.0 (#1986)
+- [`f972bdc`](https://github.com/alexfalkowski/infraops/commit/f972bdc26441fde316bbbb3d79501b55d96834fc) release(standort): upgraded to v2.689.0 (#1985)
+- [`7baedf6`](https://github.com/alexfalkowski/infraops/commit/7baedf6eb1f999628c1b8b040f22b43d30b68e4c) release(bezeichner): upgraded to v1.698.0 (#1984)
+- [`a684064`](https://github.com/alexfalkowski/infraops/commit/a684064d2c167755594bcba76c4fbddbcf24f008) release(web): upgraded to v1.255.0 (#1983)
+- [`87ad381`](https://github.com/alexfalkowski/infraops/commit/87ad3813b86378f2a3077962676902f9e09f07d5) release(standort): upgraded to v2.688.0 (#1982)
+- [`8c68cdb`](https://github.com/alexfalkowski/infraops/commit/8c68cdb8eaa463f4e5327470adae41afae584ad9) build(ci): use latest published images (#1981)
+- [`ead32c4`](https://github.com/alexfalkowski/infraops/commit/ead32c4e864c12fad2a2b5eca70f5af8b33659f9) release(bezeichner): upgraded to v1.697.0 (#1980)
+- [`a5b1f40`](https://github.com/alexfalkowski/infraops/commit/a5b1f4062b1c6f0db38b5ce76806610ecb793bb7) build(ci): use latest published images (#1979)
+- [`d8af09f`](https://github.com/alexfalkowski/infraops/commit/d8af09f13dbace04b042d9637fcd3ff7a9432a94) release(web): upgraded to v1.254.0 (#1978)
+- [`d4ee27e`](https://github.com/alexfalkowski/infraops/commit/d4ee27ef679b6fb83fd0e8e421588631079c1868) release(bezeichner): upgraded to v1.696.0 (#1977)
+- [`df7292c`](https://github.com/alexfalkowski/infraops/commit/df7292c9a9b2baa72266e94043261f13ad1ae720) release(standort): upgraded to v2.687.0 (#1976)
+
 ## [v2.410.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.410.0) - 2026-02-13
 
 - [`785009b`](https://github.com/alexfalkowski/infraops/commit/785009b2758ecb5c1834143b4c2702738581bce7) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.56.0 to 4.57.0 (#1975)
