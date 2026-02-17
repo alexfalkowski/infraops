@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:2.106
+      - image: alexfalkowski/go:2.107
     working_directory: ~/infraops
     steps:
       - checkout:
