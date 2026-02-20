@@ -7,7 +7,7 @@
       name: bezeichner
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.700.0
+      version: 1.701.0
       resource: small
     }
     {
