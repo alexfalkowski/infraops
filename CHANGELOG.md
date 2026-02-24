@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.416.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.416.0) - 2026-02-24
+
+- [`c63550b`](https://github.com/alexfalkowski/infraops/commit/c63550be9b04717829600834189949a178569b6c) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.58.0 to 4.59.0 (#2015)
+- [`3378f11`](https://github.com/alexfalkowski/infraops/commit/3378f11bff7539b264025e259442ac66f06878a0) release(web): upgraded to v1.259.0 (#2014)
+- [`cab6acc`](https://github.com/alexfalkowski/infraops/commit/cab6acc0b036785bf27b51ea90978c316848b4db) build(ci): use latest published images (#2013)
+- [`2fff9fc`](https://github.com/alexfalkowski/infraops/commit/2fff9fc62e8f0a31b49df85d681120be0c379bd1) release(standort): upgraded to v2.693.0 (#2012)
+- [`29a9568`](https://github.com/alexfalkowski/infraops/commit/29a95683941b7f275932b9618e2b95b57c0a4a7b) release(bezeichner): upgraded to v1.702.0 (#2011)
+- [`3afd00f`](https://github.com/alexfalkowski/infraops/commit/3afd00f587be4c860ba355d497284de36385ca30) build(ci): use latest published images (#2010)
+- [`4bf705d`](https://github.com/alexfalkowski/infraops/commit/4bf705d5cd5574041a290403501907a7efc79d3b) build(ci): use latest published images (#2009)
+- [`de6c5cc`](https://github.com/alexfalkowski/infraops/commit/de6c5cca1150e3b910437bf21692ec869a53293b) build(ci): use latest published images (#2008)
+- [`6e0839f`](https://github.com/alexfalkowski/infraops/commit/6e0839fb47da7e107fc9ac5475d179845ba3e3bb) build(deps): upgraded github.com/alexfalkowski/bin (#2007)
+- [`b64905c`](https://github.com/alexfalkowski/infraops/commit/b64905c806730cd92912ed3e66cdad86e43daa3a) build(deps): upgraded github.com/alexfalkowski/bin (#2006)
+- [`95b3875`](https://github.com/alexfalkowski/infraops/commit/95b38756cb323d166c008176c8f302a4193aecfe) release(web): upgraded to v1.258.0 (#2005)
+
 ## [v2.415.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.415.0) - 2026-02-20
 
 - [`b7e7803`](https://github.com/alexfalkowski/infraops/commit/b7e7803ec33443dfe3439135d8a985d071fdc401) feat(deps): upgraded github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.25.0 => v4.26.0 (#2004)
