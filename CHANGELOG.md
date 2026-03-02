@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.419.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.419.0) - 2026-03-02
+
+- [`a658b01`](https://github.com/alexfalkowski/infraops/commit/a658b013346f4140ecb0dd59da0d800ae399ec7d) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.59.0 to 4.60.0 (#2031)
+- [`551c88b`](https://github.com/alexfalkowski/infraops/commit/551c88be727f733ed80df842b78ce9f68444a372) release(web): upgraded to v1.263.0 (#2030)
+- [`e5d2671`](https://github.com/alexfalkowski/infraops/commit/e5d2671f46ad5fd380f4bb716366b861880925c4) build(ci): use latest published images (#2029)
+- [`4663b9e`](https://github.com/alexfalkowski/infraops/commit/4663b9ec0a2c512623c6112c3779aa140262da30) release(standort): upgraded to v2.696.0 (#2028)
+- [`9c8ae88`](https://github.com/alexfalkowski/infraops/commit/9c8ae889d0f34036aa0fc0e85119bdfc26185d6d) release(bezeichner): upgraded to v1.705.0 (#2027)
+
 ## [v2.418.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.418.0) - 2026-02-27
 
 - [`d00b753`](https://github.com/alexfalkowski/infraops/commit/d00b7532c450d7ce9578585169e8819431525731) feat(apps): only log (#2026)
