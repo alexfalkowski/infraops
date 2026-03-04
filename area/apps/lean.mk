@@ -16,12 +16,8 @@ delete-lean:
 create-lean:
 	@kubectl create namespace lean
 
-# Setup Github.
-setup-gh:
-	@kubectl create secret generic gh-secret --from-literal=token=$(GITHUB_TOKEN) --namespace lean
-
 # Setup lean.
-setup-lean: create-lean setup-gh
+setup-lean: create-lean
 
 # Rollout lean.
 rollout-lean: rollout-standort rollout-bezeichner rollout-web
