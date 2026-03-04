@@ -24,7 +24,7 @@ setup-gh:
 setup-lean: create-lean setup-gh
 
 # Rollout lean.
-rollout-lean: rollout-standort rollout-bezeichner rollout-web rollout-monitoror
+rollout-lean: rollout-standort rollout-bezeichner rollout-web
 
 # Rollout standort.
 rollout-standort:
@@ -38,12 +38,8 @@ rollout-bezeichner:
 rollout-web:
 	@kubectl rollout restart deployment/web -n lean
 
-# Rollout monitoror.
-rollout-monitoror:
-	@kubectl rollout restart deployment/monitoror -n lean
-
 # Verify all apps.
-verify-lean: verify-standort verify-bezeichner verify-web verify-monitoror
+verify-lean: verify-standort verify-bezeichner verify-web
 
 # Verify standort.
 verify-standort:
@@ -57,12 +53,8 @@ verify-bezeichner:
 verify-web:
 	@curl -svf https://web.lean-thoughts.com
 
-# Verify monitoror.
-verify-monitoror:
-	@curl -svf https://monitoror.lean-thoughts.com
-
 # Load test lean.
-load-lean: load-standort load-bezeichner load-web load-monitoror
+load-lean: load-standort load-bezeichner load-web
 
 # Load test standort.
 load-standort:
@@ -75,7 +67,3 @@ load-bezeichner:
 # Load test web.
 load-web:
 	@echo "GET https://web.lean-thoughts.com" | vegeta attack -duration=30s | tee "lean/web.bin" | vegeta report
-
-# Load test monitoror.
-load-monitoror:
-	@echo "GET https://monitoror.lean-thoughts.com" | vegeta attack -duration=30s | tee "lean/monitoror.bin" | vegeta report
