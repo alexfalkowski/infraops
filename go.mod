@@ -1,6 +1,6 @@
 module github.com/alexfalkowski/infraops/v2
 
-go 1.25.0
+go 1.25.6
 
 require (
 	github.com/hjson/hjson-go/v4 v4.6.0
@@ -8,7 +8,7 @@ require (
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.60.0
 	github.com/pulumi/pulumi-github/sdk/v6 v6.12.1
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.27.0
-	github.com/pulumi/pulumi/sdk/v3 v3.224.0
+	github.com/pulumi/pulumi/sdk/v3 v3.225.0
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/protobuf v1.36.11
 )
