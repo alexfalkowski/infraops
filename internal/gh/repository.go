@@ -29,7 +29,6 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		AllowAutoMerge:      inputs.Yes,
 		DeleteBranchOnMerge: inputs.Yes,
 		Description:         pulumi.String(repo.Description),
-		HasDownloads:        inputs.Yes,
 		HasIssues:           inputs.Yes,
 		HasProjects:         inputs.Yes,
 		HasWiki:             inputs.Yes,
