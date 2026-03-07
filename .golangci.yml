@@ -17,6 +17,7 @@ linters:
     - noinlineerr
     - nonamedreturns
     - paralleltest
+    - prealloc
     - revive
     - tagalign
     - tagliatelle
