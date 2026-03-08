@@ -84,7 +84,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: make sync push
-    resource_class: large
+    resource_class: arm.large
   version:
     docker:
       - image: alexfalkowski/release:5.54
@@ -95,7 +95,13 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
-    resource_class: large
+    resource_class: arm.large
+  wait-all:
+    docker:
+      - image: alexfalkowski/k8s:2.34
+    steps:
+      - run: echo "all applicable jobs finished"
+    resource_class: arm.large
 
   apps_preview:
     docker:
@@ -401,66 +407,47 @@ workflows:
       - sync:
           requires:
             - build
-          filters:
-            branches:
-              ignore: master
+          filters: 'pipeline.git.branch != "master"'
       - version:
           serial-group: << pipeline.project.slug >>/release
           requires:
             - build
-          filters:
-            branches:
-              only: master
-  apps:
-    when: << pipeline.parameters.apps >>
-    jobs:
+          filters: 'pipeline.git.branch == "master"'
       - apps_preview:
           context: infraops
-          filters:
-            branches:
-              ignore: master
+          filters: 'pipeline.parameters.apps and pipeline.git.branch != "master"'
       - apps_update:
           serial-group: << pipeline.project.slug >>/apps
           context: infraops
-          filters:
-            branches:
-              only: master
-  cf:
-    when: << pipeline.parameters.cf >>
-    jobs:
+          filters: 'pipeline.parameters.apps and pipeline.git.branch == "master"'
       - cf_preview:
           context: infraops
-          filters:
-            branches:
-              ignore: master
+          filters: 'pipeline.parameters.cf and pipeline.git.branch != "master"'
       - cf_update:
           context: infraops
-          filters:
-            branches:
-              only: master
-  do:
-    when: << pipeline.parameters.do >>
-    jobs:
+          filters: 'pipeline.parameters.cf and pipeline.git.branch == "master"'
       - do_preview:
           context: infraops
-          filters:
-            branches:
-              ignore: master
+          filters: 'pipeline.parameters.do and pipeline.git.branch != "master"'
       - do_update:
           context: infraops
-          filters:
-            branches:
-              only: master
-  gh:
-    when: << pipeline.parameters.gh >>
-    jobs:
+          filters: 'pipeline.parameters.do and pipeline.git.branch == "master"'
       - gh_preview:
           context: infraops
-          filters:
-            branches:
-              ignore: master
+          filters: 'pipeline.parameters.gh and pipeline.git.branch != "master"'
       - gh_update:
           context: infraops
-          filters:
-            branches:
-              only: master
+          filters: 'pipeline.parameters.gh and pipeline.git.branch == "master"'
+      - wait-all:
+          requires:
+            - build
+            - sync
+            - version
+            - apps_preview
+            - apps_update
+            - cf_preview
+            - cf_update
+            - do_preview
+            - do_update
+            - gh_preview
+            - gh_update
