@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.426.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.426.0) - 2026-03-08
+
+- [`597405c`](https://github.com/alexfalkowski/infraops/commit/597405c660a14c868f97acd745345001282a704c) feat(gh): check is ci/circleci: wait-all (#2055)
+- [`42648ff`](https://github.com/alexfalkowski/infraops/commit/42648ffcc319edef8030f2b41b9d4472b30f1266) build(ci): move to use a sigle workflow (#2054)
+- [`6ae0e81`](https://github.com/alexfalkowski/infraops/commit/6ae0e81fac3255a453e7b2c83d5e49d506af7020) build(ci): use circleci/path-filtering@3.0.0 (#2053)
+- [`d8dea9f`](https://github.com/alexfalkowski/infraops/commit/d8dea9f65cc5049102f824e407a70e3bd1273839) build(ci): use latest published images (#2052)
+- [`40dd3be`](https://github.com/alexfalkowski/infraops/commit/40dd3bee9ef1e8c9c49d19c2b5b78697b5478ea2) release(bezeichner): upgraded to v1.709.0 (#2049)
+- [`26c77cd`](https://github.com/alexfalkowski/infraops/commit/26c77cd8f7a74cd92ce93a021d9ca29d32ec5ed1) release(standort): upgraded to v2.699.0 (#2051)
+- [`3424c86`](https://github.com/alexfalkowski/infraops/commit/3424c86aa4278053416cb418d974264945553040) release(web): upgraded to v1.266.0 (#2050)
+- [`a807170`](https://github.com/alexfalkowski/infraops/commit/a8071703f275984f4ac34747d45f5b7fa6c78f2e) build(ci): use latest published images (#2048)
+
 ## [v2.425.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.425.0) - 2026-03-06
 
 - [`3fcc243`](https://github.com/alexfalkowski/infraops/commit/3fcc243e0a3583b65fefc891a018f42891b5cb9f) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.225.0 to 3.225.1 (#2047)
