@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.429.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.429.0) - 2026-03-09
+
+- [`8938297`](https://github.com/alexfalkowski/infraops/commit/89382977ccfb8d7a90f715ecd224fe3685093394) feat(k8s): update helm deps (#2061)
+
 ## [v2.428.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.428.0) - 2026-03-09
 
 - [`c83a870`](https://github.com/alexfalkowski/infraops/commit/c83a87042905e0b0f37a73d40141ed3bd37fcf08) feat(gh): wait for ci/circleci: sync (#2060)
