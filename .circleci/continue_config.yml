@@ -76,7 +76,7 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/release:5.54
+      - image: alexfalkowski/go:2.115
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -98,7 +98,7 @@ jobs:
     resource_class: arm.large
   wait-all:
     docker:
-      - image: alexfalkowski/k8s:2.34
+      - image: alexfalkowski/go:2.115
     steps:
       - run: echo "all applicable jobs finished"
     resource_class: arm.large
