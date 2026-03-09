@@ -64,7 +64,7 @@
         cloudevents
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: sync
       ]
     }
     {
