@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.428.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.428.0) - 2026-03-09
+
+- [`c83a870`](https://github.com/alexfalkowski/infraops/commit/c83a87042905e0b0f37a73d40141ed3bd37fcf08) feat(gh): wait for ci/circleci: sync (#2060)
+- [`55272ce`](https://github.com/alexfalkowski/infraops/commit/55272ce2c74b1a26a3784c99862240e6f27e08ef) build(deps): bump bin from `000304e` to `59b1ab0` (#2059)
+- [`af73d88`](https://github.com/alexfalkowski/infraops/commit/af73d88fc1b5432653a8be017fd5159731069140) release(web): upgraded to v1.267.0 (#2058)
+- [`a63e51f`](https://github.com/alexfalkowski/infraops/commit/a63e51f0a484a2beff4c97fd1d764649d1459ce4) release(standort): upgraded to v2.700.0 (#2057)
+
 ## [v2.427.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.427.0) - 2026-03-08
 
 - [`5155e39`](https://github.com/alexfalkowski/infraops/commit/5155e39d948410bc2bc5094d5076f8338ffcb9fc) feat(deps): upgraded github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.60.0 => v4.61.0 (#2056)
