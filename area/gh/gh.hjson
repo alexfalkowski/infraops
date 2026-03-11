@@ -38,7 +38,7 @@
         bdd
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: wait-all
       ]
     }
     {
