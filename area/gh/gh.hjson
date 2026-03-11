@@ -423,9 +423,7 @@
         htmx
       ]
       checks: [
-        ci/circleci: build-service
-        ci/circleci: build-docker-amd64
-        ci/circleci: build-docker-arm64
+        ci/circleci: wait-all
       ]
     }
     {
