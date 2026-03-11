@@ -102,7 +102,7 @@
         signal
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: wait-all
       ]
     }
     {
@@ -121,7 +121,7 @@
         sync
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: wait-all
       ]
     }
     {
