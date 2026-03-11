@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.431.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.431.0) - 2026-03-11
+
+- [`7311a02`](https://github.com/alexfalkowski/infraops/commit/7311a02d2f076022450dec8b449d04504c7b7ff9) feat(gh): check ci/circleci: wait-all (#2068)
+- [`d0957a5`](https://github.com/alexfalkowski/infraops/commit/d0957a58a73e36be1d7d467ba264193f281c418e) build(ci): use latest published images (#2067)
+- [`091636f`](https://github.com/alexfalkowski/infraops/commit/091636fff02c51632166c3ca824def4900072bff) build(ci): use latest published images (#2066)
+- [`241c954`](https://github.com/alexfalkowski/infraops/commit/241c9542a9ecf2be29a0f9c808cd41bb24fe7fb1) build(ci): use latest published images (#2065)
+- [`c263440`](https://github.com/alexfalkowski/infraops/commit/c263440823f0b79b652c745f1395babc343d3547) release(bezeichner): upgraded to v1.710.0 (#2064)
+- [`00e0666`](https://github.com/alexfalkowski/infraops/commit/00e0666667b15539ef5a4853daf1f325438288af) build(ci): use alexfalkowski/go:2.115 (#2063)
+
 ## [v2.430.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.430.0) - 2026-03-09
 
 - [`17c948c`](https://github.com/alexfalkowski/infraops/commit/17c948c4c1f91a108453e39a7d6b47f75caeefd3) feat(gh): check ci/circleci: wait-all (#2062)
