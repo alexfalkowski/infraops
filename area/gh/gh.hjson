@@ -83,7 +83,7 @@
         k8s
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: wait-all
       ]
     }
     {
