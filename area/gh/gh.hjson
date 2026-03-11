@@ -163,7 +163,7 @@
         docker
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: wait-all
       ]
     }
     {
@@ -181,7 +181,7 @@
         bash
       ]
       checks: [
-        ci/circleci: lint
+        ci/circleci: wait-all
       ]
     }
     {
@@ -530,7 +530,7 @@
         test
       ]
       checks: [
-        ci/circleci: build
+        ci/circleci: wait-all
       ]
     }
   ]
