@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.444.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.444.0) - 2026-03-12
+
+- [`9b77285`](https://github.com/alexfalkowski/infraops/commit/9b77285860a8ab8b95b126e6e78f06d84f7d7245) feat(deps): make update-all-dep (#2084)
+- [`713f066`](https://github.com/alexfalkowski/infraops/commit/713f066edb4264285931b107bd9bb701830aa2e7) build(deps): bump bin from `59b1ab0` to `a7996aa` (#2083)
+- [`0024a5c`](https://github.com/alexfalkowski/infraops/commit/0024a5c546b1dbaddcf4dd883fa2d30a7b55f4e5) build(ci): use alexfalkowski/release:5.58 (#2082)
+- [`0b2da1d`](https://github.com/alexfalkowski/infraops/commit/0b2da1d8cf6295f235c534d32f42bb5af8b00e99) build(ci): use latest published images (#2081)
+
 ## [v2.443.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.443.0) - 2026-03-11
 
 - [`6db66ea`](https://github.com/alexfalkowski/infraops/commit/6db66ea0d3ce7f4a87c0722df32bd0cdacbdeb0a) feat(gh): check ci/circleci: wait-all (#2080)
