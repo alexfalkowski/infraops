@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.448.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.448.0) - 2026-03-19
+
+- [`576a8bc`](https://github.com/alexfalkowski/infraops/commit/576a8bc1556a9009d43e4a53ea964e09d5990fe2) feat(apps): remove http headers for probe (#2109)
+- [`64d8cdf`](https://github.com/alexfalkowski/infraops/commit/64d8cdf744e16756f6cf1121684534f358c978cd) feat(deps): bump github.com/pulumi/pulumi-digitalocean/sdk/v4 from 4.61.0 to 4.62.0 (#2108)
+- [`ee746be`](https://github.com/alexfalkowski/infraops/commit/ee746be195e2d8a6b7145ba1486e76ab80198c6e) release(web): upgraded to v1.273.0 (#2107)
+- [`6ad7df0`](https://github.com/alexfalkowski/infraops/commit/6ad7df04e054a1380f86846ff31d952a30c4e2aa) release(bezeichner): upgraded to v1.714.0 (#2105)
+- [`96be3a4`](https://github.com/alexfalkowski/infraops/commit/96be3a4144e1747cbd732ef794eabe99e604a60d) release(standort): upgraded to v2.705.0 (#2106)
+
 ## [v2.447.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.447.0) - 2026-03-19
 
 - [`c313486`](https://github.com/alexfalkowski/infraops/commit/c313486f8469f69956835ee1d885889881186a21) feat(deps): bump google.golang.org/grpc from 1.79.2 to 1.79.3 (#2104)
