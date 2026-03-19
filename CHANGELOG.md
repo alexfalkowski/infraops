@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.447.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.447.0) - 2026-03-19
+
+- [`c313486`](https://github.com/alexfalkowski/infraops/commit/c313486f8469f69956835ee1d885889881186a21) feat(deps): bump google.golang.org/grpc from 1.79.2 to 1.79.3 (#2104)
+- [`95a9038`](https://github.com/alexfalkowski/infraops/commit/95a903870a8afe405a4233e9e63adb7685586f68) build(ci): use latest published images (#2103)
+- [`407508a`](https://github.com/alexfalkowski/infraops/commit/407508a5b5f996a1ce94655fd53c52bb583799f3) release(web): upgraded to v1.272.0 (#2102)
+- [`81d0c6a`](https://github.com/alexfalkowski/infraops/commit/81d0c6aa6fc6a6b2dc8914567cd1e798045f5d9d) release(standort): upgraded to v2.704.0 (#2101)
+- [`b639eec`](https://github.com/alexfalkowski/infraops/commit/b639eec8fe16413ba4407acd70ef98e903c21777) release(bezeichner): upgraded to v1.713.0 (#2100)
+- [`ddeb555`](https://github.com/alexfalkowski/infraops/commit/ddeb5550d8b949c6d1535b6865ed4bec035f9b1b) build(ci): use latest published images (#2099)
+- [`88adbfc`](https://github.com/alexfalkowski/infraops/commit/88adbfcddea566a26e557789ba78e528b5a6702c) release(web): upgraded to v1.271.0 (#2098)
+- [`2db6a70`](https://github.com/alexfalkowski/infraops/commit/2db6a705c529f62808078c3667b7c187804d882e) release(standort): upgraded to v2.703.0 (#2097)
+- [`38687de`](https://github.com/alexfalkowski/infraops/commit/38687dece1489c12f234d74abb5b6769a2c5f45c) release(bezeichner): upgraded to v1.712.0 (#2096)
+- [`fad746e`](https://github.com/alexfalkowski/infraops/commit/fad746e988af0951efb3ce8ee58025bdecebd779) release(web): upgraded to v1.270.0 (#2095)
+- [`c30c8cb`](https://github.com/alexfalkowski/infraops/commit/c30c8cb02010d843867c9453dc19fc007877c882) release(standort): upgraded to v2.702.0 (#2094)
+- [`25c7920`](https://github.com/alexfalkowski/infraops/commit/25c79206312c167d93e47da0887327fce30de7f6) release(web): upgraded to v1.269.0 (#2093)
+- [`cc44c18`](https://github.com/alexfalkowski/infraops/commit/cc44c189d604bd9216e3edfeba44ade36d5cde5e) build(deps): upgraded github.com/alexfalkowski/bin (#2092)
+- [`01116eb`](https://github.com/alexfalkowski/infraops/commit/01116ebe7cf17920dfc3708368d05571ff42abf0) release(standort): upgraded to v2.701.0 (#2091)
+
 ## [v2.446.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.446.0) - 2026-03-12
 
 - [`6732508`](https://github.com/alexfalkowski/infraops/commit/6732508fd2075944907e22d2cc3c1ca3b02cea91) feat(deps): bump github.com/pulumi/pulumi-kubernetes/sdk/v4 from 4.27.0 to 4.28.0 (#2087)
