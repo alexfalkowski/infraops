@@ -356,7 +356,3 @@ Depending on what you install, the k8s add-ons Makefile expects secrets like:
 - `api/`: protobuf schema and generated code
 - `cmd/`: small helper CLIs (`format`, `bump`)
 - `bin/`: shared build tooling (git submodule)
-
-## Dependencies graph
-
-![Dependencies](./assets/..png)
