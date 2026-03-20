@@ -1,0 +1,15 @@
+{
+  version: "2.0"
+  clusters: [
+    {
+      name: atlas-cluster
+      description: A fictional primary cluster
+      resource: medium
+    }
+    {
+      name: beacon-cluster
+      description: A fictional sandbox cluster for testing
+      resource: small
+    }
+  ]
+}
