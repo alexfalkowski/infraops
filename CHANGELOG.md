@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 
+## [v2.449.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.449.0) - 2026-03-20
+
+- [`964a79d`](https://github.com/alexfalkowski/infraops/commit/964a79d3721a623a2b4d26fdfab00f07eb6fd2bf) feat(deps): bump github.com/pulumi/pulumi/sdk/v3 from 3.226.0 to 3.227.0 (#2114)
+- [`e0dbc9a`](https://github.com/alexfalkowski/infraops/commit/e0dbc9aa4f28f7b1a3dd770456901d4bb8bb9f43) build(ci): use latest published images (#2113)
+- [`e6c6fe1`](https://github.com/alexfalkowski/infraops/commit/e6c6fe1e31327ebf88bb0ec35b87eaa17378ec6a) release(standort): upgraded to v2.706.0 (#2112)
+- [`7bebe34`](https://github.com/alexfalkowski/infraops/commit/7bebe34b2ab15d461ea0072b9ac977c12c5e06ec) release(bezeichner): upgraded to v1.715.0 (#2111)
+- [`2302ee0`](https://github.com/alexfalkowski/infraops/commit/2302ee00d0c8d6f653d9bb4c7101b9c186d065b6) release(web): upgraded to v1.274.0 (#2110)
+
 ## [v2.448.0](https://github.com/alexfalkowski/infraops/releases/tag/v2.448.0) - 2026-03-19
 
 - [`576a8bc`](https://github.com/alexfalkowski/infraops/commit/576a8bc1556a9009d43e4a53ea964e09d5990fe2) feat(apps): remove http headers for probe (#2109)
