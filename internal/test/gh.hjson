@@ -1,0 +1,63 @@
+{
+  version: "2.0"
+  repositories: [
+    {
+      name: atlas-sandbox
+      description: A sandbox repository for infrastructure experiments.
+      homepage_url: "https://example.com/atlas-sandbox"
+      visibility: public
+      collaborators: {
+        enabled: true
+      }
+      pages: {
+        enabled: true
+        cname: sandbox.example.com
+      }
+      topics: [
+        golang
+        infrastructure
+      ]
+      checks: [
+        "ci/circleci: wait-all"
+      ]
+    }
+    {
+      name: beacon-template-app
+      description: A repository created from the service template.
+      homepage_url: "https://example.com/beacon-template-app"
+      visibility: public
+      is_template: true
+      collaborators: {
+        enabled: true
+      }
+      template: {
+        owner: example-org
+        repository: starter-service-template
+      }
+      pages: {
+        enabled: true
+      }
+      topics: [
+        golang
+        template
+      ]
+      checks: [
+        "ci/circleci: wait-all"
+      ]
+    }
+    {
+      name: vault-archive
+      description: An archived private repository.
+      homepage_url: "https://example.com/vault-archive"
+      visibility: private
+      archived: true
+      topics: [
+        archive
+      ]
+      checks: [
+        "ci/circleci: release"
+        "ci/circleci: verify"
+      ]
+    }
+  ]
+}

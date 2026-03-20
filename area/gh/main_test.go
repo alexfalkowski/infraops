@@ -1,6 +1,7 @@
 package main
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/alexfalkowski/infraops/v2/internal/gh"
@@ -10,28 +11,40 @@ import (
 )
 
 func TestCreateRepository(t *testing.T) {
-	config, err := gh.ReadConfiguration("gh.hjson")
-	require.NoError(t, err)
-
-	repositories := config.GetRepositories()
-
-	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
-		for _, repository := range repositories {
-			err := gh.CreateRepository(ctx, gh.ConvertRepository(repository))
+	for _, fixture := range fixtures() {
+		t.Run(fixture.name, func(t *testing.T) {
+			config, err := gh.ReadConfiguration(fixture.path)
 			require.NoError(t, err)
-		}
 
-		return nil
-	}, pulumi.WithMocks("project", "stack", &test.Stub{}))
-	require.NoError(t, err)
+			repositories := config.GetRepositories()
+			run := func(ctx *pulumi.Context) error {
+				for _, repository := range repositories {
+					if err := gh.CreateRepository(ctx, gh.ConvertRepository(repository)); err != nil {
+						return err
+					}
+				}
 
-	err = pulumi.RunErr(func(ctx *pulumi.Context) error {
-		for _, repository := range repositories {
-			err := gh.CreateRepository(ctx, gh.ConvertRepository(repository))
-			require.NoError(t, err)
-		}
+				return nil
+			}
 
-		return nil
-	}, pulumi.WithMocks("project", "stack", &test.ErrStub{}))
-	require.Error(t, err)
+			require.NoError(t, runWithMocks(run, &test.Stub{}))
+			require.Error(t, runWithMocks(run, &test.ErrStub{}))
+		})
+	}
+}
+
+type fixture struct {
+	name string
+	path string
+}
+
+func fixtures() []fixture {
+	return []fixture{
+		{name: "area", path: "gh.hjson"},
+		{name: "shared", path: filepath.Join("..", "..", "internal", "test", "gh.hjson")},
+	}
+}
+
+func runWithMocks(run pulumi.RunFunc, mocks pulumi.MockResourceMonitor) error {
+	return pulumi.RunErr(run, pulumi.WithMocks("project", "stack", mocks))
 }

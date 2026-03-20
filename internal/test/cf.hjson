@@ -1,0 +1,36 @@
+{
+  version: "2.0"
+  balancer_zones: [
+    {
+      name: atlas-zone
+      domain: example.net
+      ipv4: 192.0.2.10
+      ipv6: 2001:db8::10
+      record_names: [
+        api
+        assets
+      ]
+    }
+  ]
+  page_zones: [
+    {
+      name: ember-pages
+      domain: example.org
+      host: ember.pages.dev
+    }
+  ]
+  buckets: [
+    {
+      name: atlas-assets
+      region: EEUR
+      zone: {
+        id: test-zone-id
+        domain: assets.example.net
+      }
+    }
+    {
+      name: atlas-backups
+      region: WNAM
+    }
+  ]
+}
