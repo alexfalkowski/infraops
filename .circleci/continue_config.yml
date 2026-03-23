@@ -76,7 +76,7 @@ jobs:
     resource_class: arm.large
   sync:
     docker:
-      - image: alexfalkowski/release:5.59
+      - image: alexfalkowski/release:6.3
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -87,7 +87,7 @@ jobs:
     resource_class: arm.large
   version:
     docker:
-      - image: alexfalkowski/release:5.59
+      - image: alexfalkowski/release:6.3
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -95,6 +95,7 @@ jobs:
       - run: git submodule sync
       - run: git submodule update --init
       - run: version
+      - run: package
     resource_class: arm.large
   wait-all:
     docker:
@@ -409,7 +410,7 @@ workflows:
             - build
           filters: 'pipeline.git.branch != "master"'
       - version:
-          serial-group: << pipeline.project.slug >>/release
+          serial-group: << pipeline.project.slug >>/version
           requires:
             - build
           filters: 'pipeline.git.branch == "master"'
