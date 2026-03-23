@@ -426,18 +426,21 @@ workflows:
           context: infraops
           filters: 'pipeline.parameters.cf and pipeline.git.branch != "master"'
       - cf_update:
+          serial-group: << pipeline.project.slug >>/cf
           context: infraops
           filters: 'pipeline.parameters.cf and pipeline.git.branch == "master"'
       - do_preview:
           context: infraops
           filters: 'pipeline.parameters.do and pipeline.git.branch != "master"'
       - do_update:
+          serial-group: << pipeline.project.slug >>/do
           context: infraops
           filters: 'pipeline.parameters.do and pipeline.git.branch == "master"'
       - gh_preview:
           context: infraops
           filters: 'pipeline.parameters.gh and pipeline.git.branch != "master"'
       - gh_update:
+          serial-group: << pipeline.project.slug >>/gh
           context: infraops
           filters: 'pipeline.parameters.gh and pipeline.git.branch == "master"'
       - wait-all:
