@@ -410,6 +410,7 @@ workflows:
             - build
           filters: 'pipeline.git.branch != "master"'
       - version:
+          context: gh
           serial-group: << pipeline.project.slug >>/version
           requires:
             - build
