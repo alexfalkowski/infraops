@@ -1,0 +1,14 @@
+version: 2
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^chore"
+
+release:
+  footer: >-
+
+    ---
+
+    Released by [GoReleaser](https://github.com/goreleaser/goreleaser).
