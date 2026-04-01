@@ -17,7 +17,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: alexfalkowski/go:3.3
+      - image: alexfalkowski/go:3.4
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -99,7 +99,7 @@ jobs:
     resource_class: arm.large
   wait-all:
     docker:
-      - image: alexfalkowski/go:3.3
+      - image: alexfalkowski/go:3.4
     steps:
       - run: echo "all applicable jobs finished"
     resource_class: arm.large
