@@ -140,7 +140,7 @@ jobs:
           key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
-    resource_class: large
+    resource_class: arm.large
   apps_update:
     docker:
       - image: alexfalkowski/k8s:3.10
@@ -180,7 +180,7 @@ jobs:
           key: infraops-apps-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
-    resource_class: large
+    resource_class: arm.large
 
   cf_preview:
     docker:
@@ -290,7 +290,7 @@ jobs:
           key: infraops-do-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
-    resource_class: large
+    resource_class: arm.large
   do_update:
     docker:
       - image: alexfalkowski/k8s:3.10
@@ -326,7 +326,7 @@ jobs:
           key: infraops-do-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
-    resource_class: large
+    resource_class: arm.large
 
   gh_preview:
     docker:
@@ -363,7 +363,7 @@ jobs:
           key: infraops-gh-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
-    resource_class: large
+    resource_class: arm.large
   gh_update:
     docker:
       - image: alexfalkowski/k8s:3.10
@@ -399,7 +399,7 @@ jobs:
           key: infraops-gh-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
-    resource_class: large
+    resource_class: arm.large
 
 workflows:
   infraops:
