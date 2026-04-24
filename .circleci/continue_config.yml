@@ -405,10 +405,7 @@ workflows:
   infraops:
     jobs:
       - build
-      - sync:
-          requires:
-            - build
-          filters: 'pipeline.git.branch != "master"'
+
       - version:
           context: gh
           serial-group: << pipeline.project.slug >>/version
@@ -443,6 +440,14 @@ workflows:
           serial-group: << pipeline.project.slug >>/gh
           context: infraops
           filters: 'pipeline.parameters.gh and pipeline.git.branch == "master"'
+      - sync:
+          requires:
+            - build
+            - apps_preview
+            - cf_preview
+            - do_preview
+            - gh_preview
+          filters: 'pipeline.git.branch != "master"'
       - wait-all:
           requires:
             - build
