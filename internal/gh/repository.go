@@ -36,7 +36,6 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		IsTemplate:          pulumi.Bool(repo.IsTemplate),
 		Name:                pulumi.String(repo.Name),
 		Archived:            pulumi.Bool(repo.Archived),
-		Pages:               pages(repo),
 		SecurityAndAnalysis: &github.RepositorySecurityAndAnalysisArgs{
 			SecretScanning: &github.RepositorySecurityAndAnalysisSecretScanningArgs{
 				Status: inputs.Enabled,
@@ -49,17 +48,49 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		Template:                 t,
 		Topics:                   pulumi.ToStringArray(repo.Topics),
 		Visibility:               pulumi.String(repo.Visibility),
-		VulnerabilityAlerts:      inputs.Yes,
 		WebCommitSignoffRequired: inputs.No,
 	}
 
-	return github.NewRepository(ctx, repo.Name, args)
+	repository, err := github.NewRepository(ctx, repo.Name, args)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := vulnerabilityAlerts(ctx, repo); err != nil {
+		return nil, err
+	}
+
+	if err := pages(ctx, repo); err != nil {
+		return nil, err
+	}
+
+	return repository, nil
 }
 
-// template returns GitHub template repository arguments when repo is configured to be created from a template.
-//
-// If repo has no template configured, template returns (nil, nil).
-// If the template configuration is incomplete, it returns ErrMissingTemplate.
+func vulnerabilityAlerts(ctx *pulumi.Context, repo *Repository) error {
+	_, err := github.NewRepositoryVulnerabilityAlerts(ctx, repo.Name, &github.RepositoryVulnerabilityAlertsArgs{
+		Enabled:    inputs.Yes,
+		Repository: pulumi.String(repo.Name),
+	})
+	return err
+}
+
+func pages(ctx *pulumi.Context, repo *Repository) error {
+	if !repo.HasPages() {
+		return nil
+	}
+
+	_, err := github.NewRepositoryPages(ctx, repo.Name, &github.RepositoryPagesArgs{
+		BuildType:  pulumi.String("legacy"),
+		Cname:      pulumi.String(repo.Pages.CNAME),
+		Repository: pulumi.String(repo.Name),
+		Source: &github.RepositoryPagesSourceArgs{
+			Branch: pulumi.String(master),
+		},
+	})
+	return err
+}
+
 func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	if !repo.HasTemplate() {
 		return nil, nil
@@ -75,21 +106,4 @@ func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	}
 
 	return args, nil
-}
-
-// pages returns GitHub Pages arguments when Pages management is enabled for repo.
-//
-// If repo has Pages disabled, pages returns nil.
-func pages(repo *Repository) *github.RepositoryPagesTypeArgs {
-	if !repo.HasPages() {
-		return nil
-	}
-
-	return &github.RepositoryPagesTypeArgs{
-		BuildType: pulumi.String("legacy"),
-		Cname:     pulumi.String(repo.Pages.CNAME),
-		Source: &github.RepositoryPagesSourceArgs{
-			Branch: pulumi.String(master),
-		},
-	}
 }
