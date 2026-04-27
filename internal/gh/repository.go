@@ -80,12 +80,12 @@ func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 // pages returns GitHub Pages arguments when Pages management is enabled for repo.
 //
 // If repo has Pages disabled, pages returns nil.
-func pages(repo *Repository) *github.RepositoryPagesArgs {
+func pages(repo *Repository) *github.RepositoryPagesTypeArgs {
 	if !repo.HasPages() {
 		return nil
 	}
 
-	return &github.RepositoryPagesArgs{
+	return &github.RepositoryPagesTypeArgs{
 		BuildType: pulumi.String("legacy"),
 		Cname:     pulumi.String(repo.Pages.CNAME),
 		Source: &github.RepositoryPagesSourceArgs{
