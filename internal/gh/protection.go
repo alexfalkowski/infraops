@@ -10,7 +10,7 @@ import (
 //
 // It enforces:
 //   - linear history
-//   - pull request reviews (with stale reviews dismissed)
+//   - pull request review settings with zero required approvals, matching the solo-maintainer workflow
 //   - required status checks as specified by repo.Checks (strict mode enabled)
 //
 // The branch name is taken from the package-level master constant.

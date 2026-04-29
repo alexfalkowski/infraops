@@ -11,6 +11,7 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 		Metadata: metadata(app),
 		Spec: nv1.NetworkPolicySpecArgs{
 			PodSelector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
+			// The policy selects app pods, but allows all traffic until per-app flows are modeled.
 			Ingress: nv1.NetworkPolicyIngressRuleArray{
 				nv1.NetworkPolicyIngressRuleArgs{},
 			},

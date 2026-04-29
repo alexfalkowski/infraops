@@ -1,93 +1,40 @@
 # AGENTS.md
 
-## Shared skill
+## Baseline
 
-Use the shared `coding-standards` skill from `bin/skills/coding-standards` for code changes, bug fixes, refactors, reviews, tests, linting, documentation, PR summaries, commits, Makefile changes, CI validation, and verification. Treat this `AGENTS.md` as the repo-specific companion to that
-skill.
+- Use `bin/skills/coding-standards` for code changes, fixes, refactors, reviews, tests, linting, docs, PR summaries, commits, Makefile changes, CI validation, and verification.
+- This repo is a Go/Pulumi infra monorepo. Each Pulumi area lives in `area/<name>/` with `main.go`, `Pulumi.yaml`, and `<name>.hjson`.
+- Shared implementation lives in `internal/`; config schema lives in `api/infraops/v2/service.proto`; generated Go lives in `api/infraops/v2/service.pb.go`.
+- Keep package-level GoDocs in `doc.go` files. Do not scatter package comments across implementation files.
 
-## Repository overview
+## Layout
 
-This repository is a Go-based infra “monorepo” driven by **Pulumi** programs.
+- `area/apps`, `area/cf`, `area/do`, `area/gh`: Pulumi programs.
+- `area/k8s`: local `helm`/`kubectl` add-ons, not Pulumi and not CI.
+- `internal/app`, `internal/cf`, `internal/do`, `internal/gh`: provider/resource logic.
+- `internal/config`: HJSON read/write helpers for protobuf messages.
+- `internal/inputs`: shared Pulumi inputs.
+- `internal/test`: Pulumi mocks.
+- `cmd/bump`: internal app version bump helper.
+- `cmd/format`: HJSON config formatter.
+- `bin`: shared build tooling submodule.
 
-Key concepts:
+## Commands
 
-- Each infrastructure “area” lives under `area/<name>/` and has a Pulumi entrypoint `area/<name>/main.go`.
-- Shared implementation lives under `internal/` (e.g. `internal/cf`, `internal/do`, `internal/gh`, `internal/app`).
-- Area configuration is stored as **HJSON** (e.g. `area/cf/cf.hjson`) and maps to protobuf types defined in `api/infraops/v2/service.proto`.
-- Package-level GoDocs are centralized in per-package `doc.go` files (not scattered across arbitrary `*.go` files).
-
-## Quick orientation (where things live)
-
-- `area/`
-  - `apps/`, `cf/`, `do/`, `gh/`: Pulumi programs (each has `Pulumi.yaml`, `*.hjson`, `main.go`, `main_test.go`).
-  - `k8s/`: cluster add-ons installed via `helm`/`kubectl` (Makefile-driven).
-- `internal/`
-  - `app/`: Kubernetes application deployment logic (Pulumi Kubernetes resources).
-  - `cf/`: Cloudflare provisioning logic (Pulumi Cloudflare provider).
-  - `do/`: DigitalOcean provisioning logic (Pulumi DigitalOcean provider).
-  - `gh/`: GitHub provisioning logic (Pulumi GitHub provider).
-  - `config/`: HJSON read/write helpers for protobuf messages (`internal/config/config.go`).
-  - `inputs/`: shared Pulumi input constants (`internal/inputs/inputs.go`).
-  - `log/`: minimal slog logger used by CLI tools (`internal/log/log.go`).
-  - `test/`: Pulumi mocks used in unit tests (`internal/test/stub.go`).
-- `api/`: protobuf definitions + Buf config; Go codegen output is under `api/infraops/v2/`.
-- `cmd/`
-  - `bump/`: CLI to bump an app version in `area/apps/apps.hjson`.
-  - `format/`: CLI to normalize/format HJSON config files.
-- `bin/`: git submodule containing shared build tooling used by the top-level `Makefile`.
-
-## Rule / instruction files
-
-No agent-specific rule files were found (e.g. `.cursor/rules`, `.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`).
-
-## Essential commands (observed)
-
-### Go deps, lint, tests, security
-
-From the repo root:
+Run from the repo root unless noted:
 
 ```bash
-make dep          # go mod download/tidy/vendor (see bin/build/make/go.mak)
-make lint         # field-alignment + golangci-lint (uses bin submodule tooling)
-make specs        # gotestsum + go test (writes junit/coverage under test/reports)
-make coverage     # generates HTML + func coverage in test/reports
-make sec          # govulncheck -test ./...
-```
-
-Notes:
-
-- The `make specs` target runs tests with `-mod vendor` (see `bin/build/make/go.mak`). In CI, `make dep` runs before `make specs`.
-- Lint configuration is in `.golangci.yml`.
-
-### API (protobuf / Buf)
-
-From the repo root:
-
-```bash
+make dep
+make lint
+make specs
+make coverage
+make sec
 make api-lint
 make api-breaking
 make api-generate
 ```
 
-Or directly:
-
-```bash
-make -C api lint
-make -C api breaking
-make -C api generate
-```
-
-Proto sources: `api/infraops/v2/service.proto`.
-Generated Go output: `api/infraops/v2/service.pb.go` (regenerate via `make api-generate` rather than editing).
-
-Notes:
-
-- Protobuf message/field comments are treated as part of the configuration contract and are kept detailed/implementation-accurate.
-- After modifying `service.proto`, regenerate code with `make api-generate` (or `make -C api generate`) and run tests.
-
-### Pulumi (preview/update per area)
-
-From the repo root:
+Pulumi:
 
 ```bash
 make pulumi-login
@@ -97,16 +44,7 @@ make area=<apps|cf|do|gh> pulumi-cancel
 make area=<apps|cf|do|gh> pulumi-delete
 ```
 
-These targets run Pulumi with:
-
-- stack: `alexfalkowski/<area>/prod`
-- cwd: `area/<area>`
-
-(See `Makefile:10-27`.)
-
-### Kubernetes add-ons (helm/kubectl)
-
-From `area/k8s/Makefile`:
+Local Kubernetes add-ons:
 
 ```bash
 make -C area/k8s save-config
@@ -115,14 +53,7 @@ make -C area/k8s delete
 make -C area/k8s pods
 ```
 
-This Makefile references environment variables:
-
-- `CIRCLECI_K8S_TOKEN` (used when installing the CircleCI release agent)
-- `BETTER_STACK_COLLECTOR_SECRET` (used when installing Better Stack)
-
-### Applications area helpers
-
-From `area/apps/Makefile`:
+Application helpers:
 
 ```bash
 make -C area/apps save-config
@@ -131,117 +62,54 @@ make -C area/apps delete
 make -C area/apps rollout
 make -C area/apps verify
 make -C area/apps load
-make -C area/apps lint   # runs kube-score + kubescape
+make -C area/apps lint
 ```
 
-## Configuration format and flow
-
-- Config files are HJSON (e.g. `area/cf/cf.hjson`, `area/do/do.hjson`, `area/gh/gh.hjson`, `area/apps/apps.hjson`).
-- The schema is defined in `api/infraops/v2/service.proto`.
-- Config loading/writing is done via `internal/config.Read` / `internal/config.Write` (`internal/config/config.go`).
-  - `Read` uses `hjson.Unmarshal` into a protobuf message.
-  - `Write` preserves file mode (`os.Stat(...).Mode()`), marshals via `hjson.Marshal`, and appends a trailing newline.
-
-### Config formatting tool
-
-Build and run:
+Config tools:
 
 ```bash
 make build-format
 ./format -k <apps|cf|do|gh>
-```
 
-- `-p` can override the path; default is `area/<kind>/<kind>.hjson` (see `cmd/format/format.go`).
-
-### App version bump tool
-
-Build and run:
-
-```bash
 make build-bump
 ./bump -n <appName> -v <version>
 ```
 
-- `-p` can override the path; default is `area/apps/apps.hjson` (see `cmd/bump/bump.go`).
-- Implementation updates `config.GetApplications()[i].Version` (see `internal/app/version/version.go`).
+## Workflow Rules
 
-## Code patterns and conventions
+- Run `make dep` before validation unless the task is strictly read-only.
+- Use repository Make targets over ad hoc commands when they cover the task.
+- After editing `api/infraops/v2/service.proto`, run `make api-generate` and include `service.pb.go`.
+- Do not hand-edit generated code unless explicitly asked.
+- Keep config comments in `service.proto` accurate; they are part of the HJSON configuration contract.
+- Tests use `testify/require`; Pulumi tests use `pulumi.RunErr(..., pulumi.WithMocks(...))`.
+- Use `internal/test.Stub` and `internal/test.ErrStub` for Pulumi mocks.
+- Lint config is `.golangci.yml`; editor defaults are in `.editorconfig`.
 
-### Pulumi entrypoints
+## Code Patterns
 
-Each area entrypoint follows the same pattern:
+- Pulumi entrypoints follow: read HJSON, convert protobuf model, create resources.
+- Conversion/resource pattern: `ConvertX(*v2.X) *X`, then `CreateX(ctx, *X) error`.
+- CLI tools use `internal/log.NewLogger()`.
+- `internal/config.Read` uses HJSON unmarshal into protobuf messages.
+- `internal/config.Write` preserves destination file mode and appends a trailing newline.
 
-- `pulumi.Run(func(ctx *pulumi.Context) error { ... })`
-- read `*.hjson` via `internal/<area>.ReadConfiguration`
-- convert protobuf types into internal types via `Convert*`
-- create resources via `Create*`
+## Intentional Assumptions
 
-Examples:
+- `cmd/bump` is an internal automation helper. `-v` is expected to be a semantic version supplied by automation.
+- `area/k8s/Makefile` is for manual operator workstation runs, not CI. `CIRCLECI_K8S_TOKEN` is passed directly to Helm in that local workflow.
+- GitHub branch protection intentionally requires zero approving PR reviews because this is a solo-maintainer workflow; required status checks are the primary merge gate.
+- Apps `NetworkPolicy` resources intentionally select app pods but allow all ingress and egress until per-app traffic flows are modeled. Do not tighten generically without checking DNS, ingress, probes, telemetry, and outbound service calls.
+- Apps env var secret references use `secret:<secretName>/<key>` and become Kubernetes `SecretKeyRef`s with Secret name `<secretName>-secret` and key `<key>`. The helper code does not pre-validate the shape; malformed references fail during Pulumi/Kubernetes application.
+- `Application.secrets` is an app-level dependency list; secret env vars reference specific keys. Keep this behavior aligned with `service.proto`.
+- `Application.resource` falls back to `"small"` for unknown values. Current small profile: cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`.
+- Cloudflare resources require `CLOUDFLARE_ACCOUNT_ID`; `internal/cf/cf.go` reads it at package scope.
+- Apps config maps read `<namespace>/<app>.yaml` relative to the Pulumi working directory. The root Makefile runs Pulumi with `--cwd area/apps`.
+- GitHub Pages and collaborators may need to be disabled on first repository creation and enabled in a follow-up change.
 
-- `area/apps/main.go`
-- `area/cf/main.go`
-- `area/do/main.go`
-- `area/gh/main.go`
+## CI
 
-### “Convert then Create”
-
-A typical flow is:
-
-- `ConvertX(*v2.X) *X`
-- `CreateX(ctx, *X) error`
-
-See:
-
-- `internal/gh/gh.go` (`ConvertRepository`, `CreateRepository`)
-- `internal/do/do.go` (`ConvertCluster`, `CreateCluster`)
-- `internal/app/app.go` (`ConvertApplication`, `CreateApplication`)
-
-### Logging
-
-The CLI tools (`cmd/format`, `cmd/bump`) use `internal/log.NewLogger()` which returns a `slog` text logger writing to stdout.
-
-### Testing
-
-- Uses `testify/require`.
-- Pulumi programs are tested with `pulumi.RunErr(..., pulumi.WithMocks(...))`.
-- Mocks are provided by `internal/test.Stub` and `internal/test.ErrStub`.
-
-See `area/*/main_test.go` and `internal/test/stub.go`.
-
-## Linting / formatting expectations
-
-- `.editorconfig` sets:
-  - Go: tabs, size 4
-  - Makefiles: tabs
-  - General text: spaces, size 2
-- `.golangci.yml` enables many linters and formatters; line length is configured via `lll` at 130.
-
-## CI (CircleCI) behavior (observed)
-
-- `.circleci/config.yml` is a setup config using `circleci/path-filtering` to set pipeline parameters per area.
-- `.circleci/continue_config.yml` runs:
-  - `build` (always): `make lint`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, `make codecov-upload`.
-  - per-area workflows:
-    - `*_preview` runs on non-`master` branches (Pulumi preview).
-    - `*_update` runs only on `master` (Pulumi update), plus extra steps for `apps` (`verify`, `load`, `lint`).
-
-If reproducing locally, mirror the same Make targets used in CI.
-
-## Gotchas / non-obvious behavior
-
-- **Cloudflare requires `CLOUDFLARE_ACCOUNT_ID`**: `internal/cf/cf.go` reads it from the environment (`os.Getenv`) and stores it as a package-level Pulumi string.
-- **Apps config maps read files relative to the Pulumi working directory**:
-  - `internal/app/config.go` reads `<namespace>/<app>.yaml` using `os.Getwd()` + `filepath.Join(wd, ns, file)`.
-  - When running Pulumi via `make area=apps pulumi-*`, Pulumi runs with `--cwd area/apps`, so ensure the expected files exist under `area/apps/<namespace>/`.
-- **Apps env var secret references**:
-  - `EnvVar.value` supports the convention `secret:<secretName>/<key>`.
-  - At deploy time this is converted into a Kubernetes `SecretKeyRef` with Secret name `<secretName>-secret` and key `<key>` (see `internal/app/environment.go` and `internal/app/secret.go`).
-- **`Application.secrets` vs secret env vars**:
-  - `Application.secrets` is an application-level dependency list used by the deployment implementation to provision and/or wire Secret resources (for example volumes/attachments).
-  - Secret references in `env_vars` (`secret:<secretName>/<key>`) target specific keys; the `secrets` list does not specify keys.
-  - These behaviors are documented in `api/infraops/v2/service.proto` and should be kept in sync with implementation.
-- **Apps resource sizing**:
-  - `Application.resource` selects a resource profile; unknown values fall back to `"small"` (see `internal/app/resource.go`).
-  - Current mapping includes `"small"`: cpu 125m-250m, memory 64Mi-128Mi, ephemeral-storage 1Gi-2Gi.
-- **GitHub repository creation has a 2-step process for some features** (from `README.md`):
-  - Pages and collaborators may need to be disabled on first creation and enabled in a follow-up change to avoid timing issues.
+- CircleCI setup config uses path filtering to enable area workflows.
+- The main `build` job runs `make lint`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
+- Area preview jobs run on non-`master`; update jobs run only on `master`.
+- Apps updates also run `make -C area/apps verify`, `load`, and `lint`.

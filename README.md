@@ -81,6 +81,9 @@ At deploy time, this becomes a Kubernetes `SecretKeyRef`:
 - Secret name: `<secretName>-secret`
 - Secret key: `<key>`
 
+The format is intentionally not pre-validated by the helper code; malformed references are expected
+to fail during Pulumi/Kubernetes application.
+
 Example:
 
 ```hjson
@@ -102,6 +105,14 @@ env_vars: [
 - `"small"` (default): cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`
 
 Unknown values fall back to `"small"`.
+
+#### App NetworkPolicy baseline
+
+The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods but currently allows
+all ingress and egress. This is intentional: the required traffic flows are not modeled per app yet,
+and tightening the policy generically could break DNS, ingress, health checks, telemetry, or outbound
+service calls. Future restrictions should be introduced per namespace/app after the required flows
+are known.
 
 ## Common workflows
 
@@ -194,7 +205,8 @@ Build:
 make build-bump
 ```
 
-Update a single app version in config:
+Update a single app version in config. This is an internal helper used by automation, and the
+`-v` value is expected to be a semantic version:
 
 ```bash
 ./bump -n bezeichner -v 1.559.0
@@ -322,6 +334,7 @@ If the pipeline fails due to timing, a rerun often succeeds.
 ### Kubernetes add-ons (`area/k8s`)
 
 This is not a Pulumi area. It contains cluster add-ons installed via `helm`/`kubectl`.
+These targets are intended to be run manually from an operator workstation, not from CI.
 
 > [!CAUTION]
 > Run this only after you have a Kubernetes cluster (for example from `area/do`).
@@ -350,6 +363,9 @@ Depending on what you install, the k8s add-ons Makefile expects secrets like:
 
 - `CIRCLECI_K8S_TOKEN` (CircleCI release agent)
 - `BETTER_STACK_COLLECTOR_SECRET` (Better Stack collector)
+
+Because the Makefile is a local-operator workflow, the CircleCI release-agent token is passed
+directly to Helm rather than through a CI secret-handling path.
 
 ## Repository structure
 
