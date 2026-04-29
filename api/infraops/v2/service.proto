@@ -24,6 +24,8 @@ option go_package = "github.com/alexfalkowski/infraops/v2/api/infraops/v2";
 //   - "secret:<secretName>/<key>"
 //
 // The Kubernetes Secret name used by the implementation is "<secretName>-secret" and the key is <key>.
+// The implementation intentionally does not pre-validate this shape; malformed references fail
+// during Pulumi/Kubernetes application.
 message EnvVar {
   // Name is the environment variable name (for example "LOG_LEVEL").
   string name = 1;
@@ -157,6 +159,8 @@ message Repository {
   repeated string topics = 10;
 
   // Checks is the set of required status check contexts enforced by branch protection.
+  // Branch protection intentionally requires zero approving PR reviews because these repositories
+  // are maintained by a solo contributor, so required status checks are the primary merge gate.
   //
   // In the current implementation, an empty list is invalid and will cause provisioning to fail.
   repeated string checks = 11;

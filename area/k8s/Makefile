@@ -16,7 +16,7 @@ setup-helm:
 	@helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 	@helm repo update
 
-# Install circleci.
+# Install circleci. This target is run manually from an operator workstation, not CI.
 install-circleci:
 	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version 1.5.0
 

@@ -42,6 +42,8 @@ const (
 //   - "secret:<secretName>/<key>"
 //
 // The Kubernetes Secret name used by the implementation is "<secretName>-secret" and the key is <key>.
+// The implementation intentionally does not pre-validate this shape; malformed references fail
+// during Pulumi/Kubernetes application.
 type EnvVar struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Name is the environment variable name (for example "LOG_LEVEL").
@@ -478,6 +480,8 @@ type Repository struct {
 	// Topics is the set of repository topics to apply.
 	Topics []string `protobuf:"bytes,10,rep,name=topics,proto3" json:"topics,omitempty"`
 	// Checks is the set of required status check contexts enforced by branch protection.
+	// Branch protection intentionally requires zero approving PR reviews because these repositories
+	// are maintained by a solo contributor, so required status checks are the primary merge gate.
 	//
 	// In the current implementation, an empty list is invalid and will cause provisioning to fail.
 	Checks        []string `protobuf:"bytes,11,rep,name=checks,proto3" json:"checks,omitempty"`
