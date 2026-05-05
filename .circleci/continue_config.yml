@@ -211,7 +211,6 @@ jobs:
             - infraops-cf-go-build-cache-
       - run: make clean
       - run: make pulumi-login
-      - run: make area=cf pulumi-refresh
       - run: make area=cf pulumi-preview
       - save_cache:
           name: save go build cache
