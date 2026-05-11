@@ -6,24 +6,10 @@ import (
 )
 
 func createService(ctx *pulumi.Context, app *App) error {
-	var ports cv1.ServicePortArray
-
-	if app.IsInternal() {
-		ports = cv1.ServicePortArray{
-			servicePort("debug", 6060),
-			servicePort("http", 8080),
-			servicePort("grpc", 9090),
-		}
-	} else {
-		ports = cv1.ServicePortArray{
-			servicePort("http", 8080),
-		}
-	}
-
 	args := &cv1.ServiceArgs{
 		Metadata: metadata(app, matchLabels(app)),
 		Spec: cv1.ServiceSpecArgs{
-			Ports:    ports,
+			Ports:    servicePorts(app),
 			Selector: matchLabels(app),
 			Type:     pulumi.String("ClusterIP"),
 		},

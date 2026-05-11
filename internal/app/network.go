@@ -11,10 +11,8 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 		Metadata: metadata(app),
 		Spec: nv1.NetworkPolicySpecArgs{
 			PodSelector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
-			// The policy selects app pods, but allows all traffic until per-app flows are modeled.
-			Ingress: nv1.NetworkPolicyIngressRuleArray{
-				nv1.NetworkPolicyIngressRuleArgs{},
-			},
+			// Ingress is limited to app ports, while egress remains open until per-app flows are modeled.
+			Ingress: ingressRules(app),
 			Egress: nv1.NetworkPolicyEgressRuleArray{
 				nv1.NetworkPolicyEgressRuleArgs{},
 			},
@@ -23,6 +21,24 @@ func createNetworkPolicy(ctx *pulumi.Context, app *App) error {
 	_, err := nv1.NewNetworkPolicy(ctx, app.Name, args)
 
 	return err
+}
+
+func ingressRules(app *App) nv1.NetworkPolicyIngressRuleArray {
+	return nv1.NetworkPolicyIngressRuleArray{
+		nv1.NetworkPolicyIngressRuleArgs{
+			Ports: networkPolicyPorts(app),
+		},
+	}
+}
+
+func networkPolicyPorts(app *App) nv1.NetworkPolicyPortArray {
+	ports := Ports(app)
+	policyPorts := make(nv1.NetworkPolicyPortArray, 0, len(ports))
+	for _, port := range ports {
+		policyPorts = append(policyPorts, nv1.NetworkPolicyPortArgs{Port: pulumi.Int(port.Number)})
+	}
+
+	return policyPorts
 }
 
 func createIngress(ctx *pulumi.Context, app *App) error {
@@ -52,7 +68,7 @@ func httpIngressRule(app *App) nv1.HTTPIngressRuleValueArgs {
 				Backend: nv1.IngressBackendArgs{
 					Service: nv1.IngressServiceBackendArgs{
 						Name: pulumi.String(app.Name),
-						Port: nv1.ServiceBackendPortArgs{Number: pulumi.Int(8080)},
+						Port: nv1.ServiceBackendPortArgs{Number: pulumi.Int(httpPort)},
 					},
 				},
 			},

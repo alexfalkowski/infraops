@@ -108,11 +108,11 @@ Unknown values fall back to `"small"`.
 
 #### App NetworkPolicy baseline
 
-The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods but currently allows
-all ingress and egress. This is intentional: the required traffic flows are not modeled per app yet,
-and tightening the policy generically could break DNS, ingress, health checks, telemetry, or outbound
-service calls. Future restrictions should be introduced per namespace/app after the required flows
-are known.
+The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods. Ingress is limited
+to the ports exposed by the app kind: external apps expose HTTP on `8080`, while internal apps expose
+debug on `6060`, HTTP on `8080`, and gRPC on `9090`. Egress currently remains open because outbound
+traffic flows are not modeled per app yet. Future egress restrictions should be introduced per
+namespace/app after the required flows are known.
 
 ## Common workflows
 

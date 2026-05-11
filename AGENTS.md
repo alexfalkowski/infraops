@@ -99,7 +99,7 @@ make build-bump
 - `cmd/bump` is an internal automation helper. `-v` is expected to be a semantic version supplied by automation.
 - `area/k8s/Makefile` is for manual operator workstation runs, not CI. `CIRCLECI_K8S_TOKEN` is passed directly to Helm in that local workflow.
 - GitHub branch protection intentionally requires zero approving PR reviews because this is a solo-maintainer workflow; required status checks are the primary merge gate.
-- Apps `NetworkPolicy` resources intentionally select app pods but allow all ingress and egress until per-app traffic flows are modeled. Do not tighten generically without checking DNS, ingress, probes, telemetry, and outbound service calls.
+- Apps `NetworkPolicy` resources select app pods, limit ingress to app ports, and intentionally keep egress open until per-app traffic flows are modeled. Do not tighten egress generically without checking DNS, ingress, probes, telemetry, and outbound service calls.
 - Apps env var secret references use `secret:<secretName>/<key>` and become Kubernetes `SecretKeyRef`s with Secret name `<secretName>-secret` and key `<key>`. The helper code does not pre-validate the shape; malformed references fail during Pulumi/Kubernetes application.
 - `Application.secrets` is an app-level dependency list; secret env vars reference specific keys. Keep this behavior aligned with `service.proto`.
 - `Application.resource` falls back to `"small"` for unknown values. Current small profile: cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`.

@@ -5,28 +5,64 @@ import (
 
 	"github.com/alexfalkowski/infraops/v2/internal/app"
 	"github.com/alexfalkowski/infraops/v2/internal/test"
+	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )
 
 func TestApp(t *testing.T) {
-	fns := []pulumi.RunFunc{withResource, withoutResource}
-
-	for _, f := range fns {
-		require.NoError(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", &test.Stub{})))
+	tests := []struct {
+		app  *app.App
+		name string
+	}{
+		{name: "with resource", app: withResource()},
+		{name: "without resource", app: withoutResource()},
 	}
 
-	for _, f := range fns {
-		require.Error(t, pulumi.RunErr(f, pulumi.WithMocks("project", "stack", &test.ErrStub{})))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stub := &resourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, tt.app)
+			}
+
+			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+			require.Equal(t, portNumbers(app.Ports(tt.app)), networkPolicyIngressPorts(stub.networkPolicy))
+		})
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name+" error", func(t *testing.T) {
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, tt.app)
+			}
+
+			require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", &test.ErrStub{})))
+		})
 	}
 
 	_, err := app.ReadConfiguration("invalid")
 	require.Error(t, err)
 }
 
-func withResource(ctx *pulumi.Context) error {
-	a := &app.App{
+type resourceStub struct {
+	test.Stub
+
+	networkPolicy resource.PropertyMap
+}
+
+func (s *resourceStub) NewResource(args pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
+	if args.TypeToken == "kubernetes:networking.k8s.io/v1:NetworkPolicy" {
+		s.networkPolicy = args.Inputs
+	}
+
+	return s.Stub.NewResource(args)
+}
+
+func withResource() *app.App {
+	return &app.App{
 		ID:        "1234",
+		Kind:      "internal",
 		Name:      "test",
 		Namespace: "test",
 		Domain:    "test.com",
@@ -41,12 +77,10 @@ func withResource(ctx *pulumi.Context) error {
 			{Name: "test", Value: "test"},
 		},
 	}
-
-	return app.CreateApplication(ctx, a)
 }
 
-func withoutResource(ctx *pulumi.Context) error {
-	a := &app.App{
+func withoutResource() *app.App {
+	return &app.App{
 		ID:        "1234",
 		Name:      "test",
 		Namespace: "test",
@@ -57,6 +91,27 @@ func withoutResource(ctx *pulumi.Context) error {
 			{Name: "test", Value: "test"},
 		},
 	}
+}
 
-	return app.CreateApplication(ctx, a)
+func portNumbers(ports []app.Port) []int {
+	numbers := make([]int, 0, len(ports))
+	for _, port := range ports {
+		numbers = append(numbers, port.Number)
+	}
+
+	return numbers
+}
+
+func networkPolicyIngressPorts(policy resource.PropertyMap) []int {
+	spec := policy[resource.PropertyKey("spec")].ObjectValue()
+	ingress := spec[resource.PropertyKey("ingress")].ArrayValue()
+	ports := ingress[0].ObjectValue()[resource.PropertyKey("ports")].ArrayValue()
+
+	values := make([]int, 0, len(ports))
+	for _, port := range ports {
+		value := port.ObjectValue()[resource.PropertyKey("port")].NumberValue()
+		values = append(values, int(value))
+	}
+
+	return values
 }
