@@ -89,7 +89,7 @@ func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster)
 			Size:      cluster.Size(),
 		},
 		Region:  pulumi.String(digitalocean.RegionFRA1),
-		Version: pulumi.String("1.35.1-do.3"),
+		Version: pulumi.String("1.35.1-do.5"),
 		VpcUuid: vpc.ID(),
 	}
 	return digitalocean.NewKubernetesCluster(ctx, cluster.Name, args)
