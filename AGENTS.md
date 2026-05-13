@@ -1,8 +1,13 @@
 # AGENTS.md
 
+## Shared skills
+
+This repository uses the shared skills from `bin/skills/`. Read
+`bin/AGENTS.md` for the canonical shared skill list and use the smallest
+matching skill for the task.
+
 ## Baseline
 
-- Use `bin/skills/coding-standards` for code changes, fixes, refactors, reviews, tests, linting, docs, PR summaries, commits, Makefile changes, CI validation, and verification.
 - This repo is a Go/Pulumi infra monorepo. Each Pulumi area lives in `area/<name>/` with `main.go`, `Pulumi.yaml`, and `<name>.hjson`.
 - Shared implementation lives in `internal/`; config schema lives in `api/infraops/v2/service.proto`; generated Go lives in `api/infraops/v2/service.pb.go`.
 - Keep package-level GoDocs in `doc.go` files. Do not scatter package comments across implementation files.
