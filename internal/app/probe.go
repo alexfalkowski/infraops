@@ -11,7 +11,7 @@ func httpProbe(path string) cv1.ProbeArgs {
 	return cv1.ProbeArgs{
 		HttpGet: cv1.HTTPGetActionArgs{
 			Path: pulumi.String(path),
-			Port: pulumi.Int(httpPort),
+			Port: pulumi.Int(8080),
 		},
 		InitialDelaySeconds: pulumi.Int(5),
 		PeriodSeconds:       pulumi.Int(10),
@@ -24,7 +24,7 @@ func httpProbe(path string) cv1.ProbeArgs {
 func tcpProbe() cv1.ProbeArgs {
 	return cv1.ProbeArgs{
 		TcpSocket: cv1.TCPSocketActionArgs{
-			Port: pulumi.Int(httpPort),
+			Port: pulumi.Int(8080),
 		},
 		InitialDelaySeconds:           pulumi.Int(5),
 		PeriodSeconds:                 pulumi.Int(10),
