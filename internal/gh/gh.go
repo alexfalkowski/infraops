@@ -87,14 +87,9 @@ func ConvertRepository(r *v2.Repository) *Repository {
 	}
 
 	if template := r.GetTemplate(); template != nil {
-		owner := template.GetOwner()
-		repo := template.GetRepository()
-
-		if owner != "" && repo != "" {
-			repository.Template = &Template{
-				Owner:      owner,
-				Repository: repo,
-			}
+		repository.Template = &Template{
+			Owner:      template.GetOwner(),
+			Repository: template.GetRepository(),
 		}
 	}
 
