@@ -5,19 +5,12 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-const (
-	debugPortName = "debug"
-	debugPort     = 6060
-	httpPortName  = "http"
-	httpPort      = 8080
-	grpcPortName  = "grpc"
-	grpcPort      = 9090
-)
-
 // Port describes an application port exposed by Kubernetes resources.
 type Port struct {
 	// Name is the stable Kubernetes service port name.
 	Name string
+	// Protocol is the application protocol exposed on the service port.
+	Protocol string
 	// Number is the TCP port number used by the container and service.
 	Number int
 }
@@ -26,13 +19,13 @@ type Port struct {
 func Ports(app *App) []Port {
 	if app.IsInternal() {
 		return []Port{
-			{Name: debugPortName, Number: debugPort},
-			{Name: httpPortName, Number: httpPort},
-			{Name: grpcPortName, Number: grpcPort},
+			{Name: "debug", Number: 6060, Protocol: "http"},
+			{Name: "http", Number: 8080, Protocol: "http"},
+			{Name: "grpc", Number: 9090, Protocol: "grpc"},
 		}
 	}
 
-	return []Port{{Name: httpPortName, Number: httpPort}}
+	return []Port{{Name: "http", Number: 8080, Protocol: "http"}}
 }
 
 func containerPorts(app *App) cv1.ContainerPortArray {
@@ -57,9 +50,10 @@ func servicePorts(app *App) cv1.ServicePortArray {
 
 func servicePort(port Port) cv1.ServicePortArgs {
 	return cv1.ServicePortArgs{
-		AppProtocol: pulumi.String("TCP"),
+		AppProtocol: pulumi.String(port.Protocol),
 		Name:        pulumi.String(port.Name),
 		Port:        pulumi.Int(port.Number),
+		Protocol:    pulumi.String("TCP"),
 		TargetPort:  pulumi.Int(port.Number),
 	}
 }

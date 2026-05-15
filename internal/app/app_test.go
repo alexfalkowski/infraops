@@ -28,6 +28,7 @@ func TestApp(t *testing.T) {
 
 			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
 			require.Equal(t, portNumbers(app.Ports(tt.app)), networkPolicyIngressPorts(stub.networkPolicy))
+			require.Equal(t, portProtocols(app.Ports(tt.app)), servicePortAppProtocols(stub.service))
 		})
 	}
 
@@ -49,11 +50,15 @@ type resourceStub struct {
 	test.Stub
 
 	networkPolicy resource.PropertyMap
+	service       resource.PropertyMap
 }
 
 func (s *resourceStub) NewResource(args pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
 	if args.TypeToken == "kubernetes:networking.k8s.io/v1:NetworkPolicy" {
 		s.networkPolicy = args.Inputs
+	}
+	if args.TypeToken == "kubernetes:core/v1:Service" {
+		s.service = args.Inputs
 	}
 
 	return s.Stub.NewResource(args)
@@ -102,6 +107,15 @@ func portNumbers(ports []app.Port) []int {
 	return numbers
 }
 
+func portProtocols(ports []app.Port) []string {
+	protocols := make([]string, 0, len(ports))
+	for _, port := range ports {
+		protocols = append(protocols, port.Protocol)
+	}
+
+	return protocols
+}
+
 func networkPolicyIngressPorts(policy resource.PropertyMap) []int {
 	spec := policy[resource.PropertyKey("spec")].ObjectValue()
 	ingress := spec[resource.PropertyKey("ingress")].ArrayValue()
@@ -111,6 +125,19 @@ func networkPolicyIngressPorts(policy resource.PropertyMap) []int {
 	for _, port := range ports {
 		value := port.ObjectValue()[resource.PropertyKey("port")].NumberValue()
 		values = append(values, int(value))
+	}
+
+	return values
+}
+
+func servicePortAppProtocols(service resource.PropertyMap) []string {
+	spec := service[resource.PropertyKey("spec")].ObjectValue()
+	ports := spec[resource.PropertyKey("ports")].ArrayValue()
+
+	values := make([]string, 0, len(ports))
+	for _, port := range ports {
+		value := port.ObjectValue()[resource.PropertyKey("appProtocol")].StringValue()
+		values = append(values, value)
 	}
 
 	return values

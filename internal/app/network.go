@@ -68,7 +68,7 @@ func httpIngressRule(app *App) nv1.HTTPIngressRuleValueArgs {
 				Backend: nv1.IngressBackendArgs{
 					Service: nv1.IngressServiceBackendArgs{
 						Name: pulumi.String(app.Name),
-						Port: nv1.ServiceBackendPortArgs{Number: pulumi.Int(httpPort)},
+						Port: nv1.ServiceBackendPortArgs{Number: pulumi.Int(8080)},
 					},
 				},
 			},
