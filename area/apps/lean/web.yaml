@@ -14,8 +14,4 @@ transport:
       kind: user-agent
       tokens: 1000
       interval: 1s
-    retry:
-      attempts: 3
-      backoff: 100ms
-      timeout: 3s
     timeout: 5s
