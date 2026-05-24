@@ -27,13 +27,13 @@ telemetry:
 transport:
   http:
     limiter:
-      kind: user-agent
+      kind: service-method
       tokens: 1000
       interval: 1s
     timeout: 5s
   grpc:
     limiter:
-      kind: user-agent
+      kind: service-method
       tokens: 1000
       interval: 1s
     timeout: 5s
