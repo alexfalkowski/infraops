@@ -5,3 +5,4 @@ coverage.html
 *.bin
 /bump
 /format
+ISSUES.md

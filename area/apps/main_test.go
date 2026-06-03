@@ -1,35 +1,45 @@
 package main
 
 import (
+	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/alexfalkowski/infraops/v2/internal/app"
 	"github.com/alexfalkowski/infraops/v2/internal/test"
-	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCreate(t *testing.T) {
 	for _, fixture := range fixtures() {
 		t.Run(fixture.name, func(t *testing.T) {
-			config, err := app.ReadConfiguration(fixture.path)
-			require.NoError(t, err)
+			stub := &test.ResourceStub{}
+			stub.FailAllResources()
 
-			applications := config.GetApplications()
-			run := func(ctx *pulumi.Context) error {
-				for _, application := range applications {
-					if err := app.CreateApplication(ctx, app.ConvertApplication(application)); err != nil {
-						return err
-					}
-				}
-
-				return nil
-			}
-
-			require.NoError(t, runWithMocks(run, &test.Stub{}))
-			require.Error(t, runWithMocks(run, &test.ErrStub{}))
+			require.NoError(t, test.RunWithMocks(run(fixture.path), &test.Stub{}))
+			require.Error(t, test.RunWithMocks(run(fixture.path), stub))
 		})
+	}
+}
+
+func TestLeanMakefileCoversConfiguredApps(t *testing.T) {
+	config, err := app.ReadConfiguration("apps.hjson")
+	require.NoError(t, err)
+
+	content, err := os.ReadFile("lean.mk")
+	require.NoError(t, err)
+
+	targets := makefileTargets(string(content))
+	for _, workflow := range []string{"rollout", "verify", "load"} {
+		aggregate := workflow + "-lean"
+		require.Contains(t, targets, aggregate)
+
+		for _, application := range config.GetApplications() {
+			target := workflow + "-" + application.GetName()
+			require.Contains(t, targets[aggregate], target)
+			require.Contains(t, targets, target)
+		}
 	}
 }
 
@@ -45,6 +55,21 @@ func fixtures() []fixture {
 	}
 }
 
-func runWithMocks(run pulumi.RunFunc, mocks pulumi.MockResourceMonitor) error {
-	return pulumi.RunErr(run, pulumi.WithMocks("project", "stack", mocks))
+func makefileTargets(content string) map[string][]string {
+	targets := map[string][]string{}
+	for line := range strings.SplitSeq(content, "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" || strings.HasPrefix(line, "#") || strings.HasPrefix(line, "@") {
+			continue
+		}
+
+		target, dependencies, ok := strings.Cut(line, ":")
+		if !ok {
+			continue
+		}
+
+		targets[strings.TrimSpace(target)] = strings.Fields(dependencies)
+	}
+
+	return targets
 }
