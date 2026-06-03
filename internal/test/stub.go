@@ -28,6 +28,9 @@ func (*Stub) NewResource(args pulumi.MockResourceArgs) (string, resource.Propert
 }
 
 // ResourceStub is a pulumi.Mocks implementation that records created resource inputs by type token.
+//
+// Resource attempts are recorded before any configured failure is returned, so Resources includes
+// failed attempts as well as successful ones.
 type ResourceStub struct {
 	Stub
 
@@ -83,6 +86,9 @@ func (s *ResourceStub) FailResourceAtWith(token string, occurrence int, err erro
 }
 
 // NewResource records the resource inputs by Pulumi type token and returns the inputs unchanged.
+//
+// If a failure is configured for the resource type or occurrence, the attempt is still recorded
+// before the error is returned.
 func (s *ResourceStub) NewResource(args pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
 	s.mu.Lock()
 

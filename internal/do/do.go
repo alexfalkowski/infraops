@@ -29,13 +29,14 @@ type Cluster struct {
 	Name string
 	// Description is an optional description for cluster-related resources (for example the VPC).
 	Description string
-	// Resource is a size label (for example "small" or "medium") used to select a droplet size slug.
+	// Resource is a size label (for example "small" or "medium") used to select node capacity.
 	Resource string
 }
 
 // Size returns the DigitalOcean droplet size slug selected by c.Resource.
 //
-// If c.Resource is not recognized, Size returns a sensible default.
+// Supported labels are "small" (2 vCPU / 4 GB) and "medium" (4 vCPU / 8 GB). If c.Resource
+// is not recognized, Size returns the small default.
 func (c *Cluster) Size() digitalocean.DropletSlug {
 	if s, ok := sizes[c.Resource]; ok {
 		return s
@@ -54,7 +55,9 @@ func ConvertCluster(cluster *v2.Cluster) *Cluster {
 
 // CreateCluster provisions the networking and Kubernetes cluster resources for cluster.
 //
-// It creates a VPC and then creates a Kubernetes cluster attached to that VPC.
+// It creates a VPC in fra1, then creates a Kubernetes cluster attached to that VPC. The cluster
+// uses two nodes, the Kubernetes version pinned in code, maintenance start time 23:00 on any day,
+// and DestroyAllAssociatedResources enabled.
 func CreateCluster(ctx *pulumi.Context, cluster *Cluster) (err error) {
 	v, err := createVPC(ctx, cluster)
 	if err != nil {

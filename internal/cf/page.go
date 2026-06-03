@@ -9,13 +9,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// PageZone describes a Cloudflare Pages-backed zone and the DNS configuration required for it.
+// PageZone describes a Cloudflare zone used for a static-site or pages-style CNAME target.
 type PageZone struct {
 	// Name is the Pulumi resource name prefix used when creating Cloudflare resources for this zone.
 	Name string
 	// Domain is the apex domain to create/manage as a Cloudflare zone (for example "example.com").
 	Domain string
-	// Host is the Cloudflare Pages hostname to CNAME to (for example "<project>.pages.dev").
+	// Host is the DNS hostname to CNAME to (for example "<owner>.github.io" or "<project>.pages.dev").
 	Host string
 }
 
@@ -28,10 +28,10 @@ func ConvertPageZone(z *v2.PageZone) *PageZone {
 	}
 }
 
-// CreatePageZone provisions a Cloudflare zone for a Pages site and creates a proxied CNAME record.
+// CreatePageZone provisions a Cloudflare zone for a static-site CNAME target.
 //
-// It creates the zone with "strict" SSL mode and then creates a CNAME from "www.<domain>"
-// to zone.Host. The DNS record is proxied and uses Cloudflare's automatic TTL.
+// It applies the shared zone-settings baseline with "strict" SSL mode, then creates a proxied
+// CNAME from "www.<domain>" to zone.Host using Cloudflare's automatic TTL.
 func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 	z, err := createZone(ctx, zone.Name, zone.Domain, "strict")
 	if err != nil {

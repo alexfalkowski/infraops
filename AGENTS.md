@@ -47,6 +47,7 @@ make area=<apps|cf|do|gh> pulumi-preview
 make area=<apps|cf|do|gh> pulumi-update
 make area=<apps|cf|do|gh> pulumi-cancel
 make area=<apps|cf|do|gh> pulumi-delete
+make area=<apps|cf|do|gh> pulumi-refresh
 ```
 
 Local Kubernetes add-ons:
@@ -69,6 +70,9 @@ make -C area/apps verify
 make -C area/apps load
 make -C area/apps lint
 ```
+
+Operator helper targets require the local CLI tools documented in `README.md`: `doctl`,
+`helm`, `kubectl`, `kube-score`, `kubescape`, `curl`, and `vegeta`.
 
 Config tools:
 
@@ -118,6 +122,9 @@ make build-bump
 ## CI
 
 - CircleCI setup config uses path filtering to enable area workflows.
-- The main `build` job runs `make lint`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
+- The main `build` job runs `make lint`, `make build-bump`, `make build-format`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
 - Area preview jobs run on non-`master`; update jobs run only on `master`.
 - Apps updates also run `make -C area/apps verify`, `load`, and `lint`.
+- Non-`master` workflows run `sync` after build and applicable previews.
+- `master` workflows run the release `version` job after build.
+- `wait-all` depends on build, sync, release, previews, and updates so the workflow has one final aggregate gate.
