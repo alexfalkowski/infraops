@@ -9,7 +9,8 @@ import (
 // repository creates or updates a GitHub repository and applies the baseline repository settings.
 //
 // It validates repo.Checks (required for branch protection) and, when configured, attaches a
-// repository template and GitHub Pages configuration.
+// repository template and GitHub Pages configuration. Secret scanning, push protection, and
+// vulnerability alerts are enabled for every repository.
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
 	t, err := template(repo)
 	if err != nil {

@@ -106,8 +106,9 @@ func ConvertRepository(r *v2.Repository) *Repository {
 // CreateRepository provisions and configures a GitHub repository.
 //
 // It creates (or updates) the repository and then applies additional repository configuration
-// such as branch protection and collaborators. Errors are wrapped with the repository name
-// to make failures easier to identify in Pulumi output.
+// such as branch protection, always-on security settings, vulnerability alerts, Pages, and
+// collaborators. Errors are wrapped with the repository name to make failures easier to identify
+// in Pulumi output.
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)
 	if err != nil {
@@ -130,8 +131,11 @@ type (
 	Visibility string
 
 	// Collaborators describes whether collaborator management is enabled for a repository.
+	//
+	// When enabled, the implementation grants admin permission to lean-thoughts-ci on
+	// alexfalkowski/<repository>.
 	Collaborators struct {
-		// Enabled controls whether collaborators should be managed for the repository.
+		// Enabled controls whether the fixed admin collaborator should be managed for the repository.
 		Enabled bool
 	}
 
@@ -147,6 +151,7 @@ type (
 // Repository describes a GitHub repository and its desired configuration.
 type Repository struct {
 	// Collaborators is optional; when nil or disabled, collaborator resources are not managed.
+	// When enabled, lean-thoughts-ci is granted admin permission on alexfalkowski/<repository>.
 	Collaborators *Collaborators
 	// Template is optional; when set, it identifies the template repository used on creation.
 	Template *Template

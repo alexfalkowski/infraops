@@ -34,6 +34,18 @@ Primary tools used:
 - kubectl: <https://kubernetes.io/docs/reference/kubectl/>
 - Helm: <https://helm.sh/>
 - kube-score: <https://kube-score.com/>
+- doctl: <https://docs.digitalocean.com/reference/doctl/>
+- kubescape: <https://kubescape.io/>
+- curl: <https://curl.se/>
+- vegeta: <https://github.com/tsenart/vegeta>
+
+Operator-only helper targets use these tools as needed:
+
+- `make -C area/apps save-config` and `make -C area/k8s save-config`: `doctl`
+- `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl`
+- `make -C area/apps verify`: `curl`
+- `make -C area/apps load`: `vegeta`
+- `make -C area/k8s setup|delete|pods`: `helm`, `kubectl`
 
 ## Configuration (HJSON + protobuf schema)
 
@@ -94,9 +106,10 @@ env_vars: [
 
 #### `Application.secrets` vs secret env vars (apps)
 
-- `Application.secrets` is an **application-level dependency list** used by the deployment implementation to provision and/or wire Secret resources (for example as volumes or attachments).
+- `Application.secrets` is an **application-level dependency list** used by the deployment implementation to wire existing Kubernetes Secrets as volumes.
 - Secret references in `env_vars` (the `secret:<secretName>/<key>` format) reference **specific keys** in those secrets.
 - They often use the same `<secretName>` values, but they serve different purposes.
+- The app program does not create Secret objects or define Secret keys. For internal apps, each listed secret is expected to exist as `<secretName>-secret` and is mounted at `/etc/secrets/<secretName>`.
 
 #### `Application.resource` sizing (apps)
 
@@ -183,12 +196,26 @@ See:
 
 This file uses the `Kubernetes` message in `api/infraops/v2/service.proto`.
 
+Internal apps also need an application config file at:
+
+- `area/apps/<namespace>/<app>.yaml`
+
+For example, the `bezeichner` app in namespace `lean` reads `area/apps/lean/bezeichner.yaml`.
+The apps Pulumi program turns that file into a Kubernetes ConfigMap entry named `<app>.yaml`,
+then mounts it into the container at `/etc/<app>/<app>.yaml`.
+
 #### Install / Setup
 
-For a full “apply” of what’s in config:
+Prepare the local app namespace/helper resources:
 
 ```bash
 make -C area/apps setup
+```
+
+Apply the Pulumi resources described by `apps.hjson`:
+
+```bash
+make area=apps pulumi-update
 ```
 
 #### Delete
@@ -248,6 +275,24 @@ Config:
 
 - `area/do/do.hjson`
 
+#### Cluster defaults
+
+The DigitalOcean program creates the cluster VPC and then provisions the cluster with fixed
+operational defaults:
+
+- Region: `fra1`
+- Kubernetes version: pinned in code
+- Node count: `2`
+- Maintenance window: any day at `23:00`
+- Associated resources: destroyed with the cluster
+
+Cluster `resource` values map to node capacity:
+
+- `"small"` (default): 2 vCPU / 4 GB node
+- `"medium"`: 4 vCPU / 8 GB node
+
+Unknown or empty values fall back to `"small"`.
+
 #### Manual prerequisites (DigitalOcean UI)
 
 Some items may be created manually depending on account setup:
@@ -258,11 +303,7 @@ Some items may be created manually depending on account setup:
 | ------------- | ------------------------------------- |
 | lean-thoughts | All of experiments for lean-thoughts. |
 
-- A default VPC in your target region (example):
-
-| Name         | Description               |
-| ------------ | ------------------------- |
-| default-fra1 | The default vpc for fra1. |
+The Pulumi program creates the VPC used by the cluster and attaches the cluster to it.
 
 #### Kubernetes cluster upgrades
 
@@ -317,6 +358,9 @@ pages: {
 
 ##### Collaborators
 
+When enabled, collaborator management grants `admin` permission to `lean-thoughts-ci`
+on `alexfalkowski/<repository>`.
+
 First change:
 
 ```hjson
@@ -362,7 +406,6 @@ make -C area/k8s pods
 Depending on what you install, the k8s add-ons Makefile expects secrets like:
 
 - `CIRCLECI_K8S_TOKEN` (CircleCI release agent)
-- `BETTER_STACK_COLLECTOR_SECRET` (Better Stack collector)
 
 Because the Makefile is a local-operator workflow, the CircleCI release-agent token is passed
 directly to Helm rather than through a CI secret-handling path.

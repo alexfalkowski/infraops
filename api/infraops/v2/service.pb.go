@@ -115,9 +115,12 @@ type Application struct {
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	// Namespace is the Kubernetes namespace to deploy into.
 	Namespace string `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// Domain is the external DNS name/host used for ingress routing (for example "api.example.com").
+	// Domain is the base/apex domain suffix used for ingress routing (for example "example.com").
+	// The apps program creates ingress hosts as "<name>.<domain>".
 	Domain string `protobuf:"bytes,5,opt,name=domain,proto3" json:"domain,omitempty"`
-	// Version is the application version to deploy (for example a container image tag).
+	// Version is the semantic application version to deploy.
+	// Internal app image tags are built as "v<version>", while external app image tags use
+	// "<version>" directly.
 	Version string `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
 	// Resource selects the resource profile to apply to the application pod.
 	//
@@ -126,18 +129,19 @@ type Application struct {
 	//
 	// If an unknown value is provided, the implementation falls back to "small".
 	Resource string `protobuf:"bytes,7,opt,name=resource,proto3" json:"resource,omitempty"`
-	// Secrets is a list of logical secret names referenced by this application.
+	// Secrets is a list of existing logical secret names referenced by this application.
 	//
 	// Clarification:
-	//   - This field is an application-level dependency list used by the deployment implementation to
-	//     provision and/or wire Secret resources (for example as volumes or other attachments).
+	//   - This field is an application-level dependency list used by the deployment implementation
+	//     to wire Secret resources as volumes.
 	//   - This list is related to, but distinct from, secret references in EnvVars:
 	//   - EnvVar values of the form "secret:<secretName>/<key>" reference a specific key within a secret.
 	//   - This Secrets list enumerates which logical secrets the application depends on (often the
 	//     same <secretName> values), but does not by itself specify which keys are consumed.
 	//
-	// In the current implementation, these names are typically materialized as Kubernetes Secrets
-	// with a "-secret" suffix and are used for volume/env wiring where applicable.
+	// The apps program does not create Secret objects or define Secret keys. For internal apps, each
+	// name is expected to exist as a Kubernetes Secret named "<secretName>-secret" and is mounted at
+	// "/etc/secrets/<secretName>".
 	Secrets []string `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// EnvVars is the list of environment variables to inject into the application container.
 	EnvVars       []*EnvVar `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
@@ -295,7 +299,8 @@ func (x *Kubernetes) GetApplications() []*Application {
 
 // Collaborators toggles whether repository collaborators are managed for a repository.
 //
-// When enabled, the infra code may create collaborator resources (for example for CI users).
+// When enabled, the infra code grants "admin" permission to "lean-thoughts-ci" on
+// "alexfalkowski/<repository>".
 type Collaborators struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Enabled controls whether collaborator resources should be created/managed.
@@ -344,6 +349,7 @@ func (x *Collaborators) GetEnabled() bool {
 // Template identifies a GitHub template repository.
 //
 // When provided, a repository may be created from this template rather than as a blank repository.
+// If template is present, owner and repository must both be non-empty.
 type Template struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Owner is the organization or user that owns the template repository.
@@ -479,9 +485,10 @@ type Repository struct {
 	Pages *Pages `protobuf:"bytes,9,opt,name=pages,proto3" json:"pages,omitempty"`
 	// Topics is the set of repository topics to apply.
 	Topics []string `protobuf:"bytes,10,rep,name=topics,proto3" json:"topics,omitempty"`
-	// Checks is the set of required status check contexts enforced by branch protection.
+	// Checks is the set of required status check contexts enforced by branch protection on "master".
 	// Branch protection intentionally requires zero approving PR reviews because these repositories
 	// are maintained by a solo contributor, so required status checks are the primary merge gate.
+	// Status checks are enforced in strict mode.
 	//
 	// In the current implementation, an empty list is invalid and will cause provisioning to fail.
 	Checks        []string `protobuf:"bytes,11,rep,name=checks,proto3" json:"checks,omitempty"`
@@ -655,6 +662,10 @@ func (x *Github) GetRepositories() []*Repository {
 //
 // The `area/cf` Pulumi program creates the zone and then creates proxied A/AAAA records for the
 // subdomains listed in record_names.
+//
+// Created zones receive the shared Cloudflare zone-settings baseline: always_use_https on,
+// min_tls_version 1.2, cache_level aggressive, http3 on, email_obfuscation off,
+// h2_prioritization on, and ssl full.
 type BalancerZone struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Name is the Pulumi resource name prefix for resources created for this zone.
@@ -736,17 +747,17 @@ func (x *BalancerZone) GetRecordNames() []string {
 	return nil
 }
 
-// PageZone describes a Cloudflare zone used for a Cloudflare Pages site.
+// PageZone describes a Cloudflare zone used for a static-site or pages-style CNAME target.
 //
-// The infra code creates the zone (with strict SSL mode) and creates a proxied CNAME from
-// "www.<domain>" to host.
+// The infra code creates the zone, applies the shared Cloudflare zone-settings baseline with
+// ssl strict, and creates a proxied CNAME from "www.<domain>" to host.
 type PageZone struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Name is the Pulumi resource name prefix for resources created for this zone.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Domain is the apex domain for the zone (for example "example.com").
 	Domain string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
-	// Host is the Cloudflare Pages hostname to CNAME to (for example "<project>.pages.dev").
+	// Host is the DNS hostname to CNAME to (for example "<owner>.github.io" or "<project>.pages.dev").
 	Host          string `protobuf:"bytes,3,opt,name=host,proto3" json:"host,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1008,7 +1019,13 @@ type Cluster struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Description is an optional description (used for related resources such as the VPC).
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	// Resource is a size label (for example "small" or "medium") used to select a droplet size slug.
+	// Resource is a size label used to select the DigitalOcean node capacity.
+	//
+	// Current mapping:
+	//   - "small" (default): 2 vCPU / 4 GB node
+	//   - "medium": 4 vCPU / 8 GB node
+	//
+	// Unknown or empty values fall back to "small".
 	Resource      string `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

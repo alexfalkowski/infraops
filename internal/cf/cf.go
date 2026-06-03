@@ -35,10 +35,12 @@ type ZoneSetting struct {
 	Value pulumi.String
 }
 
-// settings applies a baseline set of Cloudflare zone settings to the given zone.
+// settings applies the shared Cloudflare zone-settings baseline to the given zone.
 //
 // The resource names are derived from the provided name plus the setting identifier to keep
-// them stable across updates. The ssl argument is applied to the zone "ssl" setting.
+// them stable across updates. The baseline enables always_use_https, min_tls_version 1.2,
+// cache_level aggressive, http3, and h2_prioritization; disables email_obfuscation; and uses
+// ssl as the value for the zone "ssl" setting.
 func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
 	settings := []*ZoneSetting{
 		{Name: "always_use_https", Value: inputs.On},

@@ -39,10 +39,10 @@ var resources = ResourcesMap{
 	},
 }
 
-// ResourcesMap got app.
+// ResourcesMap maps configuration resource profile names to Kubernetes request/limit ranges.
 type ResourcesMap map[string]*Resources
 
-// Resources by name if found, otherwise small.
+// Resources returns the named resource profile, or the small profile when name is unknown.
 func (r ResourcesMap) Resources(name string) *Resources {
 	res, ok := r[name]
 	if ok {

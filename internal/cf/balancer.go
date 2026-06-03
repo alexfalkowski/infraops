@@ -42,6 +42,9 @@ func ConvertBalancerZone(z *v2.BalancerZone) *BalancerZone {
 }
 
 // CreateBalancerZone provisions a Cloudflare zone and creates proxied A and AAAA records.
+//
+// It applies the shared zone-settings baseline with "full" SSL mode, then creates A and AAAA
+// records for each configured record name under the zone domain.
 func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	z, err := createZone(ctx, zone.Name, zone.Domain, "full")
 	if err != nil {
