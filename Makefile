@@ -2,27 +2,27 @@ include bin/build/make/help.mak
 include bin/build/make/go.mak
 include bin/build/make/git.mak
 
-# Log into pulumi.
+# Log into Pulumi.
 pulumi-login:
 	@pulumi login --cloud-url https://api.pulumi.com
 
-# Preview pulumi changes.
+# Preview Pulumi changes.
 pulumi-preview:
 	@pulumi preview --stack alexfalkowski/$(area)/prod --cwd area/$(area) --diff
 
-# Update pulumi changes.
+# Update Pulumi changes.
 pulumi-update:
 	@pulumi update --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Cancel pulumi changes.
+# Cancel Pulumi changes.
 pulumi-cancel:
 	@pulumi cancel --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Delete pulumi stack.
+# Delete Pulumi stack.
 pulumi-delete:
 	@pulumi stack rm --yes --force --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Refresh pulumi stack.
+# Refresh Pulumi stack.
 pulumi-refresh:
 	@pulumi refresh --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 

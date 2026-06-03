@@ -8,7 +8,7 @@ syntax = "proto3";
 //
 // Notes:
 // - This schema is intentionally configuration-oriented (it models desired state, not provider API objects).
-// - For each top-level configuration message, `version` is a config/schema version string used by tooling;
+// - For each top-level configuration message, `version` is a configuration schema version string used by tooling;
 //   it is not necessarily the same as a runtime, provider, or Kubernetes version.
 package infraops.v2;
 

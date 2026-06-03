@@ -1,8 +1,6 @@
 package cf
 
 import (
-	"fmt"
-
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/v2/internal/inputs"
 	"github.com/pulumi/pulumi-cloudflare/sdk/v6/go/cloudflare"
@@ -38,8 +36,8 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		return err
 	}
 
-	name := fmt.Sprintf("%s.%s", "www", zone.Domain)
-	r := &cloudflare.RecordArgs{
+	name := "www." + zone.Domain
+	args := &cloudflare.RecordArgs{
 		Type:    pulumi.String("CNAME"),
 		Name:    pulumi.String(name),
 		Content: pulumi.String(zone.Host),
@@ -47,7 +45,7 @@ func CreatePageZone(ctx *pulumi.Context, zone *PageZone) error {
 		Proxied: inputs.Yes,
 		Ttl:     inputs.Automatic,
 	}
-	_, err = cloudflare.NewRecord(ctx, name, r)
+	_, err = cloudflare.NewRecord(ctx, name, args)
 
 	return err
 }

@@ -11,14 +11,14 @@ func addEnvironments(app *App, envs cv1.EnvVarArray) cv1.EnvVarArray {
 	for _, envVar := range app.EnvVars {
 		var arg cv1.EnvVarArgs
 		if envVar.IsSecret() {
-			value := strings.TrimPrefix(envVar.Value, "secret:")
-			name, value, _ := strings.Cut(value, "/")
+			secretRef := strings.TrimPrefix(envVar.Value, "secret:")
+			secretName, secretKey, _ := strings.Cut(secretRef, "/")
 			arg = cv1.EnvVarArgs{
 				Name: pulumi.String(envVar.Name),
 				ValueFrom: &cv1.EnvVarSourceArgs{
 					SecretKeyRef: &cv1.SecretKeySelectorArgs{
-						Name: pulumi.String(name + secretSuffix),
-						Key:  pulumi.String(value),
+						Name: pulumi.String(secretName + secretSuffix),
+						Key:  pulumi.String(secretKey),
 					},
 				},
 			}

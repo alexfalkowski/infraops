@@ -3,7 +3,7 @@
   repositories: [
     {
       name: nonnative
-      description: Allows you to keep using the power of ruby to test other systems.
+      description: Allows you to keep using the power of Ruby to test other systems.
       homepage_url: https://alexfalkowski.github.io/nonnative
       visibility: public
       collaborators: {
@@ -23,7 +23,7 @@
     }
     {
       name: go-service
-      description: A framework to build services in go.
+      description: A framework to build services in Go.
       homepage_url: https://alexfalkowski.github.io/go-service
       visibility: public
       collaborators: {
@@ -49,7 +49,7 @@
     }
     {
       name: go-health
-      description: Health monitoring pattern in go.
+      description: Health monitoring pattern in Go.
       homepage_url: https://alexfalkowski.github.io/go-health
       visibility: public
       collaborators: {
@@ -186,7 +186,7 @@
     }
     {
       name: go-client-template
-      description: A template for go clients.
+      description: A template for Go clients.
       homepage_url: https://alexfalkowski.github.io/go-client-template
       visibility: public
       is_template: true
@@ -212,7 +212,7 @@
     }
     {
       name: go-service-template
-      description: A template for go services.
+      description: A template for Go services.
       homepage_url: https://alexfalkowski.github.io/go-service-template
       visibility: public
       is_template: true

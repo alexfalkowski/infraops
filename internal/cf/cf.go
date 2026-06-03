@@ -57,9 +57,9 @@ func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error 
 			Value:     setting.Value,
 			ZoneId:    cz.ID(),
 		}
-		name := fmt.Sprintf("%s_%s", name, setting.Name)
+		resourceName := fmt.Sprintf("%s_%s", name, setting.Name)
 
-		if _, err := cloudflare.NewZoneSetting(ctx, name, args); err != nil {
+		if _, err := cloudflare.NewZoneSetting(ctx, resourceName, args); err != nil {
 			return err
 		}
 	}

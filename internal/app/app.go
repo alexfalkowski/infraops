@@ -38,9 +38,12 @@ func WriteConfiguration(path string, configuration *v2.Kubernetes) error {
 // structures that are later used to create Kubernetes resources.
 func ConvertApplication(a *v2.Application) *App {
 	app := &App{
-		ID: a.GetId(), Kind: a.GetKind(),
-		Name: a.GetName(), Namespace: a.GetNamespace(),
-		Domain: a.GetDomain(), Version: a.GetVersion(),
+		ID:        a.GetId(),
+		Kind:      a.GetKind(),
+		Name:      a.GetName(),
+		Namespace: a.GetNamespace(),
+		Domain:    a.GetDomain(),
+		Version:   a.GetVersion(),
 		Resources: resources.Resources(a.GetResource()),
 		Secrets:   a.GetSecrets(),
 	}
@@ -67,13 +70,13 @@ func ConvertApplication(a *v2.Application) *App {
 // Resources are created in a fixed order to ensure dependencies exist (for example,
 // ServiceAccount before Deployment). Any error aborts the creation flow and is returned.
 func CreateApplication(ctx *pulumi.Context, app *App) error {
-	fns := []func(ctx *pulumi.Context, app *App) error{
+	resourceCreators := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,
 		createDeployment, createService, createIngress,
 	}
-	for _, fn := range fns {
-		if err := fn(ctx, app); err != nil {
+	for _, createResource := range resourceCreators {
+		if err := createResource(ctx, app); err != nil {
 			return err
 		}
 	}
@@ -105,7 +108,7 @@ type App struct {
 	EnvVars []*EnvVar
 }
 
-// HasResources reports whether a has resource requirements configured.
+// HasResources reports whether the application has resource requirements configured.
 func (a *App) HasResources() bool {
 	return a.Resources != nil
 }

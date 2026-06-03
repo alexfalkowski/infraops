@@ -9,8 +9,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// prefix maps DNS record types to a stable name prefix used for Pulumi resource naming.
-var prefix = map[string]string{
+// recordPrefixes maps DNS record types to a stable prefix used for Pulumi resource naming.
+var recordPrefixes = map[string]string{
 	"A":    "ipv4",
 	"AAAA": "ipv6",
 }
@@ -51,8 +51,8 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 		return err
 	}
 
-	for _, n := range zone.RecordNames {
-		name := fmt.Sprintf("%s.%s", n, zone.Domain)
+	for _, recordName := range zone.RecordNames {
+		name := fmt.Sprintf("%s.%s", recordName, zone.Domain)
 
 		if err := record(ctx, name, "A", zone.IPV4, z.ID()); err != nil {
 			return err
@@ -78,7 +78,7 @@ func record(ctx *pulumi.Context, name, kind, ip string, id pulumi.IDOutput) erro
 		Proxied: inputs.Yes,
 		Ttl:     inputs.Automatic,
 	}
-	_, err := cloudflare.NewRecord(ctx, fmt.Sprintf("%s.%s", prefix[kind], name), record)
+	_, err := cloudflare.NewRecord(ctx, fmt.Sprintf("%s.%s", recordPrefixes[kind], name), record)
 
 	return err
 }

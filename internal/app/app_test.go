@@ -26,8 +26,8 @@ func TestApp(t *testing.T) {
 		app  *app.App
 		name string
 	}{
-		{name: "with resource", app: withResource()},
-		{name: "without resource", app: withoutResource()},
+		{name: "with resource", app: appWithResources()},
+		{name: "without resource", app: appWithoutResources()},
 	}
 
 	for _, tt := range tests {
@@ -78,7 +78,7 @@ func TestApplicationReturnsResourceErrors(t *testing.T) {
 			stub.FailResource(tt.resourceType)
 
 			run := func(ctx *pulumi.Context) error {
-				return app.CreateApplication(ctx, withResource())
+				return app.CreateApplication(ctx, appWithResources())
 			}
 
 			require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
@@ -89,7 +89,7 @@ func TestApplicationReturnsResourceErrors(t *testing.T) {
 
 func TestApplicationReturnsMissingConfigError(t *testing.T) {
 	stub := &test.ResourceStub{}
-	application := withResource()
+	application := appWithResources()
 	application.Namespace = "missing-config-fixture"
 
 	run := func(ctx *pulumi.Context) error {
@@ -132,7 +132,8 @@ func TestConvertedApplicationDeploymentInputs(t *testing.T) {
 	require.Equal(t, "2Gi", resourceLimit(deployment, "ephemeral-storage"))
 
 	secret := envVar(deployment, "DATABASE_PASSWORD")
-	secretKeyRef := test.Property(t, test.Property(t, secret, "valueFrom").ObjectValue(), "secretKeyRef").ObjectValue()
+	valueFrom := test.Property(t, secret, "valueFrom").ObjectValue()
+	secretKeyRef := test.Property(t, valueFrom, "secretKeyRef").ObjectValue()
 	require.Equal(t, "database-secret", test.Property(t, secretKeyRef, "name").StringValue())
 	require.Equal(t, "password", test.Property(t, secretKeyRef, "key").StringValue())
 }
@@ -163,7 +164,7 @@ func TestExternalApplicationOmitsInternalResources(t *testing.T) {
 	require.NotContains(t, container(deployment), resource.PropertyKey("volumeMounts"))
 }
 
-func withResource() *app.App {
+func appWithResources() *app.App {
 	return &app.App{
 		ID:        "1234",
 		Kind:      "internal",
@@ -183,7 +184,7 @@ func withResource() *app.App {
 	}
 }
 
-func withoutResource() *app.App {
+func appWithoutResources() *app.App {
 	return &app.App{
 		ID:        "1234",
 		Name:      "test",

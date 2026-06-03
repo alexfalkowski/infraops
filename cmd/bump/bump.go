@@ -17,9 +17,9 @@ func run() error {
 	)
 
 	set := flag.NewFlagSet("bump", flag.ContinueOnError)
-	set.StringVar(&name, "n", "", "name of the app")
-	set.StringVar(&ver, "v", "", "version of the app")
-	set.StringVar(&path, "p", "", "path of the config")
+	set.StringVar(&name, "n", "", "application name")
+	set.StringVar(&ver, "v", "", "application version")
+	set.StringVar(&path, "p", "", "config file path")
 	if err := set.Parse(os.Args[1:]); err != nil {
 		return err
 	}

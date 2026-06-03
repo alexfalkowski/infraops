@@ -1,4 +1,4 @@
-# Run kubescore for lean.
+# Run kube-score for lean.
 kube-score-lean:
 	@kubectl api-resources --verbs=list --namespaced -o name \
 		| xargs -I{} bash -c "kubectl get {} --namespace lean -oyaml && echo ---" \
@@ -12,7 +12,7 @@ kubescape-lean:
 delete-lean:
 	@kubectl delete namespaces lean
 
-# Create lean
+# Create lean.
 create-lean:
 	@kubectl create namespace lean
 
@@ -39,11 +39,11 @@ verify-lean: verify-standort verify-bezeichner verify-web
 
 # Verify standort.
 verify-standort:
-	@curl -svf --header "Content-Type: application/json" --request POST --data {}  https://standort.lean-thoughts.com/standort.v2.Service/GetLocation
+	@curl -svf --header "Content-Type: application/json" --request POST --data {} https://standort.lean-thoughts.com/standort.v2.Service/GetLocation
 
 # Verify bezeichner.
 verify-bezeichner:
-	@curl -svf --header "Content-Type: application/json" --request POST --data '{ "application": "ulid", "count": 10 }'  https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers
+	@curl -svf --header "Content-Type: application/json" --request POST --data '{ "application": "ulid", "count": 10 }' https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers
 
 # Verify web.
 verify-web:

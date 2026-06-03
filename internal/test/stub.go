@@ -71,14 +71,14 @@ func (s *ResourceStub) FailResourceWith(token string, err error) {
 	s.failResource(token, 0, err)
 }
 
-// FailResourceAt makes the occurrence-th resource creation for token fail with ErrResource.
+// FailResourceAt makes the specified occurrence of resource creation for token fail with ErrResource.
 //
 // Occurrence is one-based.
 func (s *ResourceStub) FailResourceAt(token string, occurrence int) {
 	s.FailResourceAtWith(token, occurrence, ErrResource)
 }
 
-// FailResourceAtWith makes the occurrence-th resource creation for token fail with err.
+// FailResourceAtWith makes the specified occurrence of resource creation for token fail with err.
 //
 // Occurrence is one-based.
 func (s *ResourceStub) FailResourceAtWith(token string, occurrence int, err error) {
@@ -152,9 +152,9 @@ func Property(t *testing.T, properties resource.PropertyMap, key string) resourc
 
 // StringValues converts Pulumi property values to strings.
 func StringValues(values []resource.PropertyValue) []string {
-	strings := make([]string, 0, len(values))
+	result := make([]string, 0, len(values))
 	for _, value := range values {
-		strings = append(strings, value.StringValue())
+		result = append(result, value.StringValue())
 	}
-	return strings
+	return result
 }

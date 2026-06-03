@@ -30,8 +30,8 @@ func run() error {
 	)
 
 	set := flag.NewFlagSet("format", flag.ContinueOnError)
-	set.StringVar(&kind, "k", "", "kind of config")
-	set.StringVar(&path, "p", "", "path of the config")
+	set.StringVar(&kind, "k", "", "config kind")
+	set.StringVar(&path, "p", "", "config file path")
 	if err := set.Parse(os.Args[1:]); err != nil {
 		return err
 	}
