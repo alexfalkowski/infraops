@@ -29,7 +29,9 @@ func TestCreateRepository(t *testing.T) {
 
 func TestCreateRepositoryRequiresChecks(t *testing.T) {
 	repository := &gh.Repository{
-		Name: "test", Description: "test", HomepageURL: "https://alexfalkowski.github.io/test",
+		Name:        "test",
+		Description: "test",
+		HomepageURL: "https://alexfalkowski.github.io/test",
 	}
 
 	require.Error(t, createRepository(t, repository, &test.Stub{}))
@@ -37,9 +39,11 @@ func TestCreateRepositoryRequiresChecks(t *testing.T) {
 
 func TestCreateRepositoryRequiresCompleteTemplate(t *testing.T) {
 	repository := &gh.Repository{
-		Name: "test", Description: "test", HomepageURL: "https://alexfalkowski.github.io/test",
-		Template: &gh.Template{Owner: "alexfalkowski"},
-		Checks:   gh.Checks{"ci/circleci: build"},
+		Name:        "test",
+		Description: "test",
+		HomepageURL: "https://alexfalkowski.github.io/test",
+		Template:    &gh.Template{Owner: "alexfalkowski"},
+		Checks:      gh.Checks{"ci/circleci: build"},
 	}
 
 	require.Error(t, createRepository(t, repository, &test.Stub{}))
@@ -90,7 +94,7 @@ func TestCreateRepositoryReturnsCollaboratorError(t *testing.T) {
 
 func TestCreateRepositoryFromIncompleteTemplateConfig(t *testing.T) {
 	err := pulumi.RunErr(func(ctx *pulumi.Context) error {
-		a := gh.ConvertRepository(&v2.Repository{
+		repository := gh.ConvertRepository(&v2.Repository{
 			Name:        "test",
 			Description: "test",
 			HomepageUrl: "https://alexfalkowski.github.io/test",
@@ -98,8 +102,8 @@ func TestCreateRepositoryFromIncompleteTemplateConfig(t *testing.T) {
 			Checks:      []string{"ci/circleci: build"},
 		})
 
-		require.NotNil(t, a.Template)
-		err := gh.CreateRepository(ctx, a)
+		require.NotNil(t, repository.Template)
+		err := gh.CreateRepository(ctx, repository)
 		require.ErrorIs(t, err, gh.ErrMissingTemplate)
 
 		return nil

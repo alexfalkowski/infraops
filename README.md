@@ -58,8 +58,8 @@ Those protobuf messages are then converted into internal Go types and used to pr
 ### Format and normalize config
 
 This repo includes a small CLI to normalize/format config files by:
-1) decoding the HJSON into the appropriate protobuf message
-2) writing it back out in a canonical form
+1. decoding the HJSON into the appropriate protobuf message
+2. writing it back out in a canonical form
 
 Build:
 
@@ -301,7 +301,7 @@ Some items may be created manually depending on account setup:
 
 | Name          | Description                           |
 | ------------- | ------------------------------------- |
-| lean-thoughts | All of experiments for lean-thoughts. |
+| lean-thoughts | All experiments for lean-thoughts. |
 
 The Pulumi program creates the VPC used by the cluster and attaches the cluster to it.
 

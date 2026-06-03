@@ -56,7 +56,7 @@ func TestCreateBalancerZoneReturnsResourceErrors(t *testing.T) {
 	})
 }
 
-func TestCreatePagerZone(t *testing.T) {
+func TestCreatePageZone(t *testing.T) {
 	stub := &test.ResourceStub{}
 	require.NoError(t, createPageZone(t, stub))
 	requireRecord(t, stub.Resources(recordResourceType), "CNAME", "www.test.com", "test.github.io")
@@ -67,7 +67,7 @@ func TestCreatePagerZone(t *testing.T) {
 	require.Error(t, createPageZone(t, stub))
 }
 
-func TestCreatePagerZoneReturnsRecordError(t *testing.T) {
+func TestCreatePageZoneReturnsRecordError(t *testing.T) {
 	stub := &test.ResourceStub{}
 	stub.FailResource(recordResourceType)
 
@@ -152,7 +152,7 @@ func createBalancerZone(t *testing.T, mocks pulumi.MockResourceMonitor) error {
 	t.Helper()
 
 	return test.RunWithMocks(func(ctx *pulumi.Context) error {
-		z := &cf.BalancerZone{
+		zone := &cf.BalancerZone{
 			Name:        "test",
 			Domain:      "test.com",
 			RecordNames: []string{"test"},
@@ -160,7 +160,7 @@ func createBalancerZone(t *testing.T, mocks pulumi.MockResourceMonitor) error {
 			IPV6:        "::1",
 		}
 
-		return cf.CreateBalancerZone(ctx, z)
+		return cf.CreateBalancerZone(ctx, zone)
 	}, mocks)
 }
 
@@ -168,13 +168,13 @@ func createPageZone(t *testing.T, mocks pulumi.MockResourceMonitor) error {
 	t.Helper()
 
 	return test.RunWithMocks(func(ctx *pulumi.Context) error {
-		z := &cf.PageZone{
+		zone := &cf.PageZone{
 			Name:   "test",
 			Domain: "test.com",
 			Host:   "test.github.io",
 		}
 
-		return cf.CreatePageZone(ctx, z)
+		return cf.CreatePageZone(ctx, zone)
 	}, mocks)
 }
 

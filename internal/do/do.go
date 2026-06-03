@@ -59,22 +59,22 @@ func ConvertCluster(cluster *v2.Cluster) *Cluster {
 // uses two nodes, the Kubernetes version pinned in code, maintenance start time 23:00 on any day,
 // and DestroyAllAssociatedResources enabled.
 func CreateCluster(ctx *pulumi.Context, cluster *Cluster) (err error) {
-	v, err := createVPC(ctx, cluster)
+	vpc, err := createVPC(ctx, cluster)
 	if err != nil {
 		return err
 	}
 
-	_, err = createCluster(ctx, v, cluster)
+	_, err = createCluster(ctx, vpc, cluster)
 	return err
 }
 
-func createVPC(ctx *pulumi.Context, p *Cluster) (*digitalocean.Vpc, error) {
+func createVPC(ctx *pulumi.Context, cluster *Cluster) (*digitalocean.Vpc, error) {
 	args := &digitalocean.VpcArgs{
-		Name:        pulumi.String(p.Name),
+		Name:        pulumi.String(cluster.Name),
 		Region:      digitalocean.RegionFRA1,
-		Description: pulumi.String(p.Description),
+		Description: pulumi.String(cluster.Description),
 	}
-	return digitalocean.NewVpc(ctx, p.Name, args)
+	return digitalocean.NewVpc(ctx, cluster.Name, args)
 }
 
 func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster) (*digitalocean.KubernetesCluster, error) {

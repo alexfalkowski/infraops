@@ -12,7 +12,7 @@ import (
 // repository template and GitHub Pages configuration. Secret scanning, push protection, and
 // vulnerability alerts are enabled for every repository.
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
-	t, err := template(repo)
+	templateArgs, err := template(repo)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 			},
 		},
 		SquashMergeCommitTitle:   pulumi.String("PR_TITLE"),
-		Template:                 t,
+		Template:                 templateArgs,
 		Topics:                   pulumi.ToStringArray(repo.Topics),
 		Visibility:               pulumi.String(repo.Visibility),
 		WebCommitSignoffRequired: inputs.No,

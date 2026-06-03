@@ -8,12 +8,12 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func metadata(app *App, ms ...pulumi.StringMap) mv1.ObjectMetaArgs {
-	ms = append(ms, recommendedLabels(app))
+func metadata(app *App, labelMaps ...pulumi.StringMap) mv1.ObjectMetaArgs {
+	labelMaps = append(labelMaps, recommendedLabels(app))
 	return mv1.ObjectMetaArgs{
 		Name:      pulumi.String(app.Name),
 		Namespace: pulumi.String(app.Namespace),
-		Labels:    merge(ms...),
+		Labels:    merge(labelMaps...),
 	}
 }
 
@@ -57,10 +57,10 @@ func deploymentAnnotations(app *App) pulumi.StringMap {
 	}
 }
 
-func merge(ms ...pulumi.StringMap) pulumi.StringMap {
-	fm := pulumi.StringMap{}
-	for _, m := range ms {
-		maps.Copy(fm, m)
+func merge(labelMaps ...pulumi.StringMap) pulumi.StringMap {
+	merged := pulumi.StringMap{}
+	for _, labels := range labelMaps {
+		maps.Copy(merged, labels)
 	}
-	return fm
+	return merged
 }

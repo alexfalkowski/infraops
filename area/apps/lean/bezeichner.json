@@ -1,1 +1,4 @@
-{ "application": "uuid", "count": 10 }
+{
+  "application": "uuid",
+  "count": 10
+}

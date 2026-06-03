@@ -23,14 +23,14 @@ func createConfigMap(ctx *pulumi.Context, app *App) error {
 }
 
 func configMap(app *App) (*cv1.ConfigMapArgs, error) {
-	d, err := readFile(app.Namespace, app.Name+".yaml")
+	configData, err := readFile(app.Namespace, app.Name+".yaml")
 	if err != nil {
 		return nil, err
 	}
 
 	args := &cv1.ConfigMapArgs{
 		Metadata: metadata(app),
-		Data:     pulumi.StringMap{configFile(app.Name): pulumi.String(d)},
+		Data:     pulumi.StringMap{configFile(app.Name): pulumi.String(configData)},
 	}
 	return args, nil
 }
@@ -52,13 +52,13 @@ func configFile(name string) string {
 }
 
 func readFile(ns, file string) (string, error) {
-	p, err := filePath(ns, file)
+	path, err := filePath(ns, file)
 	if err != nil {
 		return "", err
 	}
 
-	d, err := os.ReadFile(filepath.Clean(p))
-	return string(d), err
+	data, err := os.ReadFile(filepath.Clean(path))
+	return string(data), err
 }
 
 func filePath(ns, file string) (string, error) {
