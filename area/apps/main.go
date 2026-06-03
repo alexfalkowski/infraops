@@ -6,8 +6,12 @@ import (
 )
 
 func main() {
-	pulumi.Run(func(ctx *pulumi.Context) error {
-		config, err := app.ReadConfiguration("apps.hjson")
+	pulumi.Run(run("apps.hjson"))
+}
+
+func run(path string) pulumi.RunFunc {
+	return func(ctx *pulumi.Context) error {
+		config, err := app.ReadConfiguration(path)
 		if err != nil {
 			return err
 		}
@@ -19,5 +23,5 @@ func main() {
 		}
 
 		return nil
-	})
+	}
 }

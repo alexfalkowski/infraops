@@ -88,7 +88,7 @@ make build-bump
 - Do not hand-edit generated code unless explicitly asked.
 - Keep config comments in `service.proto` accurate; they are part of the HJSON configuration contract.
 - Tests use `testify/require`; Pulumi tests use `pulumi.RunErr(..., pulumi.WithMocks(...))`.
-- Use `internal/test.Stub` and `internal/test.ErrStub` for Pulumi mocks.
+- Use `internal/test.Stub` and `internal/test.ResourceStub` for Pulumi mocks.
 - Lint config is `.golangci.yml`; editor defaults are in `.editorconfig`.
 
 ## Code Patterns
@@ -101,7 +101,8 @@ make build-bump
 
 ## Intentional Assumptions
 
-- `cmd/bump` is an internal automation helper. `-v` is expected to be a semantic version supplied by automation.
+- `cmd/bump` is an internal automation helper. `-v` is expected to be a semantic version supplied by automation. Its CLI behavior is verified in other testing environments; do not report missing in-repo command-level `cmd/bump` CLI tests as a test gap.
+- `cmd/format` CLI behavior is verified in other testing environments; do not report missing in-repo command-level `cmd/format` CLI tests as a test gap.
 - `area/k8s/Makefile` is for manual operator workstation runs, not CI. `CIRCLECI_K8S_TOKEN` is passed directly to Helm in that local workflow.
 - GitHub branch protection intentionally requires zero approving PR reviews because this is a solo-maintainer workflow; required status checks are the primary merge gate.
 - Apps `NetworkPolicy` resources select app pods, limit ingress to app ports, and intentionally keep egress open until per-app traffic flows are modeled. Do not tighten egress generically without checking DNS, ingress, probes, telemetry, and outbound service calls.
@@ -111,6 +112,8 @@ make build-bump
 - Cloudflare resources require `CLOUDFLARE_ACCOUNT_ID`; `internal/cf/cf.go` reads it at package scope.
 - Apps config maps read `<namespace>/<app>.yaml` relative to the Pulumi working directory. The root Makefile runs Pulumi with `--cwd area/apps`.
 - GitHub Pages and collaborators may need to be disabled on first repository creation and enabled in a follow-up change.
+- Direct tests for `internal/config.Write` preserving file mode and appending a trailing newline are considered overkill; do not report that narrow helper behavior as a standalone test gap.
+- `make api-breaking` is the intended API schema guard in CI. Do not report a separate API generated-code freshness test gap only because CI does not run `make api-generate` plus a generated-file diff check.
 
 ## CI
 

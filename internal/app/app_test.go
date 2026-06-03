@@ -3,11 +3,22 @@ package app_test
 import (
 	"testing"
 
+	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/v2/internal/app"
 	"github.com/alexfalkowski/infraops/v2/internal/test"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/resource"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/stretchr/testify/require"
+)
+
+const (
+	configMapResourceType      = "kubernetes:core/v1:ConfigMap"
+	deploymentResourceType     = "kubernetes:apps/v1:Deployment"
+	ingressResourceType        = "kubernetes:networking.k8s.io/v1:Ingress"
+	networkPolicyResourceType  = "kubernetes:networking.k8s.io/v1:NetworkPolicy"
+	pdbResourceType            = "kubernetes:policy/v1:PodDisruptionBudget"
+	serviceAccountResourceType = "kubernetes:core/v1:ServiceAccount"
+	serviceResourceType        = "kubernetes:core/v1:Service"
 )
 
 func TestApp(t *testing.T) {
@@ -21,24 +32,27 @@ func TestApp(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			stub := &resourceStub{}
+			stub := &test.ResourceStub{}
 			run := func(ctx *pulumi.Context) error {
 				return app.CreateApplication(ctx, tt.app)
 			}
 
 			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
-			require.Equal(t, portNumbers(app.Ports(tt.app)), networkPolicyIngressPorts(stub.networkPolicy))
-			require.Equal(t, portProtocols(app.Ports(tt.app)), servicePortAppProtocols(stub.service))
+			require.Equal(t, portNumbers(app.Ports(tt.app)), networkPolicyIngressPorts(t, resourceOf(t, stub, networkPolicyResourceType)))
+			require.Equal(t, portProtocols(app.Ports(tt.app)), servicePortAppProtocols(t, resourceOf(t, stub, serviceResourceType)))
 		})
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name+" error", func(t *testing.T) {
+			stub := &test.ResourceStub{}
+			stub.FailResource(serviceAccountResourceType)
+
 			run := func(ctx *pulumi.Context) error {
 				return app.CreateApplication(ctx, tt.app)
 			}
 
-			require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", &test.ErrStub{})))
+			require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
 		})
 	}
 
@@ -46,22 +60,107 @@ func TestApp(t *testing.T) {
 	require.Error(t, err)
 }
 
-type resourceStub struct {
-	test.Stub
+func TestApplicationReturnsResourceErrors(t *testing.T) {
+	for _, tt := range []struct {
+		name         string
+		resourceType string
+	}{
+		{name: "service account", resourceType: serviceAccountResourceType},
+		{name: "network policy", resourceType: networkPolicyResourceType},
+		{name: "config map", resourceType: configMapResourceType},
+		{name: "pod disruption budget", resourceType: pdbResourceType},
+		{name: "deployment", resourceType: deploymentResourceType},
+		{name: "service", resourceType: serviceResourceType},
+		{name: "ingress", resourceType: ingressResourceType},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			stub := &test.ResourceStub{}
+			stub.FailResource(tt.resourceType)
 
-	networkPolicy resource.PropertyMap
-	service       resource.PropertyMap
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, withResource())
+			}
+
+			require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+			require.NotEmpty(t, stub.Resources(tt.resourceType))
+		})
+	}
 }
 
-func (s *resourceStub) NewResource(args pulumi.MockResourceArgs) (string, resource.PropertyMap, error) {
-	if args.TypeToken == "kubernetes:networking.k8s.io/v1:NetworkPolicy" {
-		s.networkPolicy = args.Inputs
-	}
-	if args.TypeToken == "kubernetes:core/v1:Service" {
-		s.service = args.Inputs
+func TestApplicationReturnsMissingConfigError(t *testing.T) {
+	stub := &test.ResourceStub{}
+	application := withResource()
+	application.Namespace = "missing-config-fixture"
+
+	run := func(ctx *pulumi.Context) error {
+		return app.CreateApplication(ctx, application)
 	}
 
-	return s.Stub.NewResource(args)
+	require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+	require.Len(t, stub.Resources(serviceAccountResourceType), 1)
+	require.Len(t, stub.Resources(networkPolicyResourceType), 1)
+	require.Empty(t, stub.Resources(configMapResourceType))
+}
+
+func TestConvertedApplicationDeploymentInputs(t *testing.T) {
+	stub := &test.ResourceStub{}
+	application := app.ConvertApplication(&v2.Application{
+		Id:        "1234",
+		Kind:      "internal",
+		Name:      "test",
+		Namespace: "test",
+		Domain:    "test.com",
+		Version:   "1.0.0",
+		Resource:  "unknown",
+		Secrets:   []string{"database"},
+		EnvVars: []*v2.EnvVar{
+			{Name: "LOG_LEVEL", Value: "info"},
+			{Name: "DATABASE_PASSWORD", Value: "secret:database/password"},
+		},
+	})
+	run := func(ctx *pulumi.Context) error {
+		return app.CreateApplication(ctx, application)
+	}
+
+	require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+	deployment := resourceOf(t, stub, deploymentResourceType)
+	require.Equal(t, "125m", resourceRequest(deployment, "cpu"))
+	require.Equal(t, "250m", resourceLimit(deployment, "cpu"))
+	require.Equal(t, "64Mi", resourceRequest(deployment, "memory"))
+	require.Equal(t, "128Mi", resourceLimit(deployment, "memory"))
+	require.Equal(t, "1Gi", resourceRequest(deployment, "ephemeral-storage"))
+	require.Equal(t, "2Gi", resourceLimit(deployment, "ephemeral-storage"))
+
+	secret := envVar(deployment, "DATABASE_PASSWORD")
+	secretKeyRef := test.Property(t, test.Property(t, secret, "valueFrom").ObjectValue(), "secretKeyRef").ObjectValue()
+	require.Equal(t, "database-secret", test.Property(t, secretKeyRef, "name").StringValue())
+	require.Equal(t, "password", test.Property(t, secretKeyRef, "key").StringValue())
+}
+
+func TestExternalApplicationOmitsInternalResources(t *testing.T) {
+	stub := &test.ResourceStub{}
+	application := app.ConvertApplication(&v2.Application{
+		Id:        "1234",
+		Kind:      "external",
+		Name:      "test",
+		Namespace: "test",
+		Domain:    "test.com",
+		Version:   "1.0.0",
+		Resource:  "small",
+	})
+	run := func(ctx *pulumi.Context) error {
+		return app.CreateApplication(ctx, application)
+	}
+
+	require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+	deployment := resourceOf(t, stub, deploymentResourceType)
+	componentLabel := resource.PropertyKey("circleci.com/component-name")
+	require.Empty(t, stub.Resources(configMapResourceType))
+	require.Empty(t, test.Property(t, metadata(deployment), "annotations").ObjectValue())
+	require.NotContains(t, test.Property(t, metadata(deployment), "labels").ObjectValue(), componentLabel)
+	require.NotContains(t, test.Property(t, podTemplateMetadata(deployment), "labels").ObjectValue(), componentLabel)
+	require.NotContains(t, podSpec(deployment), resource.PropertyKey("volumes"))
+	require.NotContains(t, container(deployment), resource.PropertyKey("volumeMounts"))
 }
 
 func withResource() *app.App {
@@ -116,10 +215,21 @@ func portProtocols(ports []app.Port) []string {
 	return protocols
 }
 
-func networkPolicyIngressPorts(policy resource.PropertyMap) []int {
-	spec := policy[resource.PropertyKey("spec")].ObjectValue()
-	ingress := spec[resource.PropertyKey("ingress")].ArrayValue()
-	ports := ingress[0].ObjectValue()[resource.PropertyKey("ports")].ArrayValue()
+func resourceOf(t *testing.T, stub *test.ResourceStub, token string) resource.PropertyMap {
+	t.Helper()
+
+	resources := stub.Resources(token)
+	require.Len(t, resources, 1)
+
+	return resources[0]
+}
+
+func networkPolicyIngressPorts(t *testing.T, policy resource.PropertyMap) []int {
+	t.Helper()
+
+	spec := test.Property(t, policy, "spec").ObjectValue()
+	ingress := test.Property(t, spec, "ingress").ArrayValue()
+	ports := test.Property(t, ingress[0].ObjectValue(), "ports").ArrayValue()
 
 	values := make([]int, 0, len(ports))
 	for _, port := range ports {
@@ -130,9 +240,59 @@ func networkPolicyIngressPorts(policy resource.PropertyMap) []int {
 	return values
 }
 
-func servicePortAppProtocols(service resource.PropertyMap) []string {
-	spec := service[resource.PropertyKey("spec")].ObjectValue()
-	ports := spec[resource.PropertyKey("ports")].ArrayValue()
+func metadata(deployment resource.PropertyMap) resource.PropertyMap {
+	return deployment[resource.PropertyKey("metadata")].ObjectValue()
+}
+
+func podTemplateMetadata(deployment resource.PropertyMap) resource.PropertyMap {
+	return deploymentSpec(deployment)[resource.PropertyKey("template")].ObjectValue()[resource.PropertyKey("metadata")].ObjectValue()
+}
+
+func podSpec(deployment resource.PropertyMap) resource.PropertyMap {
+	template := deploymentSpec(deployment)[resource.PropertyKey("template")].ObjectValue()
+	return template[resource.PropertyKey("spec")].ObjectValue()
+}
+
+func container(deployment resource.PropertyMap) resource.PropertyMap {
+	containers := podSpec(deployment)[resource.PropertyKey("containers")].ArrayValue()
+	return containers[0].ObjectValue()
+}
+
+func envVar(deployment resource.PropertyMap, name string) resource.PropertyMap {
+	envs := container(deployment)[resource.PropertyKey("env")].ArrayValue()
+	for _, env := range envs {
+		value := env.ObjectValue()
+		if value[resource.PropertyKey("name")].StringValue() == name {
+			return value
+		}
+	}
+
+	return nil
+}
+
+func resourceRequest(deployment resource.PropertyMap, name string) string {
+	return resourceValue(deployment, "requests", name)
+}
+
+func resourceLimit(deployment resource.PropertyMap, name string) string {
+	return resourceValue(deployment, "limits", name)
+}
+
+func resourceValue(deployment resource.PropertyMap, kind, name string) string {
+	resources := container(deployment)[resource.PropertyKey("resources")].ObjectValue()
+	values := resources[resource.PropertyKey(kind)].ObjectValue()
+	return values[resource.PropertyKey(name)].StringValue()
+}
+
+func deploymentSpec(deployment resource.PropertyMap) resource.PropertyMap {
+	return deployment[resource.PropertyKey("spec")].ObjectValue()
+}
+
+func servicePortAppProtocols(t *testing.T, service resource.PropertyMap) []string {
+	t.Helper()
+
+	spec := test.Property(t, service, "spec").ObjectValue()
+	ports := test.Property(t, spec, "ports").ArrayValue()
 
 	values := make([]string, 0, len(ports))
 	for _, port := range ports {
