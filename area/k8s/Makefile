@@ -18,7 +18,7 @@ setup-helm:
 
 # Install CircleCI. This target is run manually from an operator workstation, not CI.
 install-circleci:
-	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version 1.6.2
+	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --set rbac.clusterRoles=false --version 1.6.2
 
 # Install metrics server.
 install-metrics-server:

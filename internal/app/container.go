@@ -39,10 +39,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 		ReadinessProbe:  httpProbe(probePath(app.Name, "readyz")),
 		StartupProbe:    tcpProbe(),
 		Resources:       createResources(app),
-		SecurityContext: cv1.SecurityContextArgs{
-			ReadOnlyRootFilesystem:   inputs.Yes,
-			AllowPrivilegeEscalation: inputs.No,
-		},
+		SecurityContext: containerSecurity(),
 	}
 	return cv1.ContainerArray{container}
 }
@@ -58,12 +55,19 @@ func externalContainer(app *App) cv1.ContainerArray {
 		ReadinessProbe:  tcpProbe(),
 		StartupProbe:    tcpProbe(),
 		Resources:       createResources(app),
-		SecurityContext: cv1.SecurityContextArgs{
-			ReadOnlyRootFilesystem:   inputs.Yes,
-			AllowPrivilegeEscalation: inputs.No,
-		},
+		SecurityContext: containerSecurity(),
 	}
 	return cv1.ContainerArray{container}
+}
+
+func containerSecurity() cv1.SecurityContextArgs {
+	return cv1.SecurityContextArgs{
+		ReadOnlyRootFilesystem:   inputs.Yes,
+		AllowPrivilegeEscalation: inputs.No,
+		SeccompProfile: cv1.SeccompProfileArgs{
+			Type: pulumi.String("RuntimeDefault"),
+		},
+	}
 }
 
 func serviceID() cv1.EnvVarArgs {

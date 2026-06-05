@@ -130,6 +130,7 @@ func TestConvertedApplicationDeploymentInputs(t *testing.T) {
 	require.Equal(t, "128Mi", resourceLimit(deployment, "memory"))
 	require.Equal(t, "1Gi", resourceRequest(deployment, "ephemeral-storage"))
 	require.Equal(t, "2Gi", resourceLimit(deployment, "ephemeral-storage"))
+	require.Equal(t, "RuntimeDefault", seccompProfileType(deployment))
 
 	secret := envVar(deployment, "DATABASE_PASSWORD")
 	valueFrom := test.Property(t, secret, "valueFrom").ObjectValue()
@@ -283,6 +284,12 @@ func resourceValue(deployment resource.PropertyMap, kind, name string) string {
 	resources := container(deployment)[resource.PropertyKey("resources")].ObjectValue()
 	values := resources[resource.PropertyKey(kind)].ObjectValue()
 	return values[resource.PropertyKey(name)].StringValue()
+}
+
+func seccompProfileType(deployment resource.PropertyMap) string {
+	security := container(deployment)[resource.PropertyKey("securityContext")].ObjectValue()
+	profile := security[resource.PropertyKey("seccompProfile")].ObjectValue()
+	return profile[resource.PropertyKey("type")].StringValue()
 }
 
 func deploymentSpec(deployment resource.PropertyMap) resource.PropertyMap {
