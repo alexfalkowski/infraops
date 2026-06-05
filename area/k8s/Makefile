@@ -18,7 +18,7 @@ setup-helm:
 
 # Install CircleCI. This target is run manually from an operator workstation, not CI.
 install-circleci:
-	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version 1.5.0
+	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --version 1.6.2
 
 # Install metrics server.
 install-metrics-server:
@@ -26,7 +26,7 @@ install-metrics-server:
 
 # Install nginx ingress controller.
 install-nginx-ingress:
-	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.14.3 -f nginx/values.yaml
+	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.15.1 -f nginx/values.yaml
 
 # Install Helm add-ons.
 install-helm: install-circleci install-metrics-server install-nginx-ingress
