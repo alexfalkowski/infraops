@@ -7,9 +7,14 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/alexfalkowski/infraops/v2.svg)](https://pkg.go.dev/github.com/alexfalkowski/infraops/v2)
 [![Stability: Active](https://masterminds.github.io/stability/active.svg)](https://masterminds.github.io/stability/active.html)
 
-A Go-based infrastructure “monorepo” powered by **Pulumi**, with configuration stored as **HJSON** and validated/decoded using a **protobuf schema**.
+# 🧭 InfraOps
 
-## Overview
+A Go-based infrastructure “monorepo” powered by **Pulumi**, with configuration stored as **HJSON** and decoded into a **protobuf schema**.
+
+> [!NOTE]
+> This repository is the operational source for several personal infrastructure areas. Prefer previews and narrow area changes before applying updates.
+
+## 🗺️ Overview
 
 This repository manages multiple infrastructure “areas”:
 
@@ -20,15 +25,32 @@ This repository manages multiple infrastructure “areas”:
 - `area/k8s`: Cluster add-ons installed via `helm`/`kubectl` (Makefile driven, not Pulumi).
 
 Each Pulumi area has:
+
 - a Pulumi entrypoint at `area/<name>/main.go`
 - a config file at `area/<name>/<name>.hjson`
 - a Pulumi project file `area/<name>/Pulumi.yaml`
 
 Shared implementation lives under `internal/` (e.g. `internal/app`, `internal/cf`, `internal/do`, `internal/gh`).
 
-## Tooling
+## 🧰 Tooling
 
-Primary tools used:
+### 🧱 Development tools
+
+Development and CI-style commands use:
+
+- Go (version from `go.mod`: `1.25.8`)
+- `make`
+- Ruby, used by shared lint helpers under `bin/`
+- Pulumi CLI
+- `buf` for protobuf linting, breaking-change checks, and code generation
+- `fieldalignment` for `make lint`
+- `golangci-lint` for `make lint` when installed in `PATH`
+- `gotestsum` for `make specs`
+- `govulncheck` and Trivy for `make sec`
+
+### 🛠️ Operator tools
+
+Infrastructure operation also uses:
 
 - Pulumi: <https://www.pulumi.com/>
 - kubectl: <https://kubernetes.io/docs/reference/kubectl/>
@@ -42,12 +64,13 @@ Primary tools used:
 Operator-only helper targets use these tools as needed:
 
 - `make -C area/apps save-config` and `make -C area/k8s save-config`: `doctl`
+- `make -C area/apps setup|delete|rollout`: `kubectl`
 - `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl`
 - `make -C area/apps verify`: `curl`
 - `make -C area/apps load`: `vegeta`
 - `make -C area/k8s setup|delete|pods`: `helm`, `kubectl`
 
-## Configuration (HJSON + protobuf schema)
+## 🧾 Configuration (HJSON + Protobuf Schema)
 
 All area configuration files are **HJSON** (`*.hjson`). They are decoded into protobuf messages defined in:
 
@@ -55,9 +78,12 @@ All area configuration files are **HJSON** (`*.hjson`). They are decoded into pr
 
 Those protobuf messages are then converted into internal Go types and used to provision resources.
 
-### Format and normalize config
+The protobuf types provide the expected configuration shape. Semantic checks that are not modeled in the schema may still fail later during Pulumi or provider operations.
+
+### 🧹 Format and Normalize Config
 
 This repo includes a small CLI to normalize/format config files by:
+
 1. decoding the HJSON into the appropriate protobuf message
 2. writing it back out in a canonical form
 
@@ -79,17 +105,18 @@ Override the path:
 ./format -k cf -p area/cf/cf.hjson
 ```
 
-### Config schema notes (practical)
+### 📝 Config Schema Notes
 
 A few conventions are implemented by the Go code and are worth knowing when editing HJSON:
 
-#### `EnvVar.value` secret references (apps)
+#### 🔐 `EnvVar.value` Secret References (apps)
 
 Environment variables support literal values, and a secret reference format:
 
 - `secret:<secretName>/<key>`
 
 At deploy time, this becomes a Kubernetes `SecretKeyRef`:
+
 - Secret name: `<secretName>-secret`
 - Secret key: `<key>`
 
@@ -104,14 +131,14 @@ env_vars: [
 ]
 ```
 
-#### `Application.secrets` vs secret env vars (apps)
+#### 🧩 `Application.secrets` vs Secret Env Vars (apps)
 
 - `Application.secrets` is an **application-level dependency list** used by the deployment implementation to wire existing Kubernetes Secrets as volumes.
 - Secret references in `env_vars` (the `secret:<secretName>/<key>` format) reference **specific keys** in those secrets.
 - They often use the same `<secretName>` values, but they serve different purposes.
 - The app program does not create Secret objects or define Secret keys. For internal apps, each listed secret is expected to exist as `<secretName>-secret` and is mounted at `/etc/secrets/<secretName>`.
 
-#### `Application.resource` sizing (apps)
+#### 📏 `Application.resource` Sizing (apps)
 
 `Application.resource` selects a resource profile. Current mapping:
 
@@ -119,7 +146,7 @@ env_vars: [
 
 Unknown values fall back to `"small"`.
 
-#### App NetworkPolicy baseline
+#### 🛡️ App NetworkPolicy Baseline
 
 The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods. Ingress is limited
 to the ports exposed by the app kind: external apps expose HTTP on `8080`, while internal apps expose
@@ -127,23 +154,36 @@ debug on `6060`, HTTP on `8080`, and gRPC on `9090`. Egress currently remains op
 traffic flows are not modeled per app yet. Future egress restrictions should be introduced per
 namespace/app after the required flows are known.
 
-## Common workflows
+## 🔁 Common Workflows
 
-### Dependencies, linting, tests, and security
+### 🚚 Checkout / Bootstrap
+
+The root `Makefile` includes shared build tooling from the `bin` submodule. Initialize it before running Make targets from a fresh checkout:
+
+```bash
+git submodule sync
+git submodule update --init
+```
+
+### ✅ Dependencies, Linting, Tests, and Security
+
+> [!IMPORTANT]
+> Run `make dep` before local validation after checkout, dependency changes, or generated/vendor-state changes.
 
 From the repository root:
 
 ```bash
 make dep          # download/tidy/vendor deps
 make lint         # lint (including field alignment)
-make sec          # govulncheck -test ./...
+make sec          # govulncheck + Trivy
 make specs        # gotestsum + go test (junit/coverage under test/reports)
 make coverage     # HTML + function coverage under test/reports
 ```
 
-### Protobuf / API
+### 🧬 Protobuf / API
 
-Do not edit generated Go code under `api/infraops/v2/*.pb.go` directly.
+> [!IMPORTANT]
+> Do not edit generated Go code under `api/infraops/v2/*.pb.go` directly.
 
 Instead:
 
@@ -155,7 +195,7 @@ make api-generate
 
 (Or: `make -C api lint|breaking|generate`.)
 
-## Pulumi: preview/update per area
+## 🚀 Pulumi: Preview/Update Per Area
 
 Pulumi is typically run via Makefile targets from the repo root.
 
@@ -164,6 +204,17 @@ Login:
 ```bash
 make pulumi-login
 ```
+
+### 🔑 Provider Credentials
+
+Pulumi also needs the provider credentials for the area being previewed or updated:
+
+| Area | Required local access |
+| ---- | --------------------- |
+| `apps` | Kubernetes access through the current kubeconfig context |
+| `cf` | `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` |
+| `do` | `DIGITALOCEAN_TOKEN` |
+| `gh` | `GITHUB_TOKEN` |
 
 Preview/update:
 
@@ -177,18 +228,33 @@ Supported areas for these targets:
 - `apps`, `cf`, `do`, `gh`
 
 The Makefile runs Pulumi with:
+
 - stack: `alexfalkowski/<area>/prod`
 - working directory: `area/<area>`
 
 That working directory matters because the programs read `<area>.hjson` via a relative path.
 
-## Areas
+Other stack operations:
 
-### Applications (`area/apps`)
+```bash
+make area=cf pulumi-refresh
+make area=cf pulumi-cancel
+make area=cf pulumi-delete
+```
+
+> [!WARNING]
+> `pulumi-update`, `pulumi-refresh`, and `pulumi-cancel` affect remote infrastructure or stack state. Run a preview first unless you are recovering from a known failed operation.
+
+> [!CAUTION]
+> `pulumi-delete` runs `pulumi stack rm --force`; it removes Pulumi stack state and can orphan managed resources if they still exist.
+
+## 🧭 Areas
+
+### 📦 Applications (`area/apps`)
 
 Deploys Kubernetes applications described in `area/apps/apps.hjson`.
 
-#### Configure
+#### ⚙️ Configure
 
 See:
 
@@ -204,7 +270,13 @@ For example, the `bezeichner` app in namespace `lean` reads `area/apps/lean/beze
 The apps Pulumi program turns that file into a Kubernetes ConfigMap entry named `<app>.yaml`,
 then mounts it into the container at `/etc/<app>/<app>.yaml`.
 
-#### Install / Setup
+#### 🏗️ Install / Setup
+
+Save the cluster kubeconfig if your local context is not already configured:
+
+```bash
+make -C area/apps save-config
+```
 
 Prepare the local app namespace/helper resources:
 
@@ -218,13 +290,16 @@ Apply the Pulumi resources described by `apps.hjson`:
 make area=apps pulumi-update
 ```
 
-#### Delete
+#### 🗑️ Delete
+
+> [!CAUTION]
+> This deletes the `lean` namespace through `kubectl`.
 
 ```bash
 make -C area/apps delete
 ```
 
-#### Update an application version (bump tool)
+#### ⬆️ Update an Application Version (bump tool)
 
 Build:
 
@@ -245,9 +320,10 @@ By default it edits `area/apps/apps.hjson`. Override path:
 ./bump -n bezeichner -v 1.559.0 -p area/apps/apps.hjson
 ```
 
-> Tip: run `./format -k apps` after edits to keep config normalized.
+> [!TIP]
+> Run `./format -k apps` after edits to keep config normalized.
 
-### Cloudflare (`area/cf`)
+### ☁️ Cloudflare (`area/cf`)
 
 Manages Cloudflare resources using Pulumi’s Cloudflare provider:
 
@@ -257,15 +333,14 @@ Config:
 
 - `area/cf/cf.hjson`
 
-#### Required environment variables
+#### 🔑 Required Environment Variables
 
-The implementation requires:
+Cloudflare Pulumi runs require:
 
-- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN` for provider authentication
+- `CLOUDFLARE_ACCOUNT_ID` for account-scoped resources like R2 buckets
 
-(Used for account-scoped resources like R2 buckets.)
-
-### DigitalOcean (`area/do`)
+### 🌊 DigitalOcean (`area/do`)
 
 Manages DigitalOcean resources using Pulumi’s DigitalOcean provider:
 
@@ -275,7 +350,7 @@ Config:
 
 - `area/do/do.hjson`
 
-#### Cluster defaults
+#### 📐 Cluster Defaults
 
 The DigitalOcean program creates the cluster VPC and then provisions the cluster with fixed
 operational defaults:
@@ -293,7 +368,7 @@ Cluster `resource` values map to node capacity:
 
 Unknown or empty values fall back to `"small"`.
 
-#### Manual prerequisites (DigitalOcean UI)
+#### 🧱 Manual Prerequisites (DigitalOcean UI)
 
 Some items may be created manually depending on account setup:
 
@@ -305,17 +380,18 @@ Some items may be created manually depending on account setup:
 
 The Pulumi program creates the VPC used by the cluster and attaches the cluster to it.
 
-#### Kubernetes cluster upgrades
+#### ⬆️ Kubernetes Cluster Upgrades
 
 Cluster version is pinned in code:
 
 - `internal/do/do.go`
 
 Guidance:
+
 - Patch versions can be updated in code.
 - Minor/major upgrades should be initiated via the DigitalOcean UI (per DO guidance), then aligned in code.
 
-### GitHub (`area/gh`)
+### 🐙 GitHub (`area/gh`)
 
 Manages GitHub resources using Pulumi’s GitHub provider:
 
@@ -329,11 +405,11 @@ This area was inspired by:
 
 - <https://github.com/dirien/pulumi-github>
 
-#### Repository creation caveat (2-step enablement)
+#### 🪜 Repository Creation Caveat (2-step enablement)
 
 Some repository features may require a two-step approach: create the repository first, then enable features in a follow-up change. This avoids timing issues around initial default branch creation.
 
-##### GitHub Pages
+##### 📄 GitHub Pages
 
 First change: disable Pages (or omit pages config):
 
@@ -356,7 +432,7 @@ pages: {
 }
 ```
 
-##### Collaborators
+##### 👥 Collaborators
 
 When enabled, collaborator management grants `admin` permission to `lean-thoughts-ci`
 on `alexfalkowski/<repository>`.
@@ -375,13 +451,19 @@ collaborators: { enabled: true }
 
 If the pipeline fails due to timing, a rerun often succeeds.
 
-### Kubernetes add-ons (`area/k8s`)
+### ⚓ Kubernetes Add-ons (`area/k8s`)
 
 This is not a Pulumi area. It contains cluster add-ons installed via `helm`/`kubectl`.
 These targets are intended to be run manually from an operator workstation, not from CI.
 
 > [!CAUTION]
-> Run this only after you have a Kubernetes cluster (for example from `area/do`).
+> Run this only after you have a Kubernetes cluster, a kubeconfig context for that cluster, and the required local secrets.
+
+Save the cluster kubeconfig if your local context is not already configured:
+
+```bash
+make -C area/k8s save-config
+```
 
 Setup:
 
@@ -390,6 +472,9 @@ make -C area/k8s setup
 ```
 
 Delete:
+
+> [!CAUTION]
+> This deletes the `nginx-ingress`, `circleci`, and `metrics-server` namespaces through `kubectl`.
 
 ```bash
 make -C area/k8s delete
@@ -401,16 +486,19 @@ Useful debugging:
 make -C area/k8s pods
 ```
 
-#### Required environment variables (some add-ons)
+#### 🔑 Required Environment Variables
 
-Depending on what you install, the k8s add-ons Makefile expects secrets like:
+The default `make -C area/k8s setup` path installs the CircleCI release agent along with nginx ingress and metrics-server.
+
+> [!IMPORTANT]
+> `CIRCLECI_K8S_TOKEN` is required when running the default k8s setup target.
 
 - `CIRCLECI_K8S_TOKEN` (CircleCI release agent)
 
 Because the Makefile is a local-operator workflow, the CircleCI release-agent token is passed
 directly to Helm rather than through a CI secret-handling path.
 
-## Repository structure
+## 🗂️ Repository Structure
 
 - `area/`: Pulumi programs and k8s add-ons
 - `internal/`: shared implementation (convert + create patterns per area)
