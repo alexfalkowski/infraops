@@ -16,7 +16,7 @@
       name: standort
       namespace: lean
       domain: lean-thoughts.com
-      version: 2.843.0
+      version: 2.844.0
       resource: small
     }
     {
