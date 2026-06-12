@@ -209,12 +209,8 @@ load_release_changes() {
   done
 }
 
-# Halts CircleCI for master release-only app changes.
+# Halts CircleCI for release-only app changes.
 halt_ci() {
-  if [[ "${CIRCLE_BRANCH:-}" != "master" ]]; then
-    return
-  fi
-
   if ! release_apps >/dev/null; then
     return
   fi
