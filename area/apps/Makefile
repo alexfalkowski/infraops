@@ -20,10 +20,20 @@ setup: setup-lean
 delete: delete-lean
 
 # Rollout all apps.
-rollout: rollout-lean
+rollout-all:
+	@./release rollout-all
+
+# Rollout release app changes.
+rollout:
+	@./release rollout
 
 # Verify all apps.
-verify: verify-lean
+verify-all:
+	@./release verify-all
+
+# Verify release app changes.
+verify:
+	@./release verify
 
 # Load all apps.
 load-all:

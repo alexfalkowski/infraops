@@ -9,10 +9,11 @@ readonly APP_MAKE_DIR="area/apps"
 readonly LOAD_DURATION="30s"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+readonly -a APPS=(standort bezeichner web)
 
 # Prints command usage.
 usage() {
-  printf 'Usage: %s <halt-ci|is-release|load|load-all|load-bezeichner|load-standort|load-web>\n' "$0" >&2
+  printf 'Usage: %s <halt-ci|is-release|load|load-all|load-bezeichner|load-standort|load-web|rollout|rollout-all|rollout-bezeichner|rollout-standort|rollout-web|verify|verify-all|verify-bezeichner|verify-standort|verify-web>\n' "$0" >&2
 }
 
 # Prints the revision to inspect for app release changes.
@@ -121,38 +122,106 @@ release_apps() {
   printf '%s\n' "${apps[@]}"
 }
 
-# Runs an app load target, or prints it when dry-run mode is enabled.
-load_app() {
-  local app
-
-  app="$1"
-  if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
-    printf './%s/release load-%s\n' "$APP_MAKE_DIR" "$app"
-    return
-  fi
-
-  case "$app" in
-    bezeichner)
-      load_bezeichner
-      ;;
-    standort)
-      load_standort
-      ;;
-    web)
-      load_web
+# Reports whether an app has release helper commands.
+is_app() {
+  case "$1" in
+    bezeichner | standort | web)
+      return 0
       ;;
     *)
-      printf 'invalid app name: %s\n' "$app" >&2
       return 1
       ;;
   esac
 }
 
+# Reports whether an app action has release helper commands.
+is_action() {
+  case "$1" in
+    load | rollout | verify)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+# Runs an app action, or prints it when dry-run mode is enabled.
+run_app_action() {
+  local action
+  local app
+
+  action="$1"
+  app="$2"
+
+  if ! is_action "$action"; then
+    printf 'invalid action: %s\n' "$action" >&2
+    return 1
+  fi
+
+  if ! is_app "$app"; then
+    printf 'invalid app name: %s\n' "$app" >&2
+    return 1
+  fi
+
+  if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+    printf './%s/release %s-%s\n' "$APP_MAKE_DIR" "$action" "$app"
+    return
+  fi
+
+  "${action}_${app}"
+}
+
+# Runs an app action for every supported app.
+run_all_apps() {
+  local action
+  local app
+
+  action="$1"
+  if ! is_action "$action"; then
+    printf 'invalid action: %s\n' "$action" >&2
+    return 1
+  fi
+
+  for app in "${APPS[@]}"; do
+    run_app_action "$action" "$app"
+  done
+}
+
+# Runs a release-aware app action and falls back to all apps.
+run_release_changes() {
+  local action
+  local app
+  local apps=()
+  local label
+
+  action="$1"
+  label="$2"
+
+  while IFS= read -r app; do
+    [[ -n "$app" ]] && apps+=("$app")
+  done < <(release_apps || true)
+
+  if ((${#apps[@]} == 0)); then
+    printf '%s all apps.\n' "$label"
+    run_all_apps "$action"
+    return
+  fi
+
+  for app in "${apps[@]}"; do
+    if ! is_app "$app"; then
+      printf 'invalid app name: %s\n' "$app" >&2
+      return 1
+    fi
+
+    printf '%s release app: %s\n' "$label" "$app"
+    run_app_action "$action" "$app"
+  done
+}
+
 # Load tests all apps.
 load_all() {
-  load_app "standort"
-  load_app "bezeichner"
-  load_app "web"
+  run_all_apps "load"
 }
 
 # Load tests standort.
@@ -185,28 +254,65 @@ load_web() {
 
 # Loads targeted release apps and falls back to the full apps load target.
 load_release_changes() {
-  local app
-  local apps=()
+  run_release_changes "load" "Loading"
+}
 
-  while IFS= read -r app; do
-    [[ -n "$app" ]] && apps+=("$app")
-  done < <(release_apps || true)
+# Rolls out all apps.
+rollout_all() {
+  run_all_apps "rollout"
+}
 
-  if ((${#apps[@]} == 0)); then
-    printf 'Loading all apps.\n'
-    load_all
-    return
-  fi
+# Rolls out standort.
+rollout_standort() {
+  kubectl rollout restart deployment/standort -n lean
+}
 
-  for app in "${apps[@]}"; do
-    if [[ ! "$app" =~ ^[a-z0-9-]+$ ]]; then
-      printf 'invalid app name: %s\n' "$app" >&2
-      return 1
-    fi
+# Rolls out bezeichner.
+rollout_bezeichner() {
+  kubectl rollout restart deployment/bezeichner -n lean
+}
 
-    printf 'Loading release app: %s\n' "$app"
-    load_app "$app"
-  done
+# Rolls out web.
+rollout_web() {
+  kubectl rollout restart deployment/web -n lean
+}
+
+# Rolls out targeted release apps and falls back to the full apps rollout target.
+rollout_release_changes() {
+  run_release_changes "rollout" "Rolling out"
+}
+
+# Verifies all apps.
+verify_all() {
+  run_all_apps "verify"
+}
+
+# Verifies standort.
+verify_standort() {
+  curl -svf \
+    --header "Content-Type: application/json" \
+    --request POST \
+    --data "{}" \
+    https://standort.lean-thoughts.com/standort.v2.Service/GetLocation
+}
+
+# Verifies bezeichner.
+verify_bezeichner() {
+  curl -svf \
+    --header "Content-Type: application/json" \
+    --request POST \
+    --data '{ "application": "ulid", "count": 10 }' \
+    https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers
+}
+
+# Verifies web.
+verify_web() {
+  curl -svf https://web.lean-thoughts.com
+}
+
+# Verifies targeted release apps and falls back to the full apps verify target.
+verify_release_changes() {
+  run_release_changes "verify" "Verifying"
 }
 
 # Halts CircleCI for release-only app changes.
@@ -237,13 +343,43 @@ case "${1:-}" in
     load_all
     ;;
   load-bezeichner)
-    load_app "bezeichner"
+    run_app_action "load" "bezeichner"
     ;;
   load-standort)
-    load_app "standort"
+    run_app_action "load" "standort"
     ;;
   load-web)
-    load_app "web"
+    run_app_action "load" "web"
+    ;;
+  rollout)
+    rollout_release_changes
+    ;;
+  rollout-all)
+    rollout_all
+    ;;
+  rollout-bezeichner)
+    run_app_action "rollout" "bezeichner"
+    ;;
+  rollout-standort)
+    run_app_action "rollout" "standort"
+    ;;
+  rollout-web)
+    run_app_action "rollout" "web"
+    ;;
+  verify)
+    verify_release_changes
+    ;;
+  verify-all)
+    verify_all
+    ;;
+  verify-bezeichner)
+    run_app_action "verify" "bezeichner"
+    ;;
+  verify-standort)
+    run_app_action "verify" "standort"
+    ;;
+  verify-web)
+    run_app_action "verify" "web"
     ;;
   *)
     usage
