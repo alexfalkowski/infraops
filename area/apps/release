@@ -1,0 +1,256 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2155
+set -eo pipefail
+
+# Handles release-only application version bumps in CI.
+
+readonly APP_CONFIG="area/apps/apps.hjson"
+readonly APP_MAKE_DIR="area/apps"
+readonly LOAD_DURATION="30s"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+
+# Prints command usage.
+usage() {
+  printf 'Usage: %s <halt-ci|is-release|load|load-all|load-bezeichner|load-standort|load-web>\n' "$0" >&2
+}
+
+# Prints the revision to inspect for app release changes.
+head_revision() {
+  printf '%s\n' "${APPS_RELEASE_HEAD:-HEAD}"
+}
+
+# Prints the revision to compare against the inspected revision.
+base_revision() {
+  local head
+
+  head="$(head_revision)"
+  if [[ -n "${APPS_RELEASE_BASE:-}" ]]; then
+    printf '%s\n' "$APPS_RELEASE_BASE"
+    return
+  fi
+
+  if git -C "$REPO_ROOT" rev-parse --verify "${head}^" >/dev/null 2>&1; then
+    printf '%s\n' "${head}^"
+    return
+  fi
+
+  if git -C "$REPO_ROOT" rev-parse --verify origin/master >/dev/null 2>&1; then
+    printf '%s\n' "origin/master"
+    return
+  fi
+
+  printf 'could not determine release diff base\n' >&2
+  return 1
+}
+
+# Reports whether the inspected diff only touches the apps config.
+has_only_app_config_changed() {
+  local base
+  local changed
+  local head
+
+  base="$(base_revision)"
+  head="$(head_revision)"
+  changed="$(git -C "$REPO_ROOT" diff --name-only "$base" "$head" --)"
+
+  [[ "$changed" == "$APP_CONFIG" ]]
+}
+
+# Reports whether the apps config diff only changes application version fields.
+has_only_application_versions_changed() {
+  local base
+  local head
+
+  base="$(base_revision)"
+  head="$(head_revision)"
+
+  git -C "$REPO_ROOT" diff --unified=0 --no-ext-diff --no-color "$base" "$head" -- "$APP_CONFIG" \
+    | awk '
+      BEGIN { valid = 1 }
+      /^(---|\+\+\+|@@)/ { next }
+      /^[-+]/ {
+        seen = 1
+        if ($0 !~ /^[-+][[:space:]]+version:[[:space:]]+[0-9]+\.[0-9]+\.[0-9]+$/) {
+          valid = 0
+        }
+      }
+      END {
+        if (!seen || !valid) {
+          exit 1
+        }
+      }
+    '
+}
+
+# Reports whether the inspected diff is a release-only apps change.
+has_release_only_changes() {
+  has_only_app_config_changed && has_only_application_versions_changed
+}
+
+# Prints application names with changed release versions.
+changed_release_apps() {
+  local base
+  local head
+
+  base="$(base_revision)"
+  head="$(head_revision)"
+
+  git -C "$REPO_ROOT" diff --unified=80 --no-ext-diff --no-color "$base" "$head" -- "$APP_CONFIG" \
+    | awk '
+      /^[ +][[:space:]]+name:[[:space:]]/ { name = $2 }
+      /^\+[[:space:]]+version:[[:space:]]+[0-9]+\.[0-9]+\.[0-9]+$/ && name != "" { print name }
+    ' \
+    | sort -u
+}
+
+# Prints release-only changed apps, or fails when the diff is not targeted.
+release_apps() {
+  local app
+  local apps=()
+
+  if ! has_release_only_changes; then
+    return 1
+  fi
+
+  while IFS= read -r app; do
+    [[ -n "$app" ]] && apps+=("$app")
+  done < <(changed_release_apps)
+
+  ((${#apps[@]} > 0)) || return 1
+  printf '%s\n' "${apps[@]}"
+}
+
+# Runs an app load target, or prints it when dry-run mode is enabled.
+load_app() {
+  local app
+
+  app="$1"
+  if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+    printf './%s/release load-%s\n' "$APP_MAKE_DIR" "$app"
+    return
+  fi
+
+  case "$app" in
+    bezeichner)
+      load_bezeichner
+      ;;
+    standort)
+      load_standort
+      ;;
+    web)
+      load_web
+      ;;
+    *)
+      printf 'invalid app name: %s\n' "$app" >&2
+      return 1
+      ;;
+  esac
+}
+
+# Load tests all apps.
+load_all() {
+  load_app "standort"
+  load_app "bezeichner"
+  load_app "web"
+}
+
+# Load tests standort.
+load_standort() {
+  printf 'POST https://standort.lean-thoughts.com/standort.v2.Service/GetLocation\n' \
+    | vegeta attack -duration="$LOAD_DURATION" \
+      -body "$REPO_ROOT/$APP_MAKE_DIR/lean/standort.json" \
+      -header "Content-Type: application/json" \
+    | tee "$REPO_ROOT/$APP_MAKE_DIR/lean/standort.bin" \
+    | vegeta report
+}
+
+# Load tests bezeichner.
+load_bezeichner() {
+  printf 'POST https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers\n' \
+    | vegeta attack -duration="$LOAD_DURATION" \
+      -body "$REPO_ROOT/$APP_MAKE_DIR/lean/bezeichner.json" \
+      -header "Content-Type: application/json" \
+    | tee "$REPO_ROOT/$APP_MAKE_DIR/lean/bezeichner.bin" \
+    | vegeta report
+}
+
+# Load tests web.
+load_web() {
+  printf 'GET https://web.lean-thoughts.com\n' \
+    | vegeta attack -duration="$LOAD_DURATION" \
+    | tee "$REPO_ROOT/$APP_MAKE_DIR/lean/web.bin" \
+    | vegeta report
+}
+
+# Loads targeted release apps and falls back to the full apps load target.
+load_release_changes() {
+  local app
+  local apps=()
+
+  while IFS= read -r app; do
+    [[ -n "$app" ]] && apps+=("$app")
+  done < <(release_apps || true)
+
+  if ((${#apps[@]} == 0)); then
+    printf 'Loading all apps.\n'
+    load_all
+    return
+  fi
+
+  for app in "${apps[@]}"; do
+    if [[ ! "$app" =~ ^[a-z0-9-]+$ ]]; then
+      printf 'invalid app name: %s\n' "$app" >&2
+      return 1
+    fi
+
+    printf 'Loading release app: %s\n' "$app"
+    load_app "$app"
+  done
+}
+
+# Halts CircleCI for master release-only app changes.
+halt_ci() {
+  if [[ "${CIRCLE_BRANCH:-}" != "master" ]]; then
+    return
+  fi
+
+  if ! release_apps >/dev/null; then
+    return
+  fi
+
+  if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+    printf 'circleci-agent step halt\n'
+    return
+  fi
+
+  circleci-agent step halt
+}
+
+case "${1:-}" in
+  halt-ci)
+    halt_ci
+    ;;
+  is-release)
+    release_apps >/dev/null
+    ;;
+  load)
+    load_release_changes
+    ;;
+  load-all)
+    load_all
+    ;;
+  load-bezeichner)
+    load_app "bezeichner"
+    ;;
+  load-standort)
+    load_app "standort"
+    ;;
+  load-web)
+    load_app "web"
+    ;;
+  *)
+    usage
+    exit 2
+    ;;
+esac
