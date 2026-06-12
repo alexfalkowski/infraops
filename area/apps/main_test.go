@@ -31,7 +31,7 @@ func TestLeanMakefileCoversConfiguredApps(t *testing.T) {
 	require.NoError(t, err)
 
 	targets := makefileTargets(string(content))
-	for _, workflow := range []string{"rollout", "verify", "load"} {
+	for _, workflow := range []string{"rollout", "verify"} {
 		aggregate := workflow + "-lean"
 		require.Contains(t, targets, aggregate)
 

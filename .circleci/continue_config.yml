@@ -22,6 +22,9 @@ jobs:
     steps:
       - checkout:
           method: blobless
+      - run:
+          name: skip app release-only changes
+          command: ./area/apps/release halt-ci
       - run: git submodule sync
       - run: git submodule update --init
       - run: make source-key
@@ -94,6 +97,9 @@ jobs:
     steps:
       - checkout:
           method: blobless
+      - run:
+          name: skip app release-only changes
+          command: ./area/apps/release halt-ci
       - run: git submodule sync
       - run: git submodule update --init
       - run: version

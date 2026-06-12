@@ -26,4 +26,9 @@ rollout: rollout-lean
 verify: verify-lean
 
 # Load all apps.
-load: load-lean
+load-all:
+	@./release load-all
+
+# Load release app changes.
+load:
+	@./release load
