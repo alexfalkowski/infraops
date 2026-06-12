@@ -18,33 +18,3 @@ create-lean:
 
 # Setup lean.
 setup-lean: create-lean
-
-# Rollout lean.
-rollout-lean: rollout-standort rollout-bezeichner rollout-web
-
-# Rollout standort.
-rollout-standort:
-	@kubectl rollout restart deployment/standort -n lean
-
-# Rollout bezeichner.
-rollout-bezeichner:
-	@kubectl rollout restart deployment/bezeichner -n lean
-
-# Rollout web.
-rollout-web:
-	@kubectl rollout restart deployment/web -n lean
-
-# Verify all apps.
-verify-lean: verify-standort verify-bezeichner verify-web
-
-# Verify standort.
-verify-standort:
-	@curl -svf --header "Content-Type: application/json" --request POST --data {} https://standort.lean-thoughts.com/standort.v2.Service/GetLocation
-
-# Verify bezeichner.
-verify-bezeichner:
-	@curl -svf --header "Content-Type: application/json" --request POST --data '{ "application": "ulid", "count": 10 }' https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers
-
-# Verify web.
-verify-web:
-	@curl -svf https://web.lean-thoughts.com
