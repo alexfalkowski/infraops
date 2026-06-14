@@ -30,8 +30,8 @@ func run() error {
 	)
 
 	set := flag.NewFlagSet("format", flag.ContinueOnError)
-	set.StringVar(&kind, "k", "", "config kind")
-	set.StringVar(&path, "p", "", "config file path")
+	set.StringVar(&kind, "k", "", "config kind (apps|cf|do|gh)")
+	set.StringVar(&path, "p", "", "config file path (default area/<kind>/<kind>.hjson)")
 	if err := set.Parse(os.Args[1:]); err != nil {
 		return err
 	}

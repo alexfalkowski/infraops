@@ -94,7 +94,10 @@ type App struct {
 	ID string
 	// Name is the Kubernetes application name (used for resource naming).
 	Name string
-	// Kind determines how the application is deployed (for example "internal" vs "external").
+	// Kind determines how the application is deployed.
+	//
+	// Supported values are "internal" and "external". Unsupported values are not prevalidated
+	// and can produce mixed resource behavior during Pulumi preview/update.
 	Kind string
 	// Namespace is the Kubernetes namespace to deploy into.
 	Namespace string
@@ -141,7 +144,11 @@ type Range struct {
 
 // EnvVar represents an environment variable to inject into the application container.
 type EnvVar struct {
-	Name  string
+	Name string
+	// Value is either a literal value or a secret reference in the form
+	// "secret:<secretName>/<key>". Secret references become Kubernetes SecretKeyRefs
+	// with Secret name "<secretName>-secret" and key "<key>"; the shape is not
+	// prevalidated before Pulumi/Kubernetes application.
 	Value string
 }
 

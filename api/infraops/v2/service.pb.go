@@ -105,16 +105,21 @@ func (x *EnvVar) GetValue() string {
 // resources such as ServiceAccount, ConfigMap, Deployment, Service, Ingress, and related policies.
 type Application struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Id is an optional identifier for the application in configuration.
-	// It is available for callers/tools but may not be used by all provisioners.
+	// Id is the CircleCI project identifier for internal application deployments.
+	// Internal deployments write this value to the "circleci.com/project-id" annotation used by the
+	// CircleCI release agent. External deployments do not receive CircleCI release-agent annotations.
+	// The implementation does not validate that the value is present or well-formed.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Kind determines the deployment model for this application.
 	//
 	// Supported values:
 	//   - "internal": use the repository-built image tag format, mount the application config file
-	//     and listed secret volumes, inject SERVICE_ID, and expose debug/http/grpc ports.
+	//     and listed secret volumes, inject SERVICE_ID, add CircleCI release-agent labels/annotations,
+	//     expose debug/http/grpc ports, and use HTTP liveness/readiness probes at
+	//     "/<name>/livez" and "/<name>/readyz" on port 8080 plus a TCP startup probe on 8080.
 	//   - "external": use the external image tag format, skip app config and secret volume mounts,
-	//     and expose only the HTTP port.
+	//     skip CircleCI release-agent labels/annotations, expose only the HTTP port, and use "/"
+	//     for HTTP liveness plus TCP readiness/startup probes on 8080.
 	//
 	// Other values are unsupported. The current implementation does not pre-validate this field, so
 	// unsupported values can produce mixed resource behavior during Pulumi preview/update.
@@ -1028,6 +1033,9 @@ func (x *Cloudflare) GetBuckets() []*Bucket {
 // Cluster describes a DigitalOcean Kubernetes cluster to provision.
 //
 // The `area/do` Pulumi program currently provisions a VPC and then a Kubernetes cluster attached to it.
+// The cluster uses fixed operational defaults in code: region fra1, two nodes, Kubernetes version
+// pinned by the implementation, maintenance window "any" day at 23:00, and
+// DestroyAllAssociatedResources enabled.
 type Cluster struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Name is the cluster name used for resource naming.
