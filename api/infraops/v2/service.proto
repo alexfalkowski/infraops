@@ -45,7 +45,15 @@ message Application {
   string id = 1;
 
   // Kind determines the deployment model for this application.
-  // The Go implementation recognizes values like "internal" and "external".
+  //
+  // Supported values:
+  //   - "internal": use the repository-built image tag format, mount the application config file
+  //     and listed secret volumes, inject SERVICE_ID, and expose debug/http/grpc ports.
+  //   - "external": use the external image tag format, skip app config and secret volume mounts,
+  //     and expose only the HTTP port.
+  //
+  // Other values are unsupported. The current implementation does not pre-validate this field, so
+  // unsupported values can produce mixed resource behavior during Pulumi preview/update.
   string kind = 2;
 
   // Name is the Kubernetes resource name base for this application.
@@ -121,6 +129,8 @@ message Template {
 }
 
 // Pages describes GitHub Pages configuration for a repository.
+//
+// When enabled, the implementation creates legacy GitHub Pages configuration sourced from "master".
 message Pages {
   // Enabled controls whether Pages should be enabled/managed.
   bool enabled = 1;
@@ -133,6 +143,11 @@ message Pages {
 //
 // This configuration is consumed by the `area/gh` Pulumi program, which creates the repository
 // and applies additional settings such as branch protection, Pages, and collaborators.
+//
+// Every repository also receives the fixed repository baseline in the Go implementation: merge and
+// rebase commits disabled, squash merge/automerge/update branch/delete branch enabled, auto-init
+// enabled, issues/projects/wiki enabled, secret scanning and push protection enabled, vulnerability
+// alerts enabled, and web commit signoff disabled. These settings are not configurable in HJSON.
 message Repository {
   // Name is the repository name.
   string name = 1;

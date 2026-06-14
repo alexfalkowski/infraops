@@ -98,7 +98,7 @@ type App struct {
 	Kind string
 	// Namespace is the Kubernetes namespace to deploy into.
 	Namespace string
-	// Domain is the external hostname associated with the application.
+	// Domain is the base/apex domain suffix used to build the ingress host <name>.<domain>.
 	Domain string
 	// Version is the application version string used for deployment (for example as an image tag).
 	Version string

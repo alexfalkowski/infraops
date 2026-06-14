@@ -65,7 +65,7 @@ Operator-only helper targets use these tools as needed:
 
 - `make -C area/apps save-config` and `make -C area/k8s save-config`: `doctl`
 - `make -C area/apps setup|delete|rollout`: `kubectl`
-- `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl`
+- `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl` (live `lean` namespace scan)
 - `make -C area/apps verify`: `curl`
 - `make -C area/apps load`: `vegeta`
 - `make -C area/k8s setup|delete|pods`: `helm`, `kubectl`
@@ -290,6 +290,38 @@ Apply the Pulumi resources described by `apps.hjson`:
 make area=apps pulumi-update
 ```
 
+#### 🧪 App Helpers
+
+The default `rollout`, `verify`, and `load` helper targets are release-aware. They inspect the app
+release diff and target only apps with version-only changes in `area/apps/apps.hjson`; when the diff
+is not a release-only app change, they fall back to all supported apps.
+
+```bash
+make -C area/apps rollout
+make -C area/apps verify
+make -C area/apps load
+```
+
+Use the `*-all` targets when you want to cover every supported app explicitly:
+
+```bash
+make -C area/apps rollout-all
+make -C area/apps verify-all
+make -C area/apps load-all
+```
+
+Per-app commands are exposed by the release helper:
+
+```bash
+cd area/apps
+./release verify-web
+./release load-bezeichner
+./release rollout-standort
+```
+
+The `lint` target reads live resources from the `lean` namespace and scans them with kube-score and
+kubescape; it requires a working cluster context.
+
 #### 🗑️ Delete
 
 > [!CAUTION]
@@ -470,6 +502,11 @@ Setup:
 ```bash
 make -C area/k8s setup
 ```
+
+The nginx ingress add-on uses the Helm values in `area/k8s/nginx/values.yaml`. Those values restrict
+the DigitalOcean load balancer allow rules to Cloudflare CIDR ranges, so the ingress is intended for
+Cloudflare-proxied origin traffic. Direct clients or non-Cloudflare DNS paths may be blocked at the
+load balancer.
 
 Delete:
 

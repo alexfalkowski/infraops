@@ -6,7 +6,7 @@ kube-score: kube-score-lean
 # Run kubescape.
 kubescape: kubescape-lean
 
-# Lint config.
+# Lint live app resources.
 lint: kube-score kubescape
 
 # Save kubeconfig.
