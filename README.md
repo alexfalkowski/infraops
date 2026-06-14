@@ -119,6 +119,17 @@ Supported values:
 Other values are unsupported and are not pre-validated by the helper code; malformed values may fail
 later during Pulumi/Kubernetes application.
 
+Internal apps also receive CircleCI release-agent labels/annotations and must serve HTTP
+liveness/readiness probes at `/<name>/livez` and `/<name>/readyz` on port `8080`; startup uses a TCP
+probe on `8080`. External apps skip CircleCI release-agent labels/annotations and use `/` for HTTP
+liveness plus TCP readiness/startup probes on `8080`.
+
+#### 🪪 `Application.id` CircleCI Project ID (apps)
+
+For internal apps, `Application.id` is written to the deployment annotation
+`circleci.com/project-id`. Keep it aligned with the CircleCI project identifier when adding or
+renaming internal apps. External apps do not receive CircleCI release-agent labels or annotations.
+
 #### 🔐 `EnvVar.value` Secret References (apps)
 
 Environment variables support literal values, and a secret reference format:
@@ -205,6 +216,9 @@ make api-generate
 
 (Or: `make -C api lint|breaking|generate`.)
 
+`make api-breaking` compares the API module against the GitHub `master` branch, so it needs network
+access to run outside CI.
+
 ## 🚀 Pulumi: Preview/Update Per Area
 
 Pulumi is typically run via Makefile targets from the repo root.
@@ -253,7 +267,7 @@ make area=cf pulumi-delete
 ```
 
 > [!WARNING]
-> `pulumi-update`, `pulumi-refresh`, and `pulumi-cancel` affect remote infrastructure or stack state. Run a preview first unless you are recovering from a known failed operation.
+> `pulumi-update`, `pulumi-refresh`, and `pulumi-cancel` affect remote infrastructure or stack state. The Make targets pass `--yes`, so treat the preview as the confirmation step unless you are recovering from a known failed operation.
 
 > [!CAUTION]
 > `pulumi-delete` runs `pulumi stack rm --force`; it removes Pulumi stack state and can orphan managed resources if they still exist.
@@ -279,6 +293,10 @@ Internal apps also need an application config file at:
 For example, the `bezeichner` app in namespace `lean` reads `area/apps/lean/bezeichner.yaml`.
 The apps Pulumi program turns that file into a Kubernetes ConfigMap entry named `<app>.yaml`,
 then mounts it into the container at `/etc/<app>/<app>.yaml`.
+
+Only applications listed in `area/apps/apps.hjson` are deployed. The tracked files under
+`area/apps/fiction/` are example app configs and are not used unless a matching app entry references
+that namespace/name.
 
 #### 🏗️ Install / Setup
 
@@ -319,6 +337,8 @@ make -C area/apps rollout-all
 make -C area/apps verify-all
 make -C area/apps load-all
 ```
+
+The `load*` targets write ignored vegeta result files under `area/apps/lean/*.bin`.
 
 Per-app commands are exposed by the release helper:
 
@@ -374,6 +394,21 @@ Manages Cloudflare resources using Pulumi’s Cloudflare provider:
 Config:
 
 - `area/cf/cf.hjson`
+
+R2 buckets are optional. A bucket with a custom domain uses this shape:
+
+```hjson
+buckets: [
+  {
+    name: assets
+    region: EEUR
+    zone: {
+      id: "<cloudflare-zone-id>"
+      domain: assets.example.com
+    }
+  }
+]
+```
 
 #### 🔑 Required Environment Variables
 
@@ -481,6 +516,9 @@ pages: {
   cname: www.yoursite.com
 }
 ```
+
+Pages uses legacy GitHub Pages sourced from `master`; branch, path, and build type are not
+configurable in HJSON.
 
 ##### 👥 Collaborators
 
