@@ -109,6 +109,16 @@ Override the path:
 
 A few conventions are implemented by the Go code and are worth knowing when editing HJSON:
 
+#### 🧭 `Application.kind` Deployment Model (apps)
+
+Supported values:
+
+- `"internal"`: uses image tag `docker.io/alexfalkowski/<name>:v<version>`, mounts the app config file and listed secret volumes, injects `SERVICE_ID`, runs the container with `server`, and exposes debug `6060`, HTTP `8080`, and gRPC `9090`.
+- `"external"`: uses image tag `docker.io/alexfalkowski/<name>:<version>`, skips app config and secret volume mounts, and exposes only HTTP `8080`.
+
+Other values are unsupported and are not pre-validated by the helper code; malformed values may fail
+later during Pulumi/Kubernetes application.
+
 #### 🔐 `EnvVar.value` Secret References (apps)
 
 Environment variables support literal values, and a secret reference format:
@@ -436,6 +446,14 @@ Config:
 This area was inspired by:
 
 - <https://github.com/dirien/pulumi-github>
+
+#### 🛡️ Branch Protection Baseline
+
+Every repository must list at least one `checks` entry. Those values become the required status
+check contexts for strict branch protection on `master`; an empty list fails during provisioning.
+
+Branch protection also enforces linear history and intentionally requires zero approving PR reviews
+because required status checks are the primary merge gate for this solo-maintainer workflow.
 
 #### 🪜 Repository Creation Caveat (2-step enablement)
 
