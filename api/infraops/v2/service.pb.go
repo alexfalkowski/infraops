@@ -109,7 +109,15 @@ type Application struct {
 	// It is available for callers/tools but may not be used by all provisioners.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Kind determines the deployment model for this application.
-	// The Go implementation recognizes values like "internal" and "external".
+	//
+	// Supported values:
+	//   - "internal": use the repository-built image tag format, mount the application config file
+	//     and listed secret volumes, inject SERVICE_ID, and expose debug/http/grpc ports.
+	//   - "external": use the external image tag format, skip app config and secret volume mounts,
+	//     and expose only the HTTP port.
+	//
+	// Other values are unsupported. The current implementation does not pre-validate this field, so
+	// unsupported values can produce mixed resource behavior during Pulumi preview/update.
 	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
 	// Name is the Kubernetes resource name base for this application.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
@@ -405,6 +413,8 @@ func (x *Template) GetRepository() string {
 }
 
 // Pages describes GitHub Pages configuration for a repository.
+//
+// When enabled, the implementation creates legacy GitHub Pages configuration sourced from "master".
 type Pages struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Enabled controls whether Pages should be enabled/managed.
@@ -463,6 +473,11 @@ func (x *Pages) GetCname() string {
 //
 // This configuration is consumed by the `area/gh` Pulumi program, which creates the repository
 // and applies additional settings such as branch protection, Pages, and collaborators.
+//
+// Every repository also receives the fixed repository baseline in the Go implementation: merge and
+// rebase commits disabled, squash merge/automerge/update branch/delete branch enabled, auto-init
+// enabled, issues/projects/wiki enabled, secret scanning and push protection enabled, vulnerability
+// alerts enabled, and web commit signoff disabled. These settings are not configurable in HJSON.
 type Repository struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Name is the repository name.
