@@ -270,7 +270,7 @@ message Cloudflare {
   // BalancerZones is the set of zones for which proxied A/AAAA records are managed.
   repeated BalancerZone balancer_zones = 2;
 
-  // PageZones is the set of zones configured for Cloudflare Pages sites.
+  // PageZones is the set of zones configured for static-site or pages-style CNAME targets.
   repeated PageZone page_zones = 3;
 
   // Buckets is the set of R2 buckets to create/manage, optionally with custom domains.

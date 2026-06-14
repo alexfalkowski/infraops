@@ -959,7 +959,7 @@ type Cloudflare struct {
 	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
 	// BalancerZones is the set of zones for which proxied A/AAAA records are managed.
 	BalancerZones []*BalancerZone `protobuf:"bytes,2,rep,name=balancer_zones,json=balancerZones,proto3" json:"balancer_zones,omitempty"`
-	// PageZones is the set of zones configured for Cloudflare Pages sites.
+	// PageZones is the set of zones configured for static-site or pages-style CNAME targets.
 	PageZones []*PageZone `protobuf:"bytes,3,rep,name=page_zones,json=pageZones,proto3" json:"page_zones,omitempty"`
 	// Buckets is the set of R2 buckets to create/manage, optionally with custom domains.
 	Buckets       []*Bucket `protobuf:"bytes,4,rep,name=buckets,proto3" json:"buckets,omitempty"`
