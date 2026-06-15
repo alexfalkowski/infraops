@@ -80,6 +80,9 @@ Those protobuf messages are then converted into internal Go types and used to pr
 
 The protobuf types provide the expected configuration shape. Semantic checks that are not modeled in the schema may still fail later during Pulumi or provider operations.
 
+The top-level `version` field in each HJSON file is the configuration schema version used by this
+repo's tooling. It is not a Kubernetes, provider, Pulumi, or application runtime version.
+
 ### 🧹 Format and Normalize Config
 
 This repo includes a small CLI to normalize/format config files by:
@@ -324,6 +327,13 @@ The default `rollout`, `verify`, and `load` helper targets are release-aware. Th
 release diff and target only apps with version-only changes in `area/apps/apps.hjson`; when the diff
 is not a release-only app change, they fall back to all supported apps.
 
+The release helper compares `APPS_RELEASE_BASE` to `APPS_RELEASE_HEAD` when those environment
+variables are set. Otherwise it uses the current commit's parent, falling back to `origin/master`
+when the parent is unavailable. In CI, `area/apps/release halt-ci` halts the general build for a
+release-only apps version bump so the apps update workflow can run the targeted Pulumi update,
+verification, load, and live-resource lint path. Set `APPS_RELEASE_DRY_RUN=true` to print the
+release helper action instead of running it.
+
 ```bash
 make -C area/apps rollout
 make -C area/apps verify
@@ -394,6 +404,42 @@ Manages Cloudflare resources using Pulumi’s Cloudflare provider:
 Config:
 
 - `area/cf/cf.hjson`
+
+#### 🌐 Zone Models
+
+`balancer_zones` create a Cloudflare zone plus proxied A and AAAA records for each configured
+`record_names` entry under the zone domain. Balancer zones use the shared Cloudflare zone baseline
+with SSL mode `full`.
+
+```hjson
+balancer_zones: [
+  {
+    name: example
+    domain: example.com
+    ipv4: 203.0.113.10
+    ipv6: 2001:db8::10
+    record_names: [
+      api
+      web
+    ]
+  }
+]
+```
+
+`page_zones` create a Cloudflare zone plus a proxied `www.<domain>` CNAME to `host`. Page zones use
+the shared Cloudflare zone baseline with SSL mode `strict`.
+
+```hjson
+page_zones: [
+  {
+    name: docs
+    domain: example.com
+    host: example.github.io
+  }
+]
+```
+
+#### 🪣 R2 Buckets
 
 R2 buckets are optional. A bucket with a custom domain uses this shape:
 
@@ -481,6 +527,14 @@ Config:
 This area was inspired by:
 
 - <https://github.com/dirien/pulumi-github>
+
+#### 🧱 Repository Baseline
+
+Every managed repository receives a fixed baseline in addition to the HJSON fields: merge commits
+and rebase merges are disabled, squash merge, auto-merge, update branch, auto-init, branch deletion
+on merge, issues, projects, wiki, secret scanning, push protection, and vulnerability alerts are
+enabled, and web commit signoff is disabled. These settings are intentional and are not configurable
+in HJSON.
 
 #### 🛡️ Branch Protection Baseline
 
