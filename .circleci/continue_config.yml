@@ -14,10 +14,34 @@ parameters:
     type: boolean
     default: false
 
-jobs:
-  build:
+commands:
+  sync-submodules:
+    steps:
+      - run: git submodule sync
+      - run: git submodule update --init
+  checkout-submodules:
+    steps:
+      - checkout:
+          method: blobless
+      - sync-submodules
+
+executors:
+  go:
     docker:
       - image: alexfalkowski/go:4.20
+  release:
+    docker:
+      - image: alexfalkowski/release:8.18
+  alpine:
+    docker:
+      - image: alpine:latest
+  k8s:
+    docker:
+      - image: alexfalkowski/k8s:4.30
+
+jobs:
+  build:
+    executor: go
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -25,8 +49,7 @@ jobs:
       - run:
           name: skip app release-only changes
           command: ./area/apps/release halt-ci
-      - run: git submodule sync
-      - run: git submodule update --init
+      - sync-submodules
       - run: make source-key
       - restore_cache:
           name: restore go cache
@@ -80,19 +103,14 @@ jobs:
       - run: make codecov-upload
     resource_class: arm.large
   sync:
-    docker:
-      - image: alexfalkowski/release:8.18
+    executor: release
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make sync push
     resource_class: arm.large
   version:
-    docker:
-      - image: alexfalkowski/release:8.18
+    executor: release
     working_directory: ~/infraops
     steps:
       - checkout:
@@ -100,27 +118,21 @@ jobs:
       - run:
           name: skip app release-only changes
           command: ./area/apps/release halt-ci
-      - run: git submodule sync
-      - run: git submodule update --init
+      - sync-submodules
       - run: version
       - run: package
     resource_class: arm.large
   wait-all:
-    docker:
-      - image: alpine:latest
+    executor: alpine
     resource_class: small
     steps:
       - run: echo "all applicable jobs finished"
 
   apps_preview:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - run: make -C area/apps save-config
       - restore_cache:
@@ -150,14 +162,10 @@ jobs:
             - ~/.cache/go-build
     resource_class: arm.large
   apps_update:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - run: make -C area/apps save-config
       - restore_cache:
@@ -191,14 +199,10 @@ jobs:
     resource_class: arm.large
 
   cf_preview:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - restore_cache:
           name: restore deps
@@ -227,14 +231,10 @@ jobs:
             - ~/.cache/go-build
     resource_class: arm.large
   cf_update:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - restore_cache:
           name: restore deps
@@ -264,14 +264,10 @@ jobs:
     resource_class: arm.large
 
   do_preview:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - restore_cache:
           name: restore deps
@@ -300,14 +296,10 @@ jobs:
             - ~/.cache/go-build
     resource_class: arm.large
   do_update:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - restore_cache:
           name: restore deps
@@ -337,14 +329,10 @@ jobs:
     resource_class: arm.large
 
   gh_preview:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - restore_cache:
           name: restore deps
@@ -373,14 +361,10 @@ jobs:
             - ~/.cache/go-build
     resource_class: arm.large
   gh_update:
-    docker:
-      - image: alexfalkowski/k8s:4.30
+    executor: k8s
     working_directory: ~/infraops
     steps:
-      - checkout:
-          method: blobless
-      - run: git submodule sync
-      - run: git submodule update --init
+      - checkout-submodules
       - run: make source-key
       - restore_cache:
           name: restore deps
