@@ -77,11 +77,11 @@ Config tools:
 
 ```bash
 make build-format
-./format -k <apps|cf|do|gh>
-
 make build-bump
-./bump -n <appName> -v <version>
 ```
+
+The generated helper binaries are maintainer/operator tools; prefer the Make
+targets and README-documented workflows before running them directly.
 
 ## Workflow Rules
 
