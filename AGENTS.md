@@ -121,7 +121,7 @@ targets and README-documented workflows before running them directly.
 ## CI
 
 - CircleCI setup config uses path filtering to enable area workflows.
-- The main `build` job runs `make lint`, `make build-bump`, `make build-format`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
+- The main `build` job runs `make lint`, `make scripts-lint`, `make build-bump`, `make build-format`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
 - Area preview jobs run on non-`master`; update jobs run only on `master`.
 - Apps updates also run `make -C area/apps verify`, `load`, and `lint`.
 - Non-`master` workflows run `sync` after build and applicable previews.
