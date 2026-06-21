@@ -45,6 +45,7 @@ Development and CI-style commands use:
 - `buf` for protobuf linting, breaking-change checks, and code generation
 - `fieldalignment` for `make lint`
 - `golangci-lint` for `make lint` when installed in `PATH`
+- `shellcheck` for `make scripts-lint`
 - `gotestsum` for `make specs`
 - `govulncheck` and Trivy for `make sec`
 
@@ -198,7 +199,8 @@ From the repository root:
 
 ```bash
 make dep          # download/tidy/vendor deps
-make lint         # lint (including field alignment)
+make lint         # lint Go sources (including field alignment)
+make scripts-lint # lint repository shell workflow helpers
 make sec          # govulncheck + Trivy
 make specs        # gotestsum + go test (junit/coverage under test/reports)
 make coverage     # HTML + function coverage under test/reports

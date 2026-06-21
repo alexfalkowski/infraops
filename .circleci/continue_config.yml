@@ -77,6 +77,7 @@ jobs:
       - run:
           command: make lint
           no_output_timeout: 30m
+      - run: make scripts-lint
       - save_cache:
           name: save go lint cache
           key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}

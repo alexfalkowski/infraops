@@ -30,6 +30,10 @@ pulumi-refresh:
 api-lint:
 	@make -C api lint
 
+# Lint repository shell workflow helpers.
+scripts-lint:
+	@shellcheck area/apps/release
+
 # Check the API for breaking changes.
 api-breaking:
 	@make -C api breaking
