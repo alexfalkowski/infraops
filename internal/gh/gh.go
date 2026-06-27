@@ -132,10 +132,10 @@ type (
 
 	// Collaborators describes whether collaborator management is enabled for a repository.
 	//
-	// When enabled, the implementation grants admin permission to lean-thoughts-ci on
+	// When enabled, the implementation grants push permission to lean-thoughts-ci on
 	// alexfalkowski/<repository>.
 	Collaborators struct {
-		// Enabled controls whether the fixed admin collaborator should be managed for the repository.
+		// Enabled controls whether the fixed push collaborator should be managed for the repository.
 		Enabled bool
 	}
 
@@ -151,7 +151,7 @@ type (
 // Repository describes a GitHub repository and its desired configuration.
 type Repository struct {
 	// Collaborators is optional; when nil or disabled, collaborator resources are not managed.
-	// When enabled, lean-thoughts-ci is granted admin permission on alexfalkowski/<repository>.
+	// When enabled, lean-thoughts-ci is granted push permission on alexfalkowski/<repository>.
 	Collaborators *Collaborators
 	// Template is optional; when set, it identifies the template repository used on creation.
 	Template *Template

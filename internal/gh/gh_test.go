@@ -182,7 +182,7 @@ func requireCollaborator(t *testing.T, collaborators []resource.PropertyMap) {
 	require.Len(t, collaborators, 1)
 
 	collaborator := collaborators[0]
-	require.Equal(t, "admin", test.Property(t, collaborator, "permission").StringValue())
+	require.Equal(t, "push", test.Property(t, collaborator, "permission").StringValue())
 	require.Equal(t, "alexfalkowski/test", test.Property(t, collaborator, "repository").StringValue())
 	require.Equal(t, "lean-thoughts-ci", test.Property(t, collaborator, "username").StringValue())
 }

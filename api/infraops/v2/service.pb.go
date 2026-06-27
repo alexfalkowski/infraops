@@ -312,7 +312,7 @@ func (x *Kubernetes) GetApplications() []*Application {
 
 // Collaborators toggles whether repository collaborators are managed for a repository.
 //
-// When enabled, the infra code grants "admin" permission to "lean-thoughts-ci" on
+// When enabled, the infra code grants "push" permission to "lean-thoughts-ci" on
 // "alexfalkowski/<repository>".
 type Collaborators struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
