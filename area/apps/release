@@ -10,6 +10,8 @@ readonly LOAD_DURATION="30s"
 readonly LOAD_SUCCESS_RATIO="1"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+readonly VERIFY_CONNECT_TIMEOUT="5"
+readonly VERIFY_MAX_TIME="30"
 readonly -a APPS=(standort bezeichner web)
 
 # Prints command usage.
@@ -326,6 +328,8 @@ verify_all() {
 # Verifies standort.
 verify_standort() {
   curl -svf \
+    --connect-timeout "$VERIFY_CONNECT_TIMEOUT" \
+    --max-time "$VERIFY_MAX_TIME" \
     --header "Content-Type: application/json" \
     --request POST \
     --data "{}" \
@@ -335,6 +339,8 @@ verify_standort() {
 # Verifies bezeichner.
 verify_bezeichner() {
   curl -svf \
+    --connect-timeout "$VERIFY_CONNECT_TIMEOUT" \
+    --max-time "$VERIFY_MAX_TIME" \
     --header "Content-Type: application/json" \
     --request POST \
     --data '{ "application": "ulid", "count": 10 }' \
@@ -343,7 +349,10 @@ verify_bezeichner() {
 
 # Verifies web.
 verify_web() {
-  curl -svf https://web.lean-thoughts.com
+  curl -svf \
+    --connect-timeout "$VERIFY_CONNECT_TIMEOUT" \
+    --max-time "$VERIFY_MAX_TIME" \
+    https://web.lean-thoughts.com
 }
 
 # Verifies targeted release apps and falls back to the full apps verify target.
