@@ -54,13 +54,13 @@ jobs:
       - restore_cache:
           name: restore go cache
           keys:
-            - infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-build-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save go cache
-          key: infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -139,13 +139,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-apps-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -172,13 +172,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-apps-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-apps-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -208,13 +208,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-cf-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -240,13 +240,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-cf-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-cf-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -273,13 +273,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-do-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -305,13 +305,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-do-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-do-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -338,13 +338,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-gh-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
@@ -370,13 +370,13 @@ jobs:
       - restore_cache:
           name: restore deps
           keys:
-            - infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
             - infraops-gh-go-cache-
       - run: make clean
       - run: make dep
       - save_cache:
           name: save deps
-          key: infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-gh-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
           paths:
             - ~/go/pkg/mod
       - restore_cache:
