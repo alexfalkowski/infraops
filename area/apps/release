@@ -7,6 +7,7 @@ set -eo pipefail
 readonly APP_CONFIG="area/apps/apps.hjson"
 readonly APP_MAKE_DIR="area/apps"
 readonly LOAD_DURATION="30s"
+readonly LOAD_SUCCESS_RATIO="1"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 readonly -a APPS=(standort bezeichner web)
@@ -219,6 +220,29 @@ run_release_changes() {
   done
 }
 
+# Verifies that a Vegeta result file meets the deploy gate threshold.
+assert_successful_load() {
+  local result
+
+  result="$1"
+  vegeta report -type=json "$result" \
+    | awk -v threshold="$LOAD_SUCCESS_RATIO" '
+      match($0, /"success":[[:space:]]*[0-9.]+/) {
+        success = substr($0, RSTART + 10, RLENGTH - 10)
+      }
+      END {
+        if (success == "") {
+          print "could not read vegeta success ratio" > "/dev/stderr"
+          exit 1
+        }
+        if (success + 0 < threshold + 0) {
+          printf "load success ratio %.2f%% is below %.2f%%\n", success * 100, threshold * 100 > "/dev/stderr"
+          exit 1
+        }
+      }
+    '
+}
+
 # Load tests all apps.
 load_all() {
   run_all_apps "load"
@@ -226,30 +250,42 @@ load_all() {
 
 # Load tests standort.
 load_standort() {
+  local result
+
+  result="$REPO_ROOT/$APP_MAKE_DIR/lean/standort.bin"
   printf 'POST https://standort.lean-thoughts.com/standort.v2.Service/GetLocation\n' \
     | vegeta attack -duration="$LOAD_DURATION" \
       -body "$REPO_ROOT/$APP_MAKE_DIR/lean/standort.json" \
       -header "Content-Type: application/json" \
-    | tee "$REPO_ROOT/$APP_MAKE_DIR/lean/standort.bin" \
+    | tee "$result" \
     | vegeta report
+  assert_successful_load "$result"
 }
 
 # Load tests bezeichner.
 load_bezeichner() {
+  local result
+
+  result="$REPO_ROOT/$APP_MAKE_DIR/lean/bezeichner.bin"
   printf 'POST https://bezeichner.lean-thoughts.com/bezeichner.v1.Service/GenerateIdentifiers\n' \
     | vegeta attack -duration="$LOAD_DURATION" \
       -body "$REPO_ROOT/$APP_MAKE_DIR/lean/bezeichner.json" \
       -header "Content-Type: application/json" \
-    | tee "$REPO_ROOT/$APP_MAKE_DIR/lean/bezeichner.bin" \
+    | tee "$result" \
     | vegeta report
+  assert_successful_load "$result"
 }
 
 # Load tests web.
 load_web() {
+  local result
+
+  result="$REPO_ROOT/$APP_MAKE_DIR/lean/web.bin"
   printf 'GET https://web.lean-thoughts.com\n' \
     | vegeta attack -duration="$LOAD_DURATION" \
-    | tee "$REPO_ROOT/$APP_MAKE_DIR/lean/web.bin" \
+    | tee "$result" \
     | vegeta report
+  assert_successful_load "$result"
 }
 
 # Loads targeted release apps and falls back to the full apps load target.
