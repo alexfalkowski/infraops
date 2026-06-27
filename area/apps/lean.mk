@@ -1,8 +1,6 @@
 # Run kube-score for lean.
 kube-score-lean:
-	@kubectl api-resources --verbs=list --namespaced -o name \
-		| xargs -I{} bash -c "kubectl get {} --namespace lean -oyaml && echo ---" \
-		| kube-score score --ignore-test deployment-has-host-podantiaffinity  -
+	@./kube-score-live lean
 
 # Run kubescape for lean.
 kubescape-lean:
