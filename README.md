@@ -578,7 +578,7 @@ configurable in HJSON.
 
 ##### 👥 Collaborators
 
-When enabled, collaborator management grants `admin` permission to `lean-thoughts-ci`
+When enabled, collaborator management grants `push` permission to `lean-thoughts-ci`
 on `alexfalkowski/<repository>`.
 
 First change:

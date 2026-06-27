@@ -7,7 +7,7 @@ import (
 
 // collaborator provisions a GitHub repository collaborator when collaborator management is enabled.
 //
-// The current implementation grants "admin" permissions to the "lean-thoughts-ci" user for the
+// The current implementation grants "push" permissions to the "lean-thoughts-ci" user for the
 // repository identified by repo.Name under the "alexfalkowski" owner.
 func collaborator(ctx *pulumi.Context, repo *Repository) error {
 	if !repo.HasCollaborators() {
@@ -15,7 +15,8 @@ func collaborator(ctx *pulumi.Context, repo *Repository) error {
 	}
 
 	args := &github.RepositoryCollaboratorArgs{
-		Permission: pulumi.String("admin"),
+		// GitHub personal repositories only support "push" for collaborators.
+		Permission: pulumi.String("push"),
 		Repository: pulumi.String("alexfalkowski/" + repo.Name),
 		Username:   pulumi.String("lean-thoughts-ci"),
 	}
