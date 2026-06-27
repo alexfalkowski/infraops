@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# Scores live Kubernetes resources in a namespace and fails on empty discovery.
+
+readonly KUBE_SCORE_IGNORE_TEST="deployment-has-host-podantiaffinity"
+
+# Prints command usage.
+usage() {
+  printf 'Usage: %s <namespace>\n' "$0" >&2
+}
+
+# Prints namespaced Kubernetes API resources.
+resource_names() {
+  kubectl api-resources --verbs=list --namespaced -o name
+}
+
+# Prints Kubernetes manifests for the discovered resources in a namespace.
+resource_manifests() {
+  local manifest
+  local namespace
+  local resource
+
+  namespace="$1"
+  while IFS= read -r resource; do
+    [[ -z "$resource" ]] && continue
+
+    manifest="$(kubectl get "$resource" --namespace "$namespace" -oyaml)"
+    if [[ -n "$manifest" ]]; then
+      printf '%s\n---\n' "$manifest"
+    fi
+  done
+}
+
+# Runs kube-score for a namespace.
+score_namespace() {
+  local manifests
+  local namespace
+  local resources
+
+  namespace="$1"
+  resources="$(resource_names)"
+  if [[ -z "$resources" ]]; then
+    printf 'kubectl discovery returned no namespaced resources\n' >&2
+    return 1
+  fi
+
+  manifests="$(resource_manifests "$namespace" <<< "$resources")"
+  if [[ -z "$manifests" ]]; then
+    printf 'kubectl returned no manifests for namespace %s\n' "$namespace" >&2
+    return 1
+  fi
+
+  printf '%s\n' "$manifests" \
+    | kube-score score --ignore-test "$KUBE_SCORE_IGNORE_TEST" -
+}
+
+if (($# != 1)); then
+  usage
+  exit 2
+fi
+
+score_namespace "$1"

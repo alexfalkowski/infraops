@@ -32,7 +32,7 @@ api-lint:
 
 # Lint repository shell workflow helpers.
 scripts-lint:
-	@shellcheck area/apps/release
+	@shellcheck area/apps/release area/apps/kube-score-live
 
 # Check the API for breaking changes.
 api-breaking:
