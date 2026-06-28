@@ -6,23 +6,23 @@ include bin/build/make/git.mak
 pulumi-login:
 	@pulumi login --cloud-url https://api.pulumi.com
 
-# Preview Pulumi changes.
+# Preview Pulumi changes (requires area=apps|cf|do|gh).
 pulumi-preview:
 	@pulumi preview --stack alexfalkowski/$(area)/prod --cwd area/$(area) --diff
 
-# Update Pulumi changes.
+# Update Pulumi changes (requires area=apps|cf|do|gh).
 pulumi-update:
 	@pulumi update --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Cancel Pulumi changes.
+# Cancel Pulumi changes (requires area=apps|cf|do|gh).
 pulumi-cancel:
 	@pulumi cancel --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Delete Pulumi stack.
+# Delete Pulumi stack (requires area=apps|cf|do|gh).
 pulumi-delete:
 	@pulumi stack rm --yes --force --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 
-# Refresh Pulumi stack.
+# Refresh Pulumi stack (requires area=apps|cf|do|gh).
 pulumi-refresh:
 	@pulumi refresh --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
 

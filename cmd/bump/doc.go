@@ -2,7 +2,7 @@
 //
 // By default it edits `area/apps/apps.hjson`, but you can override the location via `-p`.
 // The tool is intended for internal automation and expects `-v` to be a semantic version string
-// supplied by that automation.
+// supplied by that automation. The value is written exactly as provided.
 //
 // Usage:
 //

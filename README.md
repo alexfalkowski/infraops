@@ -38,7 +38,7 @@ Shared implementation lives under `internal/` (e.g. `internal/app`, `internal/cf
 
 Development and CI-style commands use:
 
-- Go (version from `go.mod`: `1.25.8`)
+- Go (version declared in `go.mod`)
 - `make`
 - Ruby, used by shared lint helpers under `bin/`
 - Pulumi CLI
@@ -303,6 +303,11 @@ Only applications listed in `area/apps/apps.hjson` are deployed. The tracked fil
 `area/apps/fiction/` are example app configs and are not used unless a matching app entry references
 that namespace/name.
 
+Adding an application to `apps.hjson` only wires the Pulumi resources. To include it in release
+rollout, verify, and load workflows, also update `area/apps/release` with the app name and its
+per-app rollout, verify, and load commands, including any request payload fixture needed by load
+testing.
+
 #### 🏗️ Install / Setup
 
 Save the cluster kubeconfig if your local context is not already configured:
@@ -328,6 +333,11 @@ make area=apps pulumi-update
 The default `rollout`, `verify`, and `load` helper targets are release-aware. They inspect the app
 release diff and target only apps with version-only changes in `area/apps/apps.hjson`; when the diff
 is not a release-only app change, they fall back to all supported apps.
+
+Supported apps are the apps explicitly wired in `area/apps/release`. The `verify` helpers use
+fail-fast `curl` requests with bounded connection and total request time, and the `load` helpers run
+Vegeta and fail unless every request succeeds. Load request payloads live with the app fixtures under
+`area/apps/<namespace>/`.
 
 The release helper compares `APPS_RELEASE_BASE` to `APPS_RELEASE_HEAD` when those environment
 variables are set. Otherwise it uses the current commit's parent, falling back to `origin/master`
@@ -362,7 +372,9 @@ cd area/apps
 ```
 
 The `lint` target reads live resources from the `lean` namespace and scans them with kube-score and
-kubescape; it requires a working cluster context.
+kubescape; it requires a working cluster context. The kube-score helper intentionally ignores the
+host pod anti-affinity check and fails when Kubernetes discovery or manifest collection returns no
+live resources.
 
 #### 🗑️ Delete
 
@@ -385,13 +397,13 @@ Update a single app version in config. This is an internal helper used by automa
 `-v` value is expected to be a semantic version:
 
 ```bash
-./bump -n bezeichner -v 1.559.0
+./bump -n bezeichner -v <version>
 ```
 
 By default it edits `area/apps/apps.hjson`. Override path:
 
 ```bash
-./bump -n bezeichner -v 1.559.0 -p area/apps/apps.hjson
+./bump -n bezeichner -v <version> -p area/apps/apps.hjson
 ```
 
 > [!TIP]
@@ -409,9 +421,13 @@ Config:
 
 #### 🌐 Zone Models
 
+The shared Cloudflare zone baseline enables HTTPS, the code-defined minimum TLS setting, aggressive
+caching, HTTP/3, and HTTP/2 prioritization, disables email obfuscation, and applies the SSL mode for
+the zone model.
+
 `balancer_zones` create a Cloudflare zone plus proxied A and AAAA records for each configured
-`record_names` entry under the zone domain. Balancer zones use the shared Cloudflare zone baseline
-with SSL mode `full`.
+`record_names` entry under the zone domain. Balancer zones use the shared baseline with SSL mode
+`full`.
 
 ```hjson
 balancer_zones: [
@@ -429,7 +445,7 @@ balancer_zones: [
 ```
 
 `page_zones` create a Cloudflare zone plus a proxied `www.<domain>` CNAME to `host`. Page zones use
-the shared Cloudflare zone baseline with SSL mode `strict`.
+the shared baseline with SSL mode `strict`.
 
 ```hjson
 page_zones: [
@@ -443,7 +459,8 @@ page_zones: [
 
 #### 🪣 R2 Buckets
 
-R2 buckets are optional. A bucket with a custom domain uses this shape:
+R2 buckets are optional. Omit `zone` to create only the bucket. Include `zone` to create an enabled
+R2 custom domain using the code-defined TLS minimum:
 
 ```hjson
 buckets: [
@@ -537,6 +554,19 @@ and rebase merges are disabled, squash merge, auto-merge, update branch, auto-in
 on merge, issues, projects, wiki, secret scanning, push protection, and vulnerability alerts are
 enabled, and web commit signoff is disabled. These settings are intentional and are not configurable
 in HJSON.
+
+#### 🧬 Repository Templates
+
+`template` creates a repository from another GitHub template repository and requires both `owner` and
+`repository`. `is_template` is separate: it marks the resulting repository as a reusable template.
+
+```hjson
+is_template: true
+template: {
+  owner: alexfalkowski
+  repository: go-service-template
+}
+```
 
 #### 🛡️ Branch Protection Baseline
 

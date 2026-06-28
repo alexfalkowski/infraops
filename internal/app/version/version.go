@@ -14,7 +14,8 @@ var ErrNotFound = errors.New("name not found")
 // Update sets the version for the application identified by name in the configuration at path.
 //
 // The configuration is loaded using app.ReadConfiguration and persisted using app.WriteConfiguration.
-// If no application matches name, Update returns ErrNotFound.
+// If no application matches name, Update returns ErrNotFound. The version value is written exactly as
+// provided; callers that expose this outside trusted automation should validate it before calling.
 func Update(name, version, path string) error {
 	config, err := app.ReadConfiguration(path)
 	if err != nil {
