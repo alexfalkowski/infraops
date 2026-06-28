@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -30,7 +31,14 @@ func run() error {
 	)
 
 	set := flag.NewFlagSet("format", flag.ContinueOnError)
-	set.StringVar(&kind, "k", "", "config kind (apps|cf|do|gh)")
+	set.Usage = func() {
+		fmt.Fprintf(set.Output(), "Usage: %s -k <apps|cf|do|gh> [-p <path>]\n\n", set.Name())
+		fmt.Fprintln(set.Output(), "Normalizes an area HJSON configuration file in place.")
+		fmt.Fprintln(set.Output(), "By default, the path is area/<kind>/<kind>.hjson.")
+		fmt.Fprintln(set.Output(), "\nFlags:")
+		set.PrintDefaults()
+	}
+	set.StringVar(&kind, "k", "", "config kind (apps|cf|do|gh) (required)")
 	set.StringVar(&path, "p", "", "config file path (default area/<kind>/<kind>.hjson)")
 	if err := set.Parse(os.Args[1:]); err != nil {
 		return err
@@ -60,6 +68,10 @@ func main() {
 	logger := log.NewLogger()
 
 	if err := run(); err != nil {
+		if errors.Is(err, flag.ErrHelp) {
+			return
+		}
+
 		logger.Error("could not format config", "error", err)
 		os.Exit(1)
 	}
