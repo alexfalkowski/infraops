@@ -37,7 +37,7 @@ executors:
       - image: alpine:latest
   k8s:
     docker:
-      - image: alexfalkowski/k8s:4.34
+      - image: alexfalkowski/k8s:4.35
 
 jobs:
   build:
