@@ -9,13 +9,16 @@ delete:
 	@kubectl delete namespaces nginx-ingress circleci metrics-server
 
 # Set up Helm repos and install add-ons (requires CIRCLECI_K8S_TOKEN).
-setup: setup-helm install-helm
+setup: add-helm-repos update-helm-repos install-helm
 
-# Set up Helm repos.
-setup-helm:
+# Add Helm repos.
+add-helm-repos:
 	@helm repo add nginx https://kubernetes.github.io/ingress-nginx
 	@helm repo add circleci https://circleci-public.github.io/cci-k8s-release-agent
 	@helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+
+# Update Helm repos.
+update-helm-repos:
 	@helm repo update
 
 # Install CircleCI release agent (requires CIRCLECI_K8S_TOKEN).
@@ -24,7 +27,7 @@ install-circleci:
 
 # Install metrics server.
 install-metrics-server:
-	@helm upgrade --install metrics-server-release metrics-server/metrics-server --create-namespace --namespace metrics-server --version 3.13.0 --wait --timeout 5m
+	@helm upgrade --install metrics-server-release metrics-server/metrics-server --create-namespace --namespace metrics-server --version 3.13.1 --wait --timeout 5m
 
 # Install nginx ingress controller.
 install-nginx-ingress:
