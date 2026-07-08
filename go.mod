@@ -7,7 +7,7 @@ require (
 	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.17.0
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.74.0
 	github.com/pulumi/pulumi-github/sdk/v6 v6.14.0
-	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.32.0
+	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.33.0
 	github.com/pulumi/pulumi/sdk/v3 v3.250.0
 	github.com/stretchr/testify v1.11.1
 	google.golang.org/protobuf v1.36.11
