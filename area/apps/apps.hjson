@@ -25,7 +25,7 @@
       name: web
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.465.0
+      version: 1.466.0
       resource: small
     }
   ]
