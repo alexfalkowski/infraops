@@ -22,6 +22,7 @@
           value: "secret:database/password"
         }
       ]
+      replicas: 3
     }
     {
       id: 22222222-2222-2222-2222-222222222222
@@ -37,6 +38,7 @@
           value: enabled
         }
       ]
+      replicas: 3
     }
     {
       id: 33333333-3333-3333-3333-333333333333
@@ -51,6 +53,7 @@
           value: "https://api.example.net"
         }
       ]
+      replicas: 3
     }
   ]
 }

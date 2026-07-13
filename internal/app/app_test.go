@@ -87,6 +87,26 @@ func TestApplicationReturnsResourceErrors(t *testing.T) {
 	}
 }
 
+func TestApplicationAllowsExplicitZeroReplicas(t *testing.T) {
+	stub := &test.ResourceStub{}
+	application := app.ConvertApplication(&v2.Application{
+		Kind:      "external",
+		Name:      "test",
+		Namespace: "test",
+		Domain:    "test.com",
+		Version:   "1.0.0",
+		Replicas:  0,
+	})
+
+	run := func(ctx *pulumi.Context) error {
+		return app.CreateApplication(ctx, application)
+	}
+
+	require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+	deployment := resourceOf(t, stub, deploymentResourceType)
+	require.Zero(t, test.Property(t, deploymentSpec(deployment), "replicas").NumberValue())
+}
+
 func TestApplicationReturnsMissingConfigError(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := appWithResources()
@@ -112,6 +132,7 @@ func TestConvertedApplicationDeploymentInputs(t *testing.T) {
 		Domain:    "test.com",
 		Version:   "1.0.0",
 		Resource:  "unknown",
+		Replicas:  4,
 		Secrets:   []string{"database"},
 		EnvVars: []*v2.EnvVar{
 			{Name: "LOG_LEVEL", Value: "info"},
@@ -131,6 +152,7 @@ func TestConvertedApplicationDeploymentInputs(t *testing.T) {
 	require.Equal(t, "1Gi", resourceRequest(deployment, "ephemeral-storage"))
 	require.Equal(t, "2Gi", resourceLimit(deployment, "ephemeral-storage"))
 	require.Equal(t, "RuntimeDefault", seccompProfileType(deployment))
+	require.Equal(t, 4, int(test.Property(t, deploymentSpec(deployment), "replicas").NumberValue()))
 
 	secret := envVar(deployment, "DATABASE_PASSWORD")
 	valueFrom := test.Property(t, secret, "valueFrom").ObjectValue()
@@ -149,6 +171,7 @@ func TestExternalApplicationOmitsInternalResources(t *testing.T) {
 		Domain:    "test.com",
 		Version:   "1.0.0",
 		Resource:  "small",
+		Replicas:  1,
 	})
 	run := func(ctx *pulumi.Context) error {
 		return app.CreateApplication(ctx, application)
@@ -173,6 +196,7 @@ func appWithResources() *app.App {
 		Namespace: "test",
 		Domain:    "test.com",
 		Version:   "1.0.0",
+		Replicas:  3,
 		Secrets:   []string{"test"},
 		Resources: &app.Resources{
 			CPU:     &app.Range{Min: "125m", Max: "250m"},
@@ -192,6 +216,7 @@ func appWithoutResources() *app.App {
 		Namespace: "test",
 		Domain:    "test.com",
 		Version:   "1.0.0",
+		Replicas:  3,
 		Secrets:   []string{"test"},
 		EnvVars: []*app.EnvVar{
 			{Name: "test", Value: "test"},

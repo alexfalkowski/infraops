@@ -171,6 +171,21 @@ env_vars: [
 
 Unknown values fall back to `"small"`.
 
+#### 🔢 `Application.replicas` Pod Count (apps)
+
+Always set `replicas` explicitly; there is no fallback to three. Because this is a plain proto3
+scalar, omission decodes to zero. Use `replicas: 0` explicitly when the application should run no pods.
+Canonical rewrites by the format or bump tool may omit an explicit zero; that does not change the
+deployed replica count.
+
+```hjson
+replicas: 3
+```
+
+> [!WARNING]
+> `replicas: 1` is valid, but the current rolling update and PodDisruptionBudget both allow one
+> unavailable pod, so it does not guarantee continuous availability during disruption or rollout.
+
 #### 🛡️ App NetworkPolicy Baseline
 
 The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods. Ingress is limited
