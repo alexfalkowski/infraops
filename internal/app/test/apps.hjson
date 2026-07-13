@@ -4,10 +4,12 @@
     {
       name: app1
       version: 1.1.0
+      replicas: 3
     }
     {
       name: app2
       version: 1.0.0
+      replicas: 3
     }
   ]
 }

@@ -157,7 +157,11 @@ type Application struct {
 	// "/etc/secrets/<secretName>".
 	Secrets []string `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// EnvVars is the list of environment variables to inject into the application container.
-	EnvVars       []*EnvVar `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
+	EnvVars []*EnvVar `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
+	// Replicas is the fixed number of application pods to run.
+	// State the intended value explicitly in source configuration. Zero and omission both run no pods;
+	// canonical rewrites may omit zero, and there is no fallback to three.
+	Replicas      int32 `protobuf:"varint,10,opt,name=replicas,proto3" json:"replicas,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -253,6 +257,13 @@ func (x *Application) GetEnvVars() []*EnvVar {
 		return x.EnvVars
 	}
 	return nil
+}
+
+func (x *Application) GetReplicas() int32 {
+	if x != nil {
+		return x.Replicas
+	}
+	return 0
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.
@@ -1167,7 +1178,7 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x19infraops/v2/service.proto\x12\vinfraops.v2\"2\n" +
 	"\x06EnvVar\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\xfb\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\x97\x02\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n" +
@@ -1177,7 +1188,9 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\aversion\x18\x06 \x01(\tR\aversion\x12\x1a\n" +
 	"\bresource\x18\a \x01(\tR\bresource\x12\x18\n" +
 	"\asecrets\x18\b \x03(\tR\asecrets\x12.\n" +
-	"\benv_vars\x18\t \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\"d\n" +
+	"\benv_vars\x18\t \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12\x1a\n" +
+	"\breplicas\x18\n" +
+	" \x01(\x05R\breplicas\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +

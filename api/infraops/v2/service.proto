@@ -101,6 +101,11 @@ message Application {
 
   // EnvVars is the list of environment variables to inject into the application container.
   repeated EnvVar env_vars = 9;
+
+  // Replicas is the fixed number of application pods to run.
+  // State the intended value explicitly in source configuration. Zero and omission both run no pods;
+  // canonical rewrites may omit zero, and there is no fallback to three.
+  int32 replicas = 10;
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.

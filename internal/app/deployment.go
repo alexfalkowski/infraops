@@ -15,7 +15,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 		Metadata: m,
 		Spec: av1.DeploymentSpecArgs{
 			Selector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
-			Replicas: pulumi.Int(3),
+			Replicas: pulumi.Int(int(app.Replicas)),
 			Strategy: av1.DeploymentStrategyArgs{
 				RollingUpdate: av1.RollingUpdateDeploymentArgs{
 					MaxSurge:       inputs.One,

@@ -44,6 +44,7 @@ func ConvertApplication(a *v2.Application) *App {
 		Namespace: a.GetNamespace(),
 		Domain:    a.GetDomain(),
 		Version:   a.GetVersion(),
+		Replicas:  a.GetReplicas(),
 		Resources: resources.Resources(a.GetResource()),
 		Secrets:   a.GetSecrets(),
 	}
@@ -109,6 +110,8 @@ type App struct {
 	Secrets []string
 	// EnvVars are environment variables to be injected into the application container.
 	EnvVars []*EnvVar
+	// Replicas is the fixed number of application pods to run. Zero runs no pods.
+	Replicas int32
 }
 
 // HasResources reports whether the application has resource requirements configured.

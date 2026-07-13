@@ -22,8 +22,10 @@ func TestValidUpdate(t *testing.T) {
 	require.Len(t, applications, 2)
 	require.Equal(t, "app1", applications[0].GetName())
 	require.Equal(t, "2.0.0", applications[0].GetVersion())
+	require.EqualValues(t, 3, applications[0].GetReplicas())
 	require.Equal(t, "app2", applications[1].GetName())
 	require.Equal(t, "1.0.0", applications[1].GetVersion())
+	require.EqualValues(t, 3, applications[1].GetReplicas())
 }
 
 func TestInvalidUpdate(t *testing.T) {
