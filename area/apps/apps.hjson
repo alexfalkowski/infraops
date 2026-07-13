@@ -7,9 +7,8 @@
       name: bezeichner
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.914.0
+      version: 1.915.0
       resource: small
-      replicas: 3
     }
     {
       id: 28c679dc-5924-47e8-ac48-73cd842ba5cd
@@ -19,7 +18,6 @@
       domain: lean-thoughts.com
       version: 2.913.0
       resource: small
-      replicas: 3
     }
     {
       id: b46608ae-950a-46bb-b37a-4dfe68a95b52
@@ -29,7 +27,6 @@
       domain: lean-thoughts.com
       version: 1.477.0
       resource: small
-      replicas: 3
     }
   ]
 }
