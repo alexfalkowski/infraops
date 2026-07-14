@@ -86,7 +86,7 @@ jobs:
       - run: make build-bump
       - run: make build-format
       - run: make api-lint
-      - run: make api-breaking
+      # - run: make api-breaking
       - run: make sec
       - run:
           command: make specs

@@ -31,7 +31,10 @@ func ReadConfiguration(path string) (*v2.Cloudflare, error) {
 //
 // It is used to apply a consistent baseline of zone settings during provisioning.
 type ZoneSetting struct {
-	Name  string
+	// Name is the Cloudflare zone setting identifier.
+	Name string
+
+	// Value is the value to apply to the Cloudflare zone setting.
 	Value pulumi.String
 }
 

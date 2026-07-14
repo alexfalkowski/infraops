@@ -31,6 +31,7 @@ var (
 type Template struct {
 	// Owner is the GitHub organization or user that owns the template repository.
 	Owner string
+
 	// Repository is the template repository name.
 	Repository string
 }
@@ -126,52 +127,60 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	return nil
 }
 
-type (
-	// Visibility is a GitHub repository visibility setting (for example "public" or "private").
-	Visibility string
+// Visibility is a GitHub repository visibility setting (for example "public" or "private").
+type Visibility string
 
-	// Collaborators describes whether collaborator management is enabled for a repository.
-	//
-	// When enabled, the implementation grants push permission to lean-thoughts-ci on
-	// alexfalkowski/<repository>.
-	Collaborators struct {
-		// Enabled controls whether the fixed push collaborator should be managed for the repository.
-		Enabled bool
-	}
+// Collaborators describes whether collaborator management is enabled for a repository.
+//
+// When enabled, the implementation grants push permission to lean-thoughts-ci on
+// alexfalkowski/<repository>.
+type Collaborators struct {
+	// Enabled controls whether the fixed push collaborator should be managed for the repository.
+	Enabled bool
+}
 
-	// Pages describes GitHub Pages configuration for a repository.
-	Pages struct {
-		// CNAME is the custom domain to configure for GitHub Pages (optional).
-		CNAME string
-		// Enabled controls whether Pages should be managed/enabled for the repository.
-		Enabled bool
-	}
-)
+// Pages describes GitHub Pages configuration for a repository.
+type Pages struct {
+	// CNAME is the custom domain to configure for GitHub Pages (optional).
+	CNAME string
+
+	// Enabled controls whether Pages should be managed/enabled for the repository.
+	Enabled bool
+}
 
 // Repository describes a GitHub repository and its desired configuration.
 type Repository struct {
 	// Collaborators is optional; when nil or disabled, collaborator resources are not managed.
 	// When enabled, lean-thoughts-ci is granted push permission on alexfalkowski/<repository>.
 	Collaborators *Collaborators
+
 	// Template is optional; when set, it identifies the template repository used on creation.
 	Template *Template
+
 	// Pages is optional; when nil or disabled, Pages resources are not managed.
 	Pages *Pages
 
 	// Name is the repository name.
 	Name string
+
 	// Description is the repository description.
 	Description string
+
 	// HomepageURL is the repository homepage URL.
 	HomepageURL string
+
 	// Visibility controls repository visibility.
 	Visibility Visibility
+
 	// Topics are repository topics to apply.
 	Topics []string
+
 	// Checks are required status checks to enforce via branch protection.
 	Checks Checks
+
 	// IsTemplate marks this repository as a template repository.
 	IsTemplate bool
+
 	// Archived controls whether the repository should be archived.
 	Archived bool
 }

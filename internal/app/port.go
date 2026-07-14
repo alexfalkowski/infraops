@@ -9,8 +9,10 @@ import (
 type Port struct {
 	// Name is the stable Kubernetes service port name.
 	Name string
+
 	// Protocol is the application protocol exposed on the service port.
 	Protocol string
+
 	// Number is the TCP port number used by the container and service.
 	Number int
 }
