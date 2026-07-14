@@ -23,6 +23,29 @@ Use `bin/AGENTS.md` for shared skills and cross-repository defaults.
 - `cmd/format`: HJSON config formatter.
 - `bin`: shared build tooling submodule.
 
+## Related Repositories
+
+- Sibling repositories owned by this org are normally checked out locally one
+  directory up, at `../<repo-name>` (for example `../bezeichner`, `../standort`,
+  `../web`, `../docker`, `../bin`), and are hosted at
+  `https://github.com/alexfalkowski/<repo-name>`. Check for a local sibling
+  checkout before treating a related repository as unavailable or reporting a
+  cross-repo data gap. If no local checkout exists, use `gh` to read the
+  repository on GitHub before reporting the gap:
+  `gh repo clone <owner>/<repo> <scratch-dir> -- --depth 1`
+  to explore multiple files, or `gh api repos/<owner>/<repo>/contents/<path>`
+  to fetch one known file directly. `<owner>` here is `alexfalkowski`, the same
+  account this repo's own `origin` remote resolves to
+  (`git@github.com:alexfalkowski/infraops.git`); sibling repos share that owner.
+- The `release(<app>): upgraded to vX.Y.Z` PRs against `area/apps/apps.hjson`
+  are opened by each app's own CircleCI pipeline (in that app's own repo), not
+  by anything in this repo. That pipeline runs the shared `alexfalkowski/release`
+  Docker image, built from `../docker/release/Dockerfile`, which installs
+  `cmd/bump` at a version pinned via `install-go-tool` rather than building it
+  fresh from this repo's current `master`. Diagnosing that automation requires
+  reading `../docker/release/Dockerfile` and `../docker/release/deploy` and the
+  app repo's `.circleci/config.yml`, not just this repo.
+
 ## Commands
 
 Run from the repo root unless noted:
