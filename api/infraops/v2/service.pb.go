@@ -142,6 +142,10 @@ type Application struct {
 	//
 	// If an unknown value is provided, the implementation falls back to "small".
 	Resource string `protobuf:"bytes,7,opt,name=resource,proto3" json:"resource,omitempty"`
+	// Replicas is the fixed number of application pods to run.
+	// State the intended value explicitly in source configuration. Zero and omission both run no pods;
+	// canonical rewrites may omit zero, and there is no fallback to three.
+	Replicas int32 `protobuf:"varint,8,opt,name=replicas,proto3" json:"replicas,omitempty"`
 	// Secrets is a list of existing logical secret names referenced by this application.
 	//
 	// Clarification:
@@ -155,13 +159,9 @@ type Application struct {
 	// The apps program does not create Secret objects or define Secret keys. For internal apps, each
 	// name is expected to exist as a Kubernetes Secret named "<secretName>-secret" and is mounted at
 	// "/etc/secrets/<secretName>".
-	Secrets []string `protobuf:"bytes,8,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	Secrets []string `protobuf:"bytes,9,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// EnvVars is the list of environment variables to inject into the application container.
-	EnvVars []*EnvVar `protobuf:"bytes,9,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
-	// Replicas is the fixed number of application pods to run.
-	// State the intended value explicitly in source configuration. Zero and omission both run no pods;
-	// canonical rewrites may omit zero, and there is no fallback to three.
-	Replicas      int32 `protobuf:"varint,10,opt,name=replicas,proto3" json:"replicas,omitempty"`
+	EnvVars       []*EnvVar `protobuf:"bytes,10,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -245,6 +245,13 @@ func (x *Application) GetResource() string {
 	return ""
 }
 
+func (x *Application) GetReplicas() int32 {
+	if x != nil {
+		return x.Replicas
+	}
+	return 0
+}
+
 func (x *Application) GetSecrets() []string {
 	if x != nil {
 		return x.Secrets
@@ -257,13 +264,6 @@ func (x *Application) GetEnvVars() []*EnvVar {
 		return x.EnvVars
 	}
 	return nil
-}
-
-func (x *Application) GetReplicas() int32 {
-	if x != nil {
-		return x.Replicas
-	}
-	return 0
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.
@@ -1186,11 +1186,11 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\tnamespace\x18\x04 \x01(\tR\tnamespace\x12\x16\n" +
 	"\x06domain\x18\x05 \x01(\tR\x06domain\x12\x18\n" +
 	"\aversion\x18\x06 \x01(\tR\aversion\x12\x1a\n" +
-	"\bresource\x18\a \x01(\tR\bresource\x12\x18\n" +
-	"\asecrets\x18\b \x03(\tR\asecrets\x12.\n" +
-	"\benv_vars\x18\t \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12\x1a\n" +
-	"\breplicas\x18\n" +
-	" \x01(\x05R\breplicas\"d\n" +
+	"\bresource\x18\a \x01(\tR\bresource\x12\x1a\n" +
+	"\breplicas\x18\b \x01(\x05R\breplicas\x12\x18\n" +
+	"\asecrets\x18\t \x03(\tR\asecrets\x12.\n" +
+	"\benv_vars\x18\n" +
+	" \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +

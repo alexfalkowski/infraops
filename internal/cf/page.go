@@ -11,8 +11,10 @@ import (
 type PageZone struct {
 	// Name is the Pulumi resource name prefix used when creating Cloudflare resources for this zone.
 	Name string
+
 	// Domain is the apex domain to create/manage as a Cloudflare zone (for example "example.com").
 	Domain string
+
 	// Host is the DNS hostname to CNAME to (for example "<owner>.github.io" or "<project>.pages.dev").
 	Host string
 }

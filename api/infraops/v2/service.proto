@@ -84,6 +84,11 @@ message Application {
   // If an unknown value is provided, the implementation falls back to "small".
   string resource = 7;
 
+  // Replicas is the fixed number of application pods to run.
+  // State the intended value explicitly in source configuration. Zero and omission both run no pods;
+  // canonical rewrites may omit zero, and there is no fallback to three.
+  int32 replicas = 8;
+
   // Secrets is a list of existing logical secret names referenced by this application.
   //
   // Clarification:
@@ -97,15 +102,10 @@ message Application {
   // The apps program does not create Secret objects or define Secret keys. For internal apps, each
   // name is expected to exist as a Kubernetes Secret named "<secretName>-secret" and is mounted at
   // "/etc/secrets/<secretName>".
-  repeated string secrets = 8;
+  repeated string secrets = 9;
 
   // EnvVars is the list of environment variables to inject into the application container.
-  repeated EnvVar env_vars = 9;
-
-  // Replicas is the fixed number of application pods to run.
-  // State the intended value explicitly in source configuration. Zero and omission both run no pods;
-  // canonical rewrites may omit zero, and there is no fallback to three.
-  int32 replicas = 10;
+  repeated EnvVar env_vars = 10;
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.

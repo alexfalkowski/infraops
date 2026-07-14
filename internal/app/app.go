@@ -91,25 +91,34 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 type App struct {
 	// Resources are optional resource requests/limits to apply to the pod.
 	Resources *Resources
+
 	// ID is an optional identifier from configuration.
 	ID string
+
 	// Name is the Kubernetes application name (used for resource naming).
 	Name string
+
 	// Kind determines how the application is deployed.
 	//
 	// Supported values are "internal" and "external". Unsupported values are not prevalidated
 	// and can produce mixed resource behavior during Pulumi preview/update.
 	Kind string
+
 	// Namespace is the Kubernetes namespace to deploy into.
 	Namespace string
+
 	// Domain is the base/apex domain suffix used to build the ingress host <name>.<domain>.
 	Domain string
+
 	// Version is the application version string used for deployment (for example as an image tag).
 	Version string
+
 	// Secrets is a list of secret names referenced by this application.
 	Secrets []string
+
 	// EnvVars are environment variables to be injected into the application container.
 	EnvVars []*EnvVar
+
 	// Replicas is the fixed number of application pods to run. Zero runs no pods.
 	Replicas int32
 }
@@ -134,20 +143,30 @@ func (a *App) IsExternal() bool {
 
 // Resources describes optional CPU/memory/storage ranges for an application's pod.
 type Resources struct {
-	CPU     *Range
-	Memory  *Range
+	// CPU is the optional minimum/maximum CPU quantity for pod requests and limits.
+	CPU *Range
+
+	// Memory is the optional minimum/maximum memory quantity for pod requests and limits.
+	Memory *Range
+
+	// Storage is the optional minimum/maximum ephemeral-storage quantity for pod requests and limits.
 	Storage *Range
 }
 
 // Range represents a min/max range expressed as Kubernetes quantity strings.
 type Range struct {
+	// Min is the Kubernetes quantity used for the resource request.
 	Min string
+
+	// Max is the Kubernetes quantity used for the resource limit.
 	Max string
 }
 
 // EnvVar represents an environment variable to inject into the application container.
 type EnvVar struct {
+	// Name is the name of the environment variable.
 	Name string
+
 	// Value is either a literal value or a secret reference in the form
 	// "secret:<secretName>/<key>". Secret references become Kubernetes SecretKeyRefs
 	// with Secret name "<secretName>-secret" and key "<key>"; the shape is not

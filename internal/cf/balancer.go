@@ -20,12 +20,16 @@ var recordPrefixes = map[string]string{
 type BalancerZone struct {
 	// Name is the Pulumi resource name prefix used when creating Cloudflare resources for this zone.
 	Name string
+
 	// Domain is the apex domain to create/manage as a Cloudflare zone (for example "example.com").
 	Domain string
+
 	// IPV4 is the IPv4 address used for A records.
 	IPV4 string
+
 	// IPV6 is the IPv6 address used for AAAA records.
 	IPV6 string
+
 	// RecordNames are subdomain labels (for example ["api", "app"]) used to create records under Domain.
 	RecordNames []string
 }

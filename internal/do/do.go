@@ -27,8 +27,10 @@ func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 type Cluster struct {
 	// Name is the cluster name used for resource naming.
 	Name string
+
 	// Description is an optional description for cluster-related resources (for example the VPC).
 	Description string
+
 	// Resource is a size label (for example "small" or "medium") used to select node capacity.
 	Resource string
 }

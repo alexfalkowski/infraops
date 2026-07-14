@@ -7,30 +7,31 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-type (
-	// BucketZone identifies the Cloudflare zone used to attach a public/custom domain to an R2 bucket.
-	//
-	// This is optional; when provided, CreateBucket will also provision an R2 custom domain.
-	// See: https://developers.cloudflare.com/r2/buckets/public-buckets/
-	BucketZone struct {
-		// ID is the Cloudflare zone identifier.
-		ID string
-		// Domain is the fully-qualified domain name to associate with the bucket.
-		Domain string
-	}
+// BucketZone identifies the Cloudflare zone used to attach a public/custom domain to an R2 bucket.
+//
+// This is optional; when provided, CreateBucket will also provision an R2 custom domain.
+// See: https://developers.cloudflare.com/r2/buckets/public-buckets/
+type BucketZone struct {
+	// ID is the Cloudflare zone identifier.
+	ID string
 
-	// Bucket represents an R2 bucket configuration in Cloudflare.
-	//
-	// Regions are defined under: https://developers.cloudflare.com/r2/reference/data-location/#available-hints
-	Bucket struct {
-		// Zone is optional; when nil, no custom domain is created for the bucket.
-		Zone *BucketZone
-		// Name is the R2 bucket name.
-		Name string
-		// Region is the R2 data location hint.
-		Region string
-	}
-)
+	// Domain is the fully-qualified domain name to associate with the bucket.
+	Domain string
+}
+
+// Bucket represents an R2 bucket configuration in Cloudflare.
+//
+// Regions are defined under: https://developers.cloudflare.com/r2/reference/data-location/#available-hints
+type Bucket struct {
+	// Zone is optional; when nil, no custom domain is created for the bucket.
+	Zone *BucketZone
+
+	// Name is the R2 bucket name.
+	Name string
+
+	// Region is the R2 data location hint.
+	Region string
+}
 
 // ConvertBucket converts a protobuf v2.Bucket into the internal Bucket model.
 func ConvertBucket(bucket *v2.Bucket) *Bucket {
