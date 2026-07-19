@@ -64,6 +64,9 @@ func containerSecurity() cv1.SecurityContextArgs {
 	return cv1.SecurityContextArgs{
 		ReadOnlyRootFilesystem:   inputs.Yes,
 		AllowPrivilegeEscalation: inputs.No,
+		Capabilities: cv1.CapabilitiesArgs{
+			Drop: pulumi.StringArray{pulumi.String("ALL")},
+		},
 		SeccompProfile: cv1.SeccompProfileArgs{
 			Type: pulumi.String("RuntimeDefault"),
 		},
