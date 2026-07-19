@@ -1,7 +1,8 @@
 // Command format normalizes/rewrites an area configuration file in a consistent HJSON form.
 //
 // It reads a configuration into the corresponding protobuf message and writes it back out
-// using the repository's canonical HJSON formatting rules.
+// using the repository's canonical HJSON formatting rules. It rejects a file whose
+// top-level area-specific fields do not match the selected kind without rewriting it.
 //
 // Usage:
 //

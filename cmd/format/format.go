@@ -9,6 +9,8 @@ import (
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/v2/internal/config"
 	"github.com/alexfalkowski/infraops/v2/internal/log"
+	"github.com/hjson/hjson-go/v4"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // configs maps a supported config kind (as provided by the `-k` flag) to the protobuf
@@ -57,8 +59,43 @@ func run() error {
 		return err
 	}
 
+	if err := validateConfigKind(path, kind); err != nil {
+		return err
+	}
+
 	if err := config.Write(path, cfg); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// validateConfigKind prevents a config for another supported area from being rewritten with the selected schema.
+func validateConfigKind(path, kind string) error {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	fields := map[string]any{}
+	if err := hjson.Unmarshal(bytes, &fields); err != nil {
+		return err
+	}
+
+	for field := range fields {
+		if field == "version" {
+			continue
+		}
+
+		for configKind, config := range configs {
+			if configKind == kind {
+				continue
+			}
+
+			if config.ProtoReflect().Descriptor().Fields().ByName(protoreflect.Name(field)) != nil {
+				return fmt.Errorf("%s: file does not match kind %q", path, kind)
+			}
+		}
 	}
 
 	return nil
