@@ -161,6 +161,38 @@ func TestConvertedApplicationDeploymentInputs(t *testing.T) {
 	require.Equal(t, "password", test.Property(t, secretKeyRef, "key").StringValue())
 }
 
+func TestApplicationContainerSecurityContextDropsAllCapabilities(t *testing.T) {
+	tests := []struct {
+		app  *app.App
+		name string
+	}{
+		{app: appWithResources(), name: "internal"},
+		{
+			app: app.ConvertApplication(&v2.Application{
+				Kind:      "external",
+				Name:      "test",
+				Namespace: "test",
+				Domain:    "test.com",
+				Version:   "1.0.0",
+				Replicas:  1,
+			}),
+			name: "external",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stub := &test.ResourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, tt.app)
+			}
+
+			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+			require.Equal(t, []string{"ALL"}, droppedCapabilities(t, resourceOf(t, stub, deploymentResourceType)))
+		})
+	}
+}
+
 func TestExternalApplicationOmitsInternalResources(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := app.ConvertApplication(&v2.Application{
@@ -315,6 +347,14 @@ func seccompProfileType(deployment resource.PropertyMap) string {
 	security := container(deployment)[resource.PropertyKey("securityContext")].ObjectValue()
 	profile := security[resource.PropertyKey("seccompProfile")].ObjectValue()
 	return profile[resource.PropertyKey("type")].StringValue()
+}
+
+func droppedCapabilities(t *testing.T, deployment resource.PropertyMap) []string {
+	t.Helper()
+
+	security := container(deployment)[resource.PropertyKey("securityContext")].ObjectValue()
+	capabilities := test.Property(t, security, "capabilities").ObjectValue()
+	return test.StringValues(test.Property(t, capabilities, "drop").ArrayValue())
 }
 
 func deploymentSpec(deployment resource.PropertyMap) resource.PropertyMap {
