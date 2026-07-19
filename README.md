@@ -109,6 +109,9 @@ Override the path:
 ./format -k cf -p area/cf/cf.hjson
 ```
 
+The selected kind must match the file's area-specific fields. A mismatch is rejected
+without changing the file.
+
 ### 📝 Config Schema Notes
 
 A few conventions are implemented by the Go code and are worth knowing when editing HJSON:
