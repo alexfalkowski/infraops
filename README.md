@@ -131,6 +131,10 @@ liveness/readiness probes at `/<name>/livez` and `/<name>/readyz` on port `8080`
 probe on `8080`. External apps skip CircleCI release-agent labels/annotations and use `/` for HTTP
 liveness plus TCP readiness/startup probes on `8080`.
 
+All app containers use native `lifecycle.preStop.sleep` for five seconds before Kubernetes sends the
+termination signal, allowing endpoint and routing updates to propagate. Their 35-second pod termination
+grace period leaves 30 seconds for graceful process shutdown after the delay.
+
 #### 🪪 `Application.id` CircleCI Project ID (apps)
 
 For internal apps, `Application.id` is written to the deployment annotation

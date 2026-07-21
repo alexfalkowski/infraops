@@ -193,6 +193,40 @@ func TestApplicationContainerSecurityContextDropsAllCapabilities(t *testing.T) {
 	}
 }
 
+func TestApplicationDelaysShutdownForRoutingPropagation(t *testing.T) {
+	tests := []struct {
+		app  *app.App
+		name string
+	}{
+		{app: appWithResources(), name: "internal"},
+		{
+			app: app.ConvertApplication(&v2.Application{
+				Kind:      "external",
+				Name:      "test",
+				Namespace: "test",
+				Domain:    "test.com",
+				Version:   "1.0.0",
+				Replicas:  1,
+			}),
+			name: "external",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stub := &test.ResourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, tt.app)
+			}
+
+			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+			deployment := resourceOf(t, stub, deploymentResourceType)
+			require.Equal(t, 35, int(test.Property(t, podSpec(deployment), "terminationGracePeriodSeconds").NumberValue()))
+			require.Equal(t, 5, preStopSleepSeconds(t, deployment))
+		})
+	}
+}
+
 func TestExternalApplicationOmitsInternalResources(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := app.ConvertApplication(&v2.Application{
@@ -355,6 +389,17 @@ func droppedCapabilities(t *testing.T, deployment resource.PropertyMap) []string
 	security := container(deployment)[resource.PropertyKey("securityContext")].ObjectValue()
 	capabilities := test.Property(t, security, "capabilities").ObjectValue()
 	return test.StringValues(test.Property(t, capabilities, "drop").ArrayValue())
+}
+
+func preStopSleepSeconds(t *testing.T, deployment resource.PropertyMap) int {
+	t.Helper()
+
+	lifecycle := test.Property(t, container(deployment), "lifecycle").ObjectValue()
+	preStop := test.Property(t, lifecycle, "preStop").ObjectValue()
+	require.NotContains(t, preStop, resource.PropertyKey("exec"))
+	sleep := test.Property(t, preStop, "sleep").ObjectValue()
+
+	return int(test.Property(t, sleep, "seconds").NumberValue())
 }
 
 func deploymentSpec(deployment resource.PropertyMap) resource.PropertyMap {
