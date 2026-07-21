@@ -38,6 +38,7 @@ func internalContainer(app *App) cv1.ContainerArray {
 		LivenessProbe:   httpProbe(probePath(app.Name, "livez")),
 		ReadinessProbe:  httpProbe(probePath(app.Name, "readyz")),
 		StartupProbe:    tcpProbe(),
+		Lifecycle:       preStopDelay(),
 		Resources:       createResources(app),
 		SecurityContext: containerSecurity(),
 	}
@@ -54,10 +55,21 @@ func externalContainer(app *App) cv1.ContainerArray {
 		LivenessProbe:   httpProbe("/"),
 		ReadinessProbe:  tcpProbe(),
 		StartupProbe:    tcpProbe(),
+		Lifecycle:       preStopDelay(),
 		Resources:       createResources(app),
 		SecurityContext: containerSecurity(),
 	}
 	return cv1.ContainerArray{container}
+}
+
+func preStopDelay() cv1.LifecycleArgs {
+	return cv1.LifecycleArgs{
+		PreStop: cv1.LifecycleHandlerArgs{
+			Sleep: cv1.SleepActionArgs{
+				Seconds: pulumi.Int(5),
+			},
+		},
+	}
 }
 
 func containerSecurity() cv1.SecurityContextArgs {
