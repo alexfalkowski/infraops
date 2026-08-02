@@ -5,7 +5,11 @@ include lean.mk
 kube-score: kube-score-lean
 
 # Run kubescape.
-kubescape: kubescape-lean
+kubescape:
+	@./release kubescape
+
+# Run kubescape for all apps.
+kubescape-all: kubescape-lean
 
 # Lint live app resources.
 lint: kube-score kubescape
