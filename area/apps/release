@@ -16,7 +16,7 @@ readonly -a APPS=(standort bezeichner web)
 
 # Prints command usage.
 usage() {
-  printf 'Usage: %s <halt-ci|is-release|load|load-all|load-bezeichner|load-standort|load-web|rollout|rollout-all|rollout-bezeichner|rollout-standort|rollout-web|verify|verify-all|verify-bezeichner|verify-standort|verify-web>\n' "$0" >&2
+  printf 'Usage: %s <halt-ci|is-release|kubescape|kubescape-all|kubescape-bezeichner|kubescape-standort|kubescape-web|load|load-all|load-bezeichner|load-standort|load-web|rollout|rollout-all|rollout-bezeichner|rollout-standort|rollout-web|verify|verify-all|verify-bezeichner|verify-standort|verify-web>\n' "$0" >&2
 }
 
 # Prints the revision to inspect for app release changes.
@@ -140,7 +140,7 @@ is_app() {
 # Reports whether an app action has release helper commands.
 is_action() {
   case "$1" in
-    load | rollout | verify)
+    kubescape | load | rollout | verify)
       return 0
       ;;
     *)
@@ -191,15 +191,17 @@ run_all_apps() {
   done
 }
 
-# Runs a release-aware app action and falls back to all apps.
+# Runs a release-aware app action and falls back to all apps or a supplied action.
 run_release_changes() {
   local action
   local app
   local apps=()
+  local fallback
   local label
 
   action="$1"
   label="$2"
+  fallback="${3:-}"
 
   while IFS= read -r app; do
     [[ -n "$app" ]] && apps+=("$app")
@@ -207,6 +209,11 @@ run_release_changes() {
 
   if ((${#apps[@]} == 0)); then
     printf '%s all apps.\n' "$label"
+    if [[ -n "$fallback" ]]; then
+      "$fallback"
+      return
+    fi
+
     run_all_apps "$action"
     return
   fi
@@ -295,6 +302,44 @@ load_release_changes() {
   run_release_changes "load" "Loading"
 }
 
+# Scans all apps in the namespace with kubescape.
+kubescape_all() {
+  if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+    printf 'make -C %s kubescape-all\n' "$APP_MAKE_DIR"
+    return
+  fi
+
+  make -C "$REPO_ROOT/$APP_MAKE_DIR" kubescape-all
+}
+
+# Scans an app deployment with kubescape.
+kubescape_app() {
+  local app
+
+  app="$1"
+  kubescape scan workload "Deployment/$app" --namespace lean
+}
+
+# Scans a specific app with kubescape.
+kubescape_bezeichner() {
+  kubescape_app "bezeichner"
+}
+
+# Scans a specific app with kubescape.
+kubescape_standort() {
+  kubescape_app "standort"
+}
+
+# Scans a specific app with kubescape.
+kubescape_web() {
+  kubescape_app "web"
+}
+
+# Scans targeted release apps with kubescape and falls back to the namespace scan.
+kubescape_release_changes() {
+  run_release_changes "kubescape" "Scanning" "kubescape_all"
+}
+
 # Rolls out all apps.
 rollout_all() {
   run_all_apps "rollout"
@@ -380,6 +425,21 @@ case "${1:-}" in
     ;;
   is-release)
     release_apps >/dev/null
+    ;;
+  kubescape)
+    kubescape_release_changes
+    ;;
+  kubescape-all)
+    kubescape_all
+    ;;
+  kubescape-bezeichner)
+    run_app_action "kubescape" "bezeichner"
+    ;;
+  kubescape-standort)
+    run_app_action "kubescape" "standort"
+    ;;
+  kubescape-web)
+    run_app_action "kubescape" "web"
     ;;
   load)
     load_release_changes

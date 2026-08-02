@@ -326,8 +326,8 @@ Only applications listed in `area/apps/apps.hjson` are deployed. The tracked fil
 that namespace/name.
 
 Adding an application to `apps.hjson` only wires the Pulumi resources. To include it in release
-rollout, verify, and load workflows, also update `area/apps/release` with the app name and its
-per-app rollout, verify, and load commands, including any request payload fixture needed by load
+rollout, verify, load, and kubescape workflows, also update `area/apps/release` with the app name and its
+per-app helper commands, including any request payload fixture needed by load
 testing.
 
 #### 🏗️ Install / Setup
@@ -352,7 +352,7 @@ make area=apps pulumi-update
 
 #### 🧪 App Helpers
 
-The default `rollout`, `verify`, and `load` helper targets are release-aware. They inspect the app
+The default `rollout`, `verify`, `load`, and `kubescape` helper targets are release-aware. They inspect the app
 release diff and target only apps with version-only changes in `area/apps/apps.hjson`; when the diff
 is not a release-only app change, they fall back to all supported apps.
 
@@ -391,12 +391,14 @@ cd area/apps
 ./release verify-web
 ./release load-bezeichner
 ./release rollout-standort
+./release kubescape-web
 ```
 
-The `lint` target reads live resources from the `lean` namespace and scans them with kube-score and
-kubescape; it requires a working cluster context. The kube-score helper intentionally ignores the
-host pod anti-affinity check and fails when Kubernetes discovery or manifest collection returns no
-live resources.
+The `lint` target requires a working cluster context. kube-score always scans live resources from
+the `lean` namespace, while kubescape follows the release-aware workflow: it scans each changed app
+Deployment for release-only version changes and otherwise scans the whole namespace. The kube-score
+helper intentionally ignores the host pod anti-affinity check and fails when Kubernetes discovery
+or manifest collection returns no live resources.
 
 #### 🗑️ Delete
 
