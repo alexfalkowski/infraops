@@ -315,9 +315,12 @@ kubescape_all() {
 # Scans an app deployment with kubescape.
 kubescape_app() {
   local app
+  local image
 
   app="$1"
+  image="$(kubectl get deployment "$app" --namespace lean --output jsonpath='{.spec.template.spec.containers[0].image}')"
   kubescape scan workload "Deployment/$app" --namespace lean
+  kubescape scan image "$image"
 }
 
 # Scans a specific app with kubescape.
