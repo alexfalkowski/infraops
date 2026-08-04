@@ -396,9 +396,9 @@ cd area/apps
 
 The `lint` target requires a working cluster context. kube-score always scans live resources from
 the `lean` namespace, while kubescape follows the release-aware workflow: it scans each changed app
-Deployment for release-only version changes and otherwise scans the whole namespace. The kube-score
-helper intentionally ignores the host pod anti-affinity check and fails when Kubernetes discovery
-or manifest collection returns no live resources.
+Deployment and its resolved container image for release-only version changes and otherwise scans the
+whole namespace. The kube-score helper intentionally ignores the host pod anti-affinity check and
+fails when Kubernetes discovery or manifest collection returns no live resources.
 
 #### 🗑️ Delete
 
