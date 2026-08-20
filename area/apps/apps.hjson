@@ -7,7 +7,7 @@
       name: bezeichner
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.976.0
+      version: 1.977.0
       resource: small
       replicas: 3
     }
