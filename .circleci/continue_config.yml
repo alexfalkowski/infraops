@@ -28,21 +28,24 @@ commands:
 executors:
   go:
     docker:
-      - image: alexfalkowski/go:4.39
+      - image: alexfalkowski/go:4.40
   release:
     docker:
-      - image: alexfalkowski/release:8.30
+      - image: alexfalkowski/release:8.31
   alpine:
     docker:
       - image: alpine:latest
   k8s:
     docker:
-      - image: alexfalkowski/k8s:4.56
+      - image: alexfalkowski/k8s:4.57
 
 jobs:
   build:
     executor: go
     working_directory: ~/infraops
+    environment:
+      GOGC: 10
+      GOMAXPROCS: 2
     steps:
       - checkout:
           method: blobless
@@ -202,6 +205,9 @@ jobs:
   cf_preview:
     executor: k8s
     working_directory: ~/infraops
+    environment:
+      GOGC: 10
+      GOMAXPROCS: 2
     steps:
       - checkout-submodules
       - run: make source-key
@@ -234,6 +240,9 @@ jobs:
   cf_update:
     executor: k8s
     working_directory: ~/infraops
+    environment:
+      GOGC: 10
+      GOMAXPROCS: 2
     steps:
       - checkout-submodules
       - run: make source-key
