@@ -449,9 +449,9 @@ The shared Cloudflare zone baseline enables HTTPS, the code-defined minimum TLS 
 caching, HTTP/3, and HTTP/2 prioritization, disables email obfuscation, and applies the SSL mode for
 the zone model.
 
-`balancer_zones` create a Cloudflare zone plus proxied A and AAAA records for each configured
-`record_names` entry under the zone domain. Balancer zones use the shared baseline with SSL mode
-`full`.
+`balancer_zones` create a Cloudflare zone plus proxied A records for each configured
+`record_names` entry under the zone domain. When `ipv6` is configured, they also create proxied
+AAAA records. Balancer zones use the shared baseline with SSL mode `full`.
 
 ```hjson
 balancer_zones: [

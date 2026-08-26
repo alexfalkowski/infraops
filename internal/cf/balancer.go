@@ -15,8 +15,8 @@ var recordPrefixes = map[string]string{
 	"AAAA": "ipv6",
 }
 
-// BalancerZone describes a Cloudflare-managed zone where multiple hostnames are created as
-// proxied A and AAAA records pointing to provided IPv4/IPv6 addresses.
+// BalancerZone describes a Cloudflare-managed zone where multiple hostnames are created as proxied
+// A records and, when configured, AAAA records pointing to provided IPv4/IPv6 addresses.
 type BalancerZone struct {
 	// Name is the Pulumi resource name prefix used when creating Cloudflare resources for this zone.
 	Name string
@@ -27,7 +27,7 @@ type BalancerZone struct {
 	// IPV4 is the IPv4 address used for A records.
 	IPV4 string
 
-	// IPV6 is the IPv6 address used for AAAA records.
+	// IPV6 is the optional IPv6 address used for AAAA records.
 	IPV6 string
 
 	// RecordNames are subdomain labels (for example ["api", "app"]) used to create records under Domain.
@@ -45,10 +45,11 @@ func ConvertBalancerZone(z *v2.BalancerZone) *BalancerZone {
 	}
 }
 
-// CreateBalancerZone provisions a Cloudflare zone and creates proxied A and AAAA records.
+// CreateBalancerZone provisions a Cloudflare zone and creates proxied A records and optional AAAA
+// records.
 //
-// It applies the shared zone-settings baseline with "full" SSL mode, then creates A and AAAA
-// records for each configured record name under the zone domain.
+// It applies the shared zone-settings baseline with "full" SSL mode, then creates A records and,
+// when zone.IPV6 is non-empty, AAAA records for each configured record name under the zone domain.
 func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	z, err := createZone(ctx, zone.Name, zone.Domain, "full")
 	if err != nil {
@@ -62,8 +63,10 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 			return err
 		}
 
-		if err := record(ctx, name, "AAAA", zone.IPV6, z.ID()); err != nil {
-			return err
+		if zone.IPV6 != "" {
+			if err := record(ctx, name, "AAAA", zone.IPV6, z.ID()); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

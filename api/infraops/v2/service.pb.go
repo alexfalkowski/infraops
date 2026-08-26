@@ -691,8 +691,8 @@ func (x *Github) GetRepositories() []*Repository {
 
 // BalancerZone describes a Cloudflare-managed DNS zone for proxied records.
 //
-// The `area/cf` Pulumi program creates the zone and then creates proxied A/AAAA records for the
-// subdomains listed in record_names.
+// The `area/cf` Pulumi program creates the zone and proxied A records for the subdomains listed in
+// record_names. It also creates proxied AAAA records when ipv6 is configured.
 //
 // Created zones receive the shared Cloudflare zone-settings baseline: always_use_https on,
 // min_tls_version 1.2, cache_level aggressive, http3 on, email_obfuscation off,
@@ -705,7 +705,7 @@ type BalancerZone struct {
 	Domain string `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
 	// Ipv4 is the IPv4 address used for A records.
 	Ipv4 string `protobuf:"bytes,3,opt,name=ipv4,proto3" json:"ipv4,omitempty"`
-	// Ipv6 is the IPv6 address used for AAAA records.
+	// Ipv6 is the optional IPv6 address used for AAAA records.
 	Ipv6 string `protobuf:"bytes,4,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
 	// RecordNames are subdomain labels (for example ["api", "app"]) used to create records under domain.
 	RecordNames   []string `protobuf:"bytes,5,rep,name=record_names,json=recordNames,proto3" json:"record_names,omitempty"`
@@ -973,7 +973,7 @@ type Cloudflare struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Version is a configuration/schema version identifier for this file.
 	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
-	// BalancerZones is the set of zones for which proxied A/AAAA records are managed.
+	// BalancerZones is the set of zones for which proxied A records and optional AAAA records are managed.
 	BalancerZones []*BalancerZone `protobuf:"bytes,2,rep,name=balancer_zones,json=balancerZones,proto3" json:"balancer_zones,omitempty"`
 	// PageZones is the set of zones configured for static-site or pages-style CNAME targets.
 	PageZones []*PageZone `protobuf:"bytes,3,rep,name=page_zones,json=pageZones,proto3" json:"page_zones,omitempty"`

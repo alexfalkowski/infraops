@@ -29,6 +29,24 @@ func TestCreateBalancerZone(t *testing.T) {
 	require.Error(t, createBalancerZone(t, stub))
 }
 
+func TestCreateBalancerZoneWithoutIPV6(t *testing.T) {
+	stub := &test.ResourceStub{}
+	err := test.RunWithMocks(func(ctx *pulumi.Context) error {
+		zone := &cf.BalancerZone{
+			Name:        "test",
+			Domain:      "test.com",
+			RecordNames: []string{"test"},
+			IPV4:        "127.0.0.1",
+		}
+
+		return cf.CreateBalancerZone(ctx, zone)
+	}, stub)
+
+	require.NoError(t, err)
+	requireRecord(t, stub.Resources(recordResourceType), "A", "test.test.com", "127.0.0.1")
+	require.Len(t, stub.Resources(recordResourceType), 1)
+}
+
 func TestCreateBalancerZoneReturnsResourceErrors(t *testing.T) {
 	t.Run("setting", func(t *testing.T) {
 		stub := &test.ResourceStub{}
