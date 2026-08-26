@@ -209,8 +209,8 @@ message Github {
 
 // BalancerZone describes a Cloudflare-managed DNS zone for proxied records.
 //
-// The `area/cf` Pulumi program creates the zone and then creates proxied A/AAAA records for the
-// subdomains listed in record_names.
+// The `area/cf` Pulumi program creates the zone and proxied A records for the subdomains listed in
+// record_names. It also creates proxied AAAA records when ipv6 is configured.
 //
 // Created zones receive the shared Cloudflare zone-settings baseline: always_use_https on,
 // min_tls_version 1.2, cache_level aggressive, http3 on, email_obfuscation off,
@@ -225,7 +225,7 @@ message BalancerZone {
   // Ipv4 is the IPv4 address used for A records.
   string ipv4 = 3;
 
-  // Ipv6 is the IPv6 address used for AAAA records.
+  // Ipv6 is the optional IPv6 address used for AAAA records.
   string ipv6 = 4;
 
   // RecordNames are subdomain labels (for example ["api", "app"]) used to create records under domain.
@@ -277,7 +277,7 @@ message Cloudflare {
   // Version is a configuration/schema version identifier for this file.
   string version = 1;
 
-  // BalancerZones is the set of zones for which proxied A/AAAA records are managed.
+  // BalancerZones is the set of zones for which proxied A records and optional AAAA records are managed.
   repeated BalancerZone balancer_zones = 2;
 
   // PageZones is the set of zones configured for static-site or pages-style CNAME targets.
