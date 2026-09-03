@@ -31,13 +31,13 @@ executors:
       - image: alexfalkowski/go:5.2
   release:
     docker:
-      - image: alexfalkowski/release:8.33
+      - image: alexfalkowski/release:8.34
   alpine:
     docker:
       - image: alpine:latest
   k8s:
     docker:
-      - image: alexfalkowski/k8s:4.60
+      - image: alexfalkowski/k8s:4.61
 
 jobs:
   build:
