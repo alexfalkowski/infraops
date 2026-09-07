@@ -9,10 +9,6 @@ import (
 const secretSuffix = "-secret"
 
 func createSecretVolumes(app *App) cv1.VolumeArray {
-	if app.IsExternal() {
-		return nil
-	}
-
 	volumes := cv1.VolumeArray{
 		cv1.VolumeArgs{
 			Name:      pulumi.String(app.Name),

@@ -19,15 +19,11 @@ type Port struct {
 
 // Ports returns the ports exposed by app.
 func Ports(app *App) []Port {
-	if app.IsInternal() {
-		return []Port{
-			{Name: "debug", Number: 6060, Protocol: "http"},
-			{Name: "http", Number: 8080, Protocol: "http"},
-			{Name: "grpc", Number: 9090, Protocol: "grpc"},
-		}
+	return []Port{
+		{Name: "debug", Number: 6060, Protocol: "http"},
+		{Name: "http", Number: 8080, Protocol: "http"},
+		{Name: "grpc", Number: 9090, Protocol: "grpc"},
 	}
-
-	return []Port{{Name: "http", Number: 8080, Protocol: "http"}}
 }
 
 func containerPorts(app *App) cv1.ContainerPortArray {

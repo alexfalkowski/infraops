@@ -9,10 +9,6 @@ import (
 )
 
 func createConfigMap(ctx *pulumi.Context, app *App) error {
-	if app.IsExternal() {
-		return nil
-	}
-
 	args, err := configMap(app)
 	if err != nil {
 		return err

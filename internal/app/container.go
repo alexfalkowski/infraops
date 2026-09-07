@@ -7,14 +7,6 @@ import (
 )
 
 func containers(app *App) cv1.ContainerArray {
-	if app.IsInternal() {
-		return internalContainer(app)
-	}
-
-	return externalContainer(app)
-}
-
-func internalContainer(app *App) cv1.ContainerArray {
 	volumeMounts := cv1.VolumeMountArray{
 		cv1.VolumeMountArgs{
 			MountPath: pulumi.String(configMatchingFilePath(app.Name)),
@@ -37,23 +29,6 @@ func internalContainer(app *App) cv1.ContainerArray {
 		Ports:           containerPorts(app),
 		LivenessProbe:   httpProbe(probePath(app.Name, "livez")),
 		ReadinessProbe:  httpProbe(probePath(app.Name, "readyz")),
-		StartupProbe:    tcpProbe(),
-		Lifecycle:       preStopDelay(),
-		Resources:       createResources(app),
-		SecurityContext: containerSecurity(),
-	}
-	return cv1.ContainerArray{container}
-}
-
-func externalContainer(app *App) cv1.ContainerArray {
-	container := cv1.ContainerArgs{
-		Name:            pulumi.String(app.Name),
-		Image:           image(app),
-		ImagePullPolicy: inputs.Always,
-		Env:             addEnvironments(app, cv1.EnvVarArray{}),
-		Ports:           containerPorts(app),
-		LivenessProbe:   httpProbe("/"),
-		ReadinessProbe:  tcpProbe(),
 		StartupProbe:    tcpProbe(),
 		Lifecycle:       preStopDelay(),
 		Resources:       createResources(app),
