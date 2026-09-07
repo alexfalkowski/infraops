@@ -90,7 +90,7 @@ func TestApplicationReturnsResourceErrors(t *testing.T) {
 func TestApplicationAllowsExplicitZeroReplicas(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := app.ConvertApplication(&v2.Application{
-		Kind:      "external",
+		Kind:      "worker",
 		Name:      "test",
 		Namespace: "test",
 		Domain:    "test.com",
@@ -126,7 +126,7 @@ func TestConvertedApplicationDeploymentInputs(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := app.ConvertApplication(&v2.Application{
 		Id:        "1234",
-		Kind:      "internal",
+		Kind:      "api",
 		Name:      "test",
 		Namespace: "test",
 		Domain:    "test.com",
@@ -166,17 +166,17 @@ func TestApplicationContainerSecurityContextDropsAllCapabilities(t *testing.T) {
 		app  *app.App
 		name string
 	}{
-		{app: appWithResources(), name: "internal"},
+		{app: appWithResources(), name: "api"},
 		{
 			app: app.ConvertApplication(&v2.Application{
-				Kind:      "external",
+				Kind:      "worker",
 				Name:      "test",
 				Namespace: "test",
 				Domain:    "test.com",
 				Version:   "1.0.0",
 				Replicas:  1,
 			}),
-			name: "external",
+			name: "worker",
 		},
 	}
 
@@ -198,17 +198,17 @@ func TestApplicationDelaysShutdownForRoutingPropagation(t *testing.T) {
 		app  *app.App
 		name string
 	}{
-		{app: appWithResources(), name: "internal"},
+		{app: appWithResources(), name: "api"},
 		{
 			app: app.ConvertApplication(&v2.Application{
-				Kind:      "external",
+				Kind:      "worker",
 				Name:      "test",
 				Namespace: "test",
 				Domain:    "test.com",
 				Version:   "1.0.0",
 				Replicas:  1,
 			}),
-			name: "external",
+			name: "worker",
 		},
 	}
 
@@ -227,11 +227,11 @@ func TestApplicationDelaysShutdownForRoutingPropagation(t *testing.T) {
 	}
 }
 
-func TestExternalApplicationOmitsInternalResources(t *testing.T) {
+func TestWorkerApplicationOmitsServiceAndIngress(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := app.ConvertApplication(&v2.Application{
 		Id:        "1234",
-		Kind:      "external",
+		Kind:      "worker",
 		Name:      "test",
 		Namespace: "test",
 		Domain:    "test.com",
@@ -244,20 +244,15 @@ func TestExternalApplicationOmitsInternalResources(t *testing.T) {
 	}
 
 	require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
-	deployment := resourceOf(t, stub, deploymentResourceType)
-	componentLabel := resource.PropertyKey("circleci.com/component-name")
-	require.Empty(t, stub.Resources(configMapResourceType))
-	require.Empty(t, test.Property(t, metadata(deployment), "annotations").ObjectValue())
-	require.NotContains(t, test.Property(t, metadata(deployment), "labels").ObjectValue(), componentLabel)
-	require.NotContains(t, test.Property(t, podTemplateMetadata(deployment), "labels").ObjectValue(), componentLabel)
-	require.NotContains(t, podSpec(deployment), resource.PropertyKey("volumes"))
-	require.NotContains(t, container(deployment), resource.PropertyKey("volumeMounts"))
+	require.NotEmpty(t, stub.Resources(deploymentResourceType))
+	require.Empty(t, stub.Resources(serviceResourceType))
+	require.Empty(t, stub.Resources(ingressResourceType))
 }
 
 func appWithResources() *app.App {
 	return &app.App{
 		ID:        "1234",
-		Kind:      "internal",
+		Kind:      "api",
 		Name:      "test",
 		Namespace: "test",
 		Domain:    "test.com",
@@ -331,14 +326,6 @@ func networkPolicyIngressPorts(t *testing.T, policy resource.PropertyMap) []int 
 	}
 
 	return values
-}
-
-func metadata(deployment resource.PropertyMap) resource.PropertyMap {
-	return deployment[resource.PropertyKey("metadata")].ObjectValue()
-}
-
-func podTemplateMetadata(deployment resource.PropertyMap) resource.PropertyMap {
-	return deploymentSpec(deployment)[resource.PropertyKey("template")].ObjectValue()[resource.PropertyKey("metadata")].ObjectValue()
 }
 
 func podSpec(deployment resource.PropertyMap) resource.PropertyMap {

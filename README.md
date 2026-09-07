@@ -120,16 +120,14 @@ A few conventions are implemented by the Go code and are worth knowing when edit
 
 Supported values:
 
-- `"internal"`: uses image tag `docker.io/alexfalkowski/<name>:v<version>`, mounts the app config file and listed secret volumes, injects `SERVICE_ID`, runs the container with `server`, and exposes debug `6060`, HTTP `8080`, and gRPC `9090`.
-- `"external"`: uses image tag `docker.io/alexfalkowski/<name>:<version>`, skips app config and secret volume mounts, and exposes only HTTP `8080`.
+- `"api"`: uses image tag `docker.io/alexfalkowski/<name>:v<version>`, mounts the app config file and listed secret volumes, injects `SERVICE_ID`, runs the container with `server`, exposes debug `6060`, HTTP `8080`, and gRPC `9090`, and creates a `Service`/`Ingress` so the application receives inbound traffic.
+- `"worker"`: identical to `"api"` except no `Service` or `Ingress` is created, for an application that does not receive inbound traffic (for example a queue consumer or background job).
 
 Other values are unsupported and are not pre-validated by the helper code; malformed values may fail
 later during Pulumi/Kubernetes application.
 
-Internal apps also receive CircleCI release-agent labels/annotations and must serve HTTP
-liveness/readiness probes at `/<name>/livez` and `/<name>/readyz` on port `8080`; startup uses a TCP
-probe on `8080`. External apps skip CircleCI release-agent labels/annotations and use `/` for HTTP
-liveness plus TCP readiness/startup probes on `8080`.
+All apps receive CircleCI release-agent labels/annotations and must serve HTTP liveness/readiness
+probes at `/<name>/livez` and `/<name>/readyz` on port `8080`; startup uses a TCP probe on `8080`.
 
 All app containers use native `lifecycle.preStop.sleep` for five seconds before Kubernetes sends the
 termination signal, allowing endpoint and routing updates to propagate. Their 35-second pod termination
@@ -137,9 +135,8 @@ grace period leaves 30 seconds for graceful process shutdown after the delay.
 
 #### 🪪 `Application.id` CircleCI Project ID (apps)
 
-For internal apps, `Application.id` is written to the deployment annotation
-`circleci.com/project-id`. Keep it aligned with the CircleCI project identifier when adding or
-renaming internal apps. External apps do not receive CircleCI release-agent labels or annotations.
+`Application.id` is written to the deployment annotation `circleci.com/project-id`. Keep it aligned
+with the CircleCI project identifier when adding or renaming apps.
 
 #### 🔐 `EnvVar.value` Secret References (apps)
 
@@ -168,7 +165,7 @@ env_vars: [
 - `Application.secrets` is an **application-level dependency list** used by the deployment implementation to wire existing Kubernetes Secrets as volumes.
 - Secret references in `env_vars` (the `secret:<secretName>/<key>` format) reference **specific keys** in those secrets.
 - They often use the same `<secretName>` values, but they serve different purposes.
-- The app program does not create Secret objects or define Secret keys. For internal apps, each listed secret is expected to exist as `<secretName>-secret` and is mounted at `/etc/secrets/<secretName>`.
+- The app program does not create Secret objects or define Secret keys. Each listed secret is expected to exist as `<secretName>-secret` and is mounted at `/etc/secrets/<secretName>`.
 
 #### 📏 `Application.resource` Sizing (apps)
 
@@ -196,10 +193,9 @@ replicas: 3
 #### 🛡️ App NetworkPolicy Baseline
 
 The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods. Ingress is limited
-to the ports exposed by the app kind: external apps expose HTTP on `8080`, while internal apps expose
-debug on `6060`, HTTP on `8080`, and gRPC on `9090`. Egress currently remains open because outbound
-traffic flows are not modeled per app yet. Future egress restrictions should be introduced per
-namespace/app after the required flows are known.
+to debug on `6060`, HTTP on `8080`, and gRPC on `9090` for every app, regardless of kind. Egress
+currently remains open because outbound traffic flows are not modeled per app yet. Future egress
+restrictions should be introduced per namespace/app after the required flows are known.
 
 ## 🔁 Common Workflows
 
@@ -313,7 +309,7 @@ See:
 
 This file uses the `Kubernetes` message in `api/infraops/v2/service.proto`.
 
-Internal apps also need an application config file at:
+Apps also need an application config file at:
 
 - `area/apps/<namespace>/<app>.yaml`
 

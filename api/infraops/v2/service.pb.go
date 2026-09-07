@@ -113,13 +113,13 @@ type Application struct {
 	// Kind determines the deployment model for this application.
 	//
 	// Supported values:
-	//   - "internal": use the repository-built image tag format, mount the application config file
+	//   - "api": use the repository-built image tag format, mount the application config file
 	//     and listed secret volumes, inject SERVICE_ID, add CircleCI release-agent labels/annotations,
-	//     expose debug/http/grpc ports, and use HTTP liveness/readiness probes at
-	//     "/<name>/livez" and "/<name>/readyz" on port 8080 plus a TCP startup probe on 8080.
-	//   - "external": use the external image tag format, skip app config and secret volume mounts,
-	//     skip CircleCI release-agent labels/annotations, expose only the HTTP port, and use "/"
-	//     for HTTP liveness plus TCP readiness/startup probes on 8080.
+	//     expose debug/http/grpc ports, use HTTP liveness/readiness probes at
+	//     "/<name>/livez" and "/<name>/readyz" on port 8080 plus a TCP startup probe on 8080, and
+	//     create a Service and Ingress so the application receives inbound traffic.
+	//   - "worker": identical to "api" except no Service or Ingress is created, for an application
+	//     that does not receive inbound traffic (for example a queue consumer or background job).
 	//
 	// Other values are unsupported. The current implementation does not pre-validate this field, so
 	// unsupported values can produce mixed resource behavior during Pulumi preview/update.

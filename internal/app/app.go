@@ -71,13 +71,16 @@ func ConvertApplication(a *v2.Application) *App {
 // Resources are created in a fixed order to ensure dependencies exist (for example,
 // ServiceAccount before Deployment). Any error aborts the creation flow and is returned.
 func CreateApplication(ctx *pulumi.Context, app *App) error {
-	resourceCreators := []func(ctx *pulumi.Context, app *App) error{
+	resources := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,
-		createDeployment, createService, createIngress,
+		createDeployment,
 	}
-	for _, createResource := range resourceCreators {
-		if err := createResource(ctx, app); err != nil {
+	if !app.IsWorker() {
+		resources = append(resources, createService, createIngress)
+	}
+	for _, resource := range resources {
+		if err := resource(ctx, app); err != nil {
 			return err
 		}
 	}
@@ -100,7 +103,7 @@ type App struct {
 
 	// Kind determines how the application is deployed.
 	//
-	// Supported values are "internal" and "external". Unsupported values are not prevalidated
+	// Supported values are "api" and "worker". Unsupported values are not prevalidated
 	// and can produce mixed resource behavior during Pulumi preview/update.
 	Kind string
 
@@ -128,17 +131,12 @@ func (a *App) HasResources() bool {
 	return a.Resources != nil
 }
 
-// IsInternal reports whether this application uses the repository's opinionated deployment model.
+// IsWorker reports whether this application does not receive inbound traffic.
 //
-// Internal applications are typically built/published by this repository and deployed
-// using a conventional container image naming scheme.
-func (a *App) IsInternal() bool {
-	return a.Kind == "internal"
-}
-
-// IsExternal reports whether this application is not built/published by this repository.
-func (a *App) IsExternal() bool {
-	return a.Kind == "external"
+// Worker applications use the same deploy model as an "api" application except that no
+// Service or Ingress is created for them.
+func (a *App) IsWorker() bool {
+	return a.Kind == "worker"
 }
 
 // Resources describes optional CPU/memory/storage ranges for an application's pod.

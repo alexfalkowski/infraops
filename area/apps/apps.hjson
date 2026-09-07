@@ -3,7 +3,7 @@
   applications: [
     {
       id: 98968ca0-4ada-4856-8547-210f92b838ea
-      kind: internal
+      kind: api
       name: bezeichner
       namespace: lean
       domain: lean-thoughts.com
@@ -13,7 +13,7 @@
     }
     {
       id: 28c679dc-5924-47e8-ac48-73cd842ba5cd
-      kind: internal
+      kind: api
       name: standort
       namespace: lean
       domain: lean-thoughts.com
@@ -23,7 +23,7 @@
     }
     {
       id: b46608ae-950a-46bb-b37a-4dfe68a95b52
-      kind: internal
+      kind: api
       name: web
       namespace: lean
       domain: lean-thoughts.com
