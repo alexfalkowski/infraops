@@ -9,7 +9,7 @@
       domain: lean-thoughts.com
       version: 1.1001.0
       resource: small
-      replicas: 3
+      replicas: 2
     }
     {
       id: 28c679dc-5924-47e8-ac48-73cd842ba5cd
@@ -19,7 +19,7 @@
       domain: lean-thoughts.com
       version: 2.1003.0
       resource: small
-      replicas: 3
+      replicas: 2
     }
     {
       id: b46608ae-950a-46bb-b37a-4dfe68a95b52
@@ -29,7 +29,7 @@
       domain: lean-thoughts.com
       version: 1.567.0
       resource: small
-      replicas: 3
+      replicas: 2
     }
   ]
 }
