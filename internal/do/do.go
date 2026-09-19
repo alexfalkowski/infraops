@@ -88,7 +88,7 @@ func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster)
 		Name:                          pulumi.String(cluster.Name),
 		DestroyAllAssociatedResources: inputs.Yes,
 		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
-			NodeCount: pulumi.Int(2),
+			NodeCount: pulumi.Int(1),
 			Name:      pulumi.String(cluster.Name),
 			Labels:    pulumi.StringMap{"name": pulumi.String(cluster.Name)},
 			Size:      cluster.Size(),
