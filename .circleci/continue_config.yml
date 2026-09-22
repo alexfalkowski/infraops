@@ -13,6 +13,12 @@ parameters:
   gh:
     type: boolean
     default: false
+  bump:
+    type: boolean
+    default: false
+  format:
+    type: boolean
+    default: false
 
 commands:
   sync-submodules:
@@ -86,17 +92,56 @@ jobs:
           key: infraops-build-go-lint-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-lint-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/golangci-lint
-      - run: make build-bump
-      - run: make build-format
+      - when:
+          condition: << pipeline.parameters.bump >>
+          steps:
+            - run: make build-bump
+      - when:
+          condition: << pipeline.parameters.format >>
+          steps:
+            - run: make build-format
       - run: make api-lint
       - run: make api-breaking
       - run: make sec
+      - save_cache:
+          name: save go build cache
+          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          paths:
+            - ~/.cache/go-build
+    resource_class: arm.large
+  specs:
+    executor: go
+    working_directory: ~/infraops
+    environment:
+      GOGC: 10
+      GOMAXPROCS: 2
+    steps:
+      - checkout:
+          method: blobless
+      - run:
+          name: skip app release-only changes
+          command: ./area/apps/release halt-ci
+      - sync-submodules
+      - run: make source-key
+      - restore_cache:
+          name: restore go cache
+          keys:
+            - infraops-build-go-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}
+            - infraops-build-go-cache-
+      - run: make clean
+      - run: make dep
+      - restore_cache:
+          name: restore go build cache
+          keys:
+            - infraops-specs-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+            - infraops-specs-go-build-cache-
+      - run: make clean
       - run:
           command: make specs
           no_output_timeout: 30m
       - save_cache:
           name: save go build cache
-          key: infraops-build-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
+          key: infraops-specs-go-build-cache-{{ checksum "go.sum" }}-{{ checksum "~/.go-version" }}-{{ checksum ".source-key" }}
           paths:
             - ~/.cache/go-build
       - run: make coverage
@@ -407,12 +452,14 @@ workflows:
   infraops:
     jobs:
       - build
+      - specs
 
       - version:
           context: gh
           serial-group: << pipeline.project.slug >>/version
           requires:
             - build
+            - specs
           filters: 'pipeline.git.branch == "master"'
       - apps_preview:
           context: infraops
@@ -445,6 +492,7 @@ workflows:
       - sync:
           requires:
             - build
+            - specs
             - apps_preview
             - cf_preview
             - do_preview
@@ -453,6 +501,7 @@ workflows:
       - wait-all:
           requires:
             - build
+            - specs
             - sync
             - version
             - apps_preview

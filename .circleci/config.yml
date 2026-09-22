@@ -16,6 +16,24 @@ workflows:
             internal/gh/.* gh true
             go.* gh true
 
+            Makefile bump true
+            bin.* bump true
+            cmd/bump/.* bump true
+            internal/app/.* bump true
+            internal/config/.* bump true
+            internal/inputs/.* bump true
+            internal/log/.* bump true
+            api/infraops/v2/.* bump true
+            go.* bump true
+
+            Makefile format true
+            bin.* format true
+            cmd/format/.* format true
+            internal/config/.* format true
+            internal/log/.* format true
+            api/infraops/v2/.* format true
+            go.* format true
+
             .circleci/.* cf true
             Makefile cf true
             area/cf/.* cf true
