@@ -50,8 +50,8 @@ jobs:
     executor: go
     working_directory: ~/infraops
     environment:
-      GOGC: 10
-      GOMAXPROCS: 2
+      GOGC: "50"
+      GOMAXPROCS: "4"
     steps:
       - checkout:
           method: blobless
@@ -113,8 +113,8 @@ jobs:
     executor: go
     working_directory: ~/infraops
     environment:
-      GOGC: 10
-      GOMAXPROCS: 2
+      GOGC: "50"
+      GOMAXPROCS: "4"
     steps:
       - checkout:
           method: blobless
@@ -251,8 +251,8 @@ jobs:
     executor: k8s
     working_directory: ~/infraops
     environment:
-      GOGC: 10
-      GOMAXPROCS: 2
+      GOGC: "50"
+      GOMAXPROCS: "4"
     steps:
       - checkout-submodules
       - run: make source-key
@@ -286,8 +286,8 @@ jobs:
     executor: k8s
     working_directory: ~/infraops
     environment:
-      GOGC: 10
-      GOMAXPROCS: 2
+      GOGC: "50"
+      GOMAXPROCS: "4"
     steps:
       - checkout-submodules
       - run: make source-key
