@@ -390,5 +390,23 @@
         ci/circleci: wait-all
       ]
     }
+    {
+      name: ubuntu-budgie
+      description: Configuration for https://ubuntubudgie.org
+      homepage_url: https://alexfalkowski.github.io/ubuntu-budgie
+      visibility: public
+      collaborators: {
+        enabled: false
+      }
+      pages: {
+        enabled: false
+      }
+      topics: [
+        ubuntu
+        linux
+      ]
+      checks: [
+      ]
+    }
   ]
 }
