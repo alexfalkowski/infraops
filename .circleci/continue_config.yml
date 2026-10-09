@@ -34,16 +34,16 @@ commands:
 executors:
   go:
     docker:
-      - image: alexfalkowski/go:5.9
+      - image: alexfalkowski/go:5.12
   release:
     docker:
-      - image: alexfalkowski/release:8.37
+      - image: alexfalkowski/release:8.38
   alpine:
     docker:
       - image: alpine:latest
   k8s:
     docker:
-      - image: alexfalkowski/k8s:4.75
+      - image: alexfalkowski/k8s:4.76
 
 jobs:
   build:
