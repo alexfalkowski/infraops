@@ -326,6 +326,10 @@ rollout, verify, load, and kubescape workflows, also update `area/apps/release` 
 per-app helper commands, including any request payload fixture needed by load
 testing.
 
+The `abgleich` app is a worker, so it has no Service, Ingress, or public DNS record. Its verify
+helper waits up to 120 seconds for Kubernetes rollout readiness, and its load helper skips HTTP
+load testing. Kubernetes still probes the worker's internal HTTP liveness and readiness endpoints.
+
 #### 🏗️ Install / Setup
 
 Save the cluster kubeconfig if your local context is not already configured:
@@ -352,8 +356,8 @@ The default `rollout`, `verify`, `load`, and `kubescape` helper targets are rele
 release diff and target only apps with version-only changes in `area/apps/apps.hjson`; when the diff
 is not a release-only app change, they fall back to all supported apps.
 
-Supported apps are the apps explicitly wired in `area/apps/release`. The `verify` helpers use
-fail-fast `curl` requests with bounded connection and total request time, and the `load` helpers run
+Supported apps are the apps explicitly wired in `area/apps/release`. The API `verify` helpers use
+fail-fast `curl` requests with bounded connection and total request time, and the API `load` helpers run
 Vegeta and fail unless every request succeeds. Load request payloads live with the app fixtures under
 `area/apps/<namespace>/`.
 

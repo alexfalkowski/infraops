@@ -12,11 +12,11 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 readonly VERIFY_CONNECT_TIMEOUT="5"
 readonly VERIFY_MAX_TIME="30"
-readonly -a APPS=(standort bezeichner web)
+readonly -a APPS=(standort bezeichner web abgleich)
 
 # Prints command usage.
 usage() {
-  printf 'Usage: %s <halt-ci|is-release|kubescape|kubescape-all|kubescape-bezeichner|kubescape-standort|kubescape-web|load|load-all|load-bezeichner|load-standort|load-web|rollout|rollout-all|rollout-bezeichner|rollout-standort|rollout-web|verify|verify-all|verify-bezeichner|verify-standort|verify-web>\n' "$0" >&2
+  printf 'Usage: %s <halt-ci|is-release|kubescape|kubescape-all|kubescape-abgleich|kubescape-bezeichner|kubescape-standort|kubescape-web|load|load-all|load-abgleich|load-bezeichner|load-standort|load-web|rollout|rollout-all|rollout-abgleich|rollout-bezeichner|rollout-standort|rollout-web|verify|verify-all|verify-abgleich|verify-bezeichner|verify-standort|verify-web>\n' "$0" >&2
 }
 
 # Prints the revision to inspect for app release changes.
@@ -128,7 +128,7 @@ release_apps() {
 # Reports whether an app has release helper commands.
 is_app() {
   case "$1" in
-    bezeichner | standort | web)
+    abgleich | bezeichner | standort | web)
       return 0
       ;;
     *)
@@ -257,6 +257,11 @@ load_all() {
   run_all_apps "load"
 }
 
+# Workers have no public HTTP endpoint to load test.
+load_abgleich() {
+  printf 'Skipping HTTP load test for worker abgleich.\n'
+}
+
 # Load tests standort.
 load_standort() {
   local result
@@ -324,6 +329,11 @@ kubescape_app() {
 }
 
 # Scans a specific app with kubescape.
+kubescape_abgleich() {
+  kubescape_app "abgleich"
+}
+
+# Scans a specific app with kubescape.
 kubescape_bezeichner() {
   kubescape_app "bezeichner"
 }
@@ -346,6 +356,10 @@ kubescape_release_changes() {
 # Rolls out all apps.
 rollout_all() {
   run_all_apps "rollout"
+}
+
+rollout_abgleich() {
+  kubectl rollout restart deployment/abgleich -n lean
 }
 
 # Rolls out standort.
@@ -371,6 +385,11 @@ rollout_release_changes() {
 # Verifies all apps.
 verify_all() {
   run_all_apps "verify"
+}
+
+# Worker readiness is verified through Kubernetes instead of public HTTP.
+verify_abgleich() {
+  kubectl rollout status deployment/abgleich -n lean --timeout=120s
 }
 
 # Verifies standort.
@@ -435,6 +454,9 @@ case "${1:-}" in
   kubescape-all)
     kubescape_all
     ;;
+  kubescape-abgleich)
+    run_app_action "kubescape" "abgleich"
+    ;;
   kubescape-bezeichner)
     run_app_action "kubescape" "bezeichner"
     ;;
@@ -449,6 +471,9 @@ case "${1:-}" in
     ;;
   load-all)
     load_all
+    ;;
+  load-abgleich)
+    run_app_action "load" "abgleich"
     ;;
   load-bezeichner)
     run_app_action "load" "bezeichner"
@@ -465,6 +490,9 @@ case "${1:-}" in
   rollout-all)
     rollout_all
     ;;
+  rollout-abgleich)
+    run_app_action "rollout" "abgleich"
+    ;;
   rollout-bezeichner)
     run_app_action "rollout" "bezeichner"
     ;;
@@ -479,6 +507,9 @@ case "${1:-}" in
     ;;
   verify-all)
     verify_all
+    ;;
+  verify-abgleich)
+    run_app_action "verify" "abgleich"
     ;;
   verify-bezeichner)
     run_app_action "verify" "bezeichner"
