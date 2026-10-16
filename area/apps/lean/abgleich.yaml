@@ -10,8 +10,4 @@ telemetry:
     level: info
 transport:
   http:
-    limiter:
-      kind: service-method
-      tokens: 1000
-      interval: 1s
     timeout: 5s
