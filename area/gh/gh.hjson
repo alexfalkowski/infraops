@@ -60,7 +60,9 @@
       }
       topics: [
         golang
-        k8s
+        health-check
+        monitoring
+        kubernetes
       ]
       checks: [
         ci/circleci: wait-all
@@ -79,7 +81,9 @@
       }
       topics: [
         golang
-        signal
+        signals
+        application-lifecycle
+        graceful-shutdown
       ]
       checks: [
         ci/circleci: wait-all
@@ -98,7 +102,9 @@
       }
       topics: [
         golang
-        sync
+        concurrency
+        synchronization
+        atomics
       ]
       checks: [
         ci/circleci: wait-all
@@ -117,10 +123,12 @@
       }
       topics: [
         golang
+        pulumi
+        infrastructure-as-code
+        kubernetes
         cloudflare
         digitalocean
         github
-        k8s
       ]
       checks: [
         ci/circleci: wait-all
@@ -205,6 +213,7 @@
         ruby
         make
         cucumber
+        github-template
       ]
       checks: [
         ci/circleci: wait-all
@@ -228,6 +237,7 @@
         make
         cucumber
         microservice
+        github-template
       ]
       checks: [
         ci/circleci: wait-all
@@ -246,9 +256,10 @@
       }
       topics: [
         golang
-        ruby
-        make
-        cucumber
+        identifiers
+        id-generation
+        grpc
+        http
       ]
       checks: [
         ci/circleci: wait-all
@@ -267,9 +278,10 @@
       }
       topics: [
         golang
-        ruby
-        make
-        cucumber
+        database-migrations
+        postgresql
+        grpc
+        http
       ]
       checks: [
         ci/circleci: wait-all
@@ -288,9 +300,10 @@
       }
       topics: [
         golang
-        ruby
-        make
-        cucumber
+        geolocation
+        geoip
+        geojson
+        grpc
       ]
       checks: [
         ci/circleci: wait-all
@@ -309,9 +322,9 @@
       }
       topics: [
         golang
-        ruby
-        make
-        cucumber
+        http
+        http-status-codes
+        testing
       ]
       checks: [
         ci/circleci: wait-all
@@ -334,10 +347,9 @@
       }
       topics: [
         golang
-        ruby
-        make
-        cucumber
         htmx
+        server-side-rendering
+        website
       ]
       checks: [
         ci/circleci: wait-all
@@ -365,6 +377,8 @@
         make
         cucumber
         monolith
+        github-template
+        monorepo
       ]
       checks: [
         ci/circleci: wait-all
@@ -383,8 +397,37 @@
       }
       topics: [
         golang
-        stub
-        test
+        testing
+        stubbing
+        exec
+        command-line
+      ]
+      checks: [
+        ci/circleci: wait-all
+      ]
+    }
+    {
+      name: abgleich
+      description: Abgleich keeps pull request branches current so automated merges can progress.
+      homepage_url: https://alexfalkowski.github.io/abgleich
+      visibility: public
+      collaborators: {
+        enabled: false
+      }
+      template: {
+        owner: alexfalkowski
+        repository: go-service-template
+      }
+      pages: {
+        enabled: false
+      }
+      topics: [
+        golang
+        github
+        pull-requests
+        automation
+        auto-merge
+        branch-management
       ]
       checks: [
         ci/circleci: wait-all
