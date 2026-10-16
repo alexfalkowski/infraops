@@ -2,6 +2,15 @@
   version: "2.0"
   applications: [
     {
+      id: 97f9aced-02db-466b-97a1-04b531794623
+      kind: worker
+      name: abgleich
+      namespace: lean
+      version: 0.1.0
+      resource: small
+      replicas: 1
+    }
+    {
       id: 98968ca0-4ada-4856-8547-210f92b838ea
       kind: api
       name: bezeichner
