@@ -344,6 +344,19 @@ Prepare the local app namespace/helper resources:
 make -C area/apps setup
 ```
 
+Before deploying Abgleich, create `abgleich-secret` in the existing `lean` namespace
+from a local GitHub token file. `github_token_file` must be a nonempty file path:
+
+```bash
+make -C area/apps abgleich-secret github_token_file=/absolute/path/to/github-token
+```
+
+This explicit creation step is separate from `setup` and requires `kubectl` with the
+intended cluster context. It creates the `github-token` key using `--from-file` without
+printing its contents; creation fails if the Secret already exists. Abgleich's
+`secrets` list mounts it read-only at `/etc/secrets/abgleich/github-token` for use by a
+future release. The currently pinned Abgleich release does not consume this token.
+
 Apply the Pulumi resources described by `apps.hjson`:
 
 ```bash
