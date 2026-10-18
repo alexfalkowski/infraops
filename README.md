@@ -354,8 +354,12 @@ make -C area/apps abgleich-secret github_token_file=/absolute/path/to/github-tok
 This explicit creation step is separate from `setup` and requires `kubectl` with the
 intended cluster context. It creates the `github-token` key using `--from-file` without
 printing its contents; creation fails if the Secret already exists. Abgleich's
-`secrets` list mounts it read-only at `/etc/secrets/abgleich/github-token` for use by a
-future release. The currently pinned Abgleich release does not consume this token.
+`secrets` list mounts it read-only at `/etc/secrets/abgleich/github-token`.
+`area/apps/lean/abgleich.yaml` reads that file through `github.token` and configures
+the worker to reconcile auto-merge pull requests in `alexfalkowski/infraops` every
+five minutes. The token needs pull request write access and permission to update
+repository contents. Credentials are read once at startup; restart the worker
+after replacing the token.
 
 Apply the Pulumi resources described by `apps.hjson`:
 

@@ -1,4 +1,16 @@
 environment: production
+github:
+  client:
+    timeout: 1m
+    retry:
+      attempts: 2
+      backoff: 100ms
+  owner: alexfalkowski
+  repository: infraops
+  token: file:/etc/secrets/abgleich/github-token
+scheduler:
+  interval: 5m
+  timeout: 5m
 health:
   duration: 1s
   timeout: 1s
