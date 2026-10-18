@@ -6,10 +6,9 @@ github:
       attempts: 2
       backoff: 100ms
   owner: alexfalkowski
-  repository: infraops
   token: file:/etc/secrets/abgleich/github-token
 scheduler:
-  interval: 5m
+  interval: 15m
   timeout: 5m
 health:
   duration: 1s
