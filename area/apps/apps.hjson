@@ -6,7 +6,7 @@
       kind: worker
       name: abgleich
       namespace: lean
-      version: 0.5.0
+      version: 0.6.0
       resource: small
       replicas: 1
       secrets: [
