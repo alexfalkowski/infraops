@@ -39,7 +39,7 @@
       name: web
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.584.0
+      version: 1.585.0
       resource: small
       replicas: 2
     }
