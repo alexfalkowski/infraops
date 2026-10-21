@@ -13,6 +13,7 @@ import (
 
 const (
 	branchProtectionResourceType        = "github:index/branchProtection:BranchProtection"
+	issueLabelResourceType              = "github:index/issueLabel:IssueLabel"
 	repositoryResourceType              = "github:index/repository:Repository"
 	repositoryCollaboratorResourceType  = "github:index/repositoryCollaborator:RepositoryCollaborator"
 	repositoryPagesResourceType         = "github:index/repositoryPages:RepositoryPages"
@@ -25,6 +26,31 @@ func TestCreateRepository(t *testing.T) {
 	requireBranchProtection(t, stub.Resources(branchProtectionResourceType))
 	requirePages(t, stub.Resources(repositoryPagesResourceType))
 	requireCollaborator(t, stub.Resources(repositoryCollaboratorResourceType))
+
+	labels := stub.Resources(issueLabelResourceType)
+	require.Len(t, labels, 1)
+	label := labels[0]
+	require.Equal(t, "test", test.Property(t, label, "repository").StringValue())
+	require.Equal(t, "automerge", test.Property(t, label, "name").StringValue())
+	require.Equal(t, "0E8A16", test.Property(t, label, "color").StringValue())
+	require.Equal(t, "Eligible for automated merging.", test.Property(t, label, "description").StringValue())
+}
+
+func TestCreateRepositoryArchivedDoesNotCreateAutomergeLabel(t *testing.T) {
+	repository := fullRepository()
+	repository.Archived = true
+	stub := &test.ResourceStub{}
+
+	require.NoError(t, createRepository(t, repository, stub))
+	require.Empty(t, stub.Resources(issueLabelResourceType))
+}
+
+func TestCreateRepositoryReturnsAutomergeLabelError(t *testing.T) {
+	stub := &test.ResourceStub{}
+	stub.FailResource(issueLabelResourceType)
+
+	require.Error(t, createRepository(t, fullRepository(), stub))
+	require.Len(t, stub.Resources(issueLabelResourceType), 1)
 }
 
 func TestCreateRepositoryRequiresChecks(t *testing.T) {

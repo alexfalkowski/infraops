@@ -596,6 +596,10 @@ on merge, issues, projects, wiki, secret scanning, push protection, and vulnerab
 enabled, and web commit signoff is disabled. These settings are intentional and are not configurable
 in HJSON.
 
+Every non-archived managed repository also receives an `automerge` label with color `0E8A16`
+and description "Eligible for automated merging." Archived repositories are read-only and are
+skipped for label creation.
+
 #### 🧬 Repository Templates
 
 `template` creates a repository from another GitHub template repository and requires both `owner` and
