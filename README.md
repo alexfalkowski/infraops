@@ -345,21 +345,43 @@ make -C area/apps setup
 ```
 
 Before deploying Abgleich, create `abgleich-secret` in the existing `lean` namespace
-from a local GitHub token file. `github_token_file` must be a nonempty file path:
+from local GitHub token and App private key PEM files. Both `github_token_file` and
+`github_app_private_key_file` are required and must refer to readable, nonempty files:
 
 ```bash
-make -C area/apps abgleich-secret github_token_file=/absolute/path/to/github-token
+make -C area/apps abgleich-secret \
+  github_token_file=/absolute/path/to/github-token \
+  github_app_private_key_file=/absolute/path/to/private-key.pem
 ```
 
 This explicit creation step is separate from `setup` and requires `kubectl` with the
-intended cluster context. It creates the `github-token` key using `--from-file` without
-printing its contents; creation fails if the Secret already exists. Abgleich's
-`secrets` list mounts it read-only at `/etc/secrets/abgleich/github-token`.
-`area/apps/lean/abgleich.yaml` reads that file through `github.token` and configures
+intended cluster context. It validates both files before invoking `kubectl`, then creates
+the `github-token` and `github-app-private-key.pem` keys using `--from-file` without
+printing their contents; creation fails if the Secret already exists. Keep both files
+outside the repository and never commit credentials. Abgleich's existing `secrets` list
+mounts both keys read-only at `/etc/secrets/abgleich/github-token` and
+`/etc/secrets/abgleich/github-app-private-key.pem`. The PEM is available for future App
+authentication; current token authentication is unchanged.
+`area/apps/lean/abgleich.yaml` reads the token file through `github.token` and configures
 the worker to reconcile auto-merge pull requests in `alexfalkowski/infraops` every
 five minutes. The token needs pull request write access and permission to update
 repository contents. Credentials are read once at startup; restart the worker
 after replacing the token.
+
+To add the PEM to an existing Secret, delete and recreate it as a separate operator
+step. Before deleting, confirm both local files are readable and nonempty, and that
+the token file contains the **same existing token value**; this procedure does not
+rotate the token. Use the intended cluster context:
+
+```bash
+kubectl delete secret abgleich-secret --namespace lean && \
+make -C area/apps abgleich-secret \
+  github_token_file=/absolute/path/to/github-token \
+  github_app_private_key_file=/absolute/path/to/private-key.pem
+```
+
+Deleting the Secret does not automatically stop the running pod, but a replacement
+pod cannot start while the Secret is absent. Recreate it promptly with both files.
 
 Apply the Pulumi resources described by `apps.hjson`:
 
