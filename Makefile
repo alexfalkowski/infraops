@@ -34,7 +34,7 @@ api-lint:
 
 # Lint repository shell workflow helpers.
 scripts-lint:
-	@shellcheck area/apps/release area/apps/kube-score-live
+	@shellcheck area/apps/release area/apps/kube-score-live area/apps/lean/abgleich
 
 # Check the API for breaking changes.
 api-breaking:

@@ -1,4 +1,5 @@
 override export github_token_file := $(value github_token_file)
+override export github_app_private_key_file := $(value github_app_private_key_file)
 
 # Run kube-score for lean.
 kube-score-lean:
@@ -16,10 +17,9 @@ delete-lean:
 create-lean:
 	@kubectl create namespace lean
 
-# Create Abgleich's GitHub token secret in lean (requires github_token_file).
+# Create Abgleich's GitHub secret in lean (requires github_token_file and github_app_private_key_file).
 abgleich-secret:
-	@test -n "$$github_token_file" || { printf '%s\n' 'github_token_file is required' >&2; exit 1; }
-	@kubectl create secret generic abgleich-secret --namespace lean --from-file="github-token=$$github_token_file"
+	@./lean/abgleich
 
 # Setup lean.
 setup-lean: create-lean
