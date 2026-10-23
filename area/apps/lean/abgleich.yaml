@@ -12,7 +12,7 @@ github:
     private_key: file:/etc/secrets/abgleich/github-app-private-key.pem
   webhook:
     secret: file:/etc/secrets/abgleich/github-webhook-secret
-    timeout: 4s
+    timeout: 8s
 scheduler:
   interval: 15m
   timeout: 5m
@@ -27,5 +27,5 @@ telemetry:
     level: info
 transport:
   http:
-    timeout: 5s
+    timeout: 9s
     max_receive_size: 1048576B
