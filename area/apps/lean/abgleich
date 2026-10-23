@@ -3,11 +3,6 @@ set -eo pipefail
 
 # Creates Abgleich's Secret from local credential files without printing their contents.
 
-if [[ -z "${github_token_file:-}" ]]; then
-  printf '%s\n' 'github_token_file is required' >&2
-  exit 1
-fi
-
 if [[ -z "${github_app_private_key_file:-}" ]]; then
   printf '%s\n' 'github_app_private_key_file is required' >&2
   exit 1
@@ -15,11 +10,6 @@ fi
 
 if [[ -z "${github_webhook_secret_file:-}" ]]; then
   printf '%s\n' 'github_webhook_secret_file is required' >&2
-  exit 1
-fi
-
-if [[ ! -f "$github_token_file" || ! -r "$github_token_file" || ! -s "$github_token_file" ]]; then
-  printf '%s\n' 'github_token_file must be a readable, nonempty file' >&2
   exit 1
 fi
 
@@ -34,6 +24,5 @@ if [[ ! -f "$github_webhook_secret_file" || ! -r "$github_webhook_secret_file" |
 fi
 
 kubectl create secret generic abgleich-secret --namespace lean \
-  --from-file="github-token=$github_token_file" \
   --from-file="github-app-private-key.pem=$github_app_private_key_file" \
   --from-file="github-webhook-secret=$github_webhook_secret_file"

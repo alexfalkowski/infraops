@@ -346,29 +346,27 @@ make -C area/apps setup
 ```
 
 Before deploying Abgleich, ensure `abgleich-secret` in the existing `lean` namespace contains
-the App private key PEM and webhook secret. For a new Secret, the existing helper accepts
-local GitHub token, App private key PEM, and webhook secret files. All three of
-`github_token_file`, `github_app_private_key_file`, and `github_webhook_secret_file`
+the App private key PEM and webhook secret. For a new Secret, the helper accepts
+local App private key PEM and webhook secret files. Both
+`github_app_private_key_file` and `github_webhook_secret_file`
 are required and must refer to readable, nonempty files. The webhook secret file must
 contain the same value configured in the GitHub App:
 
 ```bash
 make -C area/apps abgleich-secret \
-  github_token_file=/absolute/path/to/github-token \
   github_app_private_key_file=/absolute/path/to/private-key.pem \
   github_webhook_secret_file=/absolute/path/to/github-webhook-secret
 ```
 
 This explicit creation step is separate from `setup` and requires `kubectl` with the
-intended cluster context. It validates all three files before invoking `kubectl`, then
-creates the `github-token`, `github-app-private-key.pem`, and `github-webhook-secret`
+intended cluster context. It validates both files before invoking `kubectl`, then
+creates the `github-app-private-key.pem` and `github-webhook-secret`
 keys using `--from-file` without printing their contents; creation fails if the Secret
-already exists. Keep all three files
+already exists. Keep both files
 outside the repository and never commit credentials. Abgleich's existing `secrets` list
-mounts the keys read-only at `/etc/secrets/abgleich/github-token`,
-`/etc/secrets/abgleich/github-app-private-key.pem`, and
-`/etc/secrets/abgleich/github-webhook-secret`. The helper retains the legacy token key,
-but Abgleich no longer uses it.
+mounts the keys read-only at `/etc/secrets/abgleich/github-app-private-key.pem` and
+`/etc/secrets/abgleich/github-webhook-secret`. The legacy `github-token` key is no
+longer created or used.
 `area/apps/lean/abgleich.yaml` configures App `5427450`, installation `174152088`, and
 the mounted private key and webhook secret. It discovers repositories accessible to the
 installation under `alexfalkowski` and reconciles those with auto-merge enabled every
@@ -384,21 +382,19 @@ the existing `automerge` label; the scheduled sweep applies the merge policy. Se
 [Abgleich setup guide](https://github.com/alexfalkowski/abgleich#-github-app-setup)
 for permissions, delivery behavior, and recovery.
 
-To add keys to an existing Secret, delete and recreate it as a separate operator
-step. Before deleting, confirm all three local files are readable and nonempty, and that
-the token file contains the **same existing token value**; this procedure does not
-rotate the token. Use the intended cluster context:
+To remove the legacy token key or replace keys in an existing Secret, delete and
+recreate it as a separate operator step. Before deleting, confirm both local files
+are readable and nonempty. Use the intended cluster context:
 
 ```bash
 kubectl delete secret abgleich-secret --namespace lean && \
 make -C area/apps abgleich-secret \
-  github_token_file=/absolute/path/to/github-token \
   github_app_private_key_file=/absolute/path/to/private-key.pem \
   github_webhook_secret_file=/absolute/path/to/github-webhook-secret
 ```
 
 Deleting the Secret does not automatically stop the running pod, but a replacement
-pod cannot start while the Secret is absent. Recreate it promptly with all three files.
+pod cannot start while the Secret is absent. Recreate it promptly with both files.
 
 Apply the Pulumi resources described by `apps.hjson`:
 
