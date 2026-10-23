@@ -18,3 +18,4 @@ test/reports/*
 *.bin
 /bump
 /format
+/area/apps/.release-selection.json

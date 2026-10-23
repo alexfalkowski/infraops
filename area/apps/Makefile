@@ -1,18 +1,29 @@
 include ../../bin/build/make/help.mak
 include lean.mk
 
-# Run kube score.
-kube-score: kube-score-lean
+.PHONY: kube-score
+
+# Score apps changed by the last successful update.
+kube-score:
+	@./release kube-score
+
+# Score all live resources in the namespace.
+kube-score-all:
+	@./release kube-score-all
 
 # Run kubescape.
 kubescape:
 	@./release kubescape
 
 # Run kubescape for all apps.
-kubescape-all: kubescape-lean
+kubescape-all:
+	@./release kubescape-all
 
-# Lint live app resources.
+# Lint apps changed by the last successful update.
 lint: kube-score kubescape
+
+# Lint the namespace and scan every supported app image.
+lint-all: kube-score-all kubescape-all
 
 # Save kubeconfig.
 save-config:

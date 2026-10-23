@@ -3,7 +3,7 @@ override export github_webhook_secret_file := $(value github_webhook_secret_file
 
 # Run kube-score for lean.
 kube-score-lean:
-	@./kube-score-live lean
+	@./kube-score lean
 
 # Run kubescape for lean.
 kubescape-lean:
