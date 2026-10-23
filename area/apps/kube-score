@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# Scores a namespace or selected apps with their related resources and shared policy context.
+
+readonly KUBE_SCORE_IGNORE_TEST="deployment-has-host-podantiaffinity"
+
+# Prints command usage.
+usage() {
+  printf 'Usage: %s <namespace> [app ...]\n' "$0" >&2
+}
+
+# Prints namespaced Kubernetes API resources.
+resource_names() {
+  kubectl api-resources --verbs=list --namespaced -o name
+}
+
+# Prints Kubernetes manifests for the discovered resources in a namespace.
+resource_manifests() {
+  local manifest
+  local namespace
+  local resource
+
+  namespace="$1"
+  while IFS= read -r resource; do
+    [[ -z "$resource" ]] && continue
+
+    manifest="$(kubectl get "$resource" --namespace "$namespace" -oyaml)"
+    if [[ -n "$manifest" ]]; then
+      printf '%s\n---\n' "$manifest"
+    fi
+  done
+}
+
+# Runs kube-score for a namespace.
+score_namespace() {
+  local manifests
+  local namespace
+  local resources
+
+  namespace="$1"
+  resources="$(resource_names)"
+  if [[ -z "$resources" ]]; then
+    printf 'kubectl discovery returned no namespaced resources\n' >&2
+    return 1
+  fi
+
+  manifests="$(resource_manifests "$namespace" <<< "$resources")"
+  if [[ -z "$manifests" ]]; then
+    printf 'kubectl returned no manifests for namespace %s\n' "$namespace" >&2
+    return 1
+  fi
+
+  printf '%s\n' "$manifests" \
+    | kube-score score --ignore-test "$KUBE_SCORE_IGNORE_TEST" -
+}
+
+# App resources share app.kubernetes.io/name; the narrower app label omits policies and budgets.
+score_apps() {
+  local app
+  local context
+  local manifests
+  local namespace
+  local selector
+
+  namespace="$1"
+  shift
+  for app in "$@"; do
+    if [[ ! "$app" =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$ ]]; then
+      printf 'invalid app name: %s\n' "$app" >&2
+      return 1
+    fi
+  done
+  selector="$(IFS=,; printf '%s' "$*")"
+  manifests="$(kubectl get deployments,services,ingresses,networkpolicies,poddisruptionbudgets \
+    --namespace "$namespace" --selector "app.kubernetes.io/name in ($selector)" --output json)"
+  for app in "$@"; do
+    if ! jq -e --arg app "$app" 'any(.items[]; .kind == "Deployment" and .metadata.name == $app)' <<< "$manifests" >/dev/null; then
+      printf 'kubectl returned no deployment for app %s in namespace %s\n' "$app" "$namespace" >&2
+      return 1
+    fi
+  done
+
+  context="$(kubectl get networkpolicies,poddisruptionbudgets --namespace "$namespace" --output json)"
+  printf '%s\n%s\n' "$manifests" "$context" \
+    | jq -s '{apiVersion: "v1", kind: "List", items: (.[0].items +
+      [.[1].items[] | select(.metadata.labels["app.kubernetes.io/name"] == null or
+        (.kind == "NetworkPolicy" and .spec.podSelector == {}) or
+        (.kind == "PodDisruptionBudget" and .spec.selector == {}))]
+      | unique_by([.apiVersion, .kind, .metadata.namespace, .metadata.name]))}' \
+    | kube-score score --ignore-test "$KUBE_SCORE_IGNORE_TEST" -
+}
+
+if (($# < 1)); then
+  usage
+  exit 2
+fi
+
+if (($# == 1)); then
+  score_namespace "$1"
+else
+  score_apps "$@"
+fi

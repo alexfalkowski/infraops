@@ -14,7 +14,7 @@ pulumi-preview:
 
 # Update Pulumi changes (requires area=apps|cf|do|gh).
 pulumi-update:
-	@pulumi update --yes --stack alexfalkowski/$(area)/prod --cwd area/$(area)
+	@./area/pulumi-update "$(area)"
 
 # Cancel Pulumi changes (requires area=apps|cf|do|gh).
 pulumi-cancel:
@@ -34,7 +34,7 @@ api-lint:
 
 # Lint repository shell workflow helpers.
 scripts-lint:
-	@shellcheck area/apps/release area/apps/kube-score-live area/apps/lean/abgleich
+	@shellcheck area/pulumi-update area/apps/release area/apps/kube-score area/apps/lean/abgleich
 
 # Check the API for breaking changes.
 api-breaking:

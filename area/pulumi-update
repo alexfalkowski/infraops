@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# Apps updates record check selection; other areas use the normal Pulumi update path.
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if (($# != 1)); then
+  printf 'Usage: %s <apps|cf|do|gh>\n' "$0" >&2
+  exit 2
+fi
+
+case "$1" in
+  apps)
+    exec "$script_dir/apps/release" update
+    ;;
+  cf | do | gh)
+    exec pulumi update --yes --stack "alexfalkowski/$1/prod" --cwd "$script_dir/$1"
+    ;;
+  *)
+    printf 'unsupported Pulumi area: %s\n' "$1" >&2
+    exit 2
+    ;;
+esac

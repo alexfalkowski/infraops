@@ -61,12 +61,14 @@ Infrastructure operation also uses:
 - kubescape: <https://kubescape.io/>
 - curl: <https://curl.se/>
 - vegeta: <https://github.com/tsenart/vegeta>
+- jq: <https://jqlang.org/>
 
 Operator-only helper targets use these tools as needed:
 
 - `make -C area/apps save-config` and `make -C area/k8s save-config`: `doctl`
 - `make -C area/apps setup|delete|rollout`: `kubectl`
-- `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl` (live `lean` namespace scan)
+- `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl`, `jq` (selected live apps in `lean`)
+- `make area=apps pulumi-update`: `jq` in addition to Pulumi and Kubernetes access
 - `make -C area/apps verify`: `curl`
 - `make -C area/apps load`: `vegeta`
 - `make -C area/k8s setup|delete|pods`: `helm`, `kubectl`
@@ -321,15 +323,15 @@ Only applications listed in `area/apps/apps.hjson` are deployed. The tracked fil
 `area/apps/fiction/` are example app configs and are not used unless a matching app entry references
 that namespace/name.
 
-Adding an application to `apps.hjson` only wires the Pulumi resources. To include it in release
-rollout, verify, load, and kubescape workflows, also update `area/apps/release` with the app name and its
-per-app helper commands, including any request payload fixture needed by load
-testing.
+Adding an application to `apps.hjson` only wires the Pulumi resources. Also update `area/apps/release`
+with its supported app name, verification and rollout commands, and load eligibility. Include a load
+scenario and request payload fixture only when they exercise useful application behavior.
 
 The `abgleich` app uses the `api` deployment model with one replica for its scheduled work and
 signed GitHub webhook handler. Its Service, Ingress, and proxied Cloudflare DNS record expose
-`https://abgleich.lean-thoughts.com/webhooks/github`. Its verify and load helpers use
-`https://abgleich.lean-thoughts.com/abgleich/readyz` without triggering webhook commands.
+`https://abgleich.lean-thoughts.com/webhooks/github`. Its verify helper uses
+`https://abgleich.lean-thoughts.com/abgleich/readyz` without triggering webhook commands. Abgleich
+has no load scenario; all load commands skip it.
 
 #### 🏗️ Install / Setup
 
@@ -403,30 +405,41 @@ make area=apps pulumi-update
 ```
 
 For Abgleich's first public deployment, preview and update the `cf` area before the apps
-update so its public verify and load checks can resolve the new hostname.
+update so its public readiness check can resolve the new hostname.
 
 #### 🧪 App Helpers
 
-The default `rollout`, `verify`, `load`, and `kubescape` helper targets are release-aware. They inspect the app
-release diff and target only apps with version-only changes in `area/apps/apps.hjson`; when the diff
-is not a release-only app change, they fall back to all supported apps.
+`make area=apps pulumi-update` records the apps affected by its successful Pulumi update in the ignored
+`area/apps/.release-selection.json`. The default `verify`, `load`, `kube-score`, `kubescape`, and `lint`
+targets use this selection, including app configuration and resource changes. They skip checks when
+the update changed no relevant resources. Each new update invalidates the previous selection before
+deployment; failed updates, missing or invalid selections, and selections from another Git revision
+fail checks instead of silently skipping them. Run the update through Make to produce the selection,
+or use explicit per-app or `*-all` commands when checking an existing deployment.
+
+Deleted apps are excluded from post-update checks. Apps scaled to zero still receive linting but skip
+verification and load traffic. Changes to shared or unlabelled Kubernetes resources expand checks to
+all supported apps and use namespace-wide manifest scanning. The helper supports the `lean` namespace;
+changes to an unknown app or another namespace fail selection until its helper support is added.
 
 Supported apps are the apps explicitly wired in `area/apps/release`. The API `verify` helpers use
 fail-fast `curl` requests with bounded connection and total request time, and the API `load` helpers run
 Vegeta and fail unless every request succeeds. Load request payloads live with the app fixtures under
 `area/apps/<namespace>/`.
 
-The release helper compares `APPS_RELEASE_BASE` to `APPS_RELEASE_HEAD` when those environment
-variables are set. Otherwise it uses the current commit's parent, falling back to `origin/master`
-when the parent is unavailable. In CI, `area/apps/release halt-ci` halts the general build for a
-release-only apps version bump so the apps update workflow can run the targeted Pulumi update,
-verification, load, and live-resource lint path. Set `APPS_RELEASE_DRY_RUN=true` to print the
-release helper action instead of running it.
+The manual `rollout` target and CI build optimization continue to inspect the Git release diff.
+They compare `APPS_RELEASE_BASE` to `APPS_RELEASE_HEAD` when set; otherwise they use the current
+commit's parent, falling back to `origin/master` when the parent is unavailable. `rollout` targets
+version-only changed apps and otherwise restarts all supported apps. In CI, `area/apps/release halt-ci`
+halts the general build for a release-only apps version bump. This classification does not choose
+post-update checks. Set `APPS_RELEASE_DRY_RUN=true` to print helper actions without invoking Pulumi,
+the cluster, or public endpoints; selective checks still require a valid update selection.
 
 ```bash
 make -C area/apps rollout
 make -C area/apps verify
 make -C area/apps load
+make -C area/apps lint
 ```
 
 Use the `*-all` targets when you want to cover every supported app explicitly:
@@ -435,6 +448,7 @@ Use the `*-all` targets when you want to cover every supported app explicitly:
 make -C area/apps rollout-all
 make -C area/apps verify-all
 make -C area/apps load-all
+make -C area/apps lint-all
 ```
 
 The `load*` targets write ignored vegeta result files under `area/apps/lean/*.bin`.
@@ -447,13 +461,21 @@ cd area/apps
 ./release load-bezeichner
 ./release rollout-standort
 ./release kubescape-web
+./release kube-score-bezeichner
 ```
 
-The `lint` target requires a working cluster context. kube-score always scans live resources from
-the `lean` namespace, while kubescape follows the release-aware workflow: it scans each changed app
-Deployment and its resolved container image for release-only version changes and otherwise scans the
-whole namespace. The kube-score helper intentionally ignores the host pod anti-affinity check and
-fails when Kubernetes discovery or manifest collection returns no live resources.
+The `lint` target requires a working cluster context. kube-score selects each changed app's Deployment,
+Service, Ingress, NetworkPolicy, and PodDisruptionBudget with `app.kubernetes.io/name`, adding unlabelled
+namespace policies and budgets and policies or budgets with empty selectors as shared context. It
+intentionally ignores the host pod anti-affinity check and fails if a selected Deployment is missing.
+Kubescape scans affected Deployments and scans their container and init-container images only when
+the update changed those images or created the Deployment. Config-only changes skip image scans.
+Explicit `kubescape-<app>` commands scan both the workload and its images.
+
+Use `lint-all` for a full namespace manifest scan and image scans of every supported app, independently
+of the last update. It is suitable for manual or scheduled baseline scans to detect drift and newly
+published vulnerabilities in unchanged images. Full kube-score scans still fail on empty Kubernetes
+discovery or manifest collection.
 
 #### 🗑️ Delete
 

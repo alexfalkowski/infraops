@@ -2,7 +2,7 @@
 # shellcheck disable=SC2155
 set -eo pipefail
 
-# Handles release-only application version bumps in CI.
+# Selects post-update checks from Pulumi changes; Git release detection only gates CI builds and manual rollouts.
 
 readonly APP_CONFIG="area/apps/apps.hjson"
 readonly APP_MAKE_DIR="area/apps"
@@ -10,13 +10,143 @@ readonly LOAD_DURATION="30s"
 readonly LOAD_SUCCESS_RATIO="1"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+readonly UPDATE_SELECTION="$REPO_ROOT/$APP_MAKE_DIR/.release-selection.json"
 readonly VERIFY_CONNECT_TIMEOUT="5"
 readonly VERIFY_MAX_TIME="30"
 readonly -a APPS=(standort bezeichner web abgleich)
 
 # Prints command usage.
 usage() {
-  printf 'Usage: %s <halt-ci|is-release|kubescape|kubescape-all|kubescape-abgleich|kubescape-bezeichner|kubescape-standort|kubescape-web|load|load-all|load-abgleich|load-bezeichner|load-standort|load-web|rollout|rollout-all|rollout-abgleich|rollout-bezeichner|rollout-standort|rollout-web|verify|verify-all|verify-abgleich|verify-bezeichner|verify-standort|verify-web>\n' "$0" >&2
+  printf 'Usage: %s <update|halt-ci|is-release>\n' "$0" >&2
+  printf '       %s <kube-score|kubescape|images|load|rollout|verify>[-all|-<app>]\n' "$0" >&2
+}
+
+# Invalidate the previous selection before any update, including failed or interrupted attempts.
+update_apps() (
+  local events
+  local revision
+
+  if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+    printf 'pulumi update --yes --stack alexfalkowski/apps/prod --cwd %s --json\n' "$APP_MAKE_DIR"
+    return
+  fi
+
+  printf 'null\n' > "$UPDATE_SELECTION"
+  revision="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+  events="$(mktemp)"
+  trap 'rm -f "$events"' EXIT
+
+  pulumi update --yes --stack alexfalkowski/apps/prod --cwd "$REPO_ROOT/$APP_MAKE_DIR" --json \
+    | tee "$events" \
+    | jq --unbuffered -r '
+      if .diagnosticEvent then .diagnosticEvent.message
+      elif .resourcePreEvent then
+        .resourcePreEvent | select(.planning != true) | .metadata | "\(.op) \(.urn)"
+      elif .summaryEvent then .summaryEvent | "Update summary: \(.resourceChanges)"
+      else empty end
+    '
+
+  jq -s --arg revision "$revision" --arg apps "${APPS[*]}" '
+    def owner:
+      (.new.inputs.metadata // .new.outputs.metadata // .old.inputs.metadata // .old.outputs.metadata // {})
+      | .labels["app.kubernetes.io/name"] // "";
+    def images($state):
+      [$state.inputs.spec.template.spec | (.containers[]?, .initContainers[]?) | {name, image}]
+      | sort_by(.name, .image);
+
+    ($apps | split(" ")) as $supported |
+    [.[] | .summaryEvent // empty | select(.isPreview == false)] as $summaries |
+    if ($summaries | length) != 1 or $summaries[0].maybeCorrupt != false
+      or ($summaries[0].result // "succeeded") != "succeeded"
+      or any(.[]; .resOpFailedEvent != null or .errorEvent != null)
+    then error("missing or unsuccessful Pulumi update summary") else . end |
+    [.[] | .resOutputsEvent // empty | select(.planning != true) | .metadata] as $steps |
+    [$steps[] | select(.op != "same" and .op != "read" and .op != "read-replacement")
+      | select((.type | startswith("kubernetes:")) or .type == "pulumi:providers:kubernetes")
+    ] as $changed |
+    if any($changed[]; . as $step |
+      (["create", "update", "replace", "create-replacement", "delete", "delete-replaced",
+        "import", "import-replacement"] | index($step.op)) == null)
+    then error("unsupported Pulumi resource operation") else . end |
+    if any($changed[]; owner as $name | $name != "" and ($supported | index($name)) == null)
+    then error("changed application has no release helpers") else . end |
+    if any($changed[]; (.new.inputs.metadata.namespace // .old.inputs.metadata.namespace // "lean") != "lean")
+    then error("changed application is outside the supported lean namespace") else . end |
+    any($changed[]; owner as $name |
+      .type == "pulumi:providers:kubernetes" or $name == "" or
+      (.type == "kubernetes:networking.k8s.io/v1:NetworkPolicy" and
+        (.new.inputs.spec // .old.inputs.spec).podSelector.matchLabels.app != $name) or
+      (.type == "kubernetes:policy/v1:PodDisruptionBudget" and
+        (.new.inputs.spec // .old.inputs.spec).selector.matchLabels.app != $name)
+    ) as $shared |
+    [$changed[] | select(.type == "kubernetes:apps/v1:Deployment" and .op == "delete") | owner] as $deleted |
+    [$steps[] | select(.type == "kubernetes:apps/v1:Deployment" and .new != null and
+      .op != "delete" and .op != "delete-replaced") | owner] as $present |
+    ($deleted - $present) as $removed |
+    {
+      revision: $revision,
+      shared: $shared,
+      apps: ((if $shared then $supported else [$changed[] | owner | select(. != "")] end) - $removed | unique),
+      inactive: [$steps[] | select(.type == "kubernetes:apps/v1:Deployment" and .new != null and
+        (.new.inputs.spec.replicas // 1) == 0) | owner] | unique,
+      images: ([$changed[] | select(.type == "kubernetes:apps/v1:Deployment" and .new != null and
+        .op != "delete" and .op != "delete-replaced" and images(.old) != images(.new)) | owner]
+        - $removed | unique)
+    }
+  ' "$events" > "$UPDATE_SELECTION"
+)
+
+# A missing, partial, or stale update must never be interpreted as an empty successful selection.
+update_selection() {
+  if [[ ! -s "$UPDATE_SELECTION" ]]; then
+    printf 'missing update selection; run make area=apps pulumi-update or use an explicit *-all/per-app check\n' >&2
+    return 1
+  fi
+
+  jq -se --arg revision "$(git -C "$REPO_ROOT" rev-parse HEAD)" --arg apps "${APPS[*]}" '
+    if length != 1 then error("invalid update selection") else .[0] end |
+    ($apps | split(" ")) as $supported |
+    if .revision == $revision and (.shared | type) == "boolean" and
+      (.apps | type) == "array" and (.images | type) == "array" and (.inactive | type) == "array" and
+      all((.apps[], .images[], .inactive[]); . as $name | ($supported | index($name)) != null) and
+      ((.images - .apps) | length) == 0
+    then . else error("invalid or stale update selection; run make area=apps pulumi-update") end
+  ' "$UPDATE_SELECTION"
+}
+
+run_update_changes() {
+  local action
+  local app
+  local apps
+  local selection
+
+  action="$1"
+  selection="$(update_selection)"
+  if [[ "$action" == "kube-score" || "$action" == "kubescape" ]]; then
+    if [[ "$(jq -r '.shared' <<< "$selection")" == "true" ]]; then
+      if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+        printf 'make -C %s %s-lean\n' "$APP_MAKE_DIR" "$action"
+      else
+        make -C "$REPO_ROOT/$APP_MAKE_DIR" "${action}-lean"
+      fi
+      return
+    fi
+  fi
+
+  apps="$(jq -r --arg action "$action" '
+    if $action == "images" then .images
+    elif $action == "load" or $action == "verify" then .apps - .inactive
+    else .apps end | .[]
+  ' <<< "$selection")"
+  if [[ -z "$apps" ]]; then
+    printf '%s: skipped; no relevant changes in the last update.\n' "$action"
+    return
+  fi
+
+  while IFS= read -r app; do
+    printf '%s changed app: %s\n' "$action" "$app"
+    run_app_action "$action" "$app"
+  done <<< "$apps"
 }
 
 # Prints the revision to inspect for app release changes.
@@ -140,7 +270,7 @@ is_app() {
 # Reports whether an app action has release helper commands.
 is_action() {
   case "$1" in
-    kubescape | load | rollout | verify)
+    kube-score | kubescape | images | load | rollout | verify)
       return 0
       ;;
     *)
@@ -167,12 +297,30 @@ run_app_action() {
     return 1
   fi
 
+  if [[ "$action" == "load" && "$app" == "abgleich" ]]; then
+    printf 'load abgleich: skipped; no load scenario.\n'
+    return
+  fi
+
   if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
     printf './%s/release %s-%s\n' "$APP_MAKE_DIR" "$action" "$app"
     return
   fi
 
-  "${action}_${app}"
+  case "$action" in
+    kube-score)
+      "$SCRIPT_DIR/kube-score" lean "$app"
+      ;;
+    kubescape)
+      kubescape scan workload "Deployment/$app" --namespace lean
+      ;;
+    images)
+      scan_app_images "$app"
+      ;;
+    *)
+      "${action}_${app}"
+      ;;
+  esac
 }
 
 # Runs an app action for every supported app.
@@ -257,18 +405,6 @@ load_all() {
   run_all_apps "load"
 }
 
-# Load tests readiness without triggering webhook commands.
-load_abgleich() {
-  local result
-
-  result="$REPO_ROOT/$APP_MAKE_DIR/lean/abgleich.bin"
-  printf 'GET https://abgleich.lean-thoughts.com/abgleich/readyz\n' \
-    | vegeta attack -duration="$LOAD_DURATION" \
-    | tee "$result" \
-    | vegeta report
-  assert_successful_load "$result"
-}
-
 # Load tests standort.
 load_standort() {
   local result
@@ -309,55 +445,39 @@ load_web() {
   assert_successful_load "$result"
 }
 
-# Loads targeted release apps and falls back to the full apps load target.
+# Load eligibility is independent of the Git release-only build optimization.
 load_release_changes() {
-  run_release_changes "load" "Loading"
+  run_update_changes "load"
 }
 
 # Scans all apps in the namespace with kubescape.
 kubescape_all() {
   if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
-    printf 'make -C %s kubescape-all\n' "$APP_MAKE_DIR"
-    return
+    printf 'make -C %s kubescape-lean\n' "$APP_MAKE_DIR"
+  else
+    make -C "$REPO_ROOT/$APP_MAKE_DIR" kubescape-lean
   fi
-
-  make -C "$REPO_ROOT/$APP_MAKE_DIR" kubescape-all
+  run_all_apps "images"
 }
 
-# Scans an app deployment with kubescape.
-kubescape_app() {
+# Workload checks and image scans have different invalidation rules.
+scan_app_images() {
   local app
   local image
+  local images
 
   app="$1"
-  image="$(kubectl get deployment "$app" --namespace lean --output jsonpath='{.spec.template.spec.containers[0].image}')"
-  kubescape scan workload "Deployment/$app" --namespace lean
-  kubescape scan image "$image"
+  images="$(kubectl get deployment "$app" --namespace lean --output json \
+    | jq -er '[.spec.template.spec | (.containers[]?, .initContainers[]?) | .image] | unique | .[]')"
+  while IFS= read -r image; do
+    kubescape scan image "$image"
+  done <<< "$images"
 }
 
-# Scans a specific app with kubescape.
-kubescape_abgleich() {
-  kubescape_app "abgleich"
-}
-
-# Scans a specific app with kubescape.
-kubescape_bezeichner() {
-  kubescape_app "bezeichner"
-}
-
-# Scans a specific app with kubescape.
-kubescape_standort() {
-  kubescape_app "standort"
-}
-
-# Scans a specific app with kubescape.
-kubescape_web() {
-  kubescape_app "web"
-}
-
-# Scans targeted release apps with kubescape and falls back to the namespace scan.
+# Config-only updates reuse the image already scanned at its last release.
 kubescape_release_changes() {
-  run_release_changes "kubescape" "Scanning" "kubescape_all"
+  run_update_changes "kubescape"
+  run_update_changes "images"
 }
 
 # Rolls out all apps.
@@ -432,9 +552,9 @@ verify_web() {
     https://web.lean-thoughts.com
 }
 
-# Verifies targeted release apps and falls back to the full apps verify target.
+# Verify only workloads that the successful update affected and left running.
 verify_release_changes() {
-  run_release_changes "verify" "Verifying"
+  run_update_changes "verify"
 }
 
 # Halts CircleCI for release-only app changes.
@@ -452,11 +572,24 @@ halt_ci() {
 }
 
 case "${1:-}" in
+  update)
+    update_apps
+    ;;
   halt-ci)
     halt_ci
     ;;
   is-release)
     release_apps >/dev/null
+    ;;
+  kube-score)
+    run_update_changes "kube-score"
+    ;;
+  kube-score-all)
+    if [[ "${APPS_RELEASE_DRY_RUN:-}" == "true" ]]; then
+      printf 'make -C %s kube-score-lean\n' "$APP_MAKE_DIR"
+    else
+      make -C "$REPO_ROOT/$APP_MAKE_DIR" kube-score-lean
+    fi
     ;;
   kubescape)
     kubescape_release_changes
@@ -464,17 +597,11 @@ case "${1:-}" in
   kubescape-all)
     kubescape_all
     ;;
-  kubescape-abgleich)
-    run_app_action "kubescape" "abgleich"
+  images)
+    run_update_changes "images"
     ;;
-  kubescape-bezeichner)
-    run_app_action "kubescape" "bezeichner"
-    ;;
-  kubescape-standort)
-    run_app_action "kubescape" "standort"
-    ;;
-  kubescape-web)
-    run_app_action "kubescape" "web"
+  images-all)
+    run_all_apps "images"
     ;;
   load)
     load_release_changes
@@ -482,35 +609,11 @@ case "${1:-}" in
   load-all)
     load_all
     ;;
-  load-abgleich)
-    run_app_action "load" "abgleich"
-    ;;
-  load-bezeichner)
-    run_app_action "load" "bezeichner"
-    ;;
-  load-standort)
-    run_app_action "load" "standort"
-    ;;
-  load-web)
-    run_app_action "load" "web"
-    ;;
   rollout)
     rollout_release_changes
     ;;
   rollout-all)
     rollout_all
-    ;;
-  rollout-abgleich)
-    run_app_action "rollout" "abgleich"
-    ;;
-  rollout-bezeichner)
-    run_app_action "rollout" "bezeichner"
-    ;;
-  rollout-standort)
-    run_app_action "rollout" "standort"
-    ;;
-  rollout-web)
-    run_app_action "rollout" "web"
     ;;
   verify)
     verify_release_changes
@@ -518,17 +621,13 @@ case "${1:-}" in
   verify-all)
     verify_all
     ;;
-  verify-abgleich)
-    run_app_action "verify" "abgleich"
-    ;;
-  verify-bezeichner)
-    run_app_action "verify" "bezeichner"
-    ;;
-  verify-standort)
-    run_app_action "verify" "standort"
-    ;;
-  verify-web)
-    run_app_action "verify" "web"
+  kube-score-* | kubescape-* | images-* | load-* | rollout-* | verify-*)
+    action="${1%-*}"
+    app="${1##*-}"
+    run_app_action "$action" "$app"
+    if [[ "$action" == "kubescape" ]]; then
+      run_app_action "images" "$app"
+    fi
     ;;
   *)
     usage
