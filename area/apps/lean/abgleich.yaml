@@ -8,8 +8,8 @@ github:
   owner: alexfalkowski
   app:
     id: 5427450
-    installationId: 174152088
-    privateKey: file:/etc/secrets/abgleich/github-app-private-key.pem
+    installation_id: 174152088
+    private_key: file:/etc/secrets/abgleich/github-app-private-key.pem
   webhook:
     secret: file:/etc/secrets/abgleich/github-webhook-secret
     timeout: 4s
