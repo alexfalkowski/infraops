@@ -6,7 +6,13 @@ github:
       attempts: 2
       backoff: 100ms
   owner: alexfalkowski
-  token: file:/etc/secrets/abgleich/github-token
+  app:
+    id: 5427450
+    installationId: 174152088
+    privateKey: file:/etc/secrets/abgleich/github-app-private-key.pem
+  webhook:
+    secret: file:/etc/secrets/abgleich/github-webhook-secret
+    timeout: 4s
 scheduler:
   interval: 15m
   timeout: 5m
@@ -22,3 +28,4 @@ telemetry:
 transport:
   http:
     timeout: 5s
+    max_receive_size: 1048576B

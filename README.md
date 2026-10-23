@@ -326,9 +326,10 @@ rollout, verify, load, and kubescape workflows, also update `area/apps/release` 
 per-app helper commands, including any request payload fixture needed by load
 testing.
 
-The `abgleich` app is a worker, so it has no Service, Ingress, or public DNS record. Its verify
-helper waits up to 120 seconds for Kubernetes rollout readiness, and its load helper skips HTTP
-load testing. Kubernetes still probes the worker's internal HTTP liveness and readiness endpoints.
+The `abgleich` app uses the `api` deployment model with one replica for its scheduled work and
+signed GitHub webhook handler. Its Service, Ingress, and proxied Cloudflare DNS record expose
+`https://abgleich.lean-thoughts.com/webhooks/github`. Its verify and load helpers use
+`https://abgleich.lean-thoughts.com/abgleich/readyz` without triggering webhook commands.
 
 #### 🏗️ Install / Setup
 
@@ -344,8 +345,9 @@ Prepare the local app namespace/helper resources:
 make -C area/apps setup
 ```
 
-Before deploying Abgleich, create `abgleich-secret` in the existing `lean` namespace
-from local GitHub token, App private key PEM, and webhook secret files. All three of
+Before deploying Abgleich, ensure `abgleich-secret` in the existing `lean` namespace contains
+the App private key PEM and webhook secret. For a new Secret, the existing helper accepts
+local GitHub token, App private key PEM, and webhook secret files. All three of
 `github_token_file`, `github_app_private_key_file`, and `github_webhook_secret_file`
 are required and must refer to readable, nonempty files. The webhook secret file must
 contain the same value configured in the GitHub App:
@@ -365,14 +367,22 @@ already exists. Keep all three files
 outside the repository and never commit credentials. Abgleich's existing `secrets` list
 mounts the keys read-only at `/etc/secrets/abgleich/github-token`,
 `/etc/secrets/abgleich/github-app-private-key.pem`, and
-`/etc/secrets/abgleich/github-webhook-secret`. The webhook secret is staged for future
-webhook support. The PEM is available for future App authentication; current token
-authentication is unchanged.
-`area/apps/lean/abgleich.yaml` reads the token file through `github.token` and configures
-the worker to reconcile auto-merge pull requests in `alexfalkowski/infraops` every
-five minutes. The token needs pull request write access and permission to update
-repository contents. Credentials are read once at startup; restart the worker
-after replacing the token.
+`/etc/secrets/abgleich/github-webhook-secret`. The helper retains the legacy token key,
+but Abgleich no longer uses it.
+`area/apps/lean/abgleich.yaml` configures App `5427450`, installation `174152088`, and
+the mounted private key and webhook secret. It discovers repositories accessible to the
+installation under `alexfalkowski` and reconciles those with auto-merge enabled every
+fifteen minutes. Credentials are read once at startup; restart Abgleich after replacing
+the private key or webhook secret. Installation access tokens renew automatically.
+
+Give the GitHub App **Contents**, **Pull requests**, and **Issues** read/write permissions,
+and approve the installation's permission change. Subscribe to **Issue comment** events.
+After deploying both the apps and Cloudflare changes, activate the App's webhook at
+`https://abgleich.lean-thoughts.com/webhooks/github` with the matching webhook secret.
+PR comments containing `@abgleich automerge` from users with write or admin access request
+the existing `automerge` label; the scheduled sweep applies the merge policy. See the
+[Abgleich setup guide](https://github.com/alexfalkowski/abgleich#-github-app-setup)
+for permissions, delivery behavior, and recovery.
 
 To add keys to an existing Secret, delete and recreate it as a separate operator
 step. Before deleting, confirm all three local files are readable and nonempty, and that
@@ -395,6 +405,9 @@ Apply the Pulumi resources described by `apps.hjson`:
 ```bash
 make area=apps pulumi-update
 ```
+
+For Abgleich's first public deployment, preview and update the `cf` area before the apps
+update so its public verify and load checks can resolve the new hostname.
 
 #### 🧪 App Helpers
 
