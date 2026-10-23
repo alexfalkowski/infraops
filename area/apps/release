@@ -257,9 +257,16 @@ load_all() {
   run_all_apps "load"
 }
 
-# Workers have no public HTTP endpoint to load test.
+# Load tests readiness without triggering webhook commands.
 load_abgleich() {
-  printf 'Skipping HTTP load test for worker abgleich.\n'
+  local result
+
+  result="$REPO_ROOT/$APP_MAKE_DIR/lean/abgleich.bin"
+  printf 'GET https://abgleich.lean-thoughts.com/abgleich/readyz\n' \
+    | vegeta attack -duration="$LOAD_DURATION" \
+    | tee "$result" \
+    | vegeta report
+  assert_successful_load "$result"
 }
 
 # Load tests standort.
@@ -387,9 +394,12 @@ verify_all() {
   run_all_apps "verify"
 }
 
-# Worker readiness is verified through Kubernetes instead of public HTTP.
+# Verifies public readiness through Cloudflare and ingress.
 verify_abgleich() {
-  kubectl rollout status deployment/abgleich -n lean --timeout=120s
+  curl -svf \
+    --connect-timeout "$VERIFY_CONNECT_TIMEOUT" \
+    --max-time "$VERIFY_MAX_TIME" \
+    https://abgleich.lean-thoughts.com/abgleich/readyz
 }
 
 # Verifies standort.
