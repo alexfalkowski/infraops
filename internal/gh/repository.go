@@ -6,12 +6,29 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
+var repositoryLabels = []struct {
+	name        string
+	color       string
+	description string
+}{
+	{
+		name:        "automerge",
+		color:       "0E8A16",
+		description: "Eligible for automated merging.",
+	},
+	{
+		name:        "hold",
+		color:       "FBCA04",
+		description: "Do not merge until this label is removed.",
+	},
+}
+
 // repository creates or updates a GitHub repository and applies the baseline repository settings.
 //
 // It validates repo.Checks (required for branch protection) and, when configured, attaches a
 // repository template and GitHub Pages configuration. Secret scanning, push protection, and
 // vulnerability alerts are enabled for every repository. Non-archived repositories receive
-// the automerge label.
+// the shared repository labels.
 func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
 	templateArgs, err := template(repo)
 	if err != nil {
@@ -58,7 +75,7 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		return nil, err
 	}
 
-	if err := automergeLabel(ctx, repository.Name, repo); err != nil {
+	if err := labels(ctx, repository.Name, repo); err != nil {
 		return nil, err
 	}
 
@@ -73,18 +90,23 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 	return repository, nil
 }
 
-func automergeLabel(ctx *pulumi.Context, name pulumi.StringInput, repo *Repository) error {
+func labels(ctx *pulumi.Context, name pulumi.StringInput, repo *Repository) error {
 	if repo.Archived {
 		return nil
 	}
 
-	_, err := github.NewIssueLabel(ctx, repo.Name+"-automerge", &github.IssueLabelArgs{
-		Repository:  name,
-		Name:        pulumi.String("automerge"),
-		Color:       pulumi.String("0E8A16"),
-		Description: pulumi.String("Eligible for automated merging."),
-	})
-	return err
+	for _, label := range repositoryLabels {
+		_, err := github.NewIssueLabel(ctx, repo.Name+"-"+label.name, &github.IssueLabelArgs{
+			Repository:  name,
+			Name:        pulumi.String(label.name),
+			Color:       pulumi.String(label.color),
+			Description: pulumi.String(label.description),
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func vulnerabilityAlerts(ctx *pulumi.Context, repo *Repository) error {
