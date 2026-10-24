@@ -108,7 +108,7 @@ func ConvertRepository(r *v2.Repository) *Repository {
 //
 // It creates (or updates) the repository and then applies additional repository configuration
 // such as branch protection, always-on security settings, vulnerability alerts, Pages,
-// collaborators, and the automerge label for non-archived repositories. Errors are wrapped with
+// collaborators, and shared labels for non-archived repositories. Errors are wrapped with
 // the repository name to make failures easier to identify in Pulumi output.
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 	r, err := repository(ctx, repo)

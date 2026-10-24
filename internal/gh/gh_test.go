@@ -28,15 +28,25 @@ func TestCreateRepository(t *testing.T) {
 	requireCollaborator(t, stub.Resources(repositoryCollaboratorResourceType))
 
 	labels := stub.Resources(issueLabelResourceType)
-	require.Len(t, labels, 1)
-	label := labels[0]
-	require.Equal(t, "test", test.Property(t, label, "repository").StringValue())
-	require.Equal(t, "automerge", test.Property(t, label, "name").StringValue())
-	require.Equal(t, "0E8A16", test.Property(t, label, "color").StringValue())
-	require.Equal(t, "Eligible for automated merging.", test.Property(t, label, "description").StringValue())
+	require.Len(t, labels, 2)
+	labelsByName := make(map[string]resource.PropertyMap, len(labels))
+	for _, label := range labels {
+		require.Equal(t, "test", test.Property(t, label, "repository").StringValue())
+		labelsByName[test.Property(t, label, "name").StringValue()] = label
+	}
+
+	require.Contains(t, labelsByName, "automerge")
+	automerge := labelsByName["automerge"]
+	require.Equal(t, "0E8A16", test.Property(t, automerge, "color").StringValue())
+	require.Equal(t, "Eligible for automated merging.", test.Property(t, automerge, "description").StringValue())
+
+	require.Contains(t, labelsByName, "hold")
+	hold := labelsByName["hold"]
+	require.Equal(t, "FBCA04", test.Property(t, hold, "color").StringValue())
+	require.Equal(t, "Do not merge until this label is removed.", test.Property(t, hold, "description").StringValue())
 }
 
-func TestCreateRepositoryArchivedDoesNotCreateAutomergeLabel(t *testing.T) {
+func TestCreateRepositoryArchivedDoesNotCreateLabels(t *testing.T) {
 	repository := fullRepository()
 	repository.Archived = true
 	stub := &test.ResourceStub{}
@@ -45,12 +55,13 @@ func TestCreateRepositoryArchivedDoesNotCreateAutomergeLabel(t *testing.T) {
 	require.Empty(t, stub.Resources(issueLabelResourceType))
 }
 
-func TestCreateRepositoryReturnsAutomergeLabelError(t *testing.T) {
-	stub := &test.ResourceStub{}
-	stub.FailResource(issueLabelResourceType)
+func TestCreateRepositoryReturnsLabelError(t *testing.T) {
+	for _, occurrence := range []int{1, 2} {
+		stub := &test.ResourceStub{}
+		stub.FailResourceAt(issueLabelResourceType, occurrence)
 
-	require.Error(t, createRepository(t, fullRepository(), stub))
-	require.Len(t, stub.Resources(issueLabelResourceType), 1)
+		require.Error(t, createRepository(t, fullRepository(), stub), "label %d", occurrence)
+	}
 }
 
 func TestCreateRepositoryRequiresChecks(t *testing.T) {

@@ -494,7 +494,7 @@ func (x *Pages) GetCname() string {
 // rebase commits disabled, squash merge/automerge/update branch/delete branch enabled, auto-init
 // enabled, issues/projects/wiki enabled, secret scanning and push protection enabled, vulnerability
 // alerts enabled, and web commit signoff disabled. These settings are not configurable in HJSON.
-// Non-archived repositories also receive the fixed "automerge" label; archived repositories are
+// Non-archived repositories also receive the fixed "automerge" and "hold" labels; archived repositories are
 // read-only and are skipped for label creation.
 type Repository struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
