@@ -377,6 +377,13 @@ installation under `alexfalkowski` and reconciles those with auto-merge enabled 
 fifteen minutes. Credentials are read once at startup; restart Abgleich after replacing
 any credential file. Installation access tokens renew automatically.
 
+The config also enables `/ab summarise` using `gpt-6.1-sol` and the mounted OpenAI key,
+with a separate job running every 30 seconds and a two-minute job timeout.
+Add the `abgleich-ai` topic to each repository that should allow summaries; this opts
+its selected PR metadata and patches into submission to OpenAI. See the
+[Abgleich summary guide](https://github.com/alexfalkowski/abgleich#-ai-pull-request-summaries)
+for command permissions and behavior.
+
 Give the GitHub App **Contents**, **Pull requests**, and **Issues** read/write permissions,
 and approve the installation's permission change. Subscribe to **Issue comment** events.
 After deploying both the apps and Cloudflare changes, activate the App's webhook at
