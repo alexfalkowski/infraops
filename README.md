@@ -9,350 +9,127 @@
 
 # 🧭 InfraOps
 
-A Go-based infrastructure “monorepo” powered by **Pulumi**, with configuration stored as **HJSON** and decoded into a **protobuf schema**.
-
-> [!NOTE]
-> This repository is the operational source for several personal infrastructure areas. Prefer previews and narrow area changes before applying updates.
+Infrastructure configuration and deployment for personal services, built with Go and Pulumi.
+Operators manage Kubernetes applications, Cloudflare, DigitalOcean, and GitHub from this repository.
+For application features, runtime settings, and usage, see each application's own README.
 
 ## 🗺️ Overview
 
-This repository manages multiple infrastructure “areas”:
+| Area | Manages | Configuration |
+| ---- | ------- | ------------- |
+| `apps` | Kubernetes application resources | [apps.hjson](area/apps/apps.hjson) |
+| `cf` | Cloudflare zones, DNS, and R2 buckets | [cf.hjson](area/cf/cf.hjson) |
+| `do` | DigitalOcean VPC and Kubernetes cluster | [do.hjson](area/do/do.hjson) |
+| `gh` | GitHub repositories, settings, and branch protection | [gh.hjson](area/gh/gh.hjson) |
+| `k8s` | Cluster add-ons installed manually with Helm and kubectl | [Makefile](area/k8s/Makefile), [nginx values](area/k8s/nginx/values.yaml) |
 
-- `area/apps`: Kubernetes applications deployed to a cluster.
-- `area/cf`: Cloudflare resources (zones, DNS records, R2 buckets/custom domains).
-- `area/do`: DigitalOcean resources (VPC + Kubernetes clusters).
-- `area/gh`: GitHub repositories and settings (branch protection, Pages, collaborators).
-- `area/k8s`: Cluster add-ons installed via `helm`/`kubectl` (Makefile driven, not Pulumi).
+Each Pulumi area has its own `main.go`, `Pulumi.yaml`, and HJSON configuration under `area/<name>/`.
+Shared resource logic lives in `internal/`.
 
-Each Pulumi area has:
-
-- a Pulumi entrypoint at `area/<name>/main.go`
-- a config file at `area/<name>/<name>.hjson`
-- a Pulumi project file `area/<name>/Pulumi.yaml`
-
-Shared implementation lives under `internal/` (e.g. `internal/app`, `internal/cf`, `internal/do`, `internal/gh`).
-
-## 🧰 Tooling
-
-### 🧱 Development tools
-
-Development and CI-style commands use:
-
-- Go (version declared in `go.mod`)
-- `make`
-- Ruby, used by shared lint helpers under `bin/`
-- Pulumi CLI
-- `buf` for protobuf linting, breaking-change checks, and code generation
-- `fieldalignment` for `make lint`
-- `golangci-lint` for `make lint` when installed in `PATH`
-- `shellcheck` for `make scripts-lint`
-- `gotestsum` for `make specs`
-- `govulncheck` and Trivy for `make sec`
-
-### 🛠️ Operator tools
-
-Infrastructure operation also uses:
-
-- Pulumi: <https://www.pulumi.com/>
-- kubectl: <https://kubernetes.io/docs/reference/kubectl/>
-- Helm: <https://helm.sh/>
-- kube-score: <https://kube-score.com/>
-- doctl: <https://docs.digitalocean.com/reference/doctl/>
-- kubescape: <https://kubescape.io/>
-- curl: <https://curl.se/>
-- vegeta: <https://github.com/tsenart/vegeta>
-- jq: <https://jqlang.org/>
-
-Operator-only helper targets use these tools as needed:
-
-- `make -C area/apps save-config` and `make -C area/k8s save-config`: `doctl`
-- `make -C area/apps setup|delete|rollout`: `kubectl`
-- `make -C area/apps lint`: `kube-score`, `kubescape`, `kubectl`, `jq` (selected live apps in `lean`)
-- `make area=apps pulumi-update`: `jq` in addition to Pulumi and Kubernetes access
-- `make -C area/apps verify`: `curl`
-- `make -C area/apps load`: `vegeta`
-- `make -C area/k8s setup|delete|pods`: `helm`, `kubectl`
-
-## 🧾 Configuration (HJSON + Protobuf Schema)
-
-All area configuration files are **HJSON** (`*.hjson`). They are decoded into protobuf messages defined in:
-
-- `api/infraops/v2/service.proto`
-
-Those protobuf messages are then converted into internal Go types and used to provision resources.
-
-The protobuf types provide the expected configuration shape. Semantic checks that are not modeled in the schema may still fail later during Pulumi or provider operations.
-
-The top-level `version` field in each HJSON file is the configuration schema version used by this
-repo's tooling. It is not a Kubernetes, provider, Pulumi, or application runtime version.
-
-### 🧹 Format and Normalize Config
-
-This repo includes a small CLI to normalize/format config files by:
-
-1. decoding the HJSON into the appropriate protobuf message
-2. writing it back out in a canonical form
-
-Build:
-
-```bash
-make build-format
+```mermaid
+flowchart LR
+  HJSON["Area HJSON"] --> Config["Protobuf config"]
+  Schema["service.proto"] -.-> Config
+  Config --> Models["Internal Go models"]
+  Models --> Pulumi["Pulumi resources"]
 ```
 
-Format a config kind (`apps|cf|do|gh`), using the default location `area/<kind>/<kind>.hjson`:
+The [protobuf schema](api/infraops/v2/service.proto) owns field definitions, defaults, and deployment
+conventions. The top-level HJSON `version` identifies the configuration schema. Semantic errors may
+still surface during Pulumi or provider operations.
 
-```bash
-./format -k cf
-```
+## 🚚 Bootstrap
 
-Override the path:
-
-```bash
-./format -k cf -p area/cf/cf.hjson
-```
-
-The selected kind must match the file's area-specific fields. A mismatch is rejected
-without changing the file.
-
-### 📝 Config Schema Notes
-
-A few conventions are implemented by the Go code and are worth knowing when editing HJSON:
-
-#### 🧭 `Application.kind` Deployment Model (apps)
-
-Supported values:
-
-- `"api"`: uses image tag `docker.io/alexfalkowski/<name>:v<version>`, mounts the app config file and listed secret volumes, injects `SERVICE_ID`, runs the container with `server`, exposes debug `6060`, HTTP `8080`, and gRPC `9090`, and creates a `Service`/`Ingress` so the application receives inbound traffic.
-- `"worker"`: identical to `"api"` except no `Service` or `Ingress` is created, for an application that does not receive inbound traffic (for example a queue consumer or background job).
-
-Other values are unsupported and are not pre-validated by the helper code; malformed values may fail
-later during Pulumi/Kubernetes application.
-
-All apps receive CircleCI release-agent labels/annotations and must serve HTTP liveness/readiness
-probes at `/<name>/livez` and `/<name>/readyz` on port `8080`; startup uses a TCP probe on `8080`.
-
-All app containers use native `lifecycle.preStop.sleep` for five seconds before Kubernetes sends the
-termination signal, allowing endpoint and routing updates to propagate. Their 35-second pod termination
-grace period leaves 30 seconds for graceful process shutdown after the delay.
-
-#### 🪪 `Application.id` CircleCI Project ID (apps)
-
-`Application.id` is written to the deployment annotation `circleci.com/project-id`. Keep it aligned
-with the CircleCI project identifier when adding or renaming apps.
-
-#### 🔐 `EnvVar.value` Secret References (apps)
-
-Environment variables support literal values, and a secret reference format:
-
-- `secret:<secretName>/<key>`
-
-At deploy time, this becomes a Kubernetes `SecretKeyRef`:
-
-- Secret name: `<secretName>-secret`
-- Secret key: `<key>`
-
-The format is intentionally not pre-validated by the helper code; malformed references are expected
-to fail during Pulumi/Kubernetes application.
-
-Example:
-
-```hjson
-env_vars: [
-  { name: "DATABASE_URL", value: "secret:db/url" }
-]
-```
-
-#### 🧩 `Application.secrets` vs Secret Env Vars (apps)
-
-- `Application.secrets` is an **application-level dependency list** used by the deployment implementation to wire existing Kubernetes Secrets as volumes.
-- Secret references in `env_vars` (the `secret:<secretName>/<key>` format) reference **specific keys** in those secrets.
-- They often use the same `<secretName>` values, but they serve different purposes.
-- The app program does not create Secret objects or define Secret keys. Each listed secret is expected to exist as `<secretName>-secret` and is mounted at `/etc/secrets/<secretName>`.
-
-#### 📏 `Application.resource` Sizing (apps)
-
-`Application.resource` selects a resource profile. Current mapping:
-
-- `"small"` (default): cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`
-
-Unknown values fall back to `"small"`.
-
-#### 🔢 `Application.replicas` Pod Count (apps)
-
-Always set `replicas` explicitly; there is no fallback to three. Because this is a plain proto3
-scalar, omission decodes to zero. Use `replicas: 0` explicitly when the application should run no pods.
-Canonical rewrites by the format or bump tool may omit an explicit zero; that does not change the
-deployed replica count.
-
-```hjson
-replicas: 3
-```
-
-> [!WARNING]
-> `replicas: 1` is valid, but the current rolling update and PodDisruptionBudget both allow one
-> unavailable pod, so it does not guarantee continuous availability during disruption or rollout.
-
-#### 🛡️ App NetworkPolicy Baseline
-
-The apps Pulumi program creates a `NetworkPolicy` that selects each app's pods. Ingress is limited
-to debug on `6060`, HTTP on `8080`, and gRPC on `9090` for every app, regardless of kind. Egress
-currently remains open because outbound traffic flows are not modeled per app yet. Future egress
-restrictions should be introduced per namespace/app after the required flows are known.
-
-## 🔁 Common Workflows
-
-### 🚚 Checkout / Bootstrap
-
-The root `Makefile` includes shared build tooling from the `bin` submodule. Initialize it before running Make targets from a fresh checkout:
+Install Go at the version declared in [go.mod](go.mod), Make, and Ruby for the shared help/build helpers.
+Initialize the `bin` tooling submodule, then download, tidy, and vendor dependencies:
 
 ```bash
 git submodule sync
 git submodule update --init
+make dep
+make help
 ```
 
-### ✅ Dependencies, Linting, Tests, and Security
+Run `make dep` before local validation. Use `make help` for the command catalog and the
+[CircleCI configuration](.circleci/continue_config.yml) for validation requirements. Go checks use
+`betteralign`, `golangci-lint`, `gotestsum`, `govulncheck`, and Trivy; shell checks use ShellCheck;
+API checks use Buf. The golangci-lint wrapper skips its check when the tool is absent from `PATH`.
 
-> [!IMPORTANT]
-> Run `make dep` before local validation after checkout, dependency changes, or generated/vendor-state changes.
+When changing [service.proto](api/infraops/v2/service.proto), run `make api-generate` and include the
+updated `service.pb.go`; do not edit generated Go directly. `make api-breaking` compares against
+GitHub `master` and requires network access.
 
-From the repository root:
+## 🚀 Preview and Deploy
 
-```bash
-make dep          # download/tidy/vendor deps
-make lint         # lint Go sources (including field alignment)
-make scripts-lint # lint repository shell workflow helpers
-make sec          # govulncheck + Trivy
-make specs        # gotestsum + go test (junit/coverage under test/reports)
-make coverage     # HTML + function coverage under test/reports
-```
+Install the Pulumi CLI and configure access for the selected area:
 
-### 🧬 Protobuf / API
-
-> [!IMPORTANT]
-> Do not edit generated Go code under `api/infraops/v2/*.pb.go` directly.
-
-Instead:
-
-```bash
-make api-lint
-make api-breaking
-make api-generate
-```
-
-(Or: `make -C api lint|breaking|generate`.)
-
-`make api-breaking` compares the API module against the GitHub `master` branch, so it needs network
-access to run outside CI.
-
-## 🚀 Pulumi: Preview/Update Per Area
-
-Pulumi is typically run via Makefile targets from the repo root.
-
-Login:
-
-```bash
-make pulumi-login
-```
-
-### 🔑 Provider Credentials
-
-Pulumi also needs the provider credentials for the area being previewed or updated:
-
-| Area | Required local access |
-| ---- | --------------------- |
-| `apps` | Kubernetes access through the current kubeconfig context |
+| Area | Required access |
+| ---- | --------------- |
+| `apps` | kubectl and the intended kubeconfig context; `jq` for update selection |
 | `cf` | `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` |
 | `do` | `DIGITALOCEAN_TOKEN` |
 | `gh` | `GITHUB_TOKEN` |
 
-Preview/update:
+From the repository root, log in and preview the area before applying it:
 
 ```bash
+make pulumi-login
 make area=cf pulumi-preview
 make area=cf pulumi-update
 ```
 
-Supported areas for these targets:
-
-- `apps`, `cf`, `do`, `gh`
-
-The Makefile runs Pulumi with:
-
-- stack: `alexfalkowski/<area>/prod`
-- working directory: `area/<area>`
-
-That working directory matters because the programs read `<area>.hjson` via a relative path.
-
-Other stack operations:
-
-```bash
-make area=cf pulumi-refresh
-make area=cf pulumi-cancel
-make area=cf pulumi-delete
-```
+Use `area=apps|cf|do|gh`. Targets select stack `alexfalkowski/<area>/prod` and working directory
+`area/<area>`, where the program reads its HJSON file. The `k8s` add-ons have a separate manual workflow
+below.
 
 > [!WARNING]
-> `pulumi-update`, `pulumi-refresh`, and `pulumi-cancel` affect remote infrastructure or stack state. The Make targets pass `--yes`, so treat the preview as the confirmation step unless you are recovering from a known failed operation.
+> Update, refresh, and cancel targets change remote infrastructure or stack state and pass `--yes`.
+> Review the preview before applying changes.
+
+For stack recovery, the root Makefile also exposes `pulumi-refresh` and `pulumi-cancel`.
 
 > [!CAUTION]
-> `pulumi-delete` runs `pulumi stack rm --force`; it removes Pulumi stack state and can orphan managed resources if they still exist.
+> `make area=cf pulumi-delete` runs `pulumi stack rm --force`. It removes stack state and can orphan
+> resources that still exist.
 
-## 🧭 Areas
+## 📦 Application Deployment
 
-### 📦 Applications (`area/apps`)
+[apps.hjson](area/apps/apps.hjson) selects the applications to deploy. Each app's configuration file
+lives at `area/apps/<namespace>/<app>.yaml`; Pulumi puts it in a ConfigMap and mounts it at
+`/etc/<app>/<app>.yaml`. Files under `area/apps/fiction/` are examples unless a matching entry in
+`apps.hjson` references them. Consult each application's README for the contents of its YAML config.
 
-Deploys Kubernetes applications described in `area/apps/apps.hjson`.
+When adding an app, also extend [area/apps/release](area/apps/release) with its supported name,
+verification and rollout commands, and load eligibility. Add load fixtures only when they exercise
+useful application behavior. The release helpers currently support the `lean` namespace.
 
-#### ⚙️ Configure
+App NetworkPolicies limit ingress to ports `6060`, `8080`, and `9090` and leave egress open.
+Set the intended `replicas` explicitly: omission means zero pods. A single replica can become
+unavailable during rollout or disruption because the rollout and PodDisruptionBudget allow one
+unavailable pod. See the [Application schema](api/infraops/v2/service.proto) for deployment kinds,
+resource sizing, probes, and secret-reference syntax.
 
-See:
+### 🏗️ Prepare the Cluster
 
-- `area/apps/apps.hjson`
-
-This file uses the `Kubernetes` message in `api/infraops/v2/service.proto`.
-
-Apps also need an application config file at:
-
-- `area/apps/<namespace>/<app>.yaml`
-
-For example, the `bezeichner` app in namespace `lean` reads `area/apps/lean/bezeichner.yaml`.
-The apps Pulumi program turns that file into a Kubernetes ConfigMap entry named `<app>.yaml`,
-then mounts it into the container at `/etc/<app>/<app>.yaml`.
-
-Only applications listed in `area/apps/apps.hjson` are deployed. The tracked files under
-`area/apps/fiction/` are example app configs and are not used unless a matching app entry references
-that namespace/name.
-
-Adding an application to `apps.hjson` only wires the Pulumi resources. Also update `area/apps/release`
-with its supported app name, verification and rollout commands, and load eligibility. Include a load
-scenario and request payload fixture only when they exercise useful application behavior.
-
-The `abgleich` app uses the `api` deployment model with one replica for its scheduled work and
-signed GitHub webhook handler. Its Service, Ingress, and proxied Cloudflare DNS record expose
-`https://abgleich.lean-thoughts.com/webhooks/github`. Its verify helper uses
-`https://abgleich.lean-thoughts.com/abgleich/readyz` without triggering webhook commands. Abgleich
-has no load scenario; all load commands skip it.
-
-#### 🏗️ Install / Setup
-
-Save the cluster kubeconfig if your local context is not already configured:
+With `doctl` installed, save kubeconfig if needed, then create the app namespace once:
 
 ```bash
 make -C area/apps save-config
-```
-
-Prepare the local app namespace/helper resources:
-
-```bash
 make -C area/apps setup
 ```
 
-Before deploying Abgleich, ensure `abgleich-secret` in the existing `lean` namespace contains
-the App private key PEM, webhook secret, and OpenAI API key. For a new Secret, the helper accepts
-local credential files. All three inputs,
-`github_app_private_key_file`, `github_webhook_secret_file`, and `openai_api_key_file`,
-are required and must refer to readable, nonempty files. The webhook secret file must
-contain the same value configured in the GitHub App:
+Create the Kubernetes Secrets required by each app before deployment. The apps program references
+existing `<secretName>-secret` objects; it does not create them. Listed secret volumes mount at
+`/etc/secrets/<secretName>`, while secret environment variables select individual keys.
+
+For a new public hostname, preview and update the Cloudflare area before the apps update so public
+readiness checks can resolve it. The [nginx Helm values](area/k8s/nginx/values.yaml) restrict load
+balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress.
+
+### 🔐 Abgleich Secret
+
+This repository provides a helper to create `abgleich-secret` in the existing `lean` namespace.
+Use the intended kubeconfig context and three readable, nonempty credential files outside the repository:
 
 ```bash
 make -C area/apps abgleich-secret \
@@ -361,50 +138,12 @@ make -C area/apps abgleich-secret \
   openai_api_key_file=/absolute/path/to/openai-api-key
 ```
 
-This explicit creation step is separate from `setup` and requires `kubectl` with the
-intended cluster context. It validates all three files before invoking `kubectl`, then
-creates the `github-app-private-key.pem`, `github-webhook-secret`, and `openai-api-key`
-keys using `--from-file` without printing their contents; creation fails if the Secret
-already exists. Keep all three files
-outside the repository and never commit credentials. Abgleich's existing `secrets` list
-mounts the keys read-only at `/etc/secrets/abgleich/github-app-private-key.pem`,
-`/etc/secrets/abgleich/github-webhook-secret`, and `/etc/secrets/abgleich/openai-api-key`.
-The legacy `github-token` key is no
-longer created or used.
-`area/apps/lean/abgleich.yaml` configures App `5427450`, installation `174152088`, and
-the mounted private key and webhook secret. It discovers repositories accessible to the
-installation under `alexfalkowski` and reconciles those with auto-merge enabled every
-fifteen minutes. Credentials are read once at startup; restart Abgleich after replacing
-any credential file. Installation access tokens renew automatically.
+The helper validates all inputs before creating the Secret with keys `github-app-private-key.pem`,
+`github-webhook-secret`, and `openai-api-key`. It fails if the Secret already exists and is separate
+from `setup`. The [deployed config](area/apps/lean/abgleich.yaml) uses the mounted files under
+`/etc/secrets/abgleich/`.
 
-Branch cleanup runs at startup and every 24 hours with a five-minute timeout. It removes
-unchanged merged-PR branches and branches whose latest commit's committer date is more
-than 30 days old (`cleanup.inactive_after: 720h`) in repositories with auto-merge enabled.
-Default, protected, and open-PR head/base branches are preserved. Inactive cleanup can
-delete unmerged work; protect long-lived branches or add their exact, case-sensitive
-names to `cleanup.exclude` before deploying. Omit `cleanup` to disable the job. See the
-[Abgleich cleanup guide](https://github.com/alexfalkowski/abgleich#-branch-cleanup)
-for safeguards and recovery.
-
-The config also enables `/ab summarise` using `gpt-6.1-sol` and the mounted OpenAI key,
-with a separate job running every 30 seconds and a two-minute job timeout.
-Add the `abgleich-ai` topic to each repository that should allow summaries; this opts
-its selected PR metadata and patches into submission to OpenAI. See the
-[Abgleich summary guide](https://github.com/alexfalkowski/abgleich#-ai-pull-request-summaries)
-for command permissions and behavior.
-
-Give the GitHub App **Contents**, **Pull requests**, and **Issues** read/write permissions,
-and approve the installation's permission change. Subscribe to **Issue comment** events.
-After deploying both the apps and Cloudflare changes, activate the App's webhook at
-`https://abgleich.lean-thoughts.com/webhooks/github` with the matching webhook secret.
-PR comments containing `@abgleich automerge` from users with write or admin access request
-the existing `automerge` label; the scheduled sweep applies the merge policy. See the
-[Abgleich setup guide](https://github.com/alexfalkowski/abgleich#-github-app-setup)
-for permissions, delivery behavior, and recovery.
-
-To remove the legacy token key or replace keys in an existing Secret, delete and
-recreate it as a separate operator step. Before deleting, confirm all three local files
-are readable and nonempty. Use the intended cluster context:
+To replace an existing Secret, first check all three local files, then delete and recreate it:
 
 ```bash
 kubectl delete secret abgleich-secret --namespace lean && \
@@ -414,403 +153,116 @@ make -C area/apps abgleich-secret \
   openai_api_key_file=/absolute/path/to/openai-api-key
 ```
 
-Deleting the Secret does not automatically stop the running pod, but a replacement
-pod cannot start while the Secret is absent. Recreate it promptly with all three files.
+A replacement pod cannot start while the Secret is absent. Recreate it promptly, then restart the
+application to pick up the credentials. The [Abgleich README](https://github.com/alexfalkowski/abgleich#readme)
+owns GitHub App permissions, webhook setup, commands, cleanup policy, and AI configuration.
 
-Apply the Pulumi resources described by `apps.hjson`:
+### 🧪 Deploy and Check
+
+Run the update through Make so subsequent checks can select the affected apps:
 
 ```bash
+make area=apps pulumi-preview
 make area=apps pulumi-update
-```
-
-For Abgleich's first public deployment, preview and update the `cf` area before the apps
-update so its public readiness check can resolve the new hostname.
-
-#### 🧪 App Helpers
-
-`make area=apps pulumi-update` records the apps affected by its successful Pulumi update in the ignored
-`area/apps/.release-selection.json`. The default `verify`, `load`, `kube-score`, `kubescape`, and `lint`
-targets use this selection, including app configuration and resource changes. They skip checks when
-the update changed no relevant resources. Each new update invalidates the previous selection before
-deployment; failed updates, missing or invalid selections, and selections from another Git revision
-fail checks instead of silently skipping them. Run the update through Make to produce the selection,
-or use explicit per-app or `*-all` commands when checking an existing deployment.
-
-Deleted apps are excluded from post-update checks. Apps scaled to zero still receive linting but skip
-verification and load traffic. Changes to shared or unlabelled Kubernetes resources expand checks to
-all supported apps and use namespace-wide manifest scanning. The helper supports the `lean` namespace;
-changes to an unknown app or another namespace fail selection until its helper support is added.
-
-Supported apps are the apps explicitly wired in `area/apps/release`. The API `verify` helpers use
-fail-fast `curl` requests with bounded connection and total request time, and the API `load` helpers run
-Vegeta and fail unless every request succeeds. Load request payloads live with the app fixtures under
-`area/apps/<namespace>/`.
-
-The manual `rollout` target and CI build optimization continue to inspect the Git release diff.
-They compare `APPS_RELEASE_BASE` to `APPS_RELEASE_HEAD` when set; otherwise they use the current
-commit's parent, falling back to `origin/master` when the parent is unavailable. `rollout` targets
-version-only changed apps and otherwise restarts all supported apps. In CI, `area/apps/release halt-ci`
-halts the general build for a release-only apps version bump. This classification does not choose
-post-update checks. Set `APPS_RELEASE_DRY_RUN=true` to print helper actions without invoking Pulumi,
-the cluster, or public endpoints; selective checks still require a valid update selection.
-
-```bash
-make -C area/apps rollout
 make -C area/apps verify
 make -C area/apps load
 make -C area/apps lint
 ```
 
-Use the `*-all` targets when you want to cover every supported app explicitly:
+```mermaid
+sequenceDiagram
+  actor Operator as Operator / CI
+  participant Make as Make / release helper
+  participant Pulumi
+  participant Selection as .release-selection.json
+  participant Apps as Deployed apps
+  Operator->>Make: pulumi-update (area=apps)
+  Make->>Selection: Invalidate previous selection
+  Make->>Pulumi: Update apps stack
+  Pulumi-->>Make: Resource events and successful summary
+  Make->>Selection: Record affected apps and Git revision
+  Operator->>Make: verify / load / lint
+  Make->>Selection: Validate and read selection
+  Make->>Apps: Check selected apps and resources
+```
+
+The ignored `area/apps/.release-selection.json` belongs to the last successful update at the current
+Git revision. Failed updates and missing, invalid, or stale selections cause checks to fail.
+
+| Update result | Check behavior |
+| ------------- | -------------- |
+| No relevant resource changes | Skip checks |
+| App config or resource changes | Check affected apps |
+| Shared or unlabelled resources change | Expand to supported apps and namespace-wide manifest scans |
+| App deleted | Exclude it from checks |
+| App scaled to zero | Lint it; skip verification and load |
+| Deployment created or images changed | Include image scans; config-only updates skip image scans |
+| Unknown app or namespace | Fail selection until helper support is added |
+
+Verification uses bounded, fail-fast `curl` requests. Load checks use Vegeta and require every request
+to succeed; Abgleich has no load scenario and is skipped. Linting uses kube-score and Kubescape against
+the live cluster. Install these tools and `jq` before running the checks. Load results are ignored files
+under `area/apps/lean/*.bin`.
+
+To check an existing deployment independently of the last update, use the explicit `*-all` targets:
 
 ```bash
-make -C area/apps rollout-all
 make -C area/apps verify-all
 make -C area/apps load-all
 make -C area/apps lint-all
 ```
 
-The `load*` targets write ignored vegeta result files under `area/apps/lean/*.bin`.
+`lint-all` scans namespace manifests and every supported app's images, including unchanged images.
+Per-app commands are available through the helper, for example `cd area/apps && ./release verify-web`.
 
-Per-app commands are exposed by the release helper:
-
-```bash
-cd area/apps
-./release verify-web
-./release load-bezeichner
-./release rollout-standort
-./release kubescape-web
-./release kube-score-bezeichner
-```
-
-The `lint` target requires a working cluster context. kube-score selects each changed app's Deployment,
-Service, Ingress, NetworkPolicy, and PodDisruptionBudget with `app.kubernetes.io/name`, adding unlabelled
-namespace policies and budgets and policies or budgets with empty selectors as shared context. It
-intentionally ignores the host pod anti-affinity check and fails if a selected Deployment is missing.
-Kubescape scans affected Deployments and scans their container and init-container images only when
-the update changed those images or created the Deployment. Config-only changes skip image scans.
-Explicit `kubescape-<app>` commands scan both the workload and its images.
-
-Use `lint-all` for a full namespace manifest scan and image scans of every supported app, independently
-of the last update. It is suitable for manual or scheduled baseline scans to detect drift and newly
-published vulnerabilities in unchanged images. Full kube-score scans still fail on empty Kubernetes
-discovery or manifest collection.
-
-#### 🗑️ Delete
+The manual `make -C area/apps rollout` uses the Git release diff: it restarts version-only changed apps,
+otherwise all supported apps. Set `APPS_RELEASE_BASE` and `APPS_RELEASE_HEAD` to override the default
+comparison against the current commit's parent (or `origin/master` when unavailable). `rollout-all`
+always restarts all supported apps. This Git comparison also supports CI's release-only build skip;
+it does not select post-update checks. `APPS_RELEASE_DRY_RUN=true` prints helper actions without
+contacting infrastructure; selective checks still need a valid selection.
 
 > [!CAUTION]
-> This deletes the `lean` namespace through `kubectl`.
+> `make -C area/apps delete` deletes the entire `lean` namespace.
 
-```bash
-make -C area/apps delete
-```
+## ⚓ Cluster Add-ons
 
-#### ⬆️ Update an Application Version (bump tool)
-
-Build:
-
-```bash
-make build-bump
-```
-
-Update a single app version in config. This is an internal helper used by automation, and the
-`-v` value is expected to be a semantic version:
-
-```bash
-./bump -n bezeichner -v <version>
-```
-
-By default it edits `area/apps/apps.hjson`. Override path:
-
-```bash
-./bump -n bezeichner -v <version> -p area/apps/apps.hjson
-```
-
-> [!TIP]
-> Run `./format -k apps` after edits to keep config normalized.
-
-### ☁️ Cloudflare (`area/cf`)
-
-Manages Cloudflare resources using Pulumi’s Cloudflare provider:
-
-- <https://www.pulumi.com/registry/packages/cloudflare/>
-
-Config:
-
-- `area/cf/cf.hjson`
-
-#### 🌐 Zone Models
-
-The shared Cloudflare zone baseline enables HTTPS, the code-defined minimum TLS setting, aggressive
-caching, HTTP/3, and HTTP/2 prioritization, disables email obfuscation, and applies the SSL mode for
-the zone model.
-
-`balancer_zones` create a Cloudflare zone plus proxied A records for each configured
-`record_names` entry under the zone domain. When `ipv6` is configured, they also create proxied
-AAAA records. Balancer zones use the shared baseline with SSL mode `full`.
-
-```hjson
-balancer_zones: [
-  {
-    name: example
-    domain: example.com
-    ipv4: 203.0.113.10
-    ipv6: 2001:db8::10
-    record_names: [
-      api
-      web
-    ]
-  }
-]
-```
-
-`page_zones` create a Cloudflare zone plus a proxied `www.<domain>` CNAME to `host`. Page zones use
-the shared baseline with SSL mode `strict`.
-
-```hjson
-page_zones: [
-  {
-    name: docs
-    domain: example.com
-    host: example.github.io
-  }
-]
-```
-
-#### 🪣 R2 Buckets
-
-R2 buckets are optional. Omit `zone` to create only the bucket. Include `zone` to create an enabled
-R2 custom domain using the code-defined TLS minimum:
-
-```hjson
-buckets: [
-  {
-    name: assets
-    region: EEUR
-    zone: {
-      id: "<cloudflare-zone-id>"
-      domain: assets.example.com
-    }
-  }
-]
-```
-
-#### 🔑 Required Environment Variables
-
-Cloudflare Pulumi runs require:
-
-- `CLOUDFLARE_API_TOKEN` for provider authentication
-- `CLOUDFLARE_ACCOUNT_ID` for account-scoped resources like R2 buckets
-
-### 🌊 DigitalOcean (`area/do`)
-
-Manages DigitalOcean resources using Pulumi’s DigitalOcean provider:
-
-- <https://www.pulumi.com/registry/packages/digitalocean/>
-
-Config:
-
-- `area/do/do.hjson`
-
-#### 📐 Cluster Defaults
-
-The DigitalOcean program creates the cluster VPC and then provisions the cluster with fixed
-operational defaults:
-
-- Region: `fra1`
-- Kubernetes version: pinned in code
-- Node count: `2`
-- Maintenance window: any day at `23:00`
-- Associated resources: destroyed with the cluster
-
-Cluster `resource` values map to node capacity:
-
-- `"small"` (default): 2 vCPU / 4 GB node
-- `"medium"`: 4 vCPU / 8 GB node
-
-Unknown or empty values fall back to `"small"`.
-
-#### 🧱 Manual Prerequisites (DigitalOcean UI)
-
-Some items may be created manually depending on account setup:
-
-- A default project (example):
-
-| Name          | Description                           |
-| ------------- | ------------------------------------- |
-| lean-thoughts | All experiments for lean-thoughts. |
-
-The Pulumi program creates the VPC used by the cluster and attaches the cluster to it.
-
-#### ⬆️ Kubernetes Cluster Upgrades
-
-Cluster version is pinned in code:
-
-- `internal/do/do.go`
-
-Guidance:
-
-- Patch versions can be updated in code.
-- Minor/major upgrades should be initiated via the DigitalOcean UI (per DO guidance), then aligned in code.
-
-### 🐙 GitHub (`area/gh`)
-
-Manages GitHub resources using Pulumi’s GitHub provider:
-
-- <https://www.pulumi.com/registry/packages/github/>
-
-Config:
-
-- `area/gh/gh.hjson`
-
-This area was inspired by:
-
-- <https://github.com/dirien/pulumi-github>
-
-#### 🧱 Repository Baseline
-
-Every managed repository receives a fixed baseline in addition to the HJSON fields: merge commits
-and rebase merges are disabled, squash merge, auto-merge, update branch, auto-init, branch deletion
-on merge, issues, projects, wiki, secret scanning, push protection, and vulnerability alerts are
-enabled, and web commit signoff is disabled. These settings are intentional and are not configurable
-in HJSON.
-
-Every non-archived managed repository also receives the labels defined in the `repositoryLabels`
-variable in `internal/gh/repository.go`:
-
-| Label | Color | Description |
-| ----- | ----- | ----------- |
-| `automerge` | `0E8A16` | Eligible for automated merging. |
-| `hold` | `FBCA04` | Do not merge until this label is removed. |
-
-Archived repositories are read-only and are skipped for label creation.
-
-#### 🧬 Repository Templates
-
-`template` creates a repository from another GitHub template repository and requires both `owner` and
-`repository`. `is_template` is separate: it marks the resulting repository as a reusable template.
-
-```hjson
-is_template: true
-template: {
-  owner: alexfalkowski
-  repository: go-service-template
-}
-```
-
-#### 🛡️ Branch Protection Baseline
-
-Every repository must list at least one `checks` entry. Those values become the required status
-check contexts for strict branch protection on `master`; an empty list fails during provisioning.
-
-Branch protection also enforces linear history and intentionally requires zero approving PR reviews
-because required status checks are the primary merge gate for this solo-maintainer workflow.
-
-#### 🪜 Repository Creation Caveat (2-step enablement)
-
-Some repository features may require a two-step approach: create the repository first, then enable features in a follow-up change. This avoids timing issues around initial default branch creation.
-
-##### 📄 GitHub Pages
-
-First change: disable Pages (or omit pages config):
-
-```hjson
-pages: { enabled: false }
-```
-
-Second change: enable Pages:
-
-```hjson
-pages: { enabled: true }
-```
-
-Optional CNAME:
-
-```hjson
-pages: {
-  enabled: true
-  cname: www.yoursite.com
-}
-```
-
-Pages uses legacy GitHub Pages sourced from `master`; branch, path, and build type are not
-configurable in HJSON.
-
-##### 👥 Collaborators
-
-When enabled, collaborator management grants `push` permission to `lean-thoughts-ci`
-on `alexfalkowski/<repository>`.
-
-First change:
-
-```hjson
-collaborators: { enabled: false }
-```
-
-Second change:
-
-```hjson
-collaborators: { enabled: true }
-```
-
-If the pipeline fails due to timing, a rerun often succeeds.
-
-### ⚓ Kubernetes Add-ons (`area/k8s`)
-
-This is not a Pulumi area. It contains cluster add-ons installed via `helm`/`kubectl`.
-These targets are intended to be run manually from an operator workstation, not from CI.
-
-> [!CAUTION]
-> Run this only after you have a Kubernetes cluster, a kubeconfig context for that cluster, and the required local secrets.
-
-Save the cluster kubeconfig if your local context is not already configured:
+[area/k8s](area/k8s/Makefile) installs nginx ingress, the CircleCI release agent, and metrics-server
+using Helm and kubectl. Run this manually from an operator workstation after creating the cluster.
+With `doctl` installed, save kubeconfig if needed and confirm the intended context before setup:
 
 ```bash
 make -C area/k8s save-config
-```
-
-Setup:
-
-```bash
 make -C area/k8s setup
 ```
 
-The nginx ingress add-on uses the Helm values in `area/k8s/nginx/values.yaml`. Those values restrict
-the DigitalOcean load balancer allow rules to Cloudflare CIDR ranges, so the ingress is intended for
-Cloudflare-proxied origin traffic. Direct clients or non-Cloudflare DNS paths may be blocked at the
-load balancer.
-
-Delete:
+The default setup requires `CIRCLECI_K8S_TOKEN` for the release agent and passes it directly to Helm.
+Use `make -C area/k8s pods` to inspect cluster pods.
 
 > [!CAUTION]
-> This deletes the `nginx-ingress`, `circleci`, and `metrics-server` namespaces through `kubectl`.
+> `make -C area/k8s delete` deletes the `nginx-ingress`, `circleci`, and `metrics-server` namespaces.
 
-```bash
-make -C area/k8s delete
-```
+## 🧾 Configuration Tools
 
-Useful debugging:
+The repo includes two maintainer helpers that rewrite HJSON in place:
 
-```bash
-make -C area/k8s pods
-```
+| Helper | Build | Example |
+| ------ | ----- | ------- |
+| Normalize an area's config | `make build-format` | `./format -k cf` |
+| Update an app version | `make build-bump` | `./bump -n bezeichner -v 1.2.3` |
 
-#### 🔑 Required Environment Variables
+Both accept `-p <path>` to override the default config file. Format kinds are `apps|cf|do|gh` and default
+to `area/<kind>/<kind>.hjson`; mismatched area fields are rejected without rewriting the file. Bump
+defaults to `area/apps/apps.hjson` and expects a semantic version from automation. Use each binary's
+`-h` output for its flags.
 
-The default `make -C area/k8s setup` path installs the CircleCI release agent along with nginx ingress and metrics-server.
+## 🛠️ Provider Notes
 
-> [!IMPORTANT]
-> `CIRCLECI_K8S_TOKEN` is required when running the default k8s setup target.
+DigitalOcean's cluster version is pinned in [internal/do/do.go](internal/do/do.go). Apply patch updates
+in code; initiate minor/major upgrades in the DigitalOcean UI, then align the code.
 
-- `CIRCLECI_K8S_TOKEN` (CircleCI release agent)
-
-Because the Makefile is a local-operator workflow, the CircleCI release-agent token is passed
-directly to Helm rather than through a CI secret-handling path.
-
-## 🗂️ Repository Structure
-
-- `area/`: Pulumi programs and k8s add-ons
-- `internal/`: shared implementation (convert + create patterns per area)
-- `api/`: protobuf schema and generated code
-- `cmd/`: small helper CLIs (`format`, `bump`)
-- `bin/`: shared build tooling (git submodule)
+GitHub repositories require at least one `checks` entry for strict branch protection on `master`.
+Required checks are the merge gate; zero approving reviews is intentional. Pages and collaborators
+may need to be disabled for initial repository creation and enabled in a follow-up change. See the
+[repository schema](api/infraops/v2/service.proto) and [implementation](internal/gh/repository.go)
+for fixed settings and labels.
