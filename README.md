@@ -377,6 +377,15 @@ installation under `alexfalkowski` and reconciles those with auto-merge enabled 
 fifteen minutes. Credentials are read once at startup; restart Abgleich after replacing
 any credential file. Installation access tokens renew automatically.
 
+Branch cleanup runs at startup and every 24 hours with a five-minute timeout. It removes
+unchanged merged-PR branches and branches whose latest commit's committer date is more
+than 30 days old (`cleanup.inactive_after: 720h`) in repositories with auto-merge enabled.
+Default, protected, and open-PR head/base branches are preserved. Inactive cleanup can
+delete unmerged work; protect long-lived branches or add their exact, case-sensitive
+names to `cleanup.exclude` before deploying. Omit `cleanup` to disable the job. See the
+[Abgleich cleanup guide](https://github.com/alexfalkowski/abgleich#-branch-cleanup)
+for safeguards and recovery.
+
 The config also enables `/ab summarise` using `gpt-6.1-sol` and the mounted OpenAI key,
 with a separate job running every 30 seconds and a two-minute job timeout.
 Add the `abgleich-ai` topic to each repository that should allow summaries; this opts
