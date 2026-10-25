@@ -1,4 +1,10 @@
 environment: production
+ai:
+  client:
+    timeout: 1m
+  provider: openai
+  openai:
+    api_key: file:/etc/secrets/abgleich/openai-api-key
 github:
   client:
     timeout: 1m
@@ -16,6 +22,10 @@ github:
 scheduler:
   interval: 15m
   timeout: 5m
+summarise:
+  model: gpt-6.1-sol
+  interval: 30s
+  timeout: 2m
 health:
   duration: 1s
   timeout: 1s
