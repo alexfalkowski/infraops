@@ -4,11 +4,11 @@ go 1.27.0
 
 require (
 	github.com/hjson/hjson-go/v4 v4.7.1
-	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.22.1
+	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.23.1
 	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.84.1
 	github.com/pulumi/pulumi-github/sdk/v6 v6.15.0
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.34.2
-	github.com/pulumi/pulumi/sdk/v3 v3.270.0
+	github.com/pulumi/pulumi/sdk/v3 v3.272.0
 	github.com/stretchr/testify v1.12.1
 	google.golang.org/protobuf v1.36.12
 )
