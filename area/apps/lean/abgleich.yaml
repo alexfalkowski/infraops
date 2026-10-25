@@ -5,6 +5,10 @@ ai:
   provider: openai
   openai:
     api_key: file:/etc/secrets/abgleich/openai-api-key
+cleanup:
+  inactive_after: 720h
+  interval: 24h
+  timeout: 5m
 github:
   client:
     timeout: 1m
