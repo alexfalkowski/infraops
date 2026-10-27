@@ -7,6 +7,9 @@ ai:
     api_key: file:/etc/secrets/abgleich/openai-api-key
 automerge:
   completion_check: "ci/circleci: wait-all"
+  dependabot:
+    exclude_repositories:
+      - alexfalkowski/docker
 cleanup:
   inactive_after: 720h
   interval: 24h
