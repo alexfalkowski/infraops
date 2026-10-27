@@ -5,6 +5,8 @@ ai:
   provider: openai
   openai:
     api_key: file:/etc/secrets/abgleich/openai-api-key
+automerge:
+  completion_check: "ci/circleci: wait-all"
 cleanup:
   inactive_after: 720h
   interval: 24h
