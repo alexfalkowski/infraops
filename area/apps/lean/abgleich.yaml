@@ -1,7 +1,7 @@
 environment: production
 ai:
   client:
-    timeout: 1m
+    timeout: 10m
   provider: openai
   openai:
     api_key: file:/etc/secrets/abgleich/openai-api-key
@@ -14,10 +14,6 @@ cleanup:
   inactive_after: 720h
   interval: 24h
   timeout: 5m
-code_review:
-  model: gpt-6.1-sol
-  interval: 30s
-  timeout: 2m
 github:
   client:
     timeout: 1m
@@ -32,6 +28,17 @@ github:
   webhook:
     secret: file:/etc/secrets/abgleich/github-webhook-secret
     timeout: 8s
+review:
+  code:
+    model: gpt-6.1-sol
+    reasoning_effort: high
+    interval: 30s
+    timeout: 10m
+  sec:
+    model: gpt-6.1-sol
+    reasoning_effort: high
+    interval: 30s
+    timeout: 10m
 scheduler:
   interval: 15m
   timeout: 5m
