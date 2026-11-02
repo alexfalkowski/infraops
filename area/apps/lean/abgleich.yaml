@@ -32,12 +32,12 @@ review:
   code:
     model: gpt-6.1-sol
     reasoning_effort: high
-    interval: 2m
+    interval: 15m
     timeout: 10m
   sec:
     model: gpt-6.1-sol
     reasoning_effort: high
-    interval: 2m
+    interval: 15m
     timeout: 10m
 scheduler:
   interval: 15m
