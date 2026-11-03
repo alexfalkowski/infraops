@@ -18,8 +18,9 @@ github:
   client:
     timeout: 1m
     retry:
-      attempts: 2
-      backoff: 100ms
+      attempts: 3
+      strategy: exponential
+      backoff: 1s
   owner: alexfalkowski
   app:
     id: 5427450
