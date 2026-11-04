@@ -92,6 +92,64 @@ For stack recovery, the root Makefile also exposes `pulumi-refresh` and `pulumi-
 > `make area=cf pulumi-delete` runs `pulumi stack rm --force`. It removes stack state and can orphan
 > resources that still exist.
 
+## 🪣 R2 Object Expiration
+
+A bucket can opt into object-age expiration with `expiration`. For example,
+this illustrative Cloudflare configuration expires objects after seven days:
+
+```hjson
+{
+  version: "2.0"
+  buckets: [
+    {
+      name: example-archive
+      region: EEUR
+      expiration: 168h
+    }
+  ]
+}
+```
+
+Use `24h` for a one-day testing example. These are examples, not an agreed einblick
+retention policy. Values use [Go duration syntax](https://pkg.go.dev/time#ParseDuration)
+and are parsed into `time.Duration`: use hours for days (`168h`, not `7d`). A configured
+value must be a positive whole number of seconds within that type's range; empty,
+malformed, overflowing, zero, negative and fractional-second values are rejected before
+bucket registration. Durations such as `1.5h` are valid because they resolve to whole seconds.
+Omitting the field creates no lifecycle resource and enables no object expiration.
+Omitting `zone` keeps the bucket without a public custom domain.
+See the [Bucket schema](api/infraops/v2/service.proto).
+
+The rule covers every object, using the stored object's age, regardless of timestamps
+inside its contents or UTC day prefixes in its key. It does not enforce strict event-age
+retention. Cloudflare applies lifecycle changes asynchronously to existing objects;
+deletion typically occurs within 24 hours after expiration and can take longer.
+Shortening the age can make existing objects eligible for deletion; extending it cannot
+restore deleted objects. See [Cloudflare object lifecycles](https://developers.cloudflare.com/r2/buckets/object-lifecycles/).
+
+The [pinned provider's lifecycle resource](https://www.pulumi.com/registry/packages/cloudflare/api-docs/r2bucketlifecycle/)
+replaces the complete bucket rule set. This capability manages all-object expiration
+and retains R2's default seven-day incomplete multipart upload cleanup; it does not merge
+other rules created outside infraops. Review existing rules before adopting it.
+Lifecycle management requires a Cloudflare token with `Workers R2 Storage Write` permission.
+The [Cloudflare lifecycle API](https://developers.cloudflare.com/api/resources/r2/subresources/buckets/subresources/lifecycle/methods/update/)
+defines replacement, empty-prefix matching, and age in seconds.
+
+> [!WARNING]
+> Removing a previously applied `expiration` value removes the lifecycle resource
+> from Pulumi state but **leaves the remote rules active**. The upstream provider pinned by
+> Cloudflare v6.23.2 has a [no-op lifecycle Delete](https://github.com/cloudflare/terraform-provider-cloudflare/blob/9b51a582458f5c5d46d8547ed2604fcba91fb861/internal/services/r2_bucket_lifecycle/resource.go).
+> To stop expiration, first disable or remove the `expire-objects` rule in Cloudflare's
+> bucket lifecycle settings, then omit the field and review the preview. Do not apply the
+> old configured value again: it reinstates expiration. Check the remote rules afterward;
+> removal does not restore deleted objects or guarantee immediate cessation of pending deletion.
+> The rule also carries incomplete multipart cleanup; retain that cleanup separately if needed.
+
+Changing only the expiration value updates the same lifecycle resource and keeps bucket
+and optional custom-domain identities. Reverting to older code/config that omits this
+capability has the same remote-rule persistence risk. Pulumi mocks verify configuration
+and resource inputs; live propagation and deletion require separately authorized R2 validation.
+
 ## 📦 Application Deployment
 
 [apps.hjson](area/apps/apps.hjson) selects the applications to deploy. Each app's configuration file
