@@ -995,7 +995,14 @@ type Bucket struct {
 	// Region is the R2 data location hint (for example "EEUR").
 	Region string `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
 	// Zone is optional; when present, it enables provisioning of an R2 custom domain for the bucket.
-	Zone          *BucketZone `protobuf:"bytes,3,opt,name=zone,proto3,oneof" json:"zone,omitempty"`
+	Zone *BucketZone `protobuf:"bytes,3,opt,name=zone,proto3,oneof" json:"zone,omitempty"`
+	// Expiration optionally expires all objects by object age using Go duration syntax (for example "168h").
+	// It must be a positive whole number of seconds within the time.Duration range; "7d" is unsupported.
+	// Omission creates no lifecycle resource. Updates apply to existing objects; deletion is asynchronous.
+	// This manages the complete lifecycle rule set, retaining seven-day incomplete multipart cleanup.
+	// Removing a previously applied value leaves rules active with the pinned provider; disable/remove
+	// them in Cloudflare before omission. This does not enforce event-age retention; see README.md.
+	Expiration    *string `protobuf:"bytes,4,opt,name=expiration,proto3,oneof" json:"expiration,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1049,6 +1056,13 @@ func (x *Bucket) GetZone() *BucketZone {
 		return x.Zone
 	}
 	return nil
+}
+
+func (x *Bucket) GetExpiration() string {
+	if x != nil && x.Expiration != nil {
+		return *x.Expiration
+	}
+	return ""
 }
 
 // Cloudflare is the top-level configuration for the `area/cf` Pulumi program.
@@ -1328,12 +1342,16 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\n" +
 	"BucketZone\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
-	"\x06domain\x18\x02 \x01(\tR\x06domain\"o\n" +
+	"\x06domain\x18\x02 \x01(\tR\x06domain\"\xa3\x01\n" +
 	"\x06Bucket\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
 	"\x06region\x18\x02 \x01(\tR\x06region\x120\n" +
-	"\x04zone\x18\x03 \x01(\v2\x17.infraops.v2.BucketZoneH\x00R\x04zone\x88\x01\x01B\a\n" +
-	"\x05_zone\"\xcd\x01\n" +
+	"\x04zone\x18\x03 \x01(\v2\x17.infraops.v2.BucketZoneH\x00R\x04zone\x88\x01\x01\x12#\n" +
+	"\n" +
+	"expiration\x18\x04 \x01(\tH\x01R\n" +
+	"expiration\x88\x01\x01B\a\n" +
+	"\x05_zoneB\r\n" +
+	"\v_expiration\"\xcd\x01\n" +
 	"\n" +
 	"Cloudflare\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12@\n" +

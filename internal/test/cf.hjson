@@ -32,5 +32,19 @@
       name: atlas-backups
       region: WNAM
     }
+    {
+      name: atlas-archive
+      region: EEUR
+      expiration: 168h
+    }
+    {
+      name: atlas-testing
+      region: EEUR
+      expiration: 24h
+      zone: {
+        id: test-zone-id
+        domain: testing.example.net
+      }
+    }
   ]
 }
