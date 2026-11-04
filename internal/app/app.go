@@ -49,6 +49,14 @@ func ConvertApplication(a *v2.Application) *App {
 		Secrets:   a.GetSecrets(),
 	}
 
+	if storage := a.GetStorage(); storage != nil {
+		app.Storage = &Storage{
+			Capacity: storage.GetCapacity(),
+			Path:     storage.GetPath(),
+			Profile:  storage.Profile,
+		}
+	}
+
 	envVars := a.GetEnvVars()
 	if envVars != nil {
 		app.EnvVars = make([]*EnvVar, len(envVars))
@@ -74,7 +82,7 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 	resources := []func(ctx *pulumi.Context, app *App) error{
 		createServiceAccount, createNetworkPolicy,
 		createConfigMap, createPodDisruptionBudget,
-		createDeployment,
+		createStorage, createDeployment,
 	}
 	if !app.IsWorker() {
 		resources = append(resources, createService, createIngress)
@@ -94,6 +102,9 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 type App struct {
 	// Resources are optional resource requests/limits to apply to the pod.
 	Resources *Resources
+
+	// Storage optionally creates a protected persistent claim and writable data mount.
+	Storage *Storage
 
 	// ID is an optional identifier from configuration.
 	ID string

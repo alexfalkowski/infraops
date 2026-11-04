@@ -35,10 +35,28 @@ message EnvVar {
   string value = 2;
 }
 
-// Application describes a Kubernetes application to deploy.
-//
-// This configuration is consumed by the `area/apps` Pulumi program, which creates Kubernetes
-// resources such as ServiceAccount, ConfigMap, Deployment, Service, Ingress, and related policies.
+// Storage configures persistent application data shared across instance replacements.
+// Omission preserves the application's existing storage behavior. Provisioned storage
+// is protected against deletion/replacement; removing it requires deliberate operator
+// action after backup or migration. See the README for adapter lifecycle details.
+message Storage {
+  // Capacity is the required storage request quantity (for example "1Gi"); no default
+  // is selected. Provisioning and expansion depend on the selected profile.
+  string capacity = 1;
+
+  // Path is the required absolute, clean, non-root data directory within the application.
+  // It is writable using the application's existing non-root identity. Keep database,
+  // recovery files, pending exports and workspace here; verify permissions at runtime.
+  string path = 2;
+
+  // Profile selects an existing storage provisioning profile. Omission uses the
+  // installation default; an explicit empty string requests storage without a profile.
+  // A profile change requires migration rather than automatic replacement.
+  optional string profile = 3;
+}
+
+// Application describes a deployable application.
+// The `area/apps` adapter consumes this configuration to provision its resources.
 message Application {
   // Id is the CircleCI project identifier for internal application deployments.
   // Internal deployments write this value to the "circleci.com/project-id" annotation used by the
@@ -61,10 +79,10 @@ message Application {
   // unsupported values can produce mixed resource behavior during Pulumi preview/update.
   string kind = 2;
 
-  // Name is the Kubernetes resource name base for this application.
+  // Name is the resource name base for this application.
   string name = 3;
 
-  // Namespace is the Kubernetes namespace to deploy into.
+  // Namespace groups this application with related resources.
   string namespace = 4;
 
   // Domain is the base/apex domain suffix used for ingress routing (for example "example.com").
@@ -106,6 +124,11 @@ message Application {
 
   // EnvVars is the list of environment variables to inject into the application container.
   repeated EnvVar env_vars = 10;
+
+  // Storage optionally provisions writable persistent application data.
+  // Omission preserves existing storage behavior. It does not change replicas or
+  // rollout policy; applications requiring one writer need a separate rollout policy.
+  Storage storage = 11;
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.

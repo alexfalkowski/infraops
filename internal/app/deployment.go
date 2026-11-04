@@ -9,6 +9,17 @@ import (
 )
 
 func createDeployment(ctx *pulumi.Context, app *App) error {
+	volumes := createSecretVolumes(app)
+	if app.Storage != nil {
+		volumes = append(volumes, cv1.VolumeArgs{
+			Name: pulumi.String(app.Name + storageSuffix),
+			PersistentVolumeClaim: cv1.PersistentVolumeClaimVolumeSourceArgs{
+				ClaimName: pulumi.String(app.Name + storageSuffix),
+				ReadOnly:  inputs.No,
+			},
+		})
+	}
+
 	m := metadata(app, deploymentLabels(app))
 	m.Annotations = deploymentAnnotations(app)
 	args := &av1.DeploymentArgs{
@@ -30,7 +41,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 					ServiceAccountName:            pulumi.String(app.Name),
 					SecurityContext:               podSecurity(),
 					TerminationGracePeriodSeconds: pulumi.Int(35),
-					Volumes:                       createSecretVolumes(app),
+					Volumes:                       volumes,
 					Containers:                    containers(app),
 				},
 			},

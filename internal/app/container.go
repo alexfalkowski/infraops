@@ -17,6 +17,13 @@ func containers(app *App) cv1.ContainerArray {
 	for _, v := range app.Secrets {
 		volumeMounts = append(volumeMounts, secretVolumeMount(v))
 	}
+	if app.Storage != nil {
+		volumeMounts = append(volumeMounts, cv1.VolumeMountArgs{
+			Name:      pulumi.String(app.Name + storageSuffix),
+			MountPath: pulumi.String(app.Storage.Path),
+			ReadOnly:  inputs.No,
+		})
+	}
 
 	envs := cv1.EnvVarArray{serviceID()}
 	container := cv1.ContainerArgs{
