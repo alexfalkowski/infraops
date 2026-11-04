@@ -109,6 +109,68 @@ unavailable during rollout or disruption because the rollout and PodDisruptionBu
 unavailable pod. See the [Application schema](api/infraops/v2/service.proto) for deployment kinds,
 resource sizing, probes, and secret-reference syntax.
 
+### 💾 Persistent Application Storage
+
+Before enabling storage, update the shared release image to a storage-aware `cmd/bump`
+version and update all consuming app pipelines to that image. Older helpers discard
+storage settings when rewriting the configuration, even when releasing another app.
+
+An application can opt into one persistent filesystem claim. Add this block to that
+application's HJSON object; the values below are illustrative, not production sizing:
+
+```hjson
+storage: {
+  capacity: 1Gi
+  path: "/data"
+  profile: example-csi
+}
+```
+
+Choose capacity and a storage provisioning profile for the installation before deploying.
+The Kubernetes adapter maps `profile` to an existing StorageClass. Omit
+`profile` to leave class assignment to the cluster default, or set it to `""`
+to request no class and bind a matching pre-provisioned PV. Capacity has no default;
+Kubernetes/provider validation applies to quantities and available storage. The claim
+requests `ReadWriteOnce` and `Filesystem`. See [Storage](api/infraops/v2/service.proto)
+for the complete field contract.
+
+The PVC's Kubernetes and Pulumi name is `<app>-data`, in the app's namespace. Pod
+replacement, image/config updates and scaling retain that identity. All replicas
+share the same claim. `ReadWriteOnce` permits multiple pods on one node; it does not
+enforce one writer. Storage leaves the existing rolling update and disruption budget
+unchanged. Applications requiring exclusive writers need a separately reviewed
+rollout policy before activation; Recreate support is deferred to I-01b.
+
+The entire claim mounts writable at the required absolute, clean, non-root
+`path`, without a subPath. Choose a dedicated directory that does not hide
+image files, `/etc/<app>` config or `/etc/secrets`. Put the database, engine recovery
+files, pending exports and any temporary workspace beneath that mount; the app owns
+creating subdirectories and bounding workspace use. No paths or environment variables
+are set inside the app. The root filesystem remains read-only, with non-root UID/GID
+`10001`, `fsGroup: 2000`, dropped capabilities and no privilege escalation. The volume
+driver must support that group access. Pulumi mocks check resource settings; verify
+actual non-root writes and recovery after pod replacement on the selected storage
+before relying on persistence. [Kubernetes security context guidance](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+describes the driver-dependent ownership handling.
+
+Claims use [Pulumi protection](https://www.pulumi.com/docs/iac/concepts/resources/options/protect/).
+Removing storage/an application or attempting a claim replacement fails until the
+operator deliberately unprotects the claim. Back up or migrate data and review the
+preview before doing so. A rename or namespace change changes claim identity and
+does not migrate data. Class changes require migration; capacity increases require
+class/driver expansion support, and shrinking is unsupported. Changing mount path
+keeps the claim but requires aligning the app's paths. Rolling back to config/code
+without storage attempts to remove the protected claim and is not an automatic
+storage rollback.
+
+Protection applies to Pulumi-managed operations. It does not prevent direct Kubernetes,
+namespace or cluster deletion, including `make -C area/apps delete`. The bound PV's
+reclaim policy controls whether claim deletion also deletes its backing storage;
+this capability does not create a StorageClass or set PV reclaim policy. Inspect
+those policies and arrange backups independently. [Kubernetes persistent-volume guidance](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
+owns binding, access, expansion and reclamation behavior. Applications that omit
+`storage` retain their existing config/secret-only volumes.
+
 ### 🏗️ Prepare the Cluster
 
 With `doctl` installed, save kubeconfig if needed, then create the app namespace once:

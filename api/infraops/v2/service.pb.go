@@ -99,10 +99,80 @@ func (x *EnvVar) GetValue() string {
 	return ""
 }
 
-// Application describes a Kubernetes application to deploy.
-//
-// This configuration is consumed by the `area/apps` Pulumi program, which creates Kubernetes
-// resources such as ServiceAccount, ConfigMap, Deployment, Service, Ingress, and related policies.
+// Storage configures persistent application data shared across instance replacements.
+// Omission preserves the application's existing storage behavior. Provisioned storage
+// is protected against deletion/replacement; removing it requires deliberate operator
+// action after backup or migration. See the README for adapter lifecycle details.
+type Storage struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Capacity is the required storage request quantity (for example "1Gi"); no default
+	// is selected. Provisioning and expansion depend on the selected profile.
+	Capacity string `protobuf:"bytes,1,opt,name=capacity,proto3" json:"capacity,omitempty"`
+	// Path is the required absolute, clean, non-root data directory within the application.
+	// It is writable using the application's existing non-root identity. Keep database,
+	// recovery files, pending exports and workspace here; verify permissions at runtime.
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// Profile selects an existing storage provisioning profile. Omission uses the
+	// installation default; an explicit empty string requests storage without a profile.
+	// A profile change requires migration rather than automatic replacement.
+	Profile       *string `protobuf:"bytes,3,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Storage) Reset() {
+	*x = Storage{}
+	mi := &file_infraops_v2_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Storage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Storage) ProtoMessage() {}
+
+func (x *Storage) ProtoReflect() protoreflect.Message {
+	mi := &file_infraops_v2_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Storage.ProtoReflect.Descriptor instead.
+func (*Storage) Descriptor() ([]byte, []int) {
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Storage) GetCapacity() string {
+	if x != nil {
+		return x.Capacity
+	}
+	return ""
+}
+
+func (x *Storage) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *Storage) GetProfile() string {
+	if x != nil && x.Profile != nil {
+		return *x.Profile
+	}
+	return ""
+}
+
+// Application describes a deployable application.
+// The `area/apps` adapter consumes this configuration to provision its resources.
 type Application struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Id is the CircleCI project identifier for internal application deployments.
@@ -124,9 +194,9 @@ type Application struct {
 	// Other values are unsupported. The current implementation does not pre-validate this field, so
 	// unsupported values can produce mixed resource behavior during Pulumi preview/update.
 	Kind string `protobuf:"bytes,2,opt,name=kind,proto3" json:"kind,omitempty"`
-	// Name is the Kubernetes resource name base for this application.
+	// Name is the resource name base for this application.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	// Namespace is the Kubernetes namespace to deploy into.
+	// Namespace groups this application with related resources.
 	Namespace string `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Domain is the base/apex domain suffix used for ingress routing (for example "example.com").
 	// The apps program creates ingress hosts as "<name>.<domain>".
@@ -161,14 +231,18 @@ type Application struct {
 	// "/etc/secrets/<secretName>".
 	Secrets []string `protobuf:"bytes,9,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// EnvVars is the list of environment variables to inject into the application container.
-	EnvVars       []*EnvVar `protobuf:"bytes,10,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
+	EnvVars []*EnvVar `protobuf:"bytes,10,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
+	// Storage optionally provisions writable persistent application data.
+	// Omission preserves existing storage behavior. It does not change replicas or
+	// rollout policy; applications requiring one writer need a separate rollout policy.
+	Storage       *Storage `protobuf:"bytes,11,opt,name=storage,proto3" json:"storage,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Application) Reset() {
 	*x = Application{}
-	mi := &file_infraops_v2_service_proto_msgTypes[1]
+	mi := &file_infraops_v2_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -180,7 +254,7 @@ func (x *Application) String() string {
 func (*Application) ProtoMessage() {}
 
 func (x *Application) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[1]
+	mi := &file_infraops_v2_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -193,7 +267,7 @@ func (x *Application) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Application.ProtoReflect.Descriptor instead.
 func (*Application) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{1}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Application) GetId() string {
@@ -266,6 +340,13 @@ func (x *Application) GetEnvVars() []*EnvVar {
 	return nil
 }
 
+func (x *Application) GetStorage() *Storage {
+	if x != nil {
+		return x.Storage
+	}
+	return nil
+}
+
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.
 type Kubernetes struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -279,7 +360,7 @@ type Kubernetes struct {
 
 func (x *Kubernetes) Reset() {
 	*x = Kubernetes{}
-	mi := &file_infraops_v2_service_proto_msgTypes[2]
+	mi := &file_infraops_v2_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -291,7 +372,7 @@ func (x *Kubernetes) String() string {
 func (*Kubernetes) ProtoMessage() {}
 
 func (x *Kubernetes) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[2]
+	mi := &file_infraops_v2_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -304,7 +385,7 @@ func (x *Kubernetes) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Kubernetes.ProtoReflect.Descriptor instead.
 func (*Kubernetes) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{2}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Kubernetes) GetVersion() string {
@@ -335,7 +416,7 @@ type Collaborators struct {
 
 func (x *Collaborators) Reset() {
 	*x = Collaborators{}
-	mi := &file_infraops_v2_service_proto_msgTypes[3]
+	mi := &file_infraops_v2_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -347,7 +428,7 @@ func (x *Collaborators) String() string {
 func (*Collaborators) ProtoMessage() {}
 
 func (x *Collaborators) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[3]
+	mi := &file_infraops_v2_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -360,7 +441,7 @@ func (x *Collaborators) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Collaborators.ProtoReflect.Descriptor instead.
 func (*Collaborators) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{3}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Collaborators) GetEnabled() bool {
@@ -386,7 +467,7 @@ type Template struct {
 
 func (x *Template) Reset() {
 	*x = Template{}
-	mi := &file_infraops_v2_service_proto_msgTypes[4]
+	mi := &file_infraops_v2_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -398,7 +479,7 @@ func (x *Template) String() string {
 func (*Template) ProtoMessage() {}
 
 func (x *Template) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[4]
+	mi := &file_infraops_v2_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -411,7 +492,7 @@ func (x *Template) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Template.ProtoReflect.Descriptor instead.
 func (*Template) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{4}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Template) GetOwner() string {
@@ -443,7 +524,7 @@ type Pages struct {
 
 func (x *Pages) Reset() {
 	*x = Pages{}
-	mi := &file_infraops_v2_service_proto_msgTypes[5]
+	mi := &file_infraops_v2_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -455,7 +536,7 @@ func (x *Pages) String() string {
 func (*Pages) ProtoMessage() {}
 
 func (x *Pages) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[5]
+	mi := &file_infraops_v2_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -468,7 +549,7 @@ func (x *Pages) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pages.ProtoReflect.Descriptor instead.
 func (*Pages) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{5}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Pages) GetEnabled() bool {
@@ -531,7 +612,7 @@ type Repository struct {
 
 func (x *Repository) Reset() {
 	*x = Repository{}
-	mi := &file_infraops_v2_service_proto_msgTypes[6]
+	mi := &file_infraops_v2_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -543,7 +624,7 @@ func (x *Repository) String() string {
 func (*Repository) ProtoMessage() {}
 
 func (x *Repository) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[6]
+	mi := &file_infraops_v2_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -556,7 +637,7 @@ func (x *Repository) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Repository.ProtoReflect.Descriptor instead.
 func (*Repository) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{6}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Repository) GetName() string {
@@ -649,7 +730,7 @@ type Github struct {
 
 func (x *Github) Reset() {
 	*x = Github{}
-	mi := &file_infraops_v2_service_proto_msgTypes[7]
+	mi := &file_infraops_v2_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -661,7 +742,7 @@ func (x *Github) String() string {
 func (*Github) ProtoMessage() {}
 
 func (x *Github) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[7]
+	mi := &file_infraops_v2_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -674,7 +755,7 @@ func (x *Github) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Github.ProtoReflect.Descriptor instead.
 func (*Github) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{7}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *Github) GetVersion() string {
@@ -717,7 +798,7 @@ type BalancerZone struct {
 
 func (x *BalancerZone) Reset() {
 	*x = BalancerZone{}
-	mi := &file_infraops_v2_service_proto_msgTypes[8]
+	mi := &file_infraops_v2_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -729,7 +810,7 @@ func (x *BalancerZone) String() string {
 func (*BalancerZone) ProtoMessage() {}
 
 func (x *BalancerZone) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[8]
+	mi := &file_infraops_v2_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -742,7 +823,7 @@ func (x *BalancerZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BalancerZone.ProtoReflect.Descriptor instead.
 func (*BalancerZone) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{8}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *BalancerZone) GetName() string {
@@ -798,7 +879,7 @@ type PageZone struct {
 
 func (x *PageZone) Reset() {
 	*x = PageZone{}
-	mi := &file_infraops_v2_service_proto_msgTypes[9]
+	mi := &file_infraops_v2_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -810,7 +891,7 @@ func (x *PageZone) String() string {
 func (*PageZone) ProtoMessage() {}
 
 func (x *PageZone) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[9]
+	mi := &file_infraops_v2_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -823,7 +904,7 @@ func (x *PageZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PageZone.ProtoReflect.Descriptor instead.
 func (*PageZone) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{9}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *PageZone) GetName() string {
@@ -862,7 +943,7 @@ type BucketZone struct {
 
 func (x *BucketZone) Reset() {
 	*x = BucketZone{}
-	mi := &file_infraops_v2_service_proto_msgTypes[10]
+	mi := &file_infraops_v2_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -874,7 +955,7 @@ func (x *BucketZone) String() string {
 func (*BucketZone) ProtoMessage() {}
 
 func (x *BucketZone) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[10]
+	mi := &file_infraops_v2_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -887,7 +968,7 @@ func (x *BucketZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BucketZone.ProtoReflect.Descriptor instead.
 func (*BucketZone) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{10}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *BucketZone) GetId() string {
@@ -921,7 +1002,7 @@ type Bucket struct {
 
 func (x *Bucket) Reset() {
 	*x = Bucket{}
-	mi := &file_infraops_v2_service_proto_msgTypes[11]
+	mi := &file_infraops_v2_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -933,7 +1014,7 @@ func (x *Bucket) String() string {
 func (*Bucket) ProtoMessage() {}
 
 func (x *Bucket) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[11]
+	mi := &file_infraops_v2_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -946,7 +1027,7 @@ func (x *Bucket) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Bucket.ProtoReflect.Descriptor instead.
 func (*Bucket) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{11}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Bucket) GetName() string {
@@ -987,7 +1068,7 @@ type Cloudflare struct {
 
 func (x *Cloudflare) Reset() {
 	*x = Cloudflare{}
-	mi := &file_infraops_v2_service_proto_msgTypes[12]
+	mi := &file_infraops_v2_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -999,7 +1080,7 @@ func (x *Cloudflare) String() string {
 func (*Cloudflare) ProtoMessage() {}
 
 func (x *Cloudflare) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[12]
+	mi := &file_infraops_v2_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1012,7 +1093,7 @@ func (x *Cloudflare) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cloudflare.ProtoReflect.Descriptor instead.
 func (*Cloudflare) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{12}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *Cloudflare) GetVersion() string {
@@ -1069,7 +1150,7 @@ type Cluster struct {
 
 func (x *Cluster) Reset() {
 	*x = Cluster{}
-	mi := &file_infraops_v2_service_proto_msgTypes[13]
+	mi := &file_infraops_v2_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1081,7 +1162,7 @@ func (x *Cluster) String() string {
 func (*Cluster) ProtoMessage() {}
 
 func (x *Cluster) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[13]
+	mi := &file_infraops_v2_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1094,7 +1175,7 @@ func (x *Cluster) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cluster.ProtoReflect.Descriptor instead.
 func (*Cluster) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{13}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Cluster) GetName() string {
@@ -1131,7 +1212,7 @@ type DigitalOcean struct {
 
 func (x *DigitalOcean) Reset() {
 	*x = DigitalOcean{}
-	mi := &file_infraops_v2_service_proto_msgTypes[14]
+	mi := &file_infraops_v2_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1143,7 +1224,7 @@ func (x *DigitalOcean) String() string {
 func (*DigitalOcean) ProtoMessage() {}
 
 func (x *DigitalOcean) ProtoReflect() protoreflect.Message {
-	mi := &file_infraops_v2_service_proto_msgTypes[14]
+	mi := &file_infraops_v2_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1156,7 +1237,7 @@ func (x *DigitalOcean) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DigitalOcean.ProtoReflect.Descriptor instead.
 func (*DigitalOcean) Descriptor() ([]byte, []int) {
-	return file_infraops_v2_service_proto_rawDescGZIP(), []int{14}
+	return file_infraops_v2_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DigitalOcean) GetVersion() string {
@@ -1180,7 +1261,13 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x19infraops/v2/service.proto\x12\vinfraops.v2\"2\n" +
 	"\x06EnvVar\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\x97\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"d\n" +
+	"\aStorage\x12\x1a\n" +
+	"\bcapacity\x18\x01 \x01(\tR\bcapacity\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\x12\x1d\n" +
+	"\aprofile\x18\x03 \x01(\tH\x00R\aprofile\x88\x01\x01B\n" +
+	"\n" +
+	"\b_profile\"\xc7\x02\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n" +
@@ -1192,7 +1279,8 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\breplicas\x18\b \x01(\x05R\breplicas\x12\x18\n" +
 	"\asecrets\x18\t \x03(\tR\asecrets\x12.\n" +
 	"\benv_vars\x18\n" +
-	" \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\"d\n" +
+	" \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12.\n" +
+	"\astorage\x18\v \x01(\v2\x14.infraops.v2.StorageR\astorage\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +
@@ -1273,41 +1361,43 @@ func file_infraops_v2_service_proto_rawDescGZIP() []byte {
 	return file_infraops_v2_service_proto_rawDescData
 }
 
-var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_infraops_v2_service_proto_goTypes = []any{
 	(*EnvVar)(nil),        // 0: infraops.v2.EnvVar
-	(*Application)(nil),   // 1: infraops.v2.Application
-	(*Kubernetes)(nil),    // 2: infraops.v2.Kubernetes
-	(*Collaborators)(nil), // 3: infraops.v2.Collaborators
-	(*Template)(nil),      // 4: infraops.v2.Template
-	(*Pages)(nil),         // 5: infraops.v2.Pages
-	(*Repository)(nil),    // 6: infraops.v2.Repository
-	(*Github)(nil),        // 7: infraops.v2.Github
-	(*BalancerZone)(nil),  // 8: infraops.v2.BalancerZone
-	(*PageZone)(nil),      // 9: infraops.v2.PageZone
-	(*BucketZone)(nil),    // 10: infraops.v2.BucketZone
-	(*Bucket)(nil),        // 11: infraops.v2.Bucket
-	(*Cloudflare)(nil),    // 12: infraops.v2.Cloudflare
-	(*Cluster)(nil),       // 13: infraops.v2.Cluster
-	(*DigitalOcean)(nil),  // 14: infraops.v2.DigitalOcean
+	(*Storage)(nil),       // 1: infraops.v2.Storage
+	(*Application)(nil),   // 2: infraops.v2.Application
+	(*Kubernetes)(nil),    // 3: infraops.v2.Kubernetes
+	(*Collaborators)(nil), // 4: infraops.v2.Collaborators
+	(*Template)(nil),      // 5: infraops.v2.Template
+	(*Pages)(nil),         // 6: infraops.v2.Pages
+	(*Repository)(nil),    // 7: infraops.v2.Repository
+	(*Github)(nil),        // 8: infraops.v2.Github
+	(*BalancerZone)(nil),  // 9: infraops.v2.BalancerZone
+	(*PageZone)(nil),      // 10: infraops.v2.PageZone
+	(*BucketZone)(nil),    // 11: infraops.v2.BucketZone
+	(*Bucket)(nil),        // 12: infraops.v2.Bucket
+	(*Cloudflare)(nil),    // 13: infraops.v2.Cloudflare
+	(*Cluster)(nil),       // 14: infraops.v2.Cluster
+	(*DigitalOcean)(nil),  // 15: infraops.v2.DigitalOcean
 }
 var file_infraops_v2_service_proto_depIdxs = []int32{
 	0,  // 0: infraops.v2.Application.env_vars:type_name -> infraops.v2.EnvVar
-	1,  // 1: infraops.v2.Kubernetes.applications:type_name -> infraops.v2.Application
-	3,  // 2: infraops.v2.Repository.collaborators:type_name -> infraops.v2.Collaborators
-	4,  // 3: infraops.v2.Repository.template:type_name -> infraops.v2.Template
-	5,  // 4: infraops.v2.Repository.pages:type_name -> infraops.v2.Pages
-	6,  // 5: infraops.v2.Github.repositories:type_name -> infraops.v2.Repository
-	10, // 6: infraops.v2.Bucket.zone:type_name -> infraops.v2.BucketZone
-	8,  // 7: infraops.v2.Cloudflare.balancer_zones:type_name -> infraops.v2.BalancerZone
-	9,  // 8: infraops.v2.Cloudflare.page_zones:type_name -> infraops.v2.PageZone
-	11, // 9: infraops.v2.Cloudflare.buckets:type_name -> infraops.v2.Bucket
-	13, // 10: infraops.v2.DigitalOcean.clusters:type_name -> infraops.v2.Cluster
-	11, // [11:11] is the sub-list for method output_type
-	11, // [11:11] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	1,  // 1: infraops.v2.Application.storage:type_name -> infraops.v2.Storage
+	2,  // 2: infraops.v2.Kubernetes.applications:type_name -> infraops.v2.Application
+	4,  // 3: infraops.v2.Repository.collaborators:type_name -> infraops.v2.Collaborators
+	5,  // 4: infraops.v2.Repository.template:type_name -> infraops.v2.Template
+	6,  // 5: infraops.v2.Repository.pages:type_name -> infraops.v2.Pages
+	7,  // 6: infraops.v2.Github.repositories:type_name -> infraops.v2.Repository
+	11, // 7: infraops.v2.Bucket.zone:type_name -> infraops.v2.BucketZone
+	9,  // 8: infraops.v2.Cloudflare.balancer_zones:type_name -> infraops.v2.BalancerZone
+	10, // 9: infraops.v2.Cloudflare.page_zones:type_name -> infraops.v2.PageZone
+	12, // 10: infraops.v2.Cloudflare.buckets:type_name -> infraops.v2.Bucket
+	14, // 11: infraops.v2.DigitalOcean.clusters:type_name -> infraops.v2.Cluster
+	12, // [12:12] is the sub-list for method output_type
+	12, // [12:12] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_infraops_v2_service_proto_init() }
@@ -1315,14 +1405,15 @@ func file_infraops_v2_service_proto_init() {
 	if File_infraops_v2_service_proto != nil {
 		return
 	}
-	file_infraops_v2_service_proto_msgTypes[11].OneofWrappers = []any{}
+	file_infraops_v2_service_proto_msgTypes[1].OneofWrappers = []any{}
+	file_infraops_v2_service_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_infraops_v2_service_proto_rawDesc), len(file_infraops_v2_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

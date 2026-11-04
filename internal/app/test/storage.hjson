@@ -1,0 +1,19 @@
+{
+  version: "2.0"
+  applications: [
+    {
+      name: test
+      namespace: test
+      kind: api
+      domain: test.com
+      version: 1.0.0
+      replicas: 1
+      secrets: ["database"]
+      storage: {
+        capacity: 1Gi
+        path: "/data"
+        profile: example-csi
+      }
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 package app_test
 
 import (
+	"os"
 	"testing"
 
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
@@ -17,6 +18,7 @@ const (
 	ingressResourceType        = "kubernetes:networking.k8s.io/v1:Ingress"
 	networkPolicyResourceType  = "kubernetes:networking.k8s.io/v1:NetworkPolicy"
 	pdbResourceType            = "kubernetes:policy/v1:PodDisruptionBudget"
+	pvcResourceType            = "kubernetes:core/v1:PersistentVolumeClaim"
 	serviceAccountResourceType = "kubernetes:core/v1:ServiceAccount"
 	serviceResourceType        = "kubernetes:core/v1:Service"
 )
@@ -111,6 +113,7 @@ func TestApplicationReturnsMissingConfigError(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := appWithResources()
 	application.Namespace = "missing-config-fixture"
+	application.Storage = &app.Storage{Capacity: "1Gi", Path: "/data"}
 
 	run := func(ctx *pulumi.Context) error {
 		return app.CreateApplication(ctx, application)
@@ -120,6 +123,7 @@ func TestApplicationReturnsMissingConfigError(t *testing.T) {
 	require.Len(t, stub.Resources(serviceAccountResourceType), 1)
 	require.Len(t, stub.Resources(networkPolicyResourceType), 1)
 	require.Empty(t, stub.Resources(configMapResourceType))
+	require.Empty(t, stub.Resources(pvcResourceType), "missing application config must not allocate persistent storage")
 }
 
 func TestConvertedApplicationDeploymentInputs(t *testing.T) {
@@ -247,6 +251,226 @@ func TestWorkerApplicationOmitsServiceAndIngress(t *testing.T) {
 	require.NotEmpty(t, stub.Resources(deploymentResourceType))
 	require.Empty(t, stub.Resources(serviceResourceType))
 	require.Empty(t, stub.Resources(ingressResourceType))
+}
+
+func TestApplicationPersistentStorage(t *testing.T) {
+	for _, tt := range []struct {
+		storage *v2.Storage
+		name    string
+	}{
+		{name: "without storage"},
+		{name: "cluster default class", storage: &v2.Storage{Capacity: "1Gi", Path: "/data"}},
+		{
+			name: "no class",
+			storage: &v2.Storage{
+				Capacity: "2Gi", Path: "/var/lib/test", Profile: new(""),
+			},
+		},
+		{
+			name: "named class",
+			storage: &v2.Storage{
+				Capacity: "1Gi", Path: "/data", Profile: new("example-csi"),
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			configuration, err := app.ReadConfiguration("test/storage.hjson")
+			require.NoError(t, err)
+			configured := configuration.GetApplications()[0]
+			configured.Storage = tt.storage
+			// Canonical config rewrites must retain the distinction between absent and empty class.
+			file := t.TempDir() + "/apps.hjson"
+			require.NoError(t, os.WriteFile(file, nil, 0o600))
+			require.NoError(t, app.WriteConfiguration(file, configuration))
+			configuration, err = app.ReadConfiguration(file)
+			require.NoError(t, err)
+			configured = configuration.GetApplications()[0]
+			application := app.ConvertApplication(configured)
+			stub := &test.ResourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, application)
+			}
+			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+
+			deployment := resourceOf(t, stub, deploymentResourceType)
+			assertApplicationVolumes(t, deployment, tt.storage)
+			assertApplicationSecurity(t, deployment)
+
+			if tt.storage == nil {
+				require.Nil(t, application.Storage)
+				require.Empty(t, stub.Resources(pvcResourceType))
+				return
+			}
+			assertStorageClaim(t, resourceOf(t, stub, pvcResourceType), tt.storage)
+		})
+	}
+}
+
+func TestStorageIdentitySurvivesDeploymentChanges(t *testing.T) {
+	configuration, err := app.ReadConfiguration("test/storage.hjson")
+	require.NoError(t, err)
+	configured := configuration.GetApplications()[0]
+	for _, kind := range []string{"api", "worker"} {
+		t.Run(kind, func(t *testing.T) {
+			configured.Kind = kind
+			for _, version := range []string{"1.0.0", "2.0.0"} {
+				t.Run(version, func(t *testing.T) {
+					configured.Version = version
+					configured.Replicas++
+					configured.Id = version
+					stub := &test.ResourceStub{}
+					run := func(ctx *pulumi.Context) error {
+						return app.CreateApplication(ctx, app.ConvertApplication(configured))
+					}
+					require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+					claim := resourceOf(t, stub, pvcResourceType)
+					metadata := test.Property(t, claim, "metadata").ObjectValue()
+					require.Equal(t, "test-data", test.Property(t, metadata, "name").StringValue())
+					volumes := test.Property(t, podSpec(resourceOf(t, stub, deploymentResourceType)), "volumes").ArrayValue()
+					source := test.Property(t, volumes[2].ObjectValue(), "persistentVolumeClaim").ObjectValue()
+					require.Equal(t, "test-data", test.Property(t, source, "claimName").StringValue())
+				})
+			}
+		})
+	}
+}
+
+func TestApplicationProtectsStorage(t *testing.T) {
+	configuration, err := app.ReadConfiguration("test/storage.hjson")
+	require.NoError(t, err)
+	stub := &test.ResourceStub{}
+	var options *pulumi.ResourceOptions
+	var name string
+	run := func(ctx *pulumi.Context) error {
+		err := ctx.RegisterStackTransformation(func(args *pulumi.ResourceTransformationArgs) *pulumi.ResourceTransformationResult {
+			if args.Type == pvcResourceType {
+				name = args.Name
+				options, _ = pulumi.NewResourceOptions(args.Opts...)
+			}
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+		return app.CreateApplication(ctx, app.ConvertApplication(configuration.GetApplications()[0]))
+	}
+	require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+	require.Equal(t, "test-data", name)
+	require.NotNil(t, options)
+	require.True(t, options.Protect, "data claims must require explicit unprotection before deletion or replacement")
+}
+
+func TestStorageReturnsResourceErrors(t *testing.T) {
+	for _, token := range []string{pvcResourceType, deploymentResourceType} {
+		t.Run(token, func(t *testing.T) {
+			configuration, err := app.ReadConfiguration("test/storage.hjson")
+			require.NoError(t, err)
+			stub := &test.ResourceStub{}
+			stub.FailResource(token)
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, app.ConvertApplication(configuration.GetApplications()[0]))
+			}
+			require.ErrorContains(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)), test.ErrResource.Error())
+			require.NotEmpty(t, stub.Resources(token))
+		})
+	}
+}
+
+func TestApplicationRejectsIncompleteStorage(t *testing.T) {
+	for _, tt := range []struct {
+		name     string
+		capacity string
+		mount    string
+		message  string
+	}{
+		{name: "missing capacity", mount: "/data", message: "storage capacity is required"},
+		{name: "missing mount", capacity: "1Gi", message: "storage path"},
+		{name: "relative mount", capacity: "1Gi", mount: "data", message: "storage path"},
+		{name: "root mount", capacity: "1Gi", mount: "/", message: "storage path"},
+		{name: "unclean mount", capacity: "1Gi", mount: "/data/../etc", message: "storage path"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			configuration, err := app.ReadConfiguration("test/storage.hjson")
+			require.NoError(t, err)
+			configured := configuration.GetApplications()[0]
+			configured.Storage.Capacity = tt.capacity
+			configured.Storage.Path = tt.mount
+			stub := &test.ResourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, app.ConvertApplication(configured))
+			}
+			require.ErrorContains(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)), tt.message)
+			require.Empty(t, stub.Resources(pvcResourceType))
+			require.Empty(t, stub.Resources(deploymentResourceType))
+		})
+	}
+}
+
+func assertStorageClaim(t *testing.T, claim resource.PropertyMap, storage *v2.Storage) {
+	t.Helper()
+
+	metadata := test.Property(t, claim, "metadata").ObjectValue()
+	require.Equal(t, "test-data", test.Property(t, metadata, "name").StringValue())
+	require.Equal(t, "test", test.Property(t, metadata, "namespace").StringValue())
+	spec := test.Property(t, claim, "spec").ObjectValue()
+	require.Equal(t, []string{"ReadWriteOnce"}, test.StringValues(test.Property(t, spec, "accessModes").ArrayValue()))
+	require.Equal(t, "Filesystem", test.Property(t, spec, "volumeMode").StringValue())
+	requests := test.Property(t, spec, "resources").ObjectValue()["requests"].ObjectValue()
+	require.Equal(t, storage.GetCapacity(), test.Property(t, requests, "storage").StringValue())
+	if storage.Profile == nil {
+		require.NotContains(t, spec, resource.PropertyKey("storageClassName"))
+	} else {
+		require.Equal(t, storage.GetProfile(), test.Property(t, spec, "storageClassName").StringValue())
+	}
+}
+
+func assertApplicationVolumes(t *testing.T, deployment resource.PropertyMap, storage *v2.Storage) {
+	t.Helper()
+
+	volumes := test.Property(t, podSpec(deployment), "volumes").ArrayValue()
+	mounts := test.Property(t, container(deployment), "volumeMounts").ArrayValue()
+	count := 2
+	if storage != nil {
+		count++
+	}
+	require.Len(t, volumes, count, "only opted-in apps add a data volume")
+	require.Len(t, mounts, count, "only opted-in apps add a data mount")
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"name": "test", "configMap": map[string]any{"name": "test"},
+	}), volumes[0].ObjectValue())
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"name": "database-secret", "secret": map[string]any{"secretName": "database-secret"},
+	}), volumes[1].ObjectValue())
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"name": "test", "mountPath": "/etc/test/test.yaml", "subPath": "test.yaml",
+	}), mounts[0].ObjectValue())
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"name": "database-secret", "mountPath": "/etc/secrets/database", "readOnly": true,
+	}), mounts[1].ObjectValue())
+	if storage != nil {
+		require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+			"name": "test-data", "persistentVolumeClaim": map[string]any{"claimName": "test-data", "readOnly": false},
+		}), volumes[2].ObjectValue())
+		require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+			"name": "test-data", "mountPath": storage.GetPath(), "readOnly": false,
+		}), mounts[2].ObjectValue())
+	}
+}
+
+func assertApplicationSecurity(t *testing.T, deployment resource.PropertyMap) {
+	t.Helper()
+
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"runAsUser": 10001, "runAsGroup": 10001, "runAsNonRoot": true, "fsGroup": 2000,
+	}), test.Property(t, podSpec(deployment), "securityContext").ObjectValue())
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"readOnlyRootFilesystem": true, "allowPrivilegeEscalation": false,
+		"capabilities":   map[string]any{"drop": []any{"ALL"}},
+		"seccompProfile": map[string]any{"type": "RuntimeDefault"},
+	}), test.Property(t, container(deployment), "securityContext").ObjectValue())
+	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
+		"rollingUpdate": map[string]any{"maxSurge": 1, "maxUnavailable": 1},
+	}), test.Property(t, deploymentSpec(deployment), "strategy").ObjectValue())
 }
 
 func appWithResources() *app.App {
