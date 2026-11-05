@@ -10,6 +10,10 @@ automerge:
   dependabot:
     exclude_repositories:
       - alexfalkowski/docker
+cache:
+  kind: ttlcache
+  max_entries: 1024
+  max_size: 4MB
 cleanup:
   inactive_after: 720h
   interval: 24h
