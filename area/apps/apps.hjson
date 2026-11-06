@@ -7,7 +7,7 @@
       name: abgleich
       namespace: lean
       domain: lean-thoughts.com
-      version: 0.59.0
+      version: 0.60.0
       resource: small
       replicas: 1
       secrets: [
