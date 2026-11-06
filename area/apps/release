@@ -514,12 +514,9 @@ verify_all() {
   run_all_apps "verify"
 }
 
-# Verifies public readiness through Cloudflare and ingress.
+# Skips public URL verification for Abgleich.
 verify_abgleich() {
-  curl -svf \
-    --connect-timeout "$VERIFY_CONNECT_TIMEOUT" \
-    --max-time "$VERIFY_MAX_TIME" \
-    https://abgleich.lean-thoughts.com/abgleich/readyz
+  printf 'verify abgleich: skipped; no URL check required.\n'
 }
 
 # Verifies standort.

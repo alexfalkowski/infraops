@@ -319,10 +319,10 @@ Git revision. Failed updates and missing, invalid, or stale selections cause che
 | Deployment created or images changed | Include image scans; config-only updates skip image scans |
 | Unknown app or namespace | Fail selection until helper support is added |
 
-Verification uses bounded, fail-fast `curl` requests. Load checks use Vegeta and require every request
-to succeed; Abgleich has no load scenario and is skipped. Linting uses kube-score and Kubescape against
-the live cluster. Install these tools and `jq` before running the checks. Load results are ignored files
-under `area/apps/lean/*.bin`.
+Verification uses bounded, fail-fast `curl` requests; Abgleich skips public URL verification in every
+verification mode. Load checks use Vegeta and require every request to succeed; Abgleich has no load
+scenario and is skipped. Linting uses kube-score and Kubescape against the live cluster. Install these
+tools and `jq` before running the checks. Load results are ignored files under `area/apps/lean/*.bin`.
 
 To check an existing deployment independently of the last update, use the explicit `*-all` targets:
 
