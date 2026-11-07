@@ -23,7 +23,7 @@ update-helm-repos:
 
 # Install CircleCI release agent (requires CIRCLECI_K8S_TOKEN).
 install-circleci:
-	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --set rbac.clusterRoles=false --version 1.8.1 --wait --timeout 5m
+	@helm upgrade --install circleci-release circleci/circleci-release-agent --set tokenSecret.token=$(CIRCLECI_K8S_TOKEN) --create-namespace --namespace circleci --set managedNamespaces="{lean}" --set rbac.clusterRoles=false --version 1.8.2 -f circleci/values.yaml --wait --timeout 5m
 
 # Install metrics server.
 install-metrics-server:

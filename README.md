@@ -357,6 +357,8 @@ make -C area/k8s setup
 ```
 
 The default setup requires `CIRCLECI_K8S_TOKEN` for the release agent and passes it directly to Helm.
+Configure the release agent's memory request and limit in [CircleCI values](area/k8s/circleci/values.yaml).
+Apply changes with `make -C area/k8s install-circleci`.
 Use `make -C area/k8s pods` to inspect cluster pods.
 
 > [!CAUTION]
