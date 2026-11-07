@@ -4,7 +4,7 @@
     {
       name: lean-thoughts
       domain: lean-thoughts.com
-      ipv4: 129.212.171.25
+      ipv4: 157.245.22.25
       record_names: [
         abgleich
         standort

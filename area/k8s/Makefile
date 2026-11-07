@@ -6,14 +6,14 @@ save-config:
 
 # Delete add-on namespaces.
 delete:
-	@kubectl delete namespaces nginx-ingress circleci metrics-server
+	@kubectl delete namespaces contour circleci metrics-server
 
 # Set up Helm repos and install add-ons (requires CIRCLECI_K8S_TOKEN).
 setup: add-helm-repos update-helm-repos install-helm
 
 # Add Helm repos.
 add-helm-repos:
-	@helm repo add nginx https://kubernetes.github.io/ingress-nginx
+	@helm repo add contour https://projectcontour.github.io/helm-charts/
 	@helm repo add circleci https://circleci-public.github.io/cci-k8s-release-agent
 	@helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 
@@ -29,12 +29,24 @@ install-circleci:
 install-metrics-server:
 	@helm upgrade --install metrics-server-release metrics-server/metrics-server --create-namespace --namespace metrics-server --version 3.14.0 --wait --timeout 5m
 
-# Install nginx ingress controller.
-install-nginx-ingress:
-	@helm upgrade --install nginx-ingress-release nginx/ingress-nginx --namespace nginx-ingress --create-namespace --version 4.15.1 -f nginx/values.yaml --wait --timeout 5m
+# Create the shared self-signed ingress certificate in the existing lean namespace.
+create-ingress-cert:
+	@./contour/certificate
+
+# Install Contour and Envoy.
+install-contour:
+	@helm upgrade --install contour-release contour/contour --namespace contour --create-namespace --version 0.9.0 -f contour/values.yaml --wait --timeout 5m
+
+# Render the pinned Contour chart without changing the cluster.
+render-contour:
+	@helm template contour-release contour/contour --namespace contour --version 0.9.0 -f contour/values.yaml
+
+# Show Envoy's public load-balancer address for Cloudflare DNS.
+contour-address:
+	@kubectl get service contour-release-envoy --namespace contour -o wide
 
 # Install Helm add-ons.
-install-helm: install-circleci install-metrics-server install-nginx-ingress
+install-helm: install-circleci install-metrics-server install-contour
 
 # List all pods.
 pods:

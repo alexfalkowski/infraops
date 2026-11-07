@@ -42,6 +42,14 @@ func TestApp(t *testing.T) {
 			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
 			require.Equal(t, portNumbers(app.Ports(tt.app)), networkPolicyIngressPorts(t, resourceOf(t, stub, networkPolicyResourceType)))
 			require.Equal(t, portProtocols(app.Ports(tt.app)), servicePortAppProtocols(t, resourceOf(t, stub, serviceResourceType)))
+			ingress := resourceOf(t, stub, ingressResourceType)
+			spec := test.Property(t, ingress, "spec").ObjectValue()
+			require.Equal(t, "contour", test.Property(t, spec, "ingressClassName").StringValue())
+			tls := test.Property(t, spec, "tls").ArrayValue()
+			require.Len(t, tls, 1)
+			require.Equal(t, "ingress-tls", test.Property(t, tls[0].ObjectValue(), "secretName").StringValue())
+			hosts := test.StringValues(test.Property(t, tls[0].ObjectValue(), "hosts").ArrayValue())
+			require.Equal(t, []string{tt.app.Name + "." + tt.app.Domain}, hosts)
 		})
 	}
 

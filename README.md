@@ -21,7 +21,7 @@ For application features, runtime settings, and usage, see each application's ow
 | `cf` | Cloudflare zones, DNS, and R2 buckets | [cf.hjson](area/cf/cf.hjson) |
 | `do` | DigitalOcean VPC and Kubernetes cluster | [do.hjson](area/do/do.hjson) |
 | `gh` | GitHub repositories, settings, and branch protection | [gh.hjson](area/gh/gh.hjson) |
-| `k8s` | Cluster add-ons installed manually with Helm and kubectl | [Makefile](area/k8s/Makefile), [nginx values](area/k8s/nginx/values.yaml) |
+| `k8s` | Cluster add-ons installed manually with Helm and kubectl | [Makefile](area/k8s/Makefile), [Contour values](area/k8s/contour/values.yaml) |
 
 Each Pulumi area has its own `main.go`, `Pulumi.yaml`, and HJSON configuration under `area/<name>/`.
 Shared resource logic lives in `internal/`.
@@ -236,14 +236,22 @@ With `doctl` installed, save kubeconfig if needed, then create the app namespace
 ```bash
 make -C area/apps save-config
 make -C area/apps setup
+make -C area/k8s create-ingress-cert
 ```
+
+The certificate helper requires OpenSSL and creates `ingress-tls` in the existing `lean` namespace.
+It generates a self-signed wildcard certificate for `*.lean-thoughts.com`, valid for ten years,
+and deletes its temporary local certificate/key files on exit. OpenSSL progress is suppressed while
+errors remain visible. It fails if the Secret already exists;
+skip this step when reusing an existing certificate. Each namespace with public app Ingresses needs
+an `ingress-tls` TLS Secret covering its configured hostnames before the apps update.
 
 Create the Kubernetes Secrets required by each app before deployment. The apps program references
 existing `<secretName>-secret` objects; it does not create them. Listed secret volumes mount at
 `/etc/secrets/<secretName>`, while secret environment variables select individual keys.
 
 For a new public hostname, preview and update the Cloudflare area before the apps update so public
-readiness checks can resolve it. The [nginx Helm values](area/k8s/nginx/values.yaml) restrict load
+readiness checks can resolve it. The [Contour Helm values](area/k8s/contour/values.yaml) restrict load
 balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress.
 
 ### 🔐 Abgleich Secret
@@ -347,8 +355,8 @@ contacting infrastructure; selective checks still need a valid selection.
 
 ## ⚓ Cluster Add-ons
 
-[area/k8s](area/k8s/Makefile) installs nginx ingress, the CircleCI release agent, and metrics-server
-using Helm and kubectl. Run this manually from an operator workstation after creating the cluster.
+[area/k8s](area/k8s/Makefile) installs Contour with Envoy in namespace `contour`, the CircleCI release
+agent, and metrics-server using Helm and kubectl. Run this manually from an operator workstation after creating the cluster.
 With `doctl` installed, save kubeconfig if needed and confirm the intended context before setup:
 
 ```bash
@@ -356,13 +364,60 @@ make -C area/k8s save-config
 make -C area/k8s setup
 ```
 
+Contour uses the existing Kubernetes `Ingress` API with ingress class `contour`; no Gateway API
+resources are required. The pinned [official chart](https://github.com/projectcontour/helm-charts)
+version `0.9.0` installs Contour `1.33.8` and Envoy `1.38.9`. The
+[compatibility matrix](https://projectcontour.io/resources/compatibility-matrix/) lists Kubernetes
+`1.37` as tested for this release. The chart also installs Contour's own CRDs.
+
+Cloudflare stays in `full` SSL mode: it connects over HTTPS to Envoy, which forwards HTTP to app
+port `8080`. App Ingresses reference the shared `ingress-tls` Secret described under **Prepare the
+Cluster**. A self-signed certificate works with `full` mode;
+`full (strict)` requires a trusted certificate, such as Cloudflare Origin CA. Contour trusts one
+forwarded-header hop for Cloudflare behind the TCP load balancer. Review that count if another HTTP
+proxy is added. Apply chart changes with `make -C area/k8s install-contour`.
+
+The [Contour values](area/k8s/contour/values.yaml) explicitly set CPU, memory, and ephemeral-storage
+requests and limits for Contour, Envoy, and the shutdown manager. These initial budgets preserve the
+chart's original `nano` allocations; review them under real traffic before changing capacity.
+
 The default setup requires `CIRCLECI_K8S_TOKEN` for the release agent and passes it directly to Helm.
 Configure the release agent's memory request and limit in [CircleCI values](area/k8s/circleci/values.yaml).
 Apply changes with `make -C area/k8s install-circleci`.
 Use `make -C area/k8s pods` to inspect cluster pods.
 
 > [!CAUTION]
-> `make -C area/k8s delete` deletes the `nginx-ingress`, `circleci`, and `metrics-server` namespaces.
+> `make -C area/k8s delete` deletes the `contour`, `circleci`, and `metrics-server` namespaces.
+> It leaves the app namespace and its `ingress-tls` Secret intact.
+
+### 📦 Move an existing Contour installation
+
+An earlier installation used namespace `projectcontour`. Moving it to `contour` requires a
+maintenance window: uninstall the old Helm release before installing the new one so its
+cluster-scoped resources can be recreated with the new release ownership. The uninstall also
+removes the old load balancer and the chart-managed Contour CRDs; export any custom Contour
+resources before using this procedure. This repo routes apps with standard Ingress objects.
+
+```bash
+helm uninstall contour-release --namespace projectcontour --wait --timeout 5m
+kubectl delete namespace projectcontour
+make -C area/k8s install-contour
+make -C area/k8s contour-address
+```
+
+Wait for `EXTERNAL-IP`, then set `balancer_zones[0].ipv4` in [cf.hjson](area/cf/cf.hjson) to that
+address. Apply the DNS change and verify the public routes:
+
+```bash
+make area=cf pulumi-preview
+make area=cf pulumi-update
+make -C area/apps verify-all
+```
+
+The existing app Ingresses still use class `contour`, and `lean/ingress-tls` is retained. No app
+update or new certificate is needed for this namespace move. Traffic is unavailable from uninstall
+until the replacement is ready and Cloudflare points to its address. `verify-all` skips Abgleich;
+also check its public readiness endpoint at `https://abgleich.lean-thoughts.com/abgleich/readyz`.
 
 ## 🧾 Configuration Tools
 
