@@ -42,13 +42,20 @@ func networkPolicyPorts(app *App) nv1.NetworkPolicyPortArray {
 }
 
 func createIngress(ctx *pulumi.Context, app *App) error {
+	host := app.Name + "." + app.Domain
 	args := &nv1.IngressArgs{
 		Metadata: metadata(app),
 		Spec: nv1.IngressSpecArgs{
-			IngressClassName: pulumi.String("nginx"),
+			IngressClassName: pulumi.String("contour"),
+			Tls: nv1.IngressTLSArray{
+				nv1.IngressTLSArgs{
+					Hosts:      pulumi.StringArray{pulumi.String(host)},
+					SecretName: pulumi.String("ingress-tls"),
+				},
+			},
 			Rules: nv1.IngressRuleArray{
 				nv1.IngressRuleArgs{
-					Host: pulumi.String(app.Name + "." + app.Domain),
+					Host: pulumi.String(host),
 					Http: httpIngressRule(app),
 				},
 			},

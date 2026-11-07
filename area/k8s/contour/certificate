@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Create the origin certificate required by Cloudflare Full SSL without retaining local key files.
+
+set -eo pipefail
+
+certificate_dir="$(mktemp -d)"
+trap 'rm -rf "$certificate_dir"' EXIT
+
+if ! openssl req -x509 -nodes -newkey rsa:2048 -days 3650 \
+  -subj '/CN=*.lean-thoughts.com' \
+  -addext 'subjectAltName=DNS:*.lean-thoughts.com' \
+  -keyout "$certificate_dir/tls.key" -out "$certificate_dir/tls.crt" \
+  2>"$certificate_dir/openssl.log"; then
+  cat "$certificate_dir/openssl.log" >&2
+  exit 1
+fi
+
+kubectl create secret tls ingress-tls --namespace lean \
+  --cert="$certificate_dir/tls.crt" --key="$certificate_dir/tls.key"
