@@ -11,18 +11,18 @@ kube-score:
 kube-score-all:
 	@./release kube-score-all
 
-# Run kubescape.
+# Check live configuration for apps changed by the last successful update.
 kubescape:
 	@./release kubescape
 
-# Run kubescape for all apps.
+# Check live configuration for all apps.
 kubescape-all:
 	@./release kubescape-all
 
 # Lint apps changed by the last successful update.
 lint: kube-score kubescape
 
-# Lint the namespace and scan every supported app image.
+# Lint live configuration throughout the namespace.
 lint-all: kube-score-all kubescape-all
 
 # Save kubeconfig.

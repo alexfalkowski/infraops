@@ -283,6 +283,7 @@ is_action() {
 run_app_action() {
   local action
   local app
+  local manifest_dir
 
   action="$1"
   app="$2"
@@ -312,7 +313,13 @@ run_app_action() {
       "$SCRIPT_DIR/kube-score" lean "$app"
       ;;
     kubescape)
-      kubescape scan workload "Deployment/$app" --namespace lean
+      (
+        manifest_dir="$(mktemp -d)"
+        trap 'rm -rf -- "$manifest_dir"' EXIT
+        "$SCRIPT_DIR/manifests" lean "$app" > "$manifest_dir/manifests.yaml"
+        # The pinned bare scan treats '-' as a path; workload scans always include images.
+        KS_SKIP_UPDATE_CHECK=true kubescape scan --scan-images=false --host-scan=false "$manifest_dir/manifests.yaml"
+      )
       ;;
     images)
       scan_app_images "$app"
@@ -457,10 +464,9 @@ kubescape_all() {
   else
     make -C "$REPO_ROOT/$APP_MAKE_DIR" kubescape-lean
   fi
-  run_all_apps "images"
 }
 
-# Workload checks and image scans have different invalidation rules.
+# Image scans are explicit operator actions, separate from deployment lint.
 scan_app_images() {
   local app
   local image
@@ -472,12 +478,6 @@ scan_app_images() {
   while IFS= read -r image; do
     kubescape scan image "$image"
   done <<< "$images"
-}
-
-# Config-only updates reuse the image already scanned at its last release.
-kubescape_release_changes() {
-  run_update_changes "kubescape"
-  run_update_changes "images"
 }
 
 # Rolls out all apps.
@@ -589,7 +589,7 @@ case "${1:-}" in
     fi
     ;;
   kubescape)
-    kubescape_release_changes
+    run_update_changes "kubescape"
     ;;
   kubescape-all)
     kubescape_all
@@ -622,9 +622,6 @@ case "${1:-}" in
     action="${1%-*}"
     app="${1##*-}"
     run_app_action "$action" "$app"
-    if [[ "$action" == "kubescape" ]]; then
-      run_app_action "images" "$app"
-    fi
     ;;
   *)
     usage

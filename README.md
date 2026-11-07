@@ -324,13 +324,16 @@ Git revision. Failed updates and missing, invalid, or stale selections cause che
 | Shared or unlabelled resources change | Expand to supported apps and namespace-wide manifest scans |
 | App deleted | Exclude it from checks |
 | App scaled to zero | Lint it; skip verification and load |
-| Deployment created or images changed | Include image scans; config-only updates skip image scans |
+| Deployment created or images changed | Check live configuration; image scans remain explicit operator actions |
 | Unknown app or namespace | Fail selection until helper support is added |
 
 Verification uses bounded, fail-fast `curl` requests; Abgleich skips public URL verification in every
 verification mode. Load checks use Vegeta and require every request to succeed; Abgleich has no load
-scenario and is skipped. Linting uses kube-score and Kubescape against the live cluster. Install these
-tools and `jq` before running the checks. Load results are ignored files under `area/apps/lean/*.bin`.
+scenario and is skipped. Linting uses kube-score and Kubescape to check live configuration. Selected
+app manifests include related Services, Ingresses, NetworkPolicies, PodDisruptionBudgets, and shared
+policy context. Deployment lint skips image vulnerability scans, host scans, and Kubescape's CLI
+update check. Install these tools and `jq` before running the checks. Load results are ignored files
+under `area/apps/lean/*.bin`.
 
 To check an existing deployment independently of the last update, use the explicit `*-all` targets:
 
@@ -340,8 +343,11 @@ make -C area/apps load-all
 make -C area/apps lint-all
 ```
 
-`lint-all` scans namespace manifests and every supported app's images, including unchanged images.
+`lint-all` checks live configuration throughout the namespace without image or host scans.
 Per-app commands are available through the helper, for example `cd area/apps && ./release verify-web`.
+Image vulnerability scans are opt-in: run `cd area/apps && ./release images` for images changed by the
+last successful update, `./release images-all` for every supported app, or `./release images-web` for
+one app.
 
 The manual `make -C area/apps rollout` uses the Git release diff: it restarts version-only changed apps,
 otherwise all supported apps. Set `APPS_RELEASE_BASE` and `APPS_RELEASE_HEAD` to override the default
