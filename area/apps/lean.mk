@@ -6,9 +6,9 @@ override export openai_api_key_file := $(value openai_api_key_file)
 kube-score-lean:
 	@./kube-score lean
 
-# Run kubescape for lean.
+# Check lean's live configuration without image or host scans.
 kubescape-lean:
-	@kubescape scan --include-namespaces lean
+	@KS_SKIP_UPDATE_CHECK=true kubescape scan --include-namespaces lean --scan-images=false --host-scan=false
 
 # Delete lean.
 delete-lean:
