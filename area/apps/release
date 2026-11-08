@@ -317,8 +317,8 @@ run_app_action() {
         manifest_dir="$(mktemp -d)"
         trap 'rm -rf -- "$manifest_dir"' EXIT
         "$SCRIPT_DIR/manifests" lean "$app" > "$manifest_dir/manifests.yaml"
-        # The pinned bare scan treats '-' as a path; workload scans always include images.
-        KS_SKIP_UPDATE_CHECK=true kubescape scan --scan-images=false --host-scan=false "$manifest_dir/manifests.yaml"
+        # Kubescape 4.0.17's default scan cannot load workloadscan from its cache fallback.
+        KS_SKIP_UPDATE_CHECK=true kubescape scan framework allcontrols --scan-images=false --host-scan=false "$manifest_dir/manifests.yaml"
       )
       ;;
     images)
