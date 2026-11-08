@@ -343,7 +343,8 @@ Git revision. Failed updates and missing, invalid, or stale selections cause che
 Verification uses bounded, fail-fast `curl` requests; Abgleich skips public URL verification in every
 verification mode. Load checks use Vegeta and require every request to succeed; Abgleich has no load
 scenario and is skipped. Linting uses kube-score and Kubescape's explicit `allcontrols` framework to
-check live configuration. This avoids the default scan's framework lookup failure when Kubescape
+check live configuration, with verbose Kubescape output for resource-level findings. This avoids
+the default scan's framework lookup failure when Kubescape
 4.0.17 falls back to cached policies. Selected app manifests include related Services, Ingresses,
 NetworkPolicies, PodDisruptionBudgets, and shared policy context. Deployment lint skips image
 vulnerability scans, host scans, and Kubescape's CLI update check. Install these tools and `jq` before
