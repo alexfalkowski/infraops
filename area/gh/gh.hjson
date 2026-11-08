@@ -439,14 +439,14 @@
       homepage_url: https://alexfalkowski.github.io/einblick
       visibility: public
       collaborators: {
-        enabled: false
+        enabled: true
       }
       template: {
         owner: alexfalkowski
         repository: go-service-template
       }
       pages: {
-        enabled: false
+        enabled: true
       }
       topics: [
         golang
