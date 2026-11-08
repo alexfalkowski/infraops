@@ -1,7 +1,7 @@
 include ../../bin/build/make/help.mak
 include lean.mk
 
-.PHONY: kube-score
+.PHONY: kube-score kubescape
 
 # Score apps changed by the last successful update.
 kube-score:

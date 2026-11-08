@@ -34,7 +34,7 @@ api-lint:
 
 # Lint repository shell workflow helpers.
 scripts-lint:
-	@shellcheck area/pulumi-update area/apps/release area/apps/manifests area/apps/kube-score area/apps/lean/abgleich area/k8s/contour/certificate
+	@shellcheck area/pulumi-update area/apps/release area/apps/manifests area/apps/kube-score area/apps/kubescape area/apps/lean/abgleich area/k8s/contour/certificate
 
 # Check the API for breaking changes.
 api-breaking:
