@@ -13,7 +13,7 @@ readonly REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 readonly UPDATE_SELECTION="$REPO_ROOT/$APP_MAKE_DIR/.release-selection.json"
 readonly VERIFY_CONNECT_TIMEOUT="5"
 readonly VERIFY_MAX_TIME="30"
-readonly -a APPS=(standort bezeichner web abgleich)
+readonly -a APPS=(standort bezeichner web abgleich einblick)
 
 # Prints command usage.
 usage() {
@@ -258,7 +258,7 @@ release_apps() {
 # Reports whether an app has release helper commands.
 is_app() {
   case "$1" in
-    abgleich | bezeichner | standort | web)
+    abgleich | bezeichner | einblick | standort | web)
       return 0
       ;;
     *)
@@ -298,8 +298,8 @@ run_app_action() {
     return 1
   fi
 
-  if [[ "$action" == "load" && "$app" == "abgleich" ]]; then
-    printf 'load abgleich: skipped; no load scenario.\n'
+  if [[ "$action" == "load" && ( "$app" == "abgleich" || "$app" == "einblick" ) ]]; then
+    printf 'load %s: skipped; no load scenario.\n' "$app"
     return
   fi
 
@@ -489,6 +489,10 @@ rollout_abgleich() {
   kubectl rollout restart deployment/abgleich -n lean
 }
 
+rollout_einblick() {
+  kubectl rollout restart deployment/einblick -n lean
+}
+
 # Rolls out standort.
 rollout_standort() {
   kubectl rollout restart deployment/standort -n lean
@@ -517,6 +521,14 @@ verify_all() {
 # Skips public URL verification for Abgleich.
 verify_abgleich() {
   printf 'verify abgleich: skipped; no URL check required.\n'
+}
+
+# Verifies Einblick readiness until telemetry workflows are implemented.
+verify_einblick() {
+  curl -svf \
+    --connect-timeout "$VERIFY_CONNECT_TIMEOUT" \
+    --max-time "$VERIFY_MAX_TIME" \
+    https://einblick.lean-thoughts.com/einblick/readyz
 }
 
 # Verifies standort.
