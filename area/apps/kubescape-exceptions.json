@@ -1,0 +1,23 @@
+[
+  {
+    "name": "lean-selinux",
+    "policyType": "postureExceptionPolicy",
+    "actions": ["disable"],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "namespace": "^lean$",
+          "kind": "^(Deployment|ReplicaSet|Pod)$"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "controlID": "C-0211",
+        "ruleName": "^set-seLinuxOptions$"
+      }
+    ],
+    "reason": "The lean DOKS nodes use AppArmor and do not load SELinux. Revisit this exception if node security modules change."
+  }
+]
