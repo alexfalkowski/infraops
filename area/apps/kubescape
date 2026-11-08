@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2155
 set -eo pipefail
 
 # Scans app manifests or live namespaces with shared deployment lint settings.
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Kubescape 4.0.17's default scan cannot load workloadscan from its cache fallback.
-KS_SKIP_UPDATE_CHECK=true kubescape scan framework allcontrols --verbose --scan-images=false --host-scan=false "$@"
+KS_SKIP_UPDATE_CHECK=true kubescape scan framework allcontrols --verbose --scan-images=false --host-scan=false \
+  --exceptions "$SCRIPT_DIR/kubescape-exceptions.json" "$@"

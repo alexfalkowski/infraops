@@ -353,6 +353,12 @@ vulnerability scans, host scans, and Kubescape's CLI update check. Install these
 running the checks. Kubescape requires GitHub policy downloads or a usable local policy cache.
 Load results are ignored files under `area/apps/lean/*.bin`.
 
+The checked-in [Kubescape exceptions](area/apps/kubescape-exceptions.json) mark only C-0211's
+`set-seLinuxOptions` rule as inapplicable to Deployments, ReplicaSets, and Pods in `lean`.
+The current DOKS nodes use AppArmor and do not load SELinux; the other C-0211 rules remain active.
+Revisit this exception if the node security modules change. The wrapper resolves the policy file
+relative to itself, so it also applies to per-app and namespace-wide scans.
+
 To check an existing deployment independently of the last update, use the explicit `*-all` targets:
 
 ```bash
