@@ -470,6 +470,7 @@ func assertApplicationSecurity(t *testing.T, deployment resource.PropertyMap) {
 
 	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
 		"runAsUser": 10001, "runAsGroup": 10001, "runAsNonRoot": true, "fsGroup": 2000,
+		"fsGroupChangePolicy": "Always",
 	}), test.Property(t, podSpec(deployment), "securityContext").ObjectValue())
 	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
 		"readOnlyRootFilesystem": true, "allowPrivilegeEscalation": false,

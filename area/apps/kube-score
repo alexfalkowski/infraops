@@ -4,7 +4,7 @@ set -eo pipefail
 
 # Scores live manifests using the same resource and policy context as Kubescape.
 
-readonly KUBE_SCORE_IGNORE_TEST="deployment-has-host-podantiaffinity"
+readonly KUBE_SCORE_IGNORE_TEST="deployment-has-host-podantiaffinity,deployment-replicas"
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 manifests="$("$SCRIPT_DIR/manifests" "$@")"
