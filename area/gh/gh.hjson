@@ -433,5 +433,37 @@
         ci/circleci: wait-all
       ]
     }
+    {
+      name: einblick
+      description: Einblick collects logs, metrics, and traces for go-service services with DuckDB queries and Parquet archives in Cloudflare R2.
+      homepage_url: https://alexfalkowski.github.io/einblick
+      visibility: public
+      collaborators: {
+        enabled: false
+      }
+      template: {
+        owner: alexfalkowski
+        repository: go-service-template
+      }
+      pages: {
+        enabled: false
+      }
+      topics: [
+        golang
+        opentelemetry
+        otlp
+        observability
+        logs
+        metrics
+        distributed-tracing
+        duckdb
+        parquet
+        cloudflare-r2
+        dashboard
+      ]
+      checks: [
+        ci/circleci: wait-all
+      ]
+    }
   ]
 }
