@@ -110,8 +110,8 @@ this illustrative Cloudflare configuration expires objects after seven days:
 }
 ```
 
-Use `24h` for a one-day testing example. These are examples, not an agreed einblick
-retention policy. Values use [Go duration syntax](https://pkg.go.dev/time#ParseDuration)
+Use `24h` for a one-day testing example. Installation-specific retention values live in
+[cf.hjson](area/cf/cf.hjson). Values use [Go duration syntax](https://pkg.go.dev/time#ParseDuration)
 and are parsed into `time.Duration`: use hours for days (`168h`, not `7d`). A configured
 value must be a positive whole number of seconds within that type's range; empty,
 malformed, overflowing, zero, negative and fractional-second values are rejected before
@@ -253,6 +253,19 @@ existing `<secretName>-secret` objects; it does not create them. Listed secret v
 For a new public hostname, preview and update the Cloudflare area before the apps update so public
 readiness checks can resolve it. The [Contour Helm values](area/k8s/contour/values.yaml) restrict load
 balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress.
+
+### 🔭 Einblick
+
+[Einblick's configuration](area/apps/lean/einblick.yaml) runs the service scaffold as one small replica
+at `https://einblick.lean-thoughts.com`, with only its HTTP transport enabled.
+Verification checks `/einblick/readyz`; load checks skip it
+until an application scenario is available. Telemetry ingestion, queries, persistent storage, and
+R2 credentials remain unwired until the service implements them.
+
+The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and a private `einblick`
+R2 bucket in `EEUR`, without a public custom domain. Objects expire after seven days (`168h`) by
+object age, with asynchronous deletion as described in [R2 Object Expiration](#-r2-object-expiration).
+Apply the Cloudflare area before the apps area using the preview and update commands above.
 
 ### 🔐 Abgleich Secret
 

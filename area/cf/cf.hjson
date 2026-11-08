@@ -7,6 +7,7 @@
       ipv4: 157.245.22.25
       record_names: [
         abgleich
+        einblick
         standort
         bezeichner
         web
@@ -18,6 +19,13 @@
       name: afalkowski
       domain: afalkowski.com
       host: alexfalkowski.github.io
+    }
+  ]
+  buckets: [
+    {
+      name: einblick
+      region: EEUR
+      expiration: 168h
     }
   ]
 }

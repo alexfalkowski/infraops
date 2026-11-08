@@ -25,6 +25,16 @@
       replicas: 2
     }
     {
+      id: fc0ad7d1-11fc-42f2-949a-6f4f2f3fcc61
+      kind: api
+      name: einblick
+      namespace: lean
+      domain: lean-thoughts.com
+      version: 0.2.0
+      resource: small
+      replicas: 1
+    }
+    {
       id: 28c679dc-5924-47e8-ac48-73cd842ba5cd
       kind: api
       name: standort
