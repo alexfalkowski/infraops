@@ -346,7 +346,9 @@ scenario and is skipped. Linting uses kube-score and Kubescape's explicit `allco
 check live configuration, with verbose Kubescape output for resource-level findings. This avoids
 the default scan's framework lookup failure when Kubescape
 4.0.17 falls back to cached policies. Selected app manifests include related Services, Ingresses,
-NetworkPolicies, PodDisruptionBudgets, and shared policy context. Deployment lint skips image
+NetworkPolicies, PodDisruptionBudgets, ServiceAccounts, and shared policy context. Deployment
+replica-count and host pod anti-affinity checks are disabled in kube-score; replica counts and
+placement are operator decisions. Deployment lint skips image
 vulnerability scans, host scans, and Kubescape's CLI update check. Install these tools and `jq` before
 running the checks. Kubescape requires GitHub policy downloads or a usable local policy cache.
 Load results are ignored files under `area/apps/lean/*.bin`.

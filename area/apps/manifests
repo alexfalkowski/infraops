@@ -3,14 +3,17 @@ set -eo pipefail
 
 # Collects live manifests for app checks, including related resources and shared policy context.
 
+# Prints namespace and optional app selection syntax to stderr.
 usage() {
   printf 'Usage: %s <namespace> [app ...]\n' "$0" >&2
 }
 
+# Discovers listable namespaced resource types, including installed custom resources.
 resource_names() {
   kubectl api-resources --verbs=list --namespaced -o name
 }
 
+# Reads resource types from stdin and emits their YAML lists for the requested namespace.
 resource_manifests() {
   local manifest
   local namespace
@@ -27,6 +30,7 @@ resource_manifests() {
   done
 }
 
+# Rejects empty discovery or manifest output before returning the namespace snapshot.
 namespace_manifests() {
   local manifests
   local namespace
@@ -48,6 +52,7 @@ namespace_manifests() {
   printf '%s\n' "$manifests"
 }
 
+# Includes selected apps and unlabelled or namespace-wide policies and budgets.
 # App resources share app.kubernetes.io/name; the narrower app label omits policies and budgets.
 app_manifests() {
   local app
@@ -65,7 +70,7 @@ app_manifests() {
     fi
   done
   selector="$(IFS=,; printf '%s' "$*")"
-  manifests="$(kubectl get deployments,services,ingresses,networkpolicies,poddisruptionbudgets \
+  manifests="$(kubectl get deployments,services,ingresses,networkpolicies,poddisruptionbudgets,serviceaccounts \
     --namespace "$namespace" --selector "app.kubernetes.io/name in ($selector)" --output json)"
   for app in "$@"; do
     if ! jq -e --arg app "$app" 'any(.items[]; .kind == "Deployment" and .metadata.name == $app)' <<< "$manifests" >/dev/null; then

@@ -20,7 +20,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 		})
 	}
 
-	m := metadata(app, deploymentLabels(app))
+	m := metadata(app, matchLabels(app), deploymentLabels(app))
 	m.Annotations = deploymentAnnotations(app)
 	args := &av1.DeploymentArgs{
 		Metadata: m,
@@ -35,7 +35,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 			},
 			Template: cv1.PodTemplateSpecArgs{
 				Metadata: mv1.ObjectMetaArgs{
-					Labels: merge(matchLabels(app), deploymentLabels(app)),
+					Labels: merge(matchLabels(app), recommendedLabels(app), deploymentLabels(app)),
 				},
 				Spec: cv1.PodSpecArgs{
 					ServiceAccountName:            pulumi.String(app.Name),

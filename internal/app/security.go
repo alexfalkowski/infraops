@@ -8,9 +8,10 @@ import (
 
 func podSecurity() cv1.PodSecurityContextArgs {
 	return cv1.PodSecurityContextArgs{
-		FsGroup:      pulumi.Int(2000),
-		RunAsNonRoot: inputs.Yes,
-		RunAsUser:    pulumi.Int(10001),
-		RunAsGroup:   pulumi.Int(10001),
+		FsGroup:             pulumi.Int(2000),
+		FsGroupChangePolicy: pulumi.String("Always"),
+		RunAsNonRoot:        inputs.Yes,
+		RunAsUser:           pulumi.Int(10001),
+		RunAsGroup:          pulumi.Int(10001),
 	}
 }
