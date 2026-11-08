@@ -8,7 +8,7 @@ kube-score-lean:
 
 # Check lean's live configuration without image or host scans.
 kubescape-lean:
-	@KS_SKIP_UPDATE_CHECK=true kubescape scan --include-namespaces lean --scan-images=false --host-scan=false
+	@KS_SKIP_UPDATE_CHECK=true kubescape scan framework allcontrols --include-namespaces lean --scan-images=false --host-scan=false
 
 # Delete lean.
 delete-lean:
