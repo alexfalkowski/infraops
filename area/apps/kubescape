@@ -7,6 +7,8 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Kubescape 4.0.17's default scan cannot load workloadscan from its cache fallback.
 # Cluster and operator manual reviews are outside app deployment lint.
+# The configured image allowlist replaces the registry blocklist (C-0001).
 KS_SKIP_UPDATE_CHECK=true kubescape scan framework allcontrols --verbose --scan-images=false --host-scan=false \
-  --exclude-controls C-0246,C-0249,C-0254,C-0286,C-0287,C-0288,C-0289 \
+  --exclude-controls C-0001,C-0246,C-0249,C-0254,C-0286,C-0287,C-0288,C-0289 \
+  --controls-config "$SCRIPT_DIR/kubescape-controls.json" \
   --exceptions "$SCRIPT_DIR/kubescape-exceptions.json" "$@"
