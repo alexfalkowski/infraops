@@ -19,5 +19,27 @@
       }
     ],
     "reason": "The lean DOKS nodes use AppArmor and do not load SELinux. Revisit this exception if node security modules change."
+  },
+  {
+    "name": "lean-image-signatures",
+    "policyType": "postureExceptionPolicy",
+    "actions": ["disable"],
+    "resources": [
+      {
+        "designatorType": "Attributes",
+        "attributes": {
+          "namespace": "^lean$"
+        }
+      }
+    ],
+    "posturePolicies": [
+      {
+        "controlID": "C-0236"
+      },
+      {
+        "controlID": "C-0237"
+      }
+    ],
+    "reason": "Unsigned images are an accepted limitation for workloads in the lean namespace. Remove this exception when image signing and trusted signature verification are configured."
   }
 ]

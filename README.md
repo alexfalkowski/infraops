@@ -353,11 +353,21 @@ vulnerability scans, host scans, and Kubescape's CLI update check. Install these
 running the checks. Kubescape requires GitHub policy downloads or a usable local policy cache.
 Load results are ignored files under `area/apps/lean/*.bin`.
 
-The checked-in [Kubescape exceptions](area/apps/kubescape-exceptions.json) mark only C-0211's
+App lint excludes seven manual-review controls that require separate cluster or operator review:
+`system:masters` use (C-0246), untrusted workloads (C-0249), audit logs (C-0254), user authentication
+through client certificates, service account tokens, or bootstrap tokens (C-0286, C-0287, C-0288), and
+ImagePolicyWebhook image provenance (C-0289). These exclusions apply to the app lint wrapper;
+they do not establish that the cluster meets those controls. Registry and image digest policy
+controls remain enabled and may report `Action Required` until configured.
+
+The checked-in [Kubescape exceptions](area/apps/kubescape-exceptions.json) mark C-0211's
 `set-seLinuxOptions` rule as inapplicable to Deployments, ReplicaSets, and Pods in `lean`.
 The current DOKS nodes use AppArmor and do not load SELinux; the other C-0211 rules remain active.
-Revisit this exception if the node security modules change. The wrapper resolves the policy file
-relative to itself, so it also applies to per-app and namespace-wide scans.
+Revisit this exception if the node security modules change. A separate exception accepts unsigned
+images throughout the `lean` namespace, suppressing signature verification (C-0236) and
+signature presence (C-0237). Remove it when image signing and trusted signature verification are
+configured. The wrapper resolves the policy file relative to itself, so it also applies to per-app
+and namespace-wide scans.
 
 To check an existing deployment independently of the last update, use the explicit `*-all` targets:
 
