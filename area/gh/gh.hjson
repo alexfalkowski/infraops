@@ -116,10 +116,10 @@
       homepage_url: https://alexfalkowski.github.io/go-linux
       visibility: public
       collaborators: {
-        enabled: false
+        enabled: true
       }
       pages: {
-        enabled: false
+        enabled: true
       }
       topics: [
         golang
