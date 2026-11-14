@@ -1,10 +1,11 @@
 environment: production
 ai:
-  client:
-    timeout: 10m
-  provider: openai
-  openai:
-    api_key: file:/etc/secrets/abgleich/openai-api-key
+  providers:
+    openai:
+      client:
+        timeout: 10m
+      kind: openai
+      api_key: file:/etc/secrets/abgleich/openai-api-key
 automerge:
   completion_check: "ci/circleci: wait-all"
   dependabot:
@@ -35,20 +36,24 @@ github:
     timeout: 8s
 review:
   code:
+    provider: openai
     model: gpt-6.1-sol
-    reasoning_effort: high
+    effort: high
     interval: 15m
     timeout: 20m
   sec:
+    provider: openai
     model: gpt-6.1-sol
-    reasoning_effort: high
+    effort: high
     interval: 15m
     timeout: 20m
 scheduler:
   interval: 15m
   timeout: 5m
 summarise:
+  provider: openai
   model: gpt-6.1-sol
+  effort: medium
   interval: 30s
   timeout: 2m
 health:
