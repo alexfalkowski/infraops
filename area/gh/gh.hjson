@@ -70,7 +70,7 @@
     }
     {
       name: go-signal
-      description: A library to handle signal handlers.
+      description: A Go library for application lifecycle management, dependency injection, and graceful shutdown.
       homepage_url: https://alexfalkowski.github.io/go-signal
       visibility: public
       collaborators: {
@@ -81,9 +81,11 @@
       }
       topics: [
         golang
-        signals
         application-lifecycle
+        dependency-injection
+        startup-hooks
         graceful-shutdown
+        signals
       ]
       checks: [
         ci/circleci: wait-all
