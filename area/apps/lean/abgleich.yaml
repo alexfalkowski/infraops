@@ -47,6 +47,12 @@ review:
     effort: high
     interval: 15m
     timeout: 20m
+  test:
+    provider: openai
+    model: gpt-6.1-sol
+    effort: high
+    interval: 15m
+    timeout: 20m
 scheduler:
   interval: 15m
   timeout: 5m
