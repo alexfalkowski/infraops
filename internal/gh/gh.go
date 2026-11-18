@@ -116,11 +116,11 @@ func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
 		return fmt.Errorf("%v: %w", repo.Name, err)
 	}
 
-	if err := branchProtection(ctx, r.NodeId, repo); err != nil {
+	if err := branchProtection(ctx, r, repo); err != nil {
 		return fmt.Errorf("%v: %w", repo.Name, err)
 	}
 
-	if err := collaborator(ctx, repo); err != nil {
+	if err := collaborator(ctx, r, repo); err != nil {
 		return fmt.Errorf("%v: %w", repo.Name, err)
 	}
 

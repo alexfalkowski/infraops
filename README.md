@@ -487,7 +487,25 @@ DigitalOcean's cluster version is pinned in [internal/do/do.go](internal/do/do.g
 in code; initiate minor/major upgrades in the DigitalOcean UI, then align the code.
 
 GitHub repositories require at least one `checks` entry for strict branch protection on `master`.
-Required checks are the merge gate; zero approving reviews is intentional. Pages and collaborators
-may need to be disabled for initial repository creation and enabled in a follow-up change. See the
-[repository schema](api/infraops/v2/service.proto) and [implementation](internal/gh/repository.go)
-for fixed settings and labels.
+Required checks are the merge gate; zero approving reviews is intentional.
+
+Pages and collaborators can be enabled in the initial repository configuration. Preview and apply
+the configuration in one change:
+
+```bash
+make area=gh pulumi-preview
+make area=gh pulumi-update
+```
+
+Pulumi waits for repository creation before configuring vulnerability alerts, Pages, and
+collaborators in the same update. A separate change to enable those settings is no longer needed
+to enforce that ordering. This workflow was verified with a temporary auto-initialized repository,
+including Pages setup, vulnerability alerts, and a collaborator invitation for write access.
+
+To delete a repository, remove its entry from `area/gh/gh.hjson`, then preview and apply the update
+using the same commands. This permanently deletes the repository and its managed settings;
+removing the entry alone does not change GitHub. This cleanup was also verified with the temporary
+repository.
+
+See the [repository schema](api/infraops/v2/service.proto) and
+[implementation](internal/gh/repository.go) for fixed settings and labels.
