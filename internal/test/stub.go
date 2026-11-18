@@ -27,7 +27,7 @@ func (*Stub) NewResource(args pulumi.MockResourceArgs) (string, resource.Propert
 	return "", args.Inputs, nil
 }
 
-// ResourceStub is a pulumi.Mocks implementation that records created resource inputs by type token.
+// ResourceStub is a pulumi.Mocks implementation that records resource inputs and dependencies by type token.
 //
 // Resource attempts are recorded before any configured failure is returned, so Resources includes
 // failed attempts as well as successful ones.
@@ -36,7 +36,7 @@ type ResourceStub struct {
 
 	failures  map[string][]resourceFailure
 	failAll   error
-	resources map[string][]resource.PropertyMap
+	resources map[string][]pulumi.MockResourceArgs
 	mu        sync.Mutex
 }
 
@@ -93,9 +93,9 @@ func (s *ResourceStub) NewResource(args pulumi.MockResourceArgs) (string, resour
 	s.mu.Lock()
 
 	if s.resources == nil {
-		s.resources = make(map[string][]resource.PropertyMap)
+		s.resources = make(map[string][]pulumi.MockResourceArgs)
 	}
-	s.resources[args.TypeToken] = append(s.resources[args.TypeToken], args.Inputs)
+	s.resources[args.TypeToken] = append(s.resources[args.TypeToken], args)
 	occurrence := len(s.resources[args.TypeToken])
 	err := s.resourceError(args.TypeToken, occurrence)
 	s.mu.Unlock()
@@ -112,8 +112,24 @@ func (s *ResourceStub) Resources(token string) []resource.PropertyMap {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	resources := s.resources[token]
-	return append([]resource.PropertyMap(nil), resources...)
+	var resources []resource.PropertyMap
+	for _, args := range s.resources[token] {
+		resources = append(resources, args.Inputs)
+	}
+	return resources
+}
+
+// Dependencies returns dependency URNs for each recorded attempt of token, in the same order as Resources.
+// Attempts without a registration RPC have a nil dependency list.
+func (s *ResourceStub) Dependencies(token string) [][]string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var dependencies [][]string
+	for _, args := range s.resources[token] {
+		dependencies = append(dependencies, append([]string(nil), args.RegisterRPC.GetDependencies()...))
+	}
+	return dependencies
 }
 
 func (s *ResourceStub) failResource(token string, occurrence int, err error) {

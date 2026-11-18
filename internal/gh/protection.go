@@ -14,10 +14,10 @@ import (
 //   - required status checks as specified by repo.Checks (strict mode enabled)
 //
 // The branch name is taken from the package-level master constant.
-func branchProtection(ctx *pulumi.Context, id pulumi.StringInput, repo *Repository) error {
+func branchProtection(ctx *pulumi.Context, created *github.Repository, repo *Repository) error {
 	args := &github.BranchProtectionArgs{
 		Pattern:               pulumi.String(master),
-		RepositoryId:          id,
+		RepositoryId:          created.NodeId,
 		RequiredLinearHistory: inputs.Yes,
 		RequiredPullRequestReviews: github.BranchProtectionRequiredPullRequestReviewArray{
 			&github.BranchProtectionRequiredPullRequestReviewArgs{

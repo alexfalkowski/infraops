@@ -44,6 +44,22 @@ func TestCreateRepository(t *testing.T) {
 	hold := labelsByName["hold"]
 	require.Equal(t, "FBCA04", test.Property(t, hold, "color").StringValue())
 	require.Equal(t, "Do not merge until this label is removed.", test.Property(t, hold, "description").StringValue())
+
+	repositoryURN := string(resource.NewURN("stack", "project", "", repositoryResourceType, "test"))
+	for _, scenario := range []struct {
+		name  string
+		token string
+	}{
+		{name: "vulnerability alerts depend on repository", token: repositoryVulnerabilityResourceType},
+		{name: "pages depend on repository", token: repositoryPagesResourceType},
+		{name: "collaborators depend on repository", token: repositoryCollaboratorResourceType},
+	} {
+		t.Run(scenario.name, func(t *testing.T) {
+			dependencies := stub.Dependencies(scenario.token)
+			require.Len(t, dependencies, 1)
+			require.Contains(t, dependencies[0], repositoryURN)
+		})
+	}
 }
 
 func TestCreateRepositoryArchivedDoesNotCreateLabels(t *testing.T) {

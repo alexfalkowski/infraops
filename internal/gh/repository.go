@@ -75,29 +75,30 @@ func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, erro
 		return nil, err
 	}
 
-	if err := labels(ctx, repository.Name, repo); err != nil {
+	// Use repository outputs so dependent settings wait for repository creation.
+	if err := labels(ctx, repository, repo); err != nil {
 		return nil, err
 	}
 
-	if err := vulnerabilityAlerts(ctx, repo); err != nil {
+	if err := vulnerabilityAlerts(ctx, repository, repo); err != nil {
 		return nil, err
 	}
 
-	if err := pages(ctx, repo); err != nil {
+	if err := pages(ctx, repository, repo); err != nil {
 		return nil, err
 	}
 
 	return repository, nil
 }
 
-func labels(ctx *pulumi.Context, name pulumi.StringInput, repo *Repository) error {
+func labels(ctx *pulumi.Context, created *github.Repository, repo *Repository) error {
 	if repo.Archived {
 		return nil
 	}
 
 	for _, label := range repositoryLabels {
 		_, err := github.NewIssueLabel(ctx, repo.Name+"-"+label.name, &github.IssueLabelArgs{
-			Repository:  name,
+			Repository:  created.Name,
 			Name:        pulumi.String(label.name),
 			Color:       pulumi.String(label.color),
 			Description: pulumi.String(label.description),
@@ -109,15 +110,15 @@ func labels(ctx *pulumi.Context, name pulumi.StringInput, repo *Repository) erro
 	return nil
 }
 
-func vulnerabilityAlerts(ctx *pulumi.Context, repo *Repository) error {
+func vulnerabilityAlerts(ctx *pulumi.Context, created *github.Repository, repo *Repository) error {
 	_, err := github.NewRepositoryVulnerabilityAlerts(ctx, repo.Name, &github.RepositoryVulnerabilityAlertsArgs{
 		Enabled:    inputs.Yes,
-		Repository: pulumi.String(repo.Name),
+		Repository: created.Name,
 	})
 	return err
 }
 
-func pages(ctx *pulumi.Context, repo *Repository) error {
+func pages(ctx *pulumi.Context, created *github.Repository, repo *Repository) error {
 	if !repo.HasPages() {
 		return nil
 	}
@@ -125,7 +126,7 @@ func pages(ctx *pulumi.Context, repo *Repository) error {
 	_, err := github.NewRepositoryPages(ctx, repo.Name, &github.RepositoryPagesArgs{
 		BuildType:  pulumi.String("legacy"),
 		Cname:      pulumi.String(repo.Pages.CNAME),
-		Repository: pulumi.String(repo.Name),
+		Repository: created.Name,
 		Source: &github.RepositoryPagesSourceArgs{
 			Branch: pulumi.String(master),
 		},

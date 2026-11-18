@@ -137,7 +137,7 @@ targets and README-documented workflows before running them directly.
 - `Application.resource` falls back to `"small"` for unknown values. Current small profile: cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`.
 - Cloudflare resources require `CLOUDFLARE_ACCOUNT_ID`; `internal/cf/cf.go` reads it at package scope.
 - Apps config maps read `<namespace>/<app>.yaml` relative to the Pulumi working directory. The root Makefile runs Pulumi with `--cwd area/apps`.
-- GitHub Pages and collaborators may need to be disabled on first repository creation and enabled in a follow-up change.
+- GitHub Pages and collaborators can be enabled in the initial repository configuration. Vulnerability alerts, Pages, and collaborators depend on repository outputs so they wait for repository creation in the same Pulumi update. Live creation of an auto-initialized repository with Pages and a collaborator invitation, followed by deletion by removing its configuration and applying the update, has been verified.
 - Direct tests for `internal/config.Write` preserving file mode and appending a trailing newline are considered overkill; do not report that narrow helper behavior as a standalone test gap.
 - `make api-breaking` is the intended API schema guard in CI. Do not report a separate API generated-code freshness test gap only because CI does not run `make api-generate` plus a generated-file diff check.
 

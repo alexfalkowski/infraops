@@ -9,7 +9,7 @@ import (
 //
 // The current implementation grants "push" permissions to the "lean-thoughts-ci" user for the
 // repository identified by repo.Name under the "alexfalkowski" owner.
-func collaborator(ctx *pulumi.Context, repo *Repository) error {
+func collaborator(ctx *pulumi.Context, created *github.Repository, repo *Repository) error {
 	if !repo.HasCollaborators() {
 		return nil
 	}
@@ -17,7 +17,7 @@ func collaborator(ctx *pulumi.Context, repo *Repository) error {
 	args := &github.RepositoryCollaboratorArgs{
 		// GitHub personal repositories only support "push" for collaborators.
 		Permission: pulumi.String("push"),
-		Repository: pulumi.String("alexfalkowski/" + repo.Name),
+		Repository: pulumi.Sprintf("alexfalkowski/%s", created.Name),
 		Username:   pulumi.String("lean-thoughts-ci"),
 	}
 	_, err := github.NewRepositoryCollaborator(ctx, repo.Name, args)
