@@ -267,9 +267,19 @@ metrics, and traces, prints them through its text logger, then discards them. Qu
 storage, and R2 credentials remain unwired. Keep Einblick's own telemetry exporters pointed away
 from itself to avoid recursive exports. See [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.2.0/docs/ingestion.md).
 
-Apply the apps configuration and restart Einblick before pointing other services at its receiver.
-For a config-only update, use `cd area/apps && ./release rollout-einblick` after the Pulumi update.
-Verification checks `/einblick/readyz`; confirm OTLP receipt separately before updating clients.
+Abgleich, Bezeichner, Standort, and Web export logs at `info` level and above, metrics, and traces
+to that in-cluster gRPC endpoint. Their `telemetry.logger`, `telemetry.metrics`, and
+`telemetry.tracer` blocks each select `kind: otlp` and `protocol: grpc`. Exporters use the
+OpenTelemetry SDK's default batching, queue limits, metric interval, and trace sampling.
+The connection uses cleartext within the cluster and sends no authentication headers.
+Application logs go to Einblick instead of each client's stdout; inspect Einblick's pod logs
+for the printed telemetry.
+
+Ensure Einblick v1.2.0 is running before rolling out the clients. After the apps preview and update,
+run `make -C area/apps rollout` so existing client pods load the updated ConfigMaps. If Einblick's
+own configuration changed, restart it first with `cd area/apps && ./release rollout-einblick`.
+Verification checks `/einblick/readyz`; confirm logs, metrics, and traces appear in Einblick's
+pod logs after sending client traffic and allowing time for batched and periodic exports.
 Load checks skip Einblick until an application scenario is available.
 
 The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and a private `einblick`
