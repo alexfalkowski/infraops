@@ -107,6 +107,14 @@ message Application {
   // canonical rewrites may omit zero, and there is no fallback to three.
   int32 replicas = 8;
 
+  // Strategy selects how application pods are replaced during a deployment rollout.
+  // "rolling" (the default when omitted or empty) uses rolling updates with one surge
+  // pod and one unavailable pod allowed. "recreate" terminates the old pods before
+  // creating replacements, causing downtime. Other values are rejected.
+  // Recreate does not limit replicas or prevent overlap outside deployment rollouts;
+  // applications requiring an exclusive writer must also keep replicas at one.
+  string strategy = 9;
+
   // Secrets is a list of existing logical secret names referenced by this application.
   //
   // Clarification:
@@ -120,15 +128,15 @@ message Application {
   // The apps program does not create Secret objects or define Secret keys. For internal apps, each
   // name is expected to exist as a Kubernetes Secret named "<secretName>-secret" and is mounted at
   // "/etc/secrets/<secretName>".
-  repeated string secrets = 9;
+  repeated string secrets = 10;
 
   // EnvVars is the list of environment variables to inject into the application container.
-  repeated EnvVar env_vars = 10;
+  repeated EnvVar env_vars = 11;
 
   // Storage optionally provisions writable persistent application data.
   // Omission preserves existing storage behavior. It does not change replicas or
-  // rollout policy; applications requiring one writer need a separate rollout policy.
-  Storage storage = 11;
+  // select a rollout strategy; configure strategy separately for exclusive writers.
+  Storage storage = 12;
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.

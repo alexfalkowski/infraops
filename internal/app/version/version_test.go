@@ -23,9 +23,11 @@ func TestValidUpdate(t *testing.T) {
 	require.Equal(t, "app1", applications[0].GetName())
 	require.Equal(t, "2.0.0", applications[0].GetVersion())
 	require.EqualValues(t, 3, applications[0].GetReplicas())
+	require.Equal(t, "recreate", applications[0].GetStrategy())
 	require.Equal(t, "app2", applications[1].GetName())
 	require.Equal(t, "1.0.0", applications[1].GetVersion())
 	require.EqualValues(t, 3, applications[1].GetReplicas())
+	require.Equal(t, "rolling", applications[1].GetStrategy())
 }
 
 func TestInvalidUpdate(t *testing.T) {

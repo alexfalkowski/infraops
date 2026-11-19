@@ -56,8 +56,10 @@ Run `make dep` before local validation. Use `make help` for the command catalog 
 API checks use Buf. The golangci-lint wrapper skips its check when the tool is absent from `PATH`.
 
 When changing [service.proto](api/infraops/v2/service.proto), run `make api-generate` and include the
-updated `service.pb.go`; do not edit generated Go directly. `make api-breaking` compares against
-GitHub `master` and requires network access.
+updated `service.pb.go`; do not edit generated Go directly. The CI breaking-change check is currently
+commented out for intentional field renumbering; API linting remains enabled. Renumbering requires
+rebuilding binary protobuf consumers together; HJSON configuration uses field names. The optional
+`make api-breaking` comparison checks against GitHub `master` and requires network access.
 
 ## 🚀 Preview and Deploy
 
@@ -159,6 +161,11 @@ lives at `area/apps/<namespace>/<app>.yaml`; Pulumi puts it in a ConfigMap and m
 `/etc/<app>/<app>.yaml`. Files under `area/apps/fiction/` are examples unless a matching entry in
 `apps.hjson` references them. Consult each application's README for the contents of its YAML config.
 
+Before enabling `strategy` or storage, update the shared release image to a `cmd/bump`
+version that understands those fields and update all consuming app pipelines to that image.
+Helpers built against an older schema discard unknown settings when rewriting the configuration,
+even when releasing another app.
+
 When adding an app, also extend [area/apps/release](area/apps/release) with its supported name,
 verification and rollout commands, and load eligibility. Add load fixtures only when they exercise
 useful application behavior. The release helpers currently support the `lean` namespace.
@@ -171,11 +178,14 @@ unavailable during rollout or disruption because the rollout and PodDisruptionBu
 unavailable pod. See the [Application schema](api/infraops/v2/service.proto) for deployment kinds,
 resource sizing, probes, and secret-reference syntax.
 
-### 💾 Persistent Application Storage
+Set `strategy: rolling` for rolling updates with `maxSurge: 1` and `maxUnavailable: 1`, or
+`strategy: recreate` to terminate old pods before creating replacements during a deployment rollout.
+Omission or an empty value preserves rolling updates; other values are rejected. Recreate causes
+downtime and does not limit replicas or prevent overlap outside deployment rollouts, such as when
+a pod is manually deleted. Applications requiring one writer must also keep one replica.
+See [Kubernetes deployment strategies](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
 
-Before enabling storage, update the shared release image to a storage-aware `cmd/bump`
-version and update all consuming app pipelines to that image. Older helpers discard
-storage settings when rewriting the configuration, even when releasing another app.
+### 💾 Persistent Application Storage
 
 An application can opt into one persistent filesystem claim. Add this block to that
 application's HJSON object; the values below are illustrative, not production sizing:
@@ -199,9 +209,9 @@ for the complete field contract.
 The PVC's Kubernetes and Pulumi name is `<app>-data`, in the app's namespace. Pod
 replacement, image/config updates and scaling retain that identity. All replicas
 share the same claim. `ReadWriteOnce` permits multiple pods on one node; it does not
-enforce one writer. Storage leaves the existing rolling update and disruption budget
-unchanged. Applications requiring exclusive writers need a separately reviewed
-rollout policy before activation; Recreate support is deferred to I-01b.
+enforce one writer. Storage leaves the configured rollout strategy and disruption budget
+unchanged. Choose `strategy` separately for the application's concurrency requirements;
+Einblick uses `recreate` with one replica for its exclusive DuckDB connection.
 
 The entire claim mounts writable at the required absolute, clean, non-root
 `path`, without a subPath. Choose a dedicated directory that does not hide
@@ -269,11 +279,12 @@ that writable mount; the root filesystem stays read-only. DuckDB uses `64MiB` an
 worker initially; its memory setting does not bound total container memory, and the
 small profile's 128Mi limit still needs workload validation.
 
-Einblick intentionally keeps the existing rolling-update policy (`maxSurge: 1`,
-`maxUnavailable: 1`) for operational evaluation. Keep one replica. A replacement can
-fail to open DuckDB until the old process releases the database lock, or wait for the
-volume to detach from another node. This trial does not guarantee uninterrupted service;
-the application currently has no database-lock retry policy or startup delay.
+Einblick uses `strategy: recreate` so normal deployment rollouts terminate the old pod
+before creating its replacement, allowing the old process to release the DuckDB lock.
+Keep one replica. Rollouts have downtime while the replacement mounts storage and becomes
+ready; moving to another node can also require volume detach/attach time. Pod replacements
+outside deployment rollouts can still overlap, and the application currently has no
+database-lock retry policy or startup delay. The other configured apps use `strategy: rolling`.
 
 Readiness checks database connectivity. The service receives logs, metrics, and traces,
 prints them through its text logger, then discards them; telemetry persistence, queries,

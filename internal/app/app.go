@@ -43,6 +43,7 @@ func ConvertApplication(a *v2.Application) *App {
 		Namespace: a.GetNamespace(),
 		Domain:    a.GetDomain(),
 		Version:   a.GetVersion(),
+		Strategy:  a.GetStrategy(),
 		Replicas:  a.GetReplicas(),
 		Resources: resources.Resources(a.GetResource()),
 		Secrets:   a.GetSecrets(),
@@ -147,6 +148,10 @@ type App struct {
 
 	// Version is the application version string used for deployment (for example as an image tag).
 	Version string
+
+	// Strategy selects "rolling" (also used when empty) or "recreate" for deployment rollouts.
+	// Other values are rejected when creating the deployment. Recreate does not limit replicas.
+	Strategy string
 
 	// Secrets is a list of secret names referenced by this application.
 	Secrets []string

@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/alexfalkowski/infraops/v2/internal/inputs"
 	av1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/apps/v1"
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
@@ -9,6 +11,19 @@ import (
 )
 
 func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *cv1.ConfigMap, app *App) error {
+	var strategy av1.DeploymentStrategyArgs
+	switch app.Strategy {
+	case "", "rolling":
+		strategy.RollingUpdate = av1.RollingUpdateDeploymentArgs{
+			MaxSurge:       inputs.One,
+			MaxUnavailable: inputs.One,
+		}
+	case "recreate":
+		strategy.Type = pulumi.String("Recreate")
+	default:
+		return fmt.Errorf("application %s: unsupported strategy %q", app.Name, app.Strategy)
+	}
+
 	volumes := createSecretVolumes(config.Metadata.Name().Elem(), app)
 	if app.Storage != nil {
 		volumes = append(volumes, cv1.VolumeArgs{
@@ -27,12 +42,7 @@ func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *
 		Spec: av1.DeploymentSpecArgs{
 			Selector: mv1.LabelSelectorArgs{MatchLabels: matchLabels(app)},
 			Replicas: pulumi.Int(int(app.Replicas)),
-			Strategy: av1.DeploymentStrategyArgs{
-				RollingUpdate: av1.RollingUpdateDeploymentArgs{
-					MaxSurge:       inputs.One,
-					MaxUnavailable: inputs.One,
-				},
-			},
+			Strategy: strategy,
 			Template: cv1.PodTemplateSpecArgs{
 				Metadata: mv1.ObjectMetaArgs{
 					Labels: merge(matchLabels(app), recommendedLabels(app), deploymentLabels(app)),
