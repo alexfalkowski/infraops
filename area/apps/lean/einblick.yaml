@@ -15,3 +15,9 @@ transport:
       tokens: 1000
       interval: 1s
     timeout: 5s
+  grpc:
+    limiter:
+      kind: service-method
+      tokens: 1000
+      interval: 1s
+    timeout: 5s

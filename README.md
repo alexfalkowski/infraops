@@ -260,11 +260,17 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 
 ### 🔭 Einblick
 
-[Einblick's configuration](area/apps/lean/einblick.yaml) runs the service scaffold as one small replica
-at `https://einblick.lean-thoughts.com`, with only its HTTP transport enabled.
-Verification checks `/einblick/readyz`; load checks skip it
-until an application scenario is available. Telemetry ingestion, queries, persistent storage, and
-R2 credentials remain unwired until the service implements them.
+[Einblick's configuration](area/apps/lean/einblick.yaml) runs one small replica with HTTP and gRPC
+enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
+`protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Version 1.2.0 receives logs,
+metrics, and traces, prints them through its text logger, then discards them. Queries, persistent
+storage, and R2 credentials remain unwired. Keep Einblick's own telemetry exporters pointed away
+from itself to avoid recursive exports. See [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.2.0/docs/ingestion.md).
+
+Apply the apps configuration and restart Einblick before pointing other services at its receiver.
+For a config-only update, use `cd area/apps && ./release rollout-einblick` after the Pulumi update.
+Verification checks `/einblick/readyz`; confirm OTLP receipt separately before updating clients.
+Load checks skip Einblick until an application scenario is available.
 
 The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and a private `einblick`
 R2 bucket in `EEUR`, without a public custom domain. Objects expire after seven days (`168h`) by
