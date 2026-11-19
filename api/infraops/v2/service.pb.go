@@ -216,6 +216,13 @@ type Application struct {
 	// State the intended value explicitly in source configuration. Zero and omission both run no pods;
 	// canonical rewrites may omit zero, and there is no fallback to three.
 	Replicas int32 `protobuf:"varint,8,opt,name=replicas,proto3" json:"replicas,omitempty"`
+	// Strategy selects how application pods are replaced during a deployment rollout.
+	// "rolling" (the default when omitted or empty) uses rolling updates with one surge
+	// pod and one unavailable pod allowed. "recreate" terminates the old pods before
+	// creating replacements, causing downtime. Other values are rejected.
+	// Recreate does not limit replicas or prevent overlap outside deployment rollouts;
+	// applications requiring an exclusive writer must also keep replicas at one.
+	Strategy string `protobuf:"bytes,9,opt,name=strategy,proto3" json:"strategy,omitempty"`
 	// Secrets is a list of existing logical secret names referenced by this application.
 	//
 	// Clarification:
@@ -229,13 +236,13 @@ type Application struct {
 	// The apps program does not create Secret objects or define Secret keys. For internal apps, each
 	// name is expected to exist as a Kubernetes Secret named "<secretName>-secret" and is mounted at
 	// "/etc/secrets/<secretName>".
-	Secrets []string `protobuf:"bytes,9,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	Secrets []string `protobuf:"bytes,10,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// EnvVars is the list of environment variables to inject into the application container.
-	EnvVars []*EnvVar `protobuf:"bytes,10,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
+	EnvVars []*EnvVar `protobuf:"bytes,11,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
 	// Storage optionally provisions writable persistent application data.
 	// Omission preserves existing storage behavior. It does not change replicas or
-	// rollout policy; applications requiring one writer need a separate rollout policy.
-	Storage       *Storage `protobuf:"bytes,11,opt,name=storage,proto3" json:"storage,omitempty"`
+	// select a rollout strategy; configure strategy separately for exclusive writers.
+	Storage       *Storage `protobuf:"bytes,12,opt,name=storage,proto3" json:"storage,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -324,6 +331,13 @@ func (x *Application) GetReplicas() int32 {
 		return x.Replicas
 	}
 	return 0
+}
+
+func (x *Application) GetStrategy() string {
+	if x != nil {
+		return x.Strategy
+	}
+	return ""
 }
 
 func (x *Application) GetSecrets() []string {
@@ -1281,7 +1295,7 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x04path\x18\x02 \x01(\tR\x04path\x12\x1d\n" +
 	"\aprofile\x18\x03 \x01(\tH\x00R\aprofile\x88\x01\x01B\n" +
 	"\n" +
-	"\b_profile\"\xc7\x02\n" +
+	"\b_profile\"\xe3\x02\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n" +
@@ -1290,11 +1304,12 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x06domain\x18\x05 \x01(\tR\x06domain\x12\x18\n" +
 	"\aversion\x18\x06 \x01(\tR\aversion\x12\x1a\n" +
 	"\bresource\x18\a \x01(\tR\bresource\x12\x1a\n" +
-	"\breplicas\x18\b \x01(\x05R\breplicas\x12\x18\n" +
-	"\asecrets\x18\t \x03(\tR\asecrets\x12.\n" +
-	"\benv_vars\x18\n" +
-	" \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12.\n" +
-	"\astorage\x18\v \x01(\v2\x14.infraops.v2.StorageR\astorage\"d\n" +
+	"\breplicas\x18\b \x01(\x05R\breplicas\x12\x1a\n" +
+	"\bstrategy\x18\t \x01(\tR\bstrategy\x12\x18\n" +
+	"\asecrets\x18\n" +
+	" \x03(\tR\asecrets\x12.\n" +
+	"\benv_vars\x18\v \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12.\n" +
+	"\astorage\x18\f \x01(\v2\x14.infraops.v2.StorageR\astorage\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +

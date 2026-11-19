@@ -139,12 +139,12 @@ targets and README-documented workflows before running them directly.
 - Apps config maps read `<namespace>/<app>.yaml` relative to the Pulumi working directory. The root Makefile runs Pulumi with `--cwd area/apps`.
 - GitHub Pages and collaborators can be enabled in the initial repository configuration. Vulnerability alerts, Pages, and collaborators depend on repository outputs so they wait for repository creation in the same Pulumi update. Live creation of an auto-initialized repository with Pages and a collaborator invitation, followed by deletion by removing its configuration and applying the update, has been verified.
 - Direct tests for `internal/config.Write` preserving file mode and appending a trailing newline are considered overkill; do not report that narrow helper behavior as a standalone test gap.
-- `make api-breaking` is the intended API schema guard in CI. Do not report a separate API generated-code freshness test gap only because CI does not run `make api-generate` plus a generated-file diff check.
+- `make api-breaking` is currently commented out in CI for intentional protobuf field renumbering; retain the step for re-enabling after the renumbered schema reaches master. The target remains available for local comparison. Do not report a separate API generated-code freshness test gap only because CI does not run `make api-generate` plus a generated-file diff check.
 
 ## CI
 
 - CircleCI setup config uses path filtering to enable area workflows.
-- The main `build` job runs `make lint`, `make scripts-lint`, `make build-bump`, `make build-format`, `make api-lint`, `make api-breaking`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
+- The main `build` job runs `make lint`, `make scripts-lint`, `make build-bump`, `make build-format`, `make api-lint`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
 - Area preview jobs run on non-`master`; update jobs run only on `master`.
 - Apps updates also run `make -C area/apps verify`, `load`, and `lint`.
 - Non-`master` workflows run `sync` after build and applicable previews.

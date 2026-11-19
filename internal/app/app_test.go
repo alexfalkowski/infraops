@@ -120,6 +120,76 @@ func TestApplicationAllowsExplicitZeroReplicas(t *testing.T) {
 	require.Zero(t, test.Property(t, deploymentSpec(deployment), "replicas").NumberValue())
 }
 
+func TestApplicationDeploymentStrategy(t *testing.T) {
+	for _, tt := range []struct {
+		expected          map[string]any
+		name              string
+		strategy          string
+		persistentStorage bool
+	}{
+		{
+			name: "omitted defaults to rolling", persistentStorage: true,
+			expected: map[string]any{
+				"rollingUpdate": map[string]any{"maxSurge": 1, "maxUnavailable": 1},
+			},
+		},
+		{
+			name: "rolling", strategy: "rolling", persistentStorage: true,
+			expected: map[string]any{
+				"rollingUpdate": map[string]any{"maxSurge": 1, "maxUnavailable": 1},
+			},
+		},
+		{
+			name: "recreate", strategy: "recreate", persistentStorage: true,
+			expected: map[string]any{"type": "Recreate"},
+		},
+		{
+			name: "recreate without storage", strategy: "recreate",
+			expected: map[string]any{"type": "Recreate"},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			configuration, err := app.ReadConfiguration("test/storage.hjson")
+			require.NoError(t, err)
+			configured := configuration.GetApplications()[0]
+			configured.Strategy = tt.strategy
+			if !tt.persistentStorage {
+				configured.Storage = nil
+			}
+			stub := &test.ResourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, app.ConvertApplication(configured))
+			}
+
+			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+			deployment := resourceOf(t, stub, deploymentResourceType)
+			require.Equal(t, resource.NewPropertyMapFromMap(tt.expected),
+				test.Property(t, deploymentSpec(deployment), "strategy").ObjectValue())
+			assertApplicationVolumes(t, deployment, configured.GetStorage())
+			if tt.persistentStorage {
+				assertStorageClaim(t, resourceOf(t, stub, pvcResourceType), configured.GetStorage())
+			} else {
+				require.Empty(t, stub.Resources(pvcResourceType))
+			}
+		})
+	}
+}
+
+func TestApplicationRejectsUnknownStrategy(t *testing.T) {
+	configuration, err := app.ReadConfiguration("test/storage.hjson")
+	require.NoError(t, err)
+	configured := configuration.GetApplications()[0]
+	configured.Strategy = "invalid"
+	stub := &test.ResourceStub{}
+	run := func(ctx *pulumi.Context) error {
+		return app.CreateApplication(ctx, app.ConvertApplication(configured))
+	}
+
+	require.ErrorContains(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)),
+		`application test: unsupported strategy "invalid"`)
+	require.Empty(t, stub.Resources(deploymentResourceType))
+}
+
 func TestApplicationReturnsMissingConfigError(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := appWithResources()
