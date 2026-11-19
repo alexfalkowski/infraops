@@ -262,10 +262,24 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 
 [Einblick's configuration](area/apps/lean/einblick.yaml) runs one small replica with HTTP and gRPC
 enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
-`protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Version 1.2.0 receives logs,
-metrics, and traces, prints them through its text logger, then discards them. Queries, persistent
-storage, and R2 credentials remain unwired. Keep Einblick's own telemetry exporters pointed away
-from itself to avoid recursive exports. See [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.2.0/docs/ingestion.md).
+`protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Version 1.3.0 requires
+DuckDB settings and opens `/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
+using the cluster's `do-block-storage-retain` profile. Database, WAL and spill files share
+that writable mount; the root filesystem stays read-only. DuckDB uses `64MiB` and one
+worker initially; its memory setting does not bound total container memory, and the
+small profile's 128Mi limit still needs workload validation.
+
+Einblick intentionally keeps the existing rolling-update policy (`maxSurge: 1`,
+`maxUnavailable: 1`) for operational evaluation. Keep one replica. A replacement can
+fail to open DuckDB until the old process releases the database lock, or wait for the
+volume to detach from another node. This trial does not guarantee uninterrupted service;
+the application currently has no database-lock retry policy or startup delay.
+
+Readiness checks database connectivity. The service receives logs, metrics, and traces,
+prints them through its text logger, then discards them; telemetry persistence, queries,
+and R2 credentials remain unwired. Keep Einblick's own telemetry exporters pointed away
+from itself to avoid recursive exports. See [database configuration](https://github.com/alexfalkowski/einblick/blob/v1.3.0/docs/configuration.md)
+and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.3.0/docs/ingestion.md).
 
 Abgleich, Bezeichner, Standort, and Web export logs at `info` level and above, metrics, and traces
 to that in-cluster gRPC endpoint. Their `telemetry.logger`, `telemetry.metrics`, and
@@ -275,7 +289,7 @@ The connection uses cleartext within the cluster and sends no authentication hea
 Application logs go to Einblick instead of each client's stdout; inspect Einblick's pod logs
 for the printed telemetry.
 
-Ensure Einblick v1.2.0 is running before rolling out the clients. After the apps preview and update,
+Ensure Einblick v1.3.0 is running before rolling out the clients. After the apps preview and update,
 run `make -C area/apps rollout` so existing client pods load the updated ConfigMaps. If Einblick's
 own configuration changed, restart it first with `cd area/apps && ./release rollout-einblick`.
 Verification checks `/einblick/readyz`; confirm logs, metrics, and traces appear in Einblick's
