@@ -120,6 +120,8 @@ Omitting the field creates no lifecycle resource and enables no object expiratio
 Omitting `zone` keeps the bucket without a public custom domain.
 See the [Bucket schema](api/infraops/v2/service.proto).
 
+When `zone` is supplied, the custom domain waits for bucket creation in the same update.
+
 The rule covers every object, using the stored object's age, regardless of timestamps
 inside its contents or UTC day prefixes in its key. It does not enforce strict event-age
 retention. Cloudflare applies lifecycle changes asynchronously to existing objects;
@@ -162,6 +164,8 @@ verification and rollout commands, and load eligibility. Add load fixtures only 
 useful application behavior. The release helpers currently support the `lean` namespace.
 
 App NetworkPolicies limit ingress to ports `6060`, `8080`, and `9090` and leave egress open.
+Deployments wait for their ServiceAccount and ConfigMap operations before rolling out. Configuration
+files use a `subPath` mount: a config-only change still requires a manual rollout to reach existing pods.
 Set the intended `replicas` explicitly: omission means zero pods. A single replica can become
 unavailable during rollout or disruption because the rollout and PodDisruptionBudget allow one
 unavailable pod. See the [Application schema](api/infraops/v2/service.proto) for deployment kinds,
@@ -501,6 +505,11 @@ Pulumi waits for repository creation before configuring vulnerability alerts, Pa
 collaborators in the same update. A separate change to enable those settings is no longer needed
 to enforce that ordering. This workflow was verified with a temporary auto-initialized repository,
 including Pages setup, vulnerability alerts, and a collaborator invitation for write access.
+
+Templates owned by `alexfalkowski` and listed in the same configuration are created before their
+consumers, regardless of entry order. Their resource outputs order creation in a single update,
+including nested templates. Templates outside that configuration or owned by another account must
+already exist. Template cycles and duplicate repository names are rejected.
 
 To delete a repository, remove its entry from `area/gh/gh.hjson`, then preview and apply the update
 using the same commands. This permanently deletes the repository and its managed settings;

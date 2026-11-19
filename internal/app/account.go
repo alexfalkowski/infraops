@@ -6,12 +6,10 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createServiceAccount(ctx *pulumi.Context, app *App) error {
+func createServiceAccount(ctx *pulumi.Context, app *App) (*cv1.ServiceAccount, error) {
 	args := &cv1.ServiceAccountArgs{
 		Metadata:                     metadata(app),
 		AutomountServiceAccountToken: inputs.No,
 	}
-	_, err := cv1.NewServiceAccount(ctx, app.Name, args)
-
-	return err
+	return cv1.NewServiceAccount(ctx, app.Name, args)
 }

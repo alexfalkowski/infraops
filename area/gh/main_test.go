@@ -20,6 +20,16 @@ func TestCreateRepository(t *testing.T) {
 	}
 }
 
+func TestCreateRepositoryDoesNotCreateFromFailedTemplate(t *testing.T) {
+	stub := &test.ResourceStub{}
+	stub.FailAllResources()
+
+	require.Error(t, test.RunWithMocks(run("test/templates.hjson"), stub))
+	repositories := stub.Resources("github:index/repository:Repository")
+	require.Len(t, repositories, 1, "the consumer must wait for its template to succeed")
+	require.Equal(t, "starter", test.Property(t, repositories[0], "name").StringValue())
+}
+
 type fixture struct {
 	name string
 	path string
@@ -29,5 +39,6 @@ func fixtures() []fixture {
 	return []fixture{
 		{name: "area", path: "gh.hjson"},
 		{name: "shared", path: filepath.Join("..", "..", "internal", "test", "gh.hjson")},
+		{name: "managed template", path: "test/templates.hjson"},
 	}
 }

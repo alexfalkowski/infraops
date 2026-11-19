@@ -8,8 +8,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createDeployment(ctx *pulumi.Context, app *App) error {
-	volumes := createSecretVolumes(app)
+func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *cv1.ConfigMap, app *App) error {
+	volumes := createSecretVolumes(config.Metadata.Name().Elem(), app)
 	if app.Storage != nil {
 		volumes = append(volumes, cv1.VolumeArgs{
 			Name: pulumi.String(app.Name + storageSuffix),
@@ -38,7 +38,7 @@ func createDeployment(ctx *pulumi.Context, app *App) error {
 					Labels: merge(matchLabels(app), recommendedLabels(app), deploymentLabels(app)),
 				},
 				Spec: cv1.PodSpecArgs{
-					ServiceAccountName:            pulumi.String(app.Name),
+					ServiceAccountName:            account.Metadata.Name().Elem(),
 					SecurityContext:               podSecurity(),
 					TerminationGracePeriodSeconds: pulumi.Int(35),
 					Volumes:                       volumes,
