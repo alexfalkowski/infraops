@@ -1,4 +1,8 @@
 environment: production
+duckdb:
+  path: /data/recent.duckdb
+  memory_limit: 64MiB
+  threads: 1
 health:
   duration: 1s
   timeout: 1s
