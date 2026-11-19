@@ -8,11 +8,11 @@ import (
 
 const secretSuffix = "-secret"
 
-func createSecretVolumes(app *App) cv1.VolumeArray {
+func createSecretVolumes(configName pulumi.StringInput, app *App) cv1.VolumeArray {
 	volumes := cv1.VolumeArray{
 		cv1.VolumeArgs{
 			Name:      pulumi.String(app.Name),
-			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: pulumi.String(app.Name)},
+			ConfigMap: cv1.ConfigMapVolumeSourceArgs{Name: configName},
 		},
 	}
 	for _, v := range app.Secrets {

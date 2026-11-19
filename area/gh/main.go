@@ -16,12 +16,11 @@ func run(path string) pulumi.RunFunc {
 			return err
 		}
 
-		for _, repository := range config.GetRepositories() {
-			if err := gh.CreateRepository(ctx, gh.ConvertRepository(repository)); err != nil {
-				return err
-			}
+		repositories := make([]*gh.Repository, len(config.GetRepositories()))
+		for i, repository := range config.GetRepositories() {
+			repositories[i] = gh.ConvertRepository(repository)
 		}
 
-		return nil
+		return gh.CreateRepositories(ctx, repositories)
 	}
 }

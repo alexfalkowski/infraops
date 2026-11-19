@@ -21,8 +21,7 @@ var ErrVersionMismatch = errors.New("version mismatch")
 // The file is expected to be HJSON matching the v2.Kubernetes protobuf schema.
 func ReadConfiguration(path string) (*v2.Kubernetes, error) {
 	var configuration v2.Kubernetes
-	err := config.Read(path, &configuration)
-	return &configuration, err
+	return &configuration, config.Read(path, &configuration)
 }
 
 // WriteConfiguration writes configuration to path in the repository's canonical HJSON form.
@@ -76,23 +75,45 @@ func ConvertApplication(a *v2.Application) *App {
 
 // CreateApplication creates all Kubernetes resources required for app in the target cluster.
 //
-// Resources are created in a fixed order to ensure dependencies exist (for example,
-// ServiceAccount before Deployment). Any error aborts the creation flow and is returned.
+// The Deployment references ServiceAccount and ConfigMap outputs so Pulumi orders their
+// operations before the rollout. Any error aborts the creation flow and is returned.
 func CreateApplication(ctx *pulumi.Context, app *App) error {
-	resources := []func(ctx *pulumi.Context, app *App) error{
-		createServiceAccount, createNetworkPolicy,
-		createConfigMap, createPodDisruptionBudget,
-		createStorage, createDeployment,
+	account, err := createServiceAccount(ctx, app)
+	if err != nil {
+		return err
 	}
-	if !app.IsWorker() {
-		resources = append(resources, createService, createIngress)
+
+	if err := createNetworkPolicy(ctx, app); err != nil {
+		return err
+	}
+
+	config, err := createConfigMap(ctx, app)
+	if err != nil {
+		return err
+	}
+
+	resources := []func(ctx *pulumi.Context, app *App) error{
+		createPodDisruptionBudget, createStorage,
 	}
 	for _, resource := range resources {
 		if err := resource(ctx, app); err != nil {
 			return err
 		}
 	}
-	return nil
+
+	if err := createDeployment(ctx, account, config, app); err != nil {
+		return err
+	}
+
+	if app.IsWorker() {
+		return nil
+	}
+
+	if err := createService(ctx, app); err != nil {
+		return err
+	}
+
+	return createIngress(ctx, app)
 }
 
 // App describes an application that will be deployed to Kubernetes.

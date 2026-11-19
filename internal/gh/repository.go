@@ -29,8 +29,8 @@ var repositoryLabels = []struct {
 // repository template and GitHub Pages configuration. Secret scanning, push protection, and
 // vulnerability alerts are enabled for every repository. Non-archived repositories receive
 // the shared repository labels.
-func repository(ctx *pulumi.Context, repo *Repository) (*github.Repository, error) {
-	templateArgs, err := template(repo)
+func repository(ctx *pulumi.Context, source *github.Repository, repo *Repository) (*github.Repository, error) {
+	templateArgs, err := template(source, repo)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func pages(ctx *pulumi.Context, created *github.Repository, repo *Repository) er
 	return err
 }
 
-func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
+func template(source *github.Repository, repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	if !repo.HasTemplate() {
 		return nil, nil
 	}
@@ -146,6 +146,9 @@ func template(repo *Repository) (*github.RepositoryTemplateArgs, error) {
 	args := &github.RepositoryTemplateArgs{
 		Owner:      pulumi.String(repo.Template.Owner),
 		Repository: pulumi.String(repo.Template.Repository),
+	}
+	if source != nil {
+		args.Repository = source.Name
 	}
 
 	return args, nil

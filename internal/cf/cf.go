@@ -23,8 +23,7 @@ var account = pulumi.String(os.Getenv("CLOUDFLARE_ACCOUNT_ID"))
 // The file is expected to be HJSON matching the v2.Cloudflare protobuf schema.
 func ReadConfiguration(path string) (*v2.Cloudflare, error) {
 	var configuration v2.Cloudflare
-	err := config.Read(path, &configuration)
-	return &configuration, err
+	return &configuration, config.Read(path, &configuration)
 }
 
 // ZoneSetting represents a single Cloudflare zone setting name/value pair.
@@ -44,7 +43,7 @@ type ZoneSetting struct {
 // them stable across updates. The baseline enables always_use_https, min_tls_version 1.2,
 // cache_level aggressive, http3, and h2_prioritization; disables email_obfuscation; and uses
 // ssl as the value for the zone "ssl" setting.
-func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error {
+func settings(ctx *pulumi.Context, created *cloudflare.Zone, name, ssl string) error {
 	settings := []*ZoneSetting{
 		{Name: "always_use_https", Value: inputs.On},
 		{Name: "min_tls_version", Value: pulumi.String("1.2")},
@@ -58,7 +57,7 @@ func settings(ctx *pulumi.Context, name, ssl string, cz *cloudflare.Zone) error 
 		args := &cloudflare.ZoneSettingArgs{
 			SettingId: pulumi.String(setting.Name),
 			Value:     setting.Value,
-			ZoneId:    cz.ID(),
+			ZoneId:    created.ID(),
 		}
 		resourceName := fmt.Sprintf("%s_%s", name, setting.Name)
 

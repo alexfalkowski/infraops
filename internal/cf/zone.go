@@ -17,7 +17,7 @@ func createZone(ctx *pulumi.Context, name, domain, ssl string) (*cloudflare.Zone
 		return nil, err
 	}
 
-	if err := settings(ctx, name, ssl, z); err != nil {
+	if err := settings(ctx, z, name, ssl); err != nil {
 		return nil, err
 	}
 

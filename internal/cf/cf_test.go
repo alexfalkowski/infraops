@@ -146,6 +146,7 @@ func TestCreateBucket(t *testing.T) {
 			Name:       "test",
 			Region:     "eeur",
 			Expiration: new("24h"),
+			Zone:       &cf.BucketZone{ID: "test", Domain: "www.test.com"},
 		}
 
 		return cf.CreateBucket(ctx, bucket)
@@ -153,6 +154,7 @@ func TestCreateBucket(t *testing.T) {
 	require.Error(t, err)
 	require.Len(t, stub.Resources(r2BucketResourceType), 1)
 	require.Empty(t, stub.Resources(r2LifecycleResourceType), "lifecycle requires a successfully created bucket")
+	require.Empty(t, stub.Resources(r2CustomDomainResourceType), "custom domains require a successfully created bucket")
 }
 
 func TestBucketExpiration(t *testing.T) {

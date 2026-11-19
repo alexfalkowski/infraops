@@ -26,24 +26,12 @@ func TestCreateRepository(t *testing.T) {
 	requireBranchProtection(t, stub.Resources(branchProtectionResourceType))
 	requirePages(t, stub.Resources(repositoryPagesResourceType))
 	requireCollaborator(t, stub.Resources(repositoryCollaboratorResourceType))
+	requireLabels(t, stub.Resources(issueLabelResourceType))
+}
 
-	labels := stub.Resources(issueLabelResourceType)
-	require.Len(t, labels, 2)
-	labelsByName := make(map[string]resource.PropertyMap, len(labels))
-	for _, label := range labels {
-		require.Equal(t, "test", test.Property(t, label, "repository").StringValue())
-		labelsByName[test.Property(t, label, "name").StringValue()] = label
-	}
-
-	require.Contains(t, labelsByName, "automerge")
-	automerge := labelsByName["automerge"]
-	require.Equal(t, "0E8A16", test.Property(t, automerge, "color").StringValue())
-	require.Equal(t, "Eligible for automated merging.", test.Property(t, automerge, "description").StringValue())
-
-	require.Contains(t, labelsByName, "hold")
-	hold := labelsByName["hold"]
-	require.Equal(t, "FBCA04", test.Property(t, hold, "color").StringValue())
-	require.Equal(t, "Do not merge until this label is removed.", test.Property(t, hold, "description").StringValue())
+func TestCreateRepositorySettingsDependOnRepository(t *testing.T) {
+	stub := &test.ResourceStub{}
+	require.NoError(t, createRepository(t, fullRepository(), stub))
 
 	repositoryURN := string(resource.NewURN("stack", "project", "", repositoryResourceType, "test"))
 	for _, scenario := range []struct {
@@ -164,6 +152,95 @@ func TestCreateRepositoryFromIncompleteTemplateConfig(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestCreateRepositoriesFromManagedTemplates(t *testing.T) {
+	stub := &test.ResourceStub{}
+	require.NoError(t, createRepositories(t, managedTemplateRepositories(), stub))
+
+	created := stub.Resources(repositoryResourceType)
+	require.Len(t, created, 4, "a shared template must only be created once")
+	require.Equal(t, map[string]*gh.Template{
+		"test":    {Owner: "AlexFalkowski", Repository: "middle"},
+		"middle":  {Owner: "alexfalkowski", Repository: "root"},
+		"sibling": {Owner: "alexfalkowski", Repository: "root"},
+		"root":    nil,
+	}, repositoryTemplates(t, created))
+}
+
+func TestCreateRepositoriesDoesNotCreateFromFailedTemplate(t *testing.T) {
+	stub := &test.ResourceStub{}
+	stub.FailResource(repositoryResourceType)
+
+	err := createRepositories(t, managedTemplateRepositories(), stub)
+	require.ErrorIs(t, err, test.ErrResource)
+	created := stub.Resources(repositoryResourceType)
+	require.Len(t, created, 1, "consumers must not be created after their template fails")
+	require.Equal(t, "root", test.Property(t, created[0], "name").StringValue())
+}
+
+func TestCreateRepositoriesKeepsExternalTemplates(t *testing.T) {
+	for _, owner := range []string{"alexfalkowski", "example-org"} {
+		t.Run(owner, func(t *testing.T) {
+			repositories := externalTemplateRepositories(owner)
+			stub := &test.ResourceStub{}
+			require.NoError(t, createRepositories(t, repositories, stub))
+
+			created := repositoryTemplates(t, stub.Resources(repositoryResourceType))
+			require.Len(t, created, len(repositories), "all configured repositories must be created")
+			require.Equal(t, &gh.Template{Owner: owner, Repository: "go-service-template"}, created["test"])
+		})
+	}
+}
+
+func TestCreateRepositoriesKeepsExternalTemplatesIndependent(t *testing.T) {
+	for _, owner := range []string{"alexfalkowski", "example-org"} {
+		t.Run(owner, func(t *testing.T) {
+			repositories := externalTemplateRepositories(owner)
+			stub := &test.ResourceStub{}
+			stub.FailResource(repositoryResourceType)
+
+			err := createRepositories(t, repositories, stub)
+			require.ErrorIs(t, err, test.ErrResource)
+			require.Len(t, stub.Resources(repositoryResourceType), len(repositories), "external templates must remain independent")
+		})
+	}
+}
+
+func TestCreateRepositoriesRejectsInvalidDependencies(t *testing.T) {
+	for _, scenario := range []struct {
+		name    string
+		repos   []*gh.Repository
+		message string
+	}{
+		{
+			name: "self reference",
+			repos: []*gh.Repository{
+				{Name: "root", Template: &gh.Template{Owner: "alexfalkowski", Repository: "ROOT"}},
+			},
+			message: "template dependency cycle",
+		},
+		{
+			name: "template cycle",
+			repos: []*gh.Repository{
+				{Name: "root", Template: &gh.Template{Owner: "alexfalkowski", Repository: "child"}},
+				{Name: "child", Template: &gh.Template{Owner: "alexfalkowski", Repository: "root"}},
+			},
+			message: "template dependency cycle",
+		},
+		{
+			name:    "duplicate names",
+			repos:   []*gh.Repository{{Name: "root"}, {Name: "ROOT"}},
+			message: "duplicate repository ROOT",
+		},
+	} {
+		t.Run(scenario.name, func(t *testing.T) {
+			stub := &test.ResourceStub{}
+			err := createRepositories(t, scenario.repos, stub)
+			require.ErrorContains(t, err, scenario.message)
+			require.Empty(t, stub.Resources(repositoryResourceType))
+		})
+	}
+}
+
 func fullRepository() *gh.Repository {
 	return gh.ConvertRepository(&v2.Repository{
 		Name:        "test",
@@ -191,6 +268,85 @@ func createRepository(t *testing.T, repository *gh.Repository, mocks pulumi.Mock
 	return test.RunWithMocks(func(ctx *pulumi.Context) error {
 		return gh.CreateRepository(ctx, repository)
 	}, mocks)
+}
+
+func createRepositories(t *testing.T, repositories []*gh.Repository, mocks pulumi.MockResourceMonitor) error {
+	t.Helper()
+
+	return test.RunWithMocks(func(ctx *pulumi.Context) error {
+		return gh.CreateRepositories(ctx, repositories)
+	}, mocks)
+}
+
+func managedTemplateRepositories() []*gh.Repository {
+	child := fullRepository()
+	child.Template = &gh.Template{Owner: "AlexFalkowski", Repository: "MIDDLE"}
+	middle := fullRepository()
+	middle.Name = "middle"
+	middle.IsTemplate = true
+	middle.Template.Repository = "root"
+	root := fullRepository()
+	root.Name = "root"
+	root.IsTemplate = true
+	root.Template = nil
+	sibling := fullRepository()
+	sibling.Name = "sibling"
+	sibling.Template.Repository = "root"
+
+	return []*gh.Repository{child, middle, sibling, root}
+}
+
+func externalTemplateRepositories(owner string) []*gh.Repository {
+	child := fullRepository()
+	child.Template.Owner = owner
+	repositories := []*gh.Repository{child}
+	if owner == "example-org" {
+		local := fullRepository()
+		local.Name = child.Template.Repository
+		local.Template = nil
+		local.IsTemplate = true
+		repositories = append(repositories, local)
+	}
+	return repositories
+}
+
+func repositoryTemplates(t *testing.T, repositories []resource.PropertyMap) map[string]*gh.Template {
+	t.Helper()
+
+	templates := make(map[string]*gh.Template, len(repositories))
+	for _, repository := range repositories {
+		name := test.Property(t, repository, "name").StringValue()
+		templates[name] = nil
+		if template, ok := repository["template"]; ok {
+			properties := template.ObjectValue()
+			templates[name] = &gh.Template{
+				Owner:      test.Property(t, properties, "owner").StringValue(),
+				Repository: test.Property(t, properties, "repository").StringValue(),
+			}
+		}
+	}
+	return templates
+}
+
+func requireLabels(t *testing.T, labels []resource.PropertyMap) {
+	t.Helper()
+
+	require.Len(t, labels, 2)
+	labelsByName := make(map[string]resource.PropertyMap, len(labels))
+	for _, label := range labels {
+		require.Equal(t, "test", test.Property(t, label, "repository").StringValue())
+		labelsByName[test.Property(t, label, "name").StringValue()] = label
+	}
+
+	require.Contains(t, labelsByName, "automerge")
+	automerge := labelsByName["automerge"]
+	require.Equal(t, "0E8A16", test.Property(t, automerge, "color").StringValue())
+	require.Equal(t, "Eligible for automated merging.", test.Property(t, automerge, "description").StringValue())
+
+	require.Contains(t, labelsByName, "hold")
+	hold := labelsByName["hold"]
+	require.Equal(t, "FBCA04", test.Property(t, hold, "color").StringValue())
+	require.Equal(t, "Do not merge until this label is removed.", test.Property(t, hold, "description").StringValue())
 }
 
 func requireBranchProtection(t *testing.T, protections []resource.PropertyMap) {

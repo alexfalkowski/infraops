@@ -59,12 +59,12 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 	for _, recordName := range zone.RecordNames {
 		name := fmt.Sprintf("%s.%s", recordName, zone.Domain)
 
-		if err := record(ctx, name, "A", zone.IPV4, z.ID()); err != nil {
+		if err := record(ctx, z.ID(), name, "A", zone.IPV4); err != nil {
 			return err
 		}
 
 		if zone.IPV6 != "" {
-			if err := record(ctx, name, "AAAA", zone.IPV6, z.ID()); err != nil {
+			if err := record(ctx, z.ID(), name, "AAAA", zone.IPV6); err != nil {
 				return err
 			}
 		}
@@ -76,7 +76,7 @@ func CreateBalancerZone(ctx *pulumi.Context, zone *BalancerZone) error {
 //
 // The Pulumi resource name is prefixed (for example "ipv4.<name>") to keep the A and AAAA records
 // distinct while remaining stable across updates.
-func record(ctx *pulumi.Context, name, kind, ip string, id pulumi.IDOutput) error {
+func record(ctx *pulumi.Context, id pulumi.IDOutput, name, kind, ip string) error {
 	record := &cloudflare.RecordArgs{
 		Type:    pulumi.String(kind),
 		Name:    pulumi.String(name),

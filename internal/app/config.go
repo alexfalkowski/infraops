@@ -8,14 +8,13 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createConfigMap(ctx *pulumi.Context, app *App) error {
+func createConfigMap(ctx *pulumi.Context, app *App) (*cv1.ConfigMap, error) {
 	args, err := configMap(app)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = cv1.NewConfigMap(ctx, app.Name, args)
-	return err
+	return cv1.NewConfigMap(ctx, app.Name, args)
 }
 
 func configMap(app *App) (*cv1.ConfigMapArgs, error) {

@@ -93,6 +93,9 @@ func TestApplicationReturnsResourceErrors(t *testing.T) {
 
 			require.Error(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
 			require.NotEmpty(t, stub.Resources(tt.resourceType))
+			if tt.resourceType == serviceAccountResourceType || tt.resourceType == configMapResourceType {
+				require.Empty(t, stub.Resources(deploymentResourceType), "a failed prerequisite must prevent deployment")
+			}
 		})
 	}
 }

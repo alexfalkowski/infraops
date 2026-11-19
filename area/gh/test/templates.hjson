@@ -1,0 +1,20 @@
+{
+  version: "2.0"
+  repositories: [
+    {
+      name: consumer
+      visibility: public
+      template: {
+        owner: alexfalkowski
+        repository: starter
+      }
+      checks: ["ci/circleci: wait-all"]
+    }
+    {
+      name: starter
+      visibility: public
+      is_template: true
+      checks: ["ci/circleci: wait-all"]
+    }
+  ]
+}

@@ -19,8 +19,7 @@ var sizes = map[string]digitalocean.DropletSlug{
 // The file is expected to be HJSON matching the v2.DigitalOcean protobuf schema.
 func ReadConfiguration(path string) (*v2.DigitalOcean, error) {
 	var configuration v2.DigitalOcean
-	err := config.Read(path, &configuration)
-	return &configuration, err
+	return &configuration, config.Read(path, &configuration)
 }
 
 // Cluster describes a DigitalOcean Kubernetes cluster configuration.

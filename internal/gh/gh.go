@@ -6,6 +6,7 @@ import (
 
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
 	"github.com/alexfalkowski/infraops/v2/internal/config"
+	"github.com/pulumi/pulumi-github/sdk/v6/go/github"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -64,8 +65,7 @@ func (c Checks) Valid() error {
 // The file is expected to be HJSON matching the v2.Github protobuf schema.
 func ReadConfiguration(path string) (*v2.Github, error) {
 	var configuration v2.Github
-	err := config.Read(path, &configuration)
-	return &configuration, err
+	return &configuration, config.Read(path, &configuration)
 }
 
 // ConvertRepository converts a protobuf v2.Repository into the internal Repository model.
@@ -110,21 +110,10 @@ func ConvertRepository(r *v2.Repository) *Repository {
 // such as branch protection, always-on security settings, vulnerability alerts, Pages,
 // collaborators, and shared labels for non-archived repositories. Errors are wrapped with
 // the repository name to make failures easier to identify in Pulumi output.
+// A configured template must already exist; use CreateRepositories for templates managed together.
 func CreateRepository(ctx *pulumi.Context, repo *Repository) error {
-	r, err := repository(ctx, repo)
-	if err != nil {
-		return fmt.Errorf("%v: %w", repo.Name, err)
-	}
-
-	if err := branchProtection(ctx, r, repo); err != nil {
-		return fmt.Errorf("%v: %w", repo.Name, err)
-	}
-
-	if err := collaborator(ctx, r, repo); err != nil {
-		return fmt.Errorf("%v: %w", repo.Name, err)
-	}
-
-	return nil
+	_, err := createRepository(ctx, nil, repo)
+	return err
 }
 
 // Visibility is a GitHub repository visibility setting (for example "public" or "private").
@@ -198,4 +187,21 @@ func (r *Repository) HasTemplate() bool {
 // HasPages reports whether Pages management is enabled for this repository.
 func (r *Repository) HasPages() bool {
 	return r.Pages != nil && r.Pages.Enabled
+}
+
+func createRepository(ctx *pulumi.Context, source *github.Repository, repo *Repository) (*github.Repository, error) {
+	r, err := repository(ctx, source, repo)
+	if err != nil {
+		return nil, fmt.Errorf("%v: %w", repo.Name, err)
+	}
+
+	if err := branchProtection(ctx, r, repo); err != nil {
+		return nil, fmt.Errorf("%v: %w", repo.Name, err)
+	}
+
+	if err := collaborator(ctx, r, repo); err != nil {
+		return nil, fmt.Errorf("%v: %w", repo.Name, err)
+	}
+
+	return r, nil
 }

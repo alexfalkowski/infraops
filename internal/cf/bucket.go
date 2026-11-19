@@ -103,7 +103,7 @@ func CreateBucket(ctx *pulumi.Context, bucket *Bucket) error {
 	}
 
 	if bucket.Expiration != nil {
-		if err := newLifecycle(ctx, bucket, b, expiration); err != nil {
+		if err := newLifecycle(ctx, b, expiration, bucket); err != nil {
 			return err
 		}
 	}
@@ -111,14 +111,14 @@ func CreateBucket(ctx *pulumi.Context, bucket *Bucket) error {
 		return nil
 	}
 
-	return newDomain(ctx, bucket)
+	return newDomain(ctx, b, bucket)
 }
 
 // newLifecycle replaces the bucket's lifecycle rules after the bucket exists.
-func newLifecycle(ctx *pulumi.Context, bucket *Bucket, b *cloudflare.R2Bucket, expiration time.Duration) error {
+func newLifecycle(ctx *pulumi.Context, created *cloudflare.R2Bucket, expiration time.Duration, bucket *Bucket) error {
 	args := &cloudflare.R2BucketLifecycleArgs{
 		AccountId:  account,
-		BucketName: b.Name,
+		BucketName: created.Name,
 		Rules: cloudflare.R2BucketLifecycleRuleArray{
 			&cloudflare.R2BucketLifecycleRuleArgs{
 				Id:      pulumi.String("expire-objects"),
@@ -147,13 +147,13 @@ func newLifecycle(ctx *pulumi.Context, bucket *Bucket, b *cloudflare.R2Bucket, e
 	return err
 }
 
-// newDomain creates an R2 custom domain for bucket.
+// newDomain creates an R2 custom domain after the bucket exists.
 //
 // It enables the domain and sets a minimum TLS version of 1.2.
-func newDomain(ctx *pulumi.Context, bucket *Bucket) error {
+func newDomain(ctx *pulumi.Context, created *cloudflare.R2Bucket, bucket *Bucket) error {
 	args := &cloudflare.R2CustomDomainArgs{
 		AccountId:  account,
-		BucketName: pulumi.String(bucket.Name),
+		BucketName: created.Name,
 		Domain:     pulumi.String(bucket.Zone.Domain),
 		Enabled:    inputs.Yes,
 		ZoneId:     pulumi.String(bucket.Zone.ID),
