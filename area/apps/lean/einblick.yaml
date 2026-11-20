@@ -1,4 +1,9 @@
 environment: production
+queries:
+  max_results: 100
+  max_range: 24h
+  timeout: 5s
+  concurrency: 1
 duckdb:
   path: /data/recent.duckdb
   memory_limit: 64MiB
