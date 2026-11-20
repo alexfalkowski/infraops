@@ -37,19 +37,19 @@ github:
 review:
   code:
     provider: openai
-    model: gpt-6.1-sol
+    model: gpt-6.2-sol
     effort: high
     interval: 15m
     timeout: 20m
   sec:
     provider: openai
-    model: gpt-6.1-sol
+    model: gpt-6.2-sol
     effort: high
     interval: 15m
     timeout: 20m
   test:
     provider: openai
-    model: gpt-6.1-sol
+    model: gpt-6.2-sol
     effort: high
     interval: 15m
     timeout: 20m
@@ -58,7 +58,7 @@ scheduler:
   timeout: 5m
 summarise:
   provider: openai
-  model: gpt-6.1-sol
+  model: gpt-6.2-sol
   effort: medium
   interval: 30s
   timeout: 2m
