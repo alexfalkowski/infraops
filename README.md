@@ -272,8 +272,8 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 
 [Einblick's configuration](area/apps/lean/einblick.yaml) runs one small replica with HTTP and gRPC
 enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
-`protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Version 1.3.0 requires
-DuckDB settings and opens `/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
+`protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Einblick opens
+`/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
 using the cluster's `do-block-storage-retain` profile. Database, WAL and spill files share
 that writable mount; the root filesystem stays read-only. DuckDB uses `64MiB` and one
 worker initially; its memory setting does not bound total container memory, and the
@@ -286,25 +286,33 @@ ready; moving to another node can also require volume detach/attach time. Pod re
 outside deployment rollouts can still overlap, and the application currently has no
 database-lock retry policy or startup delay. The other configured apps use `strategy: rolling`.
 
-Readiness checks database connectivity. The service receives logs, metrics, and traces,
-prints them through its text logger, then discards them; telemetry persistence, queries,
-and R2 credentials remain unwired. Keep Einblick's own telemetry exporters pointed away
-from itself to avoid recursive exports. See [database configuration](https://github.com/alexfalkowski/einblick/blob/v1.3.0/docs/configuration.md)
-and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.3.0/docs/ingestion.md).
+Readiness checks database connectivity. Einblick stores logs in the local DuckDB database.
+The `/logs` view opens on the last seven days and offers shorter presets. The `168h`
+event-time limit also applies to the log query API. Metrics and traces are printed through
+the text logger and then discarded. Keep Einblick's own telemetry exporters pointed away
+from itself to avoid recursive exports. See [database configuration](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/configuration.md),
+[recent-log queries](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/queries.md),
+and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/ingestion.md).
+
+Accepted logs stay on the local claim without automatic expiration or archival to R2.
+Monitor free space on the claim. See [log storage and recovery](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/operations.md#-log-storage-and-recovery).
+
+The log browser has no application login. Verify edge access controls for both the browser
+and the HTTP query API before rollout.
 
 Abgleich, Bezeichner, Standort, and Web export logs at `info` level and above, metrics, and traces
 to that in-cluster gRPC endpoint. Their `telemetry.logger`, `telemetry.metrics`, and
 `telemetry.tracer` blocks each select `kind: otlp` and `protocol: grpc`. Exporters use the
 OpenTelemetry SDK's default batching, queue limits, metric interval, and trace sampling.
 The connection uses cleartext within the cluster and sends no authentication headers.
-Application logs go to Einblick instead of each client's stdout; inspect Einblick's pod logs
-for the printed telemetry.
+Application logs go to Einblick's `/logs` view. Inspect Einblick's pod logs for the printed
+metrics and traces.
 
-Ensure Einblick v1.3.0 is running before rolling out the clients. After the apps preview and update,
-run `make -C area/apps rollout` so existing client pods load the updated ConfigMaps. If Einblick's
-own configuration changed, restart it first with `cd area/apps && ./release rollout-einblick`.
-Verification checks `/einblick/readyz`; confirm logs, metrics, and traces appear in Einblick's
-pod logs after sending client traffic and allowing time for batched and periodic exports.
+After the apps update, restart Einblick with `(cd area/apps && ./release rollout-einblick)`
+if its ConfigMap changed and the update left its existing pods in place. Wait for
+`kubectl -n lean rollout status deployment/einblick` to succeed. Restart client pods only
+when they need to load their own updated ConfigMaps. After sending client traffic and allowing
+time for exports, confirm `/logs` shows the **7 days** preset and the client logs.
 Load checks skip Einblick until an application scenario is available.
 
 The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and a private `einblick`

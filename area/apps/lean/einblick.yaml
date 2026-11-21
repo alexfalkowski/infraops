@@ -1,7 +1,7 @@
 environment: production
 queries:
   max_results: 100
-  max_range: 24h
+  max_range: 168h
   timeout: 5s
   concurrency: 1
 duckdb:
