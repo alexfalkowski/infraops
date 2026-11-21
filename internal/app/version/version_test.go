@@ -28,6 +28,12 @@ func TestValidUpdate(t *testing.T) {
 	require.Equal(t, "1.0.0", applications[1].GetVersion())
 	require.EqualValues(t, 3, applications[1].GetReplicas())
 	require.Equal(t, "rolling", applications[1].GetStrategy())
+	storage := applications[1].GetStorage()
+	require.Len(t, storage, 2)
+	require.Equal(t, "1Gi", storage["data"].GetCapacity())
+	require.Equal(t, "/data", storage["data"].GetPath())
+	require.Equal(t, "2Gi", storage["archive"].GetCapacity())
+	require.Equal(t, "/staging", storage["archive"].GetPath())
 }
 
 func TestInvalidUpdate(t *testing.T) {

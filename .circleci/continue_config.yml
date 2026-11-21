@@ -101,7 +101,7 @@ jobs:
           steps:
             - run: make build-format
       - run: make api-lint
-      # Re-enable after the intentional Application field renumbering reaches master.
+      # Re-enable after the Application field renumbering and storage schema changes reach master.
       # - run: make api-breaking
       - run: make sec
       - save_cache:

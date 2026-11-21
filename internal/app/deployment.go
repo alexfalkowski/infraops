@@ -10,7 +10,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *cv1.ConfigMap, app *App) error {
+func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *cv1.ConfigMap, app *App, claims []pulumi.Resource) error {
 	var strategy av1.DeploymentStrategyArgs
 	switch app.Strategy {
 	case "", "rolling":
@@ -25,11 +25,12 @@ func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *
 	}
 
 	volumes := createSecretVolumes(config.Metadata.Name().Elem(), app)
-	if app.Storage != nil {
+	for _, storage := range app.Storage {
+		name := pulumi.String(storage.claimName(app.Name))
 		volumes = append(volumes, cv1.VolumeArgs{
-			Name: pulumi.String(app.Name + storageSuffix),
+			Name: name,
 			PersistentVolumeClaim: cv1.PersistentVolumeClaimVolumeSourceArgs{
-				ClaimName: pulumi.String(app.Name + storageSuffix),
+				ClaimName: name,
 				ReadOnly:  inputs.No,
 			},
 		})
@@ -57,7 +58,7 @@ func createDeployment(ctx *pulumi.Context, account *cv1.ServiceAccount, config *
 			},
 		},
 	}
-	_, err := av1.NewDeployment(ctx, app.Name, args)
+	_, err := av1.NewDeployment(ctx, app.Name, args, pulumi.DependsOn(claims))
 
 	return err
 }

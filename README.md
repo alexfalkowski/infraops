@@ -35,8 +35,10 @@ flowchart LR
 ```
 
 The [protobuf schema](api/infraops/v2/service.proto) owns field definitions, defaults, and deployment
-conventions. The top-level HJSON `version` identifies the configuration schema. Semantic errors may
-still surface during Pulumi or provider operations.
+conventions. The top-level HJSON `version` identifies the configuration schema. HJSON readers reject
+duplicate keys within an object. An app can declare `storage` only once, regardless of capitalization.
+Duplicate-key diagnostics omit configuration values. Semantic errors may still surface during Pulumi
+or provider operations.
 
 ## 🚚 Bootstrap
 
@@ -57,8 +59,9 @@ API checks use Buf. The golangci-lint wrapper skips its check when the tool is a
 
 When changing [service.proto](api/infraops/v2/service.proto), run `make api-generate` and include the
 updated `service.pb.go`; do not edit generated Go directly. The CI breaking-change check is currently
-commented out for intentional field renumbering; API linting remains enabled. Renumbering requires
-rebuilding binary protobuf consumers together; HJSON configuration uses field names. The optional
+commented out for intentional field renumbering and the move to named storage. Both changes
+require rebuilding binary protobuf consumers together. HJSON configurations must use the new
+storage shape. API linting remains enabled. The optional
 `make api-breaking` comparison checks against GitHub `master` and requires network access.
 
 ## 🚀 Preview and Deploy
@@ -161,10 +164,10 @@ lives at `area/apps/<namespace>/<app>.yaml`; Pulumi puts it in a ConfigMap and m
 `/etc/<app>/<app>.yaml`. Files under `area/apps/fiction/` are examples unless a matching entry in
 `apps.hjson` references them. Consult each application's README for the contents of its YAML config.
 
-Before enabling `strategy` or storage, update the shared release image to a `cmd/bump`
-version that understands those fields and update all consuming app pipelines to that image.
-Helpers built against an older schema discard unknown settings when rewriting the configuration,
-even when releasing another app.
+Use a shared release image with `cmd/bump` built for the current apps schema. When migrating
+to named storage, pause automated version bumps until all app pipelines use that image.
+Older helpers can drop named volumes when rewriting `apps.hjson`, including when releasing
+another app.
 
 When adding an app, also extend [area/apps/release](area/apps/release) with its supported name,
 verification and rollout commands, and load eligibility. Add load fixtures only when they exercise
@@ -187,34 +190,42 @@ See [Kubernetes deployment strategies](https://kubernetes.io/docs/concepts/workl
 
 ### 💾 Persistent Application Storage
 
-An application can opt into one persistent filesystem claim. Add this block to that
-application's HJSON object; the values below are illustrative, not production sizing:
+An application can declare multiple persistent volumes in its `storage` map.
+Each entry specifies the volume name, capacity, and mount path.
 
 ```hjson
 storage: {
-  capacity: 1Gi
-  path: "/data"
-  profile: example-csi
+  data: {
+    capacity: 1Gi
+    path: /data
+  }
+  archive: {
+    capacity: 2Gi
+    path: /staging
+  }
 }
 ```
 
-Choose capacity and a storage provisioning profile for the installation before deploying.
-The Kubernetes adapter maps `profile` to an existing StorageClass. Omit
-`profile` to leave class assignment to the cluster default, or set it to `""`
-to request no class and bind a matching pre-provisioned PV. Capacity has no default;
-Kubernetes/provider validation applies to quantities and available storage. The claim
-requests `ReadWriteOnce` and `Filesystem`. See [Storage](api/infraops/v2/service.proto)
-for the complete field contract.
+The apps program uses the cluster's `do-block-storage-retain` StorageClass for app
+volumes. Set capacity explicitly. Kubernetes validates the quantity and storage
+availability. Each claim requests `ReadWriteOnce` and `Filesystem`. Pulumi waits for the
+claims before rolling out the Deployment.
+See the [Storage schema](api/infraops/v2/service.proto).
 
-The PVC's Kubernetes and Pulumi name is `<app>-data`, in the app's namespace. Pod
-replacement, image/config updates and scaling retain that identity. All replicas
-share the same claim. `ReadWriteOnce` permits multiple pods on one node; it does not
+Each PVC's Kubernetes and Pulumi name is `<app>-<volume>` in the app's namespace.
+Use lowercase ASCII letters and digits for volume keys. The combined name must be a
+Kubernetes DNS label of at most 63 characters. If the existing `<app>-data` claim uses
+`do-block-storage-retain`, put its current capacity and path under `data` to preserve
+the claim and mount. For a claim on another class or with no class, migrate the data
+to the retained class before applying the new configuration. Pod replacement,
+image/config updates and scaling retain claim identities. All replicas share the same claims.
+`ReadWriteOnce` permits multiple pods on one node; it does not
 enforce one writer. Storage leaves the configured rollout strategy and disruption budget
 unchanged. Choose `strategy` separately for the application's concurrency requirements;
 Einblick uses `recreate` with one replica for its exclusive DuckDB connection.
 
-The entire claim mounts writable at the required absolute, clean, non-root
-`path`, without a subPath. Choose a dedicated directory that does not hide
+Each claim mounts writable at its own absolute, clean, non-root `path`, without a
+subPath. Choose a dedicated directory that does not hide
 image files, `/etc/<app>` config or `/etc/secrets`. Put the database, engine recovery
 files, pending exports and any temporary workspace beneath that mount; the app owns
 creating subdirectories and bounding workspace use. No paths or environment variables
@@ -228,7 +239,7 @@ describes the driver-dependent ownership handling.
 Claims use [Pulumi protection](https://www.pulumi.com/docs/iac/concepts/resources/options/protect/).
 Removing storage/an application or attempting a claim replacement fails until the
 operator deliberately unprotects the claim. Back up or migrate data and review the
-preview before doing so. A rename or namespace change changes claim identity and
+preview before doing so. Renaming a volume or app, or moving to another namespace, changes claim identity and
 does not migrate data. Class changes require migration; capacity increases require
 class/driver expansion support, and shrinking is unsupported. Changing mount path
 keeps the claim but requires aligning the app's paths. Rolling back to config/code
@@ -237,11 +248,23 @@ storage rollback.
 
 Protection applies to Pulumi-managed operations. It does not prevent direct Kubernetes,
 namespace or cluster deletion, including `make -C area/apps delete`. The bound PV's
-reclaim policy controls whether claim deletion also deletes its backing storage;
-this capability does not create a StorageClass or set PV reclaim policy. Inspect
-those policies and arrange backups independently. [Kubernetes persistent-volume guidance](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
-owns binding, access, expansion and reclamation behavior. Applications that omit
-`storage` retain their existing config/secret-only volumes.
+reclaim policy controls what happens to the disk when the claim is deleted.
+`do-block-storage-retain` sets `Retain`, so the disk stays available and billable
+after claim deletion.
+See [Kubernetes persistent-volume guidance](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming).
+
+#### 🗑️ Delete a retained disk
+
+1. Find the bound PV with `kubectl get pv` and record its name and DigitalOcean volume
+   ID (`spec.csi.volumeHandle` on the PV) before removing the claim.
+2. Stop or migrate the workload using the disk. For a Pulumi-managed claim, unprotect
+   that claim, remove its storage configuration, and preview and apply the apps update.
+   Wait for DigitalOcean to show the disk as detached.
+3. In the [DigitalOcean Volumes page](https://cloud.digitalocean.com/volumes), locate
+   the disk you recorded, then choose **More → Delete → Confirm**. This permanently
+   deletes the data and stops billing for the disk.
+   See [DigitalOcean's deletion instructions](https://docs.digitalocean.com/products/volumes/how-to/delete-detach/#delete-a-volume-using-the-control-panel).
+4. Delete the corresponding `Released` PV from Kubernetes to clear its record.
 
 ### 🏗️ Prepare the Cluster
 
@@ -274,7 +297,7 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
 `protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Einblick opens
 `/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
-using the cluster's `do-block-storage-retain` profile. Database, WAL and spill files share
+using the cluster's `do-block-storage-retain` class. Database, WAL and spill files share
 that writable mount, and the root filesystem stays read-only. The pod requests `256Mi`
 of memory and has a `512Mi` limit. DuckDB uses one worker and a `256MiB` memory limit,
 leaving headroom for memory outside DuckDB's buffer manager.

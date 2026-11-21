@@ -17,10 +17,10 @@ func containers(app *App) cv1.ContainerArray {
 	for _, v := range app.Secrets {
 		volumeMounts = append(volumeMounts, secretVolumeMount(v))
 	}
-	if app.Storage != nil {
+	for _, storage := range app.Storage {
 		volumeMounts = append(volumeMounts, cv1.VolumeMountArgs{
-			Name:      pulumi.String(app.Name + storageSuffix),
-			MountPath: pulumi.String(app.Storage.Path),
+			Name:      pulumi.String(storage.claimName(app.Name)),
+			MountPath: pulumi.String(storage.Path),
 			ReadOnly:  inputs.No,
 		})
 	}

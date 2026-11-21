@@ -35,24 +35,17 @@ message EnvVar {
   string value = 2;
 }
 
-// Storage configures persistent application data shared across instance replacements.
-// Omission preserves the application's existing storage behavior. Provisioned storage
-// is protected against deletion/replacement; removing it requires deliberate operator
-// action after backup or migration. See the README for adapter lifecycle details.
+// Storage configures a persistent filesystem volume shared across instance replacements.
+// Each volume is protected against deletion and replacement. See the README for lifecycle details.
 message Storage {
   // Capacity is the required storage request quantity (for example "1Gi"); no default
-  // is selected. Provisioning and expansion depend on the selected profile.
+  // is selected. Provisioning and expansion depend on the cluster's storage class.
   string capacity = 1;
 
   // Path is the required absolute, clean, non-root data directory within the application.
   // It is writable using the application's existing non-root identity. Keep database,
   // recovery files, pending exports and workspace here; verify permissions at runtime.
   string path = 2;
-
-  // Profile selects an existing storage provisioning profile. Omission uses the
-  // installation default; an explicit empty string requests storage without a profile.
-  // A profile change requires migration rather than automatic replacement.
-  optional string profile = 3;
 }
 
 // Application describes a deployable application.
@@ -134,10 +127,12 @@ message Application {
   // EnvVars is the list of environment variables to inject into the application container.
   repeated EnvVar env_vars = 11;
 
-  // Storage optionally provisions writable persistent application data.
-  // Omission preserves existing storage behavior. It does not change replicas or
-  // select a rollout strategy; configure strategy separately for exclusive writers.
-  Storage storage = 12;
+  // Storage maps volume keys to writable persistent filesystems. Keys use lowercase ASCII
+  // letters and digits. Each key is appended to the application name with a hyphen to form
+  // the claim name, which must be a Kubernetes DNS label of at most 63 characters. Mount
+  // paths must be distinct. Omit storage for apps without persistent volumes. Configure
+  // the rollout strategy separately for exclusive writers.
+  map<string, Storage> storage = 12;
 }
 
 // Kubernetes is the top-level configuration for the `area/apps` Pulumi program.

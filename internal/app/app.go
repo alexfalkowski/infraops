@@ -2,6 +2,8 @@ package app
 
 import (
 	"errors"
+	"maps"
+	"slices"
 	"strings"
 
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
@@ -49,12 +51,14 @@ func ConvertApplication(a *v2.Application) *App {
 		Secrets:   a.GetSecrets(),
 	}
 
-	if storage := a.GetStorage(); storage != nil {
-		app.Storage = &Storage{
-			Capacity: storage.GetCapacity(),
-			Path:     storage.GetPath(),
-			Profile:  storage.Profile,
-		}
+	storage := a.GetStorage()
+	for _, key := range slices.Sorted(maps.Keys(storage)) {
+		volume := storage[key]
+		app.Storage = append(app.Storage, Storage{
+			Key:      key,
+			Capacity: volume.GetCapacity(),
+			Path:     volume.GetPath(),
+		})
 	}
 
 	envVars := a.GetEnvVars()
@@ -76,8 +80,8 @@ func ConvertApplication(a *v2.Application) *App {
 
 // CreateApplication creates all Kubernetes resources required for app in the target cluster.
 //
-// The Deployment references ServiceAccount and ConfigMap outputs so Pulumi orders their
-// operations before the rollout. Any error aborts the creation flow and is returned.
+// The Deployment depends on the ServiceAccount, ConfigMap, and storage claims so Pulumi
+// orders their operations before the rollout. Any error aborts creation and is returned.
 func CreateApplication(ctx *pulumi.Context, app *App) error {
 	account, err := createServiceAccount(ctx, app)
 	if err != nil {
@@ -93,16 +97,15 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 		return err
 	}
 
-	resources := []func(ctx *pulumi.Context, app *App) error{
-		createPodDisruptionBudget, createStorage,
+	if err := createPodDisruptionBudget(ctx, app); err != nil {
+		return err
 	}
-	for _, resource := range resources {
-		if err := resource(ctx, app); err != nil {
-			return err
-		}
+	claims, err := createStorage(ctx, app)
+	if err != nil {
+		return err
 	}
 
-	if err := createDeployment(ctx, account, config, app); err != nil {
+	if err := createDeployment(ctx, account, config, app, claims); err != nil {
 		return err
 	}
 
@@ -124,9 +127,6 @@ func CreateApplication(ctx *pulumi.Context, app *App) error {
 type App struct {
 	// Resources are optional resource requests/limits to apply to the pod.
 	Resources *Resources
-
-	// Storage optionally creates a protected persistent claim and writable data mount.
-	Storage *Storage
 
 	// ID is an optional identifier from configuration.
 	ID string
@@ -158,6 +158,9 @@ type App struct {
 
 	// EnvVars are environment variables to be injected into the application container.
 	EnvVars []*EnvVar
+
+	// Storage lists the protected claims and writable mounts provisioned for the app.
+	Storage []Storage
 
 	// Replicas is the fixed number of application pods to run. Zero runs no pods.
 	Replicas int32

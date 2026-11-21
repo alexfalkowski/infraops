@@ -1,7 +1,7 @@
 package app_test
 
 import (
-	"os"
+	"strings"
 	"testing"
 
 	v2 "github.com/alexfalkowski/infraops/v2/api/infraops/v2"
@@ -187,11 +187,7 @@ func TestApplicationDeploymentStrategy(t *testing.T) {
 			require.Equal(t, resource.NewPropertyMapFromMap(tt.expected),
 				test.Property(t, deploymentSpec(deployment), "strategy").ObjectValue())
 			assertApplicationVolumes(t, deployment, configured.GetStorage())
-			if tt.persistentStorage {
-				assertStorageClaim(t, resourceOf(t, stub, pvcResourceType), configured.GetStorage())
-			} else {
-				require.Empty(t, stub.Resources(pvcResourceType))
-			}
+			assertStorageClaims(t, stub.Resources(pvcResourceType), configured.GetStorage())
 		})
 	}
 }
@@ -215,7 +211,7 @@ func TestApplicationReturnsMissingConfigError(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := appWithResources()
 	application.Namespace = "missing-config-fixture"
-	application.Storage = &app.Storage{Capacity: "1Gi", Path: "/data"}
+	application.Storage = []app.Storage{{Key: "data", Capacity: "1Gi", Path: "/data"}}
 
 	run := func(ctx *pulumi.Context) error {
 		return app.CreateApplication(ctx, application)
@@ -356,22 +352,18 @@ func TestWorkerApplicationOmitsServiceAndIngress(t *testing.T) {
 }
 
 func TestApplicationPersistentStorage(t *testing.T) {
+	data := &v2.Storage{Capacity: "1Gi", Path: "/data"}
 	for _, tt := range []struct {
-		storage *v2.Storage
+		storage map[string]*v2.Storage
 		name    string
 	}{
 		{name: "without storage"},
-		{name: "cluster default class", storage: &v2.Storage{Capacity: "1Gi", Path: "/data"}},
+		{name: "one volume", storage: map[string]*v2.Storage{"data": data}},
 		{
-			name: "no class",
-			storage: &v2.Storage{
-				Capacity: "2Gi", Path: "/var/lib/test", Profile: new(""),
-			},
-		},
-		{
-			name: "named class",
-			storage: &v2.Storage{
-				Capacity: "1Gi", Path: "/data", Profile: new("example-csi"),
+			name: "multiple volumes",
+			storage: map[string]*v2.Storage{
+				"data":    data,
+				"archive": {Capacity: "2Gi", Path: "/staging"},
 			},
 		},
 	} {
@@ -380,13 +372,6 @@ func TestApplicationPersistentStorage(t *testing.T) {
 			require.NoError(t, err)
 			configured := configuration.GetApplications()[0]
 			configured.Storage = tt.storage
-			// Canonical config rewrites must retain the distinction between absent and empty class.
-			file := t.TempDir() + "/apps.hjson"
-			require.NoError(t, os.WriteFile(file, nil, 0o600))
-			require.NoError(t, app.WriteConfiguration(file, configuration))
-			configuration, err = app.ReadConfiguration(file)
-			require.NoError(t, err)
-			configured = configuration.GetApplications()[0]
 			application := app.ConvertApplication(configured)
 			stub := &test.ResourceStub{}
 			run := func(ctx *pulumi.Context) error {
@@ -395,15 +380,15 @@ func TestApplicationPersistentStorage(t *testing.T) {
 			require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
 
 			deployment := resourceOf(t, stub, deploymentResourceType)
-			assertApplicationVolumes(t, deployment, tt.storage)
+			assertApplicationVolumes(t, deployment, configured.GetStorage())
 			assertApplicationSecurity(t, deployment)
-
-			if tt.storage == nil {
-				require.Nil(t, application.Storage)
-				require.Empty(t, stub.Resources(pvcResourceType))
-				return
+			assertStorageClaims(t, stub.Resources(pvcResourceType), configured.GetStorage())
+			dependencies := stub.Dependencies(deploymentResourceType)
+			require.Len(t, dependencies, 1)
+			for key := range tt.storage {
+				claim := resource.NewURN("stack", "project", "", pvcResourceType, "test-"+key)
+				require.Contains(t, dependencies[0], string(claim))
 			}
-			assertStorageClaim(t, resourceOf(t, stub, pvcResourceType), tt.storage)
 		})
 	}
 }
@@ -474,6 +459,9 @@ func TestStorageReturnsResourceErrors(t *testing.T) {
 			}
 			require.ErrorContains(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)), test.ErrResource.Error())
 			require.NotEmpty(t, stub.Resources(token))
+			if token == pvcResourceType {
+				require.Empty(t, stub.Resources(deploymentResourceType), "a failed claim must prevent deployment")
+			}
 		})
 	}
 }
@@ -495,8 +483,8 @@ func TestApplicationRejectsIncompleteStorage(t *testing.T) {
 			configuration, err := app.ReadConfiguration("test/storage.hjson")
 			require.NoError(t, err)
 			configured := configuration.GetApplications()[0]
-			configured.Storage.Capacity = tt.capacity
-			configured.Storage.Path = tt.mount
+			configured.Storage["archive"] = &v2.Storage{Capacity: "1Gi", Path: "/staging"}
+			configured.Storage["data"] = &v2.Storage{Capacity: tt.capacity, Path: tt.mount}
 			stub := &test.ResourceStub{}
 			run := func(ctx *pulumi.Context) error {
 				return app.CreateApplication(ctx, app.ConvertApplication(configured))
@@ -508,35 +496,74 @@ func TestApplicationRejectsIncompleteStorage(t *testing.T) {
 	}
 }
 
-func assertStorageClaim(t *testing.T, claim resource.PropertyMap, storage *v2.Storage) {
-	t.Helper()
-
-	metadata := test.Property(t, claim, "metadata").ObjectValue()
-	require.Equal(t, "test-data", test.Property(t, metadata, "name").StringValue())
-	require.Equal(t, "test", test.Property(t, metadata, "namespace").StringValue())
-	spec := test.Property(t, claim, "spec").ObjectValue()
-	require.Equal(t, []string{"ReadWriteOnce"}, test.StringValues(test.Property(t, spec, "accessModes").ArrayValue()))
-	require.Equal(t, "Filesystem", test.Property(t, spec, "volumeMode").StringValue())
-	requests := test.Property(t, spec, "resources").ObjectValue()["requests"].ObjectValue()
-	require.Equal(t, storage.GetCapacity(), test.Property(t, requests, "storage").StringValue())
-	if storage.Profile == nil {
-		require.NotContains(t, spec, resource.PropertyKey("storageClassName"))
-	} else {
-		require.Equal(t, storage.GetProfile(), test.Property(t, spec, "storageClassName").StringValue())
+func TestApplicationRejectsConflictingStorage(t *testing.T) {
+	for _, tt := range []struct {
+		name    string
+		key     string
+		path    string
+		message string
+	}{
+		{name: "duplicate mount path", key: "archive", path: "/data", message: `duplicate storage path "/data"`},
+		{
+			name: "uppercase volume key", key: "Archive", path: "/staging",
+			message: "storage key must use only lowercase letters and digits",
+		},
+		{
+			name: "ambiguous volume key", key: "cache-data", path: "/staging",
+			message: "storage key must use only lowercase letters and digits",
+		},
+		{
+			name: "combined name too long", key: strings.Repeat("a", 59), path: "/staging",
+			message: "storage name must be a Kubernetes DNS label of at most 63 characters",
+		},
+		{name: "secret volume name", key: "secret", path: "/staging", message: `duplicate volume name "test-secret"`},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			configuration, err := app.ReadConfiguration("test/storage.hjson")
+			require.NoError(t, err)
+			configured := configuration.GetApplications()[0]
+			configured.Secrets = append(configured.Secrets, "test")
+			configured.Storage[tt.key] = &v2.Storage{Capacity: "1Gi", Path: tt.path}
+			stub := &test.ResourceStub{}
+			run := func(ctx *pulumi.Context) error {
+				return app.CreateApplication(ctx, app.ConvertApplication(configured))
+			}
+			require.ErrorContains(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)), tt.message)
+			require.Empty(t, stub.Resources(pvcResourceType))
+			require.Empty(t, stub.Resources(deploymentResourceType))
+		})
 	}
 }
 
-func assertApplicationVolumes(t *testing.T, deployment resource.PropertyMap, storage *v2.Storage) {
+func assertStorageClaims(t *testing.T, claims []resource.PropertyMap, storage map[string]*v2.Storage) {
+	t.Helper()
+
+	require.Len(t, claims, len(storage))
+	claimsByName := make(map[string]resource.PropertyMap, len(claims))
+	for _, claim := range claims {
+		metadata := test.Property(t, claim, "metadata").ObjectValue()
+		require.Equal(t, "test", test.Property(t, metadata, "namespace").StringValue())
+		claimsByName[test.Property(t, metadata, "name").StringValue()] = claim
+	}
+	for key, volume := range storage {
+		name := "test-" + key
+		require.Contains(t, claimsByName, name)
+		spec := test.Property(t, claimsByName[name], "spec").ObjectValue()
+		require.Equal(t, []string{"ReadWriteOnce"}, test.StringValues(test.Property(t, spec, "accessModes").ArrayValue()))
+		require.Equal(t, "Filesystem", test.Property(t, spec, "volumeMode").StringValue())
+		requests := test.Property(t, spec, "resources").ObjectValue()["requests"].ObjectValue()
+		require.Equal(t, volume.GetCapacity(), test.Property(t, requests, "storage").StringValue())
+		require.Equal(t, "do-block-storage-retain", test.Property(t, spec, "storageClassName").StringValue())
+	}
+}
+
+func assertApplicationVolumes(t *testing.T, deployment resource.PropertyMap, storage map[string]*v2.Storage) {
 	t.Helper()
 
 	volumes := test.Property(t, podSpec(deployment), "volumes").ArrayValue()
 	mounts := test.Property(t, container(deployment), "volumeMounts").ArrayValue()
-	count := 2
-	if storage != nil {
-		count++
-	}
-	require.Len(t, volumes, count, "only opted-in apps add a data volume")
-	require.Len(t, mounts, count, "only opted-in apps add a data mount")
+	require.Len(t, volumes, 2+len(storage), "each storage entry adds one volume")
+	require.Len(t, mounts, 2+len(storage), "each storage entry adds one mount")
 	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
 		"name": "test", "configMap": map[string]any{"name": "test"},
 	}), volumes[0].ObjectValue())
@@ -549,13 +576,14 @@ func assertApplicationVolumes(t *testing.T, deployment resource.PropertyMap, sto
 	require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
 		"name": "database-secret", "mountPath": "/etc/secrets/database", "readOnly": true,
 	}), mounts[1].ObjectValue())
-	if storage != nil {
-		require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
-			"name": "test-data", "persistentVolumeClaim": map[string]any{"claimName": "test-data", "readOnly": false},
-		}), volumes[2].ObjectValue())
-		require.Equal(t, resource.NewPropertyMapFromMap(map[string]any{
-			"name": "test-data", "mountPath": storage.GetPath(), "readOnly": false,
-		}), mounts[2].ObjectValue())
+	for key, volume := range storage {
+		name := "test-" + key
+		require.Contains(t, volumes[2:], resource.NewObjectProperty(resource.NewPropertyMapFromMap(map[string]any{
+			"name": name, "persistentVolumeClaim": map[string]any{"claimName": name, "readOnly": false},
+		})))
+		require.Contains(t, mounts[2:], resource.NewObjectProperty(resource.NewPropertyMapFromMap(map[string]any{
+			"name": name, "mountPath": volume.GetPath(), "readOnly": false,
+		})))
 	}
 }
 

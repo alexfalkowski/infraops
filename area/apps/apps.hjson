@@ -37,9 +37,10 @@
       replicas: 1
       strategy: recreate
       storage: {
-        capacity: 1Gi
-        path: /data
-        profile: do-block-storage-retain
+        data: {
+          capacity: 1Gi
+          path: /data
+        }
       }
     }
     {
