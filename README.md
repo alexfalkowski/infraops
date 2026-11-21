@@ -317,8 +317,10 @@ from itself to avoid recursive exports. See [database configuration](https://git
 [recent-log queries](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/queries.md),
 and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/ingestion.md).
 
-Accepted logs stay on the local claim without automatic expiration or archival to R2.
-Monitor free space on the claim. See [log storage and recovery](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/operations.md#-log-storage-and-recovery).
+Accepted logs stay on the local database claim without automatic expiration or archival to R2.
+Einblick stages Parquet batches on the separate `2Gi` `einblick-archive` claim mounted at
+`/staging`. Monitor free space on both claims. See [log storage and recovery](https://github.com/alexfalkowski/einblick/blob/v1.11.0/docs/operations.md#-log-storage-and-recovery)
+and [local Parquet staging](https://github.com/alexfalkowski/einblick/blob/v1.11.0/docs/operations.md#-local-parquet-staging).
 
 The log browser has no application login. Verify edge access controls for both the browser
 and the HTTP query API before rollout.
