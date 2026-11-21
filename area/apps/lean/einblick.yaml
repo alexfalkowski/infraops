@@ -8,6 +8,10 @@ duckdb:
   path: /data/recent.duckdb
   memory_limit: 256MiB
   threads: 1
+archive:
+  workspace: /staging
+  interval: 10s
+  batch_size: 65536B
 health:
   duration: 1s
   timeout: 1s
