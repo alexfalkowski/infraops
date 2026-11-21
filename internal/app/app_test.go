@@ -100,6 +100,27 @@ func TestApplicationReturnsResourceErrors(t *testing.T) {
 	}
 }
 
+func TestApplicationMediumResourceProfile(t *testing.T) {
+	stub := &test.ResourceStub{}
+	application := app.ConvertApplication(&v2.Application{
+		Kind:      "api",
+		Name:      "test",
+		Namespace: "test",
+		Domain:    "test.com",
+		Version:   "1.0.0",
+		Resource:  "medium",
+		Replicas:  1,
+	})
+	run := func(ctx *pulumi.Context) error {
+		return app.CreateApplication(ctx, application)
+	}
+
+	require.NoError(t, pulumi.RunErr(run, pulumi.WithMocks("project", "stack", stub)))
+	deployment := resourceOf(t, stub, deploymentResourceType)
+	require.Equal(t, "256Mi", resourceRequest(deployment, "memory"))
+	require.Equal(t, "512Mi", resourceLimit(deployment, "memory"))
+}
+
 func TestApplicationAllowsExplicitZeroReplicas(t *testing.T) {
 	stub := &test.ResourceStub{}
 	application := app.ConvertApplication(&v2.Application{

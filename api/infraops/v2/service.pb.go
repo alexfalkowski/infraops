@@ -209,6 +209,7 @@ type Application struct {
 	//
 	// Implementation mapping (current):
 	//   - "small" (default): cpu 125m-250m, memory 64Mi-128Mi, ephemeral-storage 1Gi-2Gi
+	//   - "medium": cpu 125m-250m, memory 256Mi-512Mi, ephemeral-storage 1Gi-2Gi
 	//
 	// If an unknown value is provided, the implementation falls back to "small".
 	Resource string `protobuf:"bytes,7,opt,name=resource,proto3" json:"resource,omitempty"`

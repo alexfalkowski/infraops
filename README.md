@@ -270,14 +270,14 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 
 ### 🔭 Einblick
 
-[Einblick's configuration](area/apps/lean/einblick.yaml) runs one small replica with HTTP and gRPC
+[Einblick](area/apps/lean/einblick.yaml) runs one replica with the `medium` resource profile. HTTP and gRPC are
 enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
 `protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Einblick opens
 `/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
 using the cluster's `do-block-storage-retain` profile. Database, WAL and spill files share
-that writable mount; the root filesystem stays read-only. DuckDB uses `64MiB` and one
-worker initially; its memory setting does not bound total container memory, and the
-small profile's 128Mi limit still needs workload validation.
+that writable mount, and the root filesystem stays read-only. The pod requests `256Mi`
+of memory and has a `512Mi` limit. DuckDB uses one worker and a `256MiB` memory limit,
+leaving headroom for memory outside DuckDB's buffer manager.
 
 Einblick uses `strategy: recreate` so normal deployment rollouts terminate the old pod
 before creating its replacement, allowing the old process to release the DuckDB lock.

@@ -33,7 +33,7 @@
       namespace: lean
       domain: lean-thoughts.com
       version: 1.10.0
-      resource: small
+      resource: medium
       replicas: 1
       strategy: recreate
       storage: {
