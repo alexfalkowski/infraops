@@ -12,6 +12,16 @@
       version: 1.0.0
       replicas: 3
       strategy: rolling
+      storage: {
+        data: {
+          capacity: 1Gi
+          path: /data
+        }
+        archive: {
+          capacity: 2Gi
+          path: /staging
+        }
+      }
     }
   ]
 }

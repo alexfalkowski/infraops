@@ -99,23 +99,17 @@ func (x *EnvVar) GetValue() string {
 	return ""
 }
 
-// Storage configures persistent application data shared across instance replacements.
-// Omission preserves the application's existing storage behavior. Provisioned storage
-// is protected against deletion/replacement; removing it requires deliberate operator
-// action after backup or migration. See the README for adapter lifecycle details.
+// Storage configures a persistent filesystem volume shared across instance replacements.
+// Each volume is protected against deletion and replacement. See the README for lifecycle details.
 type Storage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Capacity is the required storage request quantity (for example "1Gi"); no default
-	// is selected. Provisioning and expansion depend on the selected profile.
+	// is selected. Provisioning and expansion depend on the cluster's storage class.
 	Capacity string `protobuf:"bytes,1,opt,name=capacity,proto3" json:"capacity,omitempty"`
 	// Path is the required absolute, clean, non-root data directory within the application.
 	// It is writable using the application's existing non-root identity. Keep database,
 	// recovery files, pending exports and workspace here; verify permissions at runtime.
-	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	// Profile selects an existing storage provisioning profile. Omission uses the
-	// installation default; an explicit empty string requests storage without a profile.
-	// A profile change requires migration rather than automatic replacement.
-	Profile       *string `protobuf:"bytes,3,opt,name=profile,proto3,oneof" json:"profile,omitempty"`
+	Path          string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -160,13 +154,6 @@ func (x *Storage) GetCapacity() string {
 func (x *Storage) GetPath() string {
 	if x != nil {
 		return x.Path
-	}
-	return ""
-}
-
-func (x *Storage) GetProfile() string {
-	if x != nil && x.Profile != nil {
-		return *x.Profile
 	}
 	return ""
 }
@@ -240,10 +227,12 @@ type Application struct {
 	Secrets []string `protobuf:"bytes,10,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// EnvVars is the list of environment variables to inject into the application container.
 	EnvVars []*EnvVar `protobuf:"bytes,11,rep,name=env_vars,json=envVars,proto3" json:"env_vars,omitempty"`
-	// Storage optionally provisions writable persistent application data.
-	// Omission preserves existing storage behavior. It does not change replicas or
-	// select a rollout strategy; configure strategy separately for exclusive writers.
-	Storage       *Storage `protobuf:"bytes,12,opt,name=storage,proto3" json:"storage,omitempty"`
+	// Storage maps volume keys to writable persistent filesystems. Keys use lowercase ASCII
+	// letters and digits. Each key is appended to the application name with a hyphen to form
+	// the claim name, which must be a Kubernetes DNS label of at most 63 characters. Mount
+	// paths must be distinct. Omit storage for apps without persistent volumes. Configure
+	// the rollout strategy separately for exclusive writers.
+	Storage       map[string]*Storage `protobuf:"bytes,12,rep,name=storage,proto3" json:"storage,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -355,7 +344,7 @@ func (x *Application) GetEnvVars() []*EnvVar {
 	return nil
 }
 
-func (x *Application) GetStorage() *Storage {
+func (x *Application) GetStorage() map[string]*Storage {
 	if x != nil {
 		return x.Storage
 	}
@@ -1290,13 +1279,10 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\x19infraops/v2/service.proto\x12\vinfraops.v2\"2\n" +
 	"\x06EnvVar\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"d\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"9\n" +
 	"\aStorage\x12\x1a\n" +
 	"\bcapacity\x18\x01 \x01(\tR\bcapacity\x12\x12\n" +
-	"\x04path\x18\x02 \x01(\tR\x04path\x12\x1d\n" +
-	"\aprofile\x18\x03 \x01(\tH\x00R\aprofile\x88\x01\x01B\n" +
-	"\n" +
-	"\b_profile\"\xe3\x02\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\"\xc6\x03\n" +
 	"\vApplication\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04kind\x18\x02 \x01(\tR\x04kind\x12\x12\n" +
@@ -1309,8 +1295,11 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\bstrategy\x18\t \x01(\tR\bstrategy\x12\x18\n" +
 	"\asecrets\x18\n" +
 	" \x03(\tR\asecrets\x12.\n" +
-	"\benv_vars\x18\v \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12.\n" +
-	"\astorage\x18\f \x01(\v2\x14.infraops.v2.StorageR\astorage\"d\n" +
+	"\benv_vars\x18\v \x03(\v2\x13.infraops.v2.EnvVarR\aenvVars\x12?\n" +
+	"\astorage\x18\f \x03(\v2%.infraops.v2.Application.StorageEntryR\astorage\x1aP\n" +
+	"\fStorageEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.infraops.v2.StorageR\x05value:\x028\x01\"d\n" +
 	"\n" +
 	"Kubernetes\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12<\n" +
@@ -1395,7 +1384,7 @@ func file_infraops_v2_service_proto_rawDescGZIP() []byte {
 	return file_infraops_v2_service_proto_rawDescData
 }
 
-var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_infraops_v2_service_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_infraops_v2_service_proto_goTypes = []any{
 	(*EnvVar)(nil),        // 0: infraops.v2.EnvVar
 	(*Storage)(nil),       // 1: infraops.v2.Storage
@@ -1413,10 +1402,11 @@ var file_infraops_v2_service_proto_goTypes = []any{
 	(*Cloudflare)(nil),    // 13: infraops.v2.Cloudflare
 	(*Cluster)(nil),       // 14: infraops.v2.Cluster
 	(*DigitalOcean)(nil),  // 15: infraops.v2.DigitalOcean
+	nil,                   // 16: infraops.v2.Application.StorageEntry
 }
 var file_infraops_v2_service_proto_depIdxs = []int32{
 	0,  // 0: infraops.v2.Application.env_vars:type_name -> infraops.v2.EnvVar
-	1,  // 1: infraops.v2.Application.storage:type_name -> infraops.v2.Storage
+	16, // 1: infraops.v2.Application.storage:type_name -> infraops.v2.Application.StorageEntry
 	2,  // 2: infraops.v2.Kubernetes.applications:type_name -> infraops.v2.Application
 	4,  // 3: infraops.v2.Repository.collaborators:type_name -> infraops.v2.Collaborators
 	5,  // 4: infraops.v2.Repository.template:type_name -> infraops.v2.Template
@@ -1427,11 +1417,12 @@ var file_infraops_v2_service_proto_depIdxs = []int32{
 	10, // 9: infraops.v2.Cloudflare.page_zones:type_name -> infraops.v2.PageZone
 	12, // 10: infraops.v2.Cloudflare.buckets:type_name -> infraops.v2.Bucket
 	14, // 11: infraops.v2.DigitalOcean.clusters:type_name -> infraops.v2.Cluster
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	1,  // 12: infraops.v2.Application.StorageEntry.value:type_name -> infraops.v2.Storage
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_infraops_v2_service_proto_init() }
@@ -1439,7 +1430,6 @@ func file_infraops_v2_service_proto_init() {
 	if File_infraops_v2_service_proto != nil {
 		return
 	}
-	file_infraops_v2_service_proto_msgTypes[1].OneofWrappers = []any{}
 	file_infraops_v2_service_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1447,7 +1437,7 @@ func file_infraops_v2_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_infraops_v2_service_proto_rawDesc), len(file_infraops_v2_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -1,0 +1,13 @@
+{
+  applications: [
+    {
+      env_vars: [
+        {
+          name: EXAMPLE
+          value: first-synthetic-value
+          value: second-synthetic-value
+        }
+      ]
+    }
+  ]
+}

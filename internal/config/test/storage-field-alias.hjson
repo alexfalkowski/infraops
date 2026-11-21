@@ -1,0 +1,13 @@
+{
+  applications: [
+    {
+      name: test
+      Storage: {
+        data: {
+          capacity: 1Gi
+          path: /data
+        }
+      }
+    }
+  ]
+}

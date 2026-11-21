@@ -31,7 +31,7 @@ linters:
     - exhaustruct_v5
   settings:
     lll:
-      line-length: 130
+      line-length: 140
   exclusions:
     generated: lax
     presets:

@@ -10,9 +10,10 @@
       replicas: 1
       secrets: ["database"]
       storage: {
-        capacity: 1Gi
-        path: "/data"
-        profile: example-csi
+        data: {
+          capacity: 1Gi
+          path: "/data"
+        }
       }
     }
   ]

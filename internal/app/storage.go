@@ -4,18 +4,23 @@ import (
 	"errors"
 	"fmt"
 	"path"
+	"regexp"
 
 	cv1 "github.com/pulumi/pulumi-kubernetes/sdk/v4/go/kubernetes/core/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-const storageSuffix = "-data"
+const storageClass = "do-block-storage-retain"
 
-// Storage configures one persistent filesystem claim for an application.
-// Nil App.Storage preserves the existing config/secret-only volumes.
+var (
+	storageKey  = regexp.MustCompile(`^[a-z0-9]+$`)
+	storageName = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
+)
+
+// Storage configures a persistent filesystem claim for an application.
 type Storage struct {
-	// Profile preserves nil (cluster default) versus empty (no class).
-	Profile *string
+	// Key is the configured volume key, appended to the application name to name the claim.
+	Key string
 
 	// Capacity is a required Kubernetes storage request; the provider validates quantities.
 	Capacity string
@@ -25,9 +30,18 @@ type Storage struct {
 	Path string
 }
 
-// Validate checks the required capacity and absolute, clean, non-root data path.
-// Quantity validity and profile availability are checked by Kubernetes/provider operations.
-func (s *Storage) Validate() error {
+func (s Storage) claimName(appName string) string {
+	return appName + "-" + s.Key
+}
+
+func (s Storage) validate(name string) error {
+	// Alphanumeric keys make the final hyphen the separator between app and key.
+	if !storageKey.MatchString(s.Key) {
+		return errors.New("storage key must use only lowercase letters and digits")
+	}
+	if len(name) > 63 || !storageName.MatchString(name) {
+		return errors.New("storage name must be a Kubernetes DNS label of at most 63 characters")
+	}
 	if s.Capacity == "" {
 		return errors.New("storage capacity is required")
 	}
@@ -37,26 +51,58 @@ func (s *Storage) Validate() error {
 	return nil
 }
 
-func createStorage(ctx *pulumi.Context, app *App) error {
-	if app.Storage == nil {
+func createStorage(ctx *pulumi.Context, app *App) ([]pulumi.Resource, error) {
+	if err := validateStorage(app); err != nil {
+		return nil, err
+	}
+	claims := make([]pulumi.Resource, 0, len(app.Storage))
+	for _, storage := range app.Storage {
+		claim, err := createStorageClaim(ctx, app, storage)
+		if err != nil {
+			return nil, err
+		}
+		claims = append(claims, claim)
+	}
+	return claims, nil
+}
+
+func validateStorage(app *App) error {
+	if len(app.Storage) == 0 {
 		return nil
 	}
-	storage := app.Storage
-	if err := storage.Validate(); err != nil {
-		return fmt.Errorf("application %s: %w", app.Name, err)
+	names := make(map[string]bool, len(app.Secrets)+len(app.Storage))
+	for _, secret := range app.Secrets {
+		names[secret+secretSuffix] = true
 	}
+	paths := make(map[string]bool, len(app.Storage))
+	for _, storage := range app.Storage {
+		name := storage.claimName(app.Name)
+		if err := storage.validate(name); err != nil {
+			return fmt.Errorf("application %s, volume %q: %w", app.Name, storage.Key, err)
+		}
+		if names[name] {
+			return fmt.Errorf("application %s: duplicate volume name %q", app.Name, name)
+		}
+		if paths[storage.Path] {
+			return fmt.Errorf("application %s: duplicate storage path %q", app.Name, storage.Path)
+		}
+		names[name] = true
+		paths[storage.Path] = true
+	}
+	return nil
+}
 
+func createStorageClaim(ctx *pulumi.Context, app *App, storage Storage) (*cv1.PersistentVolumeClaim, error) {
+	name := storage.claimName(app.Name)
 	m := metadata(app)
-	m.Name = pulumi.String(app.Name + storageSuffix)
+	m.Name = pulumi.String(name)
 	spec := cv1.PersistentVolumeClaimSpecArgs{
-		AccessModes: pulumi.StringArray{pulumi.String("ReadWriteOnce")},
-		VolumeMode:  pulumi.String("Filesystem"),
+		AccessModes:      pulumi.StringArray{pulumi.String("ReadWriteOnce")},
+		VolumeMode:       pulumi.String("Filesystem"),
+		StorageClassName: pulumi.String(storageClass),
 		Resources: cv1.VolumeResourceRequirementsArgs{
 			Requests: pulumi.StringMap{"storage": pulumi.String(storage.Capacity)},
 		},
-	}
-	if storage.Profile != nil {
-		spec.StorageClassName = pulumi.String(*storage.Profile)
 	}
 
 	args := &cv1.PersistentVolumeClaimArgs{
@@ -65,6 +111,5 @@ func createStorage(ctx *pulumi.Context, app *App) error {
 	}
 
 	// Replacing or deleting a data claim needs deliberate backup/migration and unprotection.
-	_, err := cv1.NewPersistentVolumeClaim(ctx, app.Name+storageSuffix, args, pulumi.Protect(true))
-	return err
+	return cv1.NewPersistentVolumeClaim(ctx, name, args, pulumi.Protect(true))
 }
