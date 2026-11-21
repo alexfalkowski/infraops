@@ -37,6 +37,11 @@ var resources = ResourcesMap{
 		Memory:  &Range{Min: "64Mi", Max: "128Mi"},
 		Storage: &Range{Min: "1Gi", Max: "2Gi"},
 	},
+	"medium": {
+		CPU:     &Range{Min: "125m", Max: "250m"},
+		Memory:  &Range{Min: "256Mi", Max: "512Mi"},
+		Storage: &Range{Min: "1Gi", Max: "2Gi"},
+	},
 }
 
 // ResourcesMap maps configuration resource profile names to Kubernetes request/limit ranges.

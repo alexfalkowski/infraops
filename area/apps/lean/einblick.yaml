@@ -6,7 +6,7 @@ queries:
   concurrency: 1
 duckdb:
   path: /data/recent.duckdb
-  memory_limit: 64MiB
+  memory_limit: 256MiB
   threads: 1
 health:
   duration: 1s
