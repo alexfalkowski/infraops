@@ -317,12 +317,12 @@ from itself to avoid recursive exports. See [database configuration](https://git
 [recent-log queries](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/queries.md),
 and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/ingestion.md).
 
-Accepted logs stay on the local database claim without automatic expiration or archival to R2.
-Every 10 seconds, Einblick checks for work and can stage one Parquet batch on the separate
-`2Gi` `einblick-archive` claim mounted at `/staging`. On startup, Einblick creates `/staging/v1`
-if needed and requires write access on the mounted workspace. Monitor free space on both claims.
-See [log storage and recovery](https://github.com/alexfalkowski/einblick/blob/v1.13.0/docs/operations.md#-log-storage-and-recovery)
-and [local Parquet staging](https://github.com/alexfalkowski/einblick/blob/v1.13.0/docs/operations.md#-local-parquet-staging).
+Accepted logs stay on the local database claim without automatic expiration. Einblick stages
+Parquet batches on the separate `2Gi` `einblick-archive` claim mounted at `/staging` and checks
+for work every 10 seconds. It publishes staged batches to R2 and removes staged files after
+verifying the uploaded objects. On startup, Einblick creates `/staging/v1` if needed and requires
+write access on the mounted workspace. Monitor free space on both claims.
+See [R2 publication and recovery](https://github.com/alexfalkowski/einblick/blob/v1.15.0/docs/operations.md#-r2-publication-and-recovery).
 
 The log browser has no application login. Verify edge access controls for both the browser
 and the HTTP query API before rollout.
@@ -347,6 +347,19 @@ The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and
 R2 bucket in `EEUR`, without a public custom domain. Objects expire after seven days (`168h`) by
 object age, with asynchronous deletion as described in [R2 Object Expiration](#-r2-object-expiration).
 Apply the Cloudflare area before the apps area using the preview and update commands above.
+Before the apps update, create `einblick-secret` in `lean` using the intended kubeconfig context
+and the R2 access key ID and secret access key files. The credentials need Object Read & Write
+permission on the `einblick` bucket.
+
+```bash
+make -C area/apps einblick-secret \
+  r2_access_key_id_file=/absolute/path/to/access \
+  r2_secret_access_key_file=/absolute/path/to/secret
+```
+
+The app mounts the keys `r2-access-key-id` and `r2-secret-access-key` under
+`/etc/secrets/einblick/` and loads them at startup. The helper fails if the Secret already exists.
+Restart Einblick after rotating the credentials.
 
 ### 🔐 Abgleich Secret
 
