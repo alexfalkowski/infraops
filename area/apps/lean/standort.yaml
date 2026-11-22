@@ -9,15 +9,15 @@ telemetry:
     kind: otlp
     level: info
     protocol: grpc
-    url: einblick.lean.svc.cluster.local:9090
+    endpoint: einblick.lean.svc.cluster.local:9090
   metrics:
     kind: otlp
     protocol: grpc
-    url: einblick.lean.svc.cluster.local:9090
+    endpoint: einblick.lean.svc.cluster.local:9090
   tracer:
     kind: otlp
     protocol: grpc
-    url: einblick.lean.svc.cluster.local:9090
+    endpoint: einblick.lean.svc.cluster.local:9090
 transport:
   http:
     limiter:
