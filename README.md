@@ -295,7 +295,7 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 
 [Einblick](area/apps/lean/einblick.yaml) runs one replica with the `medium` resource profile. HTTP and gRPC are
 enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
-`protocol: grpc` and `url: einblick.lean.svc.cluster.local:9090`. Einblick opens
+`protocol: grpc` and send telemetry to `einblick.lean.svc.cluster.local:9090`. Einblick opens
 `/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
 using the cluster's `do-block-storage-retain` class. Database, WAL and spill files share
 that writable mount, and the root filesystem stays read-only. The pod requests `256Mi`
@@ -329,8 +329,9 @@ and the HTTP query API before rollout.
 
 Abgleich, Bezeichner, Standort, and Web export logs at `info` level and above, metrics, and traces
 to that in-cluster gRPC endpoint. Their `telemetry.logger`, `telemetry.metrics`, and
-`telemetry.tracer` blocks each select `kind: otlp` and `protocol: grpc`. Exporters use the
-OpenTelemetry SDK's default batching, queue limits, metric interval, and trace sampling.
+`telemetry.tracer` blocks each select `kind: otlp` and `protocol: grpc`. Bezeichner v2.5.0
+sets the collector address with `endpoint`. Abgleich, Standort, and Web use `url`.
+Exporters use the OpenTelemetry SDK's default batching, queue limits, metric interval, and trace sampling.
 The connection uses cleartext within the cluster and sends no authentication headers.
 Application logs go to Einblick's `/logs` view. Inspect Einblick's pod logs for the printed
 metrics and traces.
