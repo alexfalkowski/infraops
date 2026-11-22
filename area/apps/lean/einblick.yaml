@@ -11,7 +11,7 @@ duckdb:
 archive:
   workspace: /staging
   interval: 10s
-  batch_size: 65536B
+  batch_size: 655360B
   r2:
     endpoint: https://561357e2a2b66ddfeabd46e2965d2c67.r2.cloudflarestorage.com
     bucket: einblick
