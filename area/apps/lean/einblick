@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# Creates Einblick's Secret from local credential files without printing their contents.
+
+if [[ -z "${r2_access_key_id_file:-}" ]]; then
+  printf '%s\n' 'r2_access_key_id_file is required' >&2
+  exit 1
+fi
+
+if [[ -z "${r2_secret_access_key_file:-}" ]]; then
+  printf '%s\n' 'r2_secret_access_key_file is required' >&2
+  exit 1
+fi
+
+if [[ ! -f "$r2_access_key_id_file" || ! -r "$r2_access_key_id_file" || ! -s "$r2_access_key_id_file" ]]; then
+  printf '%s\n' 'r2_access_key_id_file must be a readable, nonempty file' >&2
+  exit 1
+fi
+
+if [[ ! -f "$r2_secret_access_key_file" || ! -r "$r2_secret_access_key_file" || ! -s "$r2_secret_access_key_file" ]]; then
+  printf '%s\n' 'r2_secret_access_key_file must be a readable, nonempty file' >&2
+  exit 1
+fi
+
+kubectl create secret generic einblick-secret --namespace lean \
+  --from-file="r2-access-key-id=$r2_access_key_id_file" \
+  --from-file="r2-secret-access-key=$r2_secret_access_key_file"

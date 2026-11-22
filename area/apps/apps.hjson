@@ -32,10 +32,13 @@
       name: einblick
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.14.0
+      version: 1.15.0
       resource: medium
       replicas: 1
       strategy: recreate
+      secrets: [
+        einblick
+      ]
       storage: {
         archive: {
           capacity: 2Gi
