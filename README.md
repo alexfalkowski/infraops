@@ -297,8 +297,9 @@ balancer access to Cloudflare CIDRs; use Cloudflare-proxied DNS for that ingress
 enabled. HTTP is available at `https://einblick.lean-thoughts.com`; in-cluster OTLP clients use
 `protocol: grpc` and send telemetry to `einblick.lean.svc.cluster.local:9090`. Einblick opens
 `/data/recent.duckdb` on the protected 1Gi `einblick-data` claim,
-using the cluster's `do-block-storage-retain` class. Database, WAL and spill files share
-that writable mount, and the root filesystem stays read-only. The pod requests `256Mi`
+using the cluster's `do-block-storage-retain` class. The container sets `HOME=/data`, so
+home-directory files share the writable claim with the database, WAL, and spill files.
+The root filesystem stays read-only. The pod requests `256Mi`
 of memory and has a `512Mi` limit. DuckDB uses one worker and a `256MiB` memory limit,
 leaving headroom for memory outside DuckDB's buffer manager.
 

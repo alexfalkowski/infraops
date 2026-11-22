@@ -39,6 +39,12 @@
       secrets: [
         einblick
       ]
+      env_vars: [
+        {
+          name: HOME
+          value: /data
+        }
+      ]
       storage: {
         archive: {
           capacity: 2Gi
