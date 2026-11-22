@@ -62,7 +62,7 @@
       name: standort
       namespace: lean
       domain: lean-thoughts.com
-      version: 3.5.0
+      version: 3.6.0
       resource: small
       replicas: 2
       strategy: rolling
