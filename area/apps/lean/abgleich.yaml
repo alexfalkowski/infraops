@@ -6,6 +6,7 @@ ai:
         timeout: 10m
       kind: openai
       api_key: file:/etc/secrets/abgleich/openai-api-key
+      url: https://api.openai.com/v1/
 automerge:
   completion_check: "ci/circleci: wait-all"
   dependabot:
@@ -26,6 +27,7 @@ github:
       attempts: 3
       strategy: exponential
       backoff: 1s
+  url: https://api.github.com/
   owner: alexfalkowski
   app:
     id: 5427450
@@ -35,6 +37,9 @@ github:
     secret: file:/etc/secrets/abgleich/github-webhook-secret
     timeout: 8s
 review:
+  go_docs: https://go.dev/doc
+  module_proxy: https://proxy.golang.org
+  gem_registry: https://rubygems.org
   code:
     provider: openai
     model: gpt-6.2-sol
@@ -72,15 +77,15 @@ telemetry:
     kind: otlp
     level: info
     protocol: grpc
-    url: einblick.lean.svc.cluster.local:9090
+    endpoint: einblick.lean.svc.cluster.local:9090
   metrics:
     kind: otlp
     protocol: grpc
-    url: einblick.lean.svc.cluster.local:9090
+    endpoint: einblick.lean.svc.cluster.local:9090
   tracer:
     kind: otlp
     protocol: grpc
-    url: einblick.lean.svc.cluster.local:9090
+    endpoint: einblick.lean.svc.cluster.local:9090
 transport:
   http:
     timeout: 9s
