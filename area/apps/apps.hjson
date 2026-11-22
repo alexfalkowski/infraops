@@ -32,7 +32,7 @@
       name: einblick
       namespace: lean
       domain: lean-thoughts.com
-      version: 1.13.0
+      version: 1.14.0
       resource: medium
       replicas: 1
       strategy: recreate
