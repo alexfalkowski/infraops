@@ -3,10 +3,10 @@ ai:
   providers:
     openai:
       client:
+        endpoint: https://api.openai.com/v1/
         timeout: 10m
       kind: openai
       api_key: file:/etc/secrets/abgleich/openai-api-key
-      url: https://api.openai.com/v1/
 automerge:
   completion_check: "ci/circleci: wait-all"
   dependabot:
@@ -22,12 +22,12 @@ cleanup:
   timeout: 5m
 github:
   client:
+    endpoint: https://api.github.com/
     timeout: 1m
     retry:
       attempts: 3
       strategy: exponential
       backoff: 1s
-  url: https://api.github.com/
   owner: alexfalkowski
   app:
     id: 5427450
@@ -37,9 +37,12 @@ github:
     secret: file:/etc/secrets/abgleich/github-webhook-secret
     timeout: 8s
 review:
-  go_docs: https://go.dev/doc
-  module_proxy: https://proxy.golang.org
-  gem_registry: https://rubygems.org
+  go_docs:
+    endpoint: https://go.dev/doc
+  module_proxy:
+    endpoint: https://proxy.golang.org
+  gem_registry:
+    endpoint: https://rubygems.org
   code:
     provider: openai
     model: gpt-6.2-sol
