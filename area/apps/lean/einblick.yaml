@@ -13,12 +13,13 @@ archive:
   interval: 10s
   batch_size: 655360B
   r2:
-    endpoint: https://561357e2a2b66ddfeabd46e2965d2c67.r2.cloudflarestorage.com
+    client:
+      endpoint: https://561357e2a2b66ddfeabd46e2965d2c67.r2.cloudflarestorage.com
+      timeout: 5s
     bucket: einblick
     region: auto
     access_key_id: file:/etc/secrets/einblick/r2-access-key-id
     secret_access_key: file:/etc/secrets/einblick/r2-secret-access-key
-    request_timeout: 5s
 health:
   duration: 1s
   timeout: 1s
