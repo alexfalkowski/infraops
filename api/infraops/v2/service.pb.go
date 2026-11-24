@@ -1006,7 +1006,12 @@ type Bucket struct {
 	// This manages the complete lifecycle rule set, retaining seven-day incomplete multipart cleanup.
 	// Removing a previously applied value leaves rules active with the pinned provider; disable/remove
 	// them in Cloudflare before omission. This does not enforce event-age retention; see README.md.
-	Expiration    *string `protobuf:"bytes,4,opt,name=expiration,proto3,oneof" json:"expiration,omitempty"`
+	Expiration *string `protobuf:"bytes,4,opt,name=expiration,proto3,oneof" json:"expiration,omitempty"`
+	// Lock duration protects all objects from deletion and overwrites by object age.
+	// Use a positive whole number of seconds in Go duration syntax (for example "168h").
+	// The resource replaces the full bucket lock rule set. Omission creates no lock resource.
+	// To remove a previously applied lock, clear the remote rule before omitting this field.
+	LockDuration  *string `protobuf:"bytes,5,opt,name=lock_duration,json=lockDuration,proto3,oneof" json:"lock_duration,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1065,6 +1070,13 @@ func (x *Bucket) GetZone() *BucketZone {
 func (x *Bucket) GetExpiration() string {
 	if x != nil && x.Expiration != nil {
 		return *x.Expiration
+	}
+	return ""
+}
+
+func (x *Bucket) GetLockDuration() string {
+	if x != nil && x.LockDuration != nil {
+		return *x.LockDuration
 	}
 	return ""
 }
@@ -1347,16 +1359,18 @@ const file_infraops_v2_service_proto_rawDesc = "" +
 	"\n" +
 	"BucketZone\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
-	"\x06domain\x18\x02 \x01(\tR\x06domain\"\xa3\x01\n" +
+	"\x06domain\x18\x02 \x01(\tR\x06domain\"\xdf\x01\n" +
 	"\x06Bucket\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x16\n" +
 	"\x06region\x18\x02 \x01(\tR\x06region\x120\n" +
 	"\x04zone\x18\x03 \x01(\v2\x17.infraops.v2.BucketZoneH\x00R\x04zone\x88\x01\x01\x12#\n" +
 	"\n" +
 	"expiration\x18\x04 \x01(\tH\x01R\n" +
-	"expiration\x88\x01\x01B\a\n" +
+	"expiration\x88\x01\x01\x12(\n" +
+	"\rlock_duration\x18\x05 \x01(\tH\x02R\flockDuration\x88\x01\x01B\a\n" +
 	"\x05_zoneB\r\n" +
-	"\v_expiration\"\xcd\x01\n" +
+	"\v_expirationB\x10\n" +
+	"\x0e_lock_duration\"\xcd\x01\n" +
 	"\n" +
 	"Cloudflare\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\x12@\n" +

@@ -34,6 +34,11 @@ type Bucket struct {
 	// Nil creates no lifecycle resource, but does not remove previously applied remote rules.
 	Expiration *string
 
+	// LockDuration optionally protects all objects from deletion and overwrites by age.
+	// Configured values must be positive whole seconds in Go duration syntax.
+	// Nil creates no lock resource. Existing remote rules persist when the field is removed.
+	LockDuration *string
+
 	// Name is the R2 bucket name.
 	Name string
 
@@ -44,26 +49,16 @@ type Bucket struct {
 // GetExpiration parses the configured Go duration, returning zero when omitted.
 // Invalid durations and values that are not positive whole seconds return an error.
 func (b *Bucket) GetExpiration() (time.Duration, error) {
-	if b.Expiration == nil {
-		return 0, nil
-	}
-
-	expiration, err := time.ParseDuration(*b.Expiration)
-	if err != nil {
-		return 0, fmt.Errorf("bucket %s: expiration: %w", b.Name, err)
-	}
-	if expiration <= 0 || expiration%time.Second != 0 {
-		return 0, fmt.Errorf("bucket %s: expiration must be a positive whole number of seconds", b.Name)
-	}
-	return expiration, nil
+	return parseBucketDuration(b.Name, "expiration", b.Expiration)
 }
 
 // ConvertBucket converts a protobuf v2.Bucket into the internal Bucket model.
 func ConvertBucket(bucket *v2.Bucket) *Bucket {
 	b := &Bucket{
-		Name:       bucket.GetName(),
-		Region:     bucket.GetRegion(),
-		Expiration: bucket.Expiration,
+		Name:         bucket.GetName(),
+		Region:       bucket.GetRegion(),
+		Expiration:   bucket.Expiration,
+		LockDuration: bucket.LockDuration,
 	}
 
 	zone := bucket.GetZone()
@@ -77,15 +72,20 @@ func ConvertBucket(bucket *v2.Bucket) *Bucket {
 	return b
 }
 
-// CreateBucket provisions an R2 bucket with optional object expiration and custom domain.
+// CreateBucket provisions an R2 bucket with optional object expiration, lock, and custom domain.
 //
-// Explicit expiration is parsed with time.ParseDuration and must be positive whole seconds.
+// Explicit expiration and lock durations use Go duration syntax and must be positive whole seconds.
 // Invalid durations return an error before registering resources.
-// The lifecycle owns all bucket rules and retains seven-day incomplete multipart cleanup.
-// Removing its configuration leaves remote rules active with the pinned provider.
+// The lifecycle owns the full lifecycle rule set and keeps seven-day incomplete multipart cleanup.
+// The lock owns the full bucket lock rule set. The pinned provider leaves remote rules active
+// when the corresponding lifecycle or lock setting is removed.
 // A non-nil Zone also creates a custom domain using Zone.ID and Zone.Domain.
 func CreateBucket(ctx *pulumi.Context, bucket *Bucket) error {
 	expiration, err := bucket.GetExpiration()
+	if err != nil {
+		return err
+	}
+	lockDuration, err := parseBucketDuration(bucket.Name, "lock_duration", bucket.LockDuration)
 	if err != nil {
 		return err
 	}
@@ -107,11 +107,31 @@ func CreateBucket(ctx *pulumi.Context, bucket *Bucket) error {
 			return err
 		}
 	}
+	if bucket.LockDuration != nil {
+		if err := newLock(ctx, b, bucket.Name, lockDuration); err != nil {
+			return err
+		}
+	}
 	if bucket.Zone == nil {
 		return nil
 	}
 
 	return newDomain(ctx, b, bucket)
+}
+
+func parseBucketDuration(bucket, field string, value *string) (time.Duration, error) {
+	if value == nil {
+		return 0, nil
+	}
+
+	duration, err := time.ParseDuration(*value)
+	if err != nil {
+		return 0, fmt.Errorf("bucket %s: %s: %w", bucket, field, err)
+	}
+	if duration <= 0 || duration%time.Second != 0 {
+		return 0, fmt.Errorf("bucket %s: %s must be a positive whole number of seconds", bucket, field)
+	}
+	return duration, nil
 }
 
 // newLifecycle replaces the bucket's lifecycle rules after the bucket exists.
@@ -144,6 +164,27 @@ func newLifecycle(ctx *pulumi.Context, created *cloudflare.R2Bucket, expiration 
 	}
 
 	_, err := cloudflare.NewR2BucketLifecycle(ctx, bucket.Name, args)
+	return err
+}
+
+func newLock(ctx *pulumi.Context, created *cloudflare.R2Bucket, name string, duration time.Duration) error {
+	args := &cloudflare.R2BucketLockArgs{
+		AccountId:  account,
+		BucketName: created.Name,
+		Rules: cloudflare.R2BucketLockRuleArray{
+			&cloudflare.R2BucketLockRuleArgs{
+				Id:      pulumi.String("protect-objects"),
+				Enabled: inputs.Yes,
+				Prefix:  pulumi.String(""),
+				Condition: &cloudflare.R2BucketLockRuleConditionArgs{
+					Type:          pulumi.String("Age"),
+					MaxAgeSeconds: pulumi.Int(duration / time.Second),
+				},
+			},
+		},
+	}
+
+	_, err := cloudflare.NewR2BucketLock(ctx, name, args)
 	return err
 }
 
