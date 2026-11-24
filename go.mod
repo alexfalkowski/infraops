@@ -5,7 +5,7 @@ go 1.27.0
 require (
 	github.com/hjson/hjson-go/v4 v4.7.1
 	github.com/pulumi/pulumi-cloudflare/sdk/v6 v6.24.0
-	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.85.0
+	github.com/pulumi/pulumi-digitalocean/sdk/v4 v4.86.0
 	github.com/pulumi/pulumi-github/sdk/v6 v6.15.1
 	github.com/pulumi/pulumi-kubernetes/sdk/v4 v4.34.3
 	github.com/pulumi/pulumi/sdk/v3 v3.277.0
