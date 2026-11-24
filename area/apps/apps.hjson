@@ -73,7 +73,7 @@
       name: web
       namespace: lean
       domain: lean-thoughts.com
-      version: 2.10.0
+      version: 2.11.0
       resource: small
       replicas: 2
       strategy: rolling
