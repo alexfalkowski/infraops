@@ -18,6 +18,7 @@ import (
 const (
 	r2BucketResourceType       = "cloudflare:index/r2Bucket:R2Bucket"
 	r2LifecycleResourceType    = "cloudflare:index/r2BucketLifecycle:R2BucketLifecycle"
+	r2LockResourceType         = "cloudflare:index/r2BucketLock:R2BucketLock"
 	r2CustomDomainResourceType = "cloudflare:index/r2CustomDomain:R2CustomDomain"
 	recordResourceType         = "cloudflare:index/record:Record"
 	zoneSettingResourceType    = "cloudflare:index/zoneSetting:ZoneSetting"
@@ -157,15 +158,18 @@ func TestCreateBucket(t *testing.T) {
 	require.Empty(t, stub.Resources(r2CustomDomainResourceType), "custom domains require a successfully created bucket")
 }
 
-func TestBucketExpiration(t *testing.T) {
+func TestBucketPolicies(t *testing.T) {
 	for _, tt := range []struct {
-		expiration *string
-		name       string
-		seconds    int64
-		public     bool
+		expiration  *string
+		lock        *string
+		name        string
+		seconds     int64
+		lockSeconds int64
+		public      bool
 	}{
 		{name: "omitted"},
-		{name: "seven days", expiration: new("168h"), seconds: 604800},
+		{name: "seven days with matching lock", expiration: new("168h"), lock: new("168h"), seconds: 604800, lockSeconds: 604800},
+		{name: "lock without expiration", lock: new("24h"), lockSeconds: 86400},
 		{name: "one day with custom domain", expiration: new("24h"), seconds: 86400, public: true},
 		{name: "minimum", expiration: new("1s"), seconds: 1},
 		{name: "milliseconds forming a whole second", expiration: new("1000ms"), seconds: 1},
@@ -177,6 +181,7 @@ func TestBucketExpiration(t *testing.T) {
 			require.NoError(t, err)
 			configured := configuration.GetBuckets()[0]
 			configured.Expiration = tt.expiration
+			configured.LockDuration = tt.lock
 			if !tt.public {
 				configured.Zone = nil
 			}
@@ -203,11 +208,33 @@ func TestBucketExpiration(t *testing.T) {
 			}
 			if tt.expiration == nil {
 				require.Empty(t, stub.Resources(r2LifecycleResourceType))
+			} else {
+				requireLifecycle(t, stub.Resources(r2LifecycleResourceType), "atlas-assets", tt.seconds)
+			}
+			locks := stub.Resources(r2LockResourceType)
+			if tt.lock == nil {
+				require.Empty(t, locks)
 				return
 			}
-			requireLifecycle(t, stub.Resources(r2LifecycleResourceType), "atlas-assets", tt.seconds)
+			requireBucketLock(t, locks, "atlas-assets", tt.lockSeconds)
 		})
 	}
+}
+
+func TestBucketRejectsInvalidLockDuration(t *testing.T) {
+	stub := &test.ResourceStub{}
+	err := test.RunWithMocks(func(ctx *pulumi.Context) error {
+		return cf.CreateBucket(ctx, cf.ConvertBucket(&v2.Bucket{
+			Name:         "test",
+			Region:       "EEUR",
+			Expiration:   new("168h"),
+			LockDuration: new("1500ms"),
+		}))
+	}, stub)
+	require.ErrorContains(t, err, "bucket test: lock_duration must be a positive whole number of seconds")
+	require.Empty(t, stub.Resources(r2BucketResourceType))
+	require.Empty(t, stub.Resources(r2LifecycleResourceType))
+	require.Empty(t, stub.Resources(r2LockResourceType))
 }
 
 func TestBucketRejectsInvalidExpiration(t *testing.T) {
@@ -369,6 +396,21 @@ func requireLifecycle(t *testing.T, lifecycles []resource.PropertyMap, bucket st
 	condition = test.Property(t, multipart, "condition").ObjectValue()
 	require.Equal(t, "Age", test.Property(t, condition, "type").StringValue())
 	require.Equal(t, int64(604800), int64(test.Property(t, condition, "maxAge").NumberValue()), "retain default multipart cleanup")
+}
+
+func requireBucketLock(t *testing.T, locks []resource.PropertyMap, bucket string, seconds int64) {
+	t.Helper()
+
+	require.Len(t, locks, 1)
+	require.Equal(t, bucket, test.Property(t, locks[0], "bucketName").StringValue())
+	rules := test.Property(t, locks[0], "rules").ArrayValue()
+	require.Len(t, rules, 1)
+	rule := rules[0].ObjectValue()
+	require.True(t, test.Property(t, rule, "enabled").BoolValue(), "the lock must protect archived objects")
+	require.Empty(t, test.Property(t, rule, "prefix").StringValue(), "the lock must cover all objects")
+	condition := test.Property(t, rule, "condition").ObjectValue()
+	require.Equal(t, "Age", test.Property(t, condition, "type").StringValue())
+	require.Equal(t, seconds, int64(test.Property(t, condition, "maxAgeSeconds").NumberValue()))
 }
 
 func requireCustomDomain(t *testing.T, domains []resource.PropertyMap, bucket, domain, zone string) {

@@ -157,6 +157,24 @@ and optional custom-domain identities. Reverting to older code/config that omits
 capability has the same remote-rule persistence risk. Pulumi mocks verify configuration
 and resource inputs; live propagation and deletion require separately authorized R2 validation.
 
+### 🔒 R2 Bucket Locks
+
+Set `lock_duration: 168h` on an R2 bucket to protect all objects from deletion and overwrites
+for seven days from upload. The field uses the same positive whole-second Go durations as
+`expiration`. Leave it unset for buckets that need object replacement or early deletion.
+If a lock lasts longer than an expiration rule, Cloudflare waits for the lock to expire before
+deleting the object. [Cloudflare bucket locks](https://developers.cloudflare.com/r2/buckets/bucket-locks/)
+
+The Pulumi lock resource replaces the bucket's entire lock rule set. Before adopting an existing
+bucket lock, verify that this single all-object rule covers the protection you need. For Einblick,
+the first apply replaces the existing seven-day rule with the equivalent `protect-objects` rule.
+[Pulumi R2BucketLock](https://www.pulumi.com/registry/packages/cloudflare/api-docs/r2bucketlock/)
+
+The pinned provider leaves remote lock rules active when Pulumi removes the resource. To disable
+locking, first disable any app eviction that relies on the lock, remove the rule in Cloudflare, and
+then omit `lock_duration` from the config. Verify the resulting remote rule set.
+[Pinned provider implementation](https://github.com/cloudflare/terraform-provider-cloudflare/blob/8e7a366035f75193ac78ef5b0470dac41add9efb/internal/services/r2_bucket_lock/resource.go)
+
 ## 📦 Application Deployment
 
 [apps.hjson](area/apps/apps.hjson) selects the applications to deploy. Each app's configuration file
@@ -318,7 +336,8 @@ from itself to avoid recursive exports. See [database configuration](https://git
 [recent-log queries](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/queries.md),
 and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/ingestion.md).
 
-Accepted logs stay on the local database claim without automatic expiration. Einblick stages
+Einblick keeps accepted logs on the local database claim for at least 72 hours from receipt.
+It evicts a batch only after verifying the archived copy in R2. Einblick stages
 Parquet batches on the separate `2Gi` `einblick-archive` claim mounted at `/staging` and checks
 for work every 10 seconds. It publishes staged batches to R2 and removes staged files after
 verifying the uploaded objects. On startup, Einblick creates `/staging/v1` if needed and requires
@@ -347,7 +366,8 @@ Load checks skip Einblick until an application scenario is available.
 The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and a private `einblick`
 R2 bucket in `EEUR`, without a public custom domain. Objects expire after seven days (`168h`) by
 object age, with asynchronous deletion as described in [R2 Object Expiration](#-r2-object-expiration).
-Apply the Cloudflare area before the apps area using the preview and update commands above.
+Verify the [seven-day bucket lock](#-r2-bucket-locks) before applying app eviction. Apply the
+Cloudflare area before the apps area using the preview and update commands above.
 Before the apps update, create `einblick-secret` in `lean` using the intended kubeconfig context
 and the R2 access key ID and secret access key files. The credentials need Object Read & Write
 permission on the `einblick` bucket.

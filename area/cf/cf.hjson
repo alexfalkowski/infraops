@@ -26,6 +26,7 @@
       name: einblick
       region: EEUR
       expiration: 168h
+      lock_duration: 168h
     }
   ]
 }
