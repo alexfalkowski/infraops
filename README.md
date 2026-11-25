@@ -329,20 +329,19 @@ outside deployment rollouts can still overlap, and the application currently has
 database-lock retry policy or startup delay. The other configured apps use `strategy: rolling`.
 
 Readiness checks database connectivity. Einblick stores logs in the local DuckDB database.
-The `/logs` view opens on the last seven days and offers shorter presets. The `168h`
+The `/logs` view opens on the last hour and offers presets up to seven days. The `168h`
 event-time limit also applies to the log query API. Metrics and traces are printed through
 the text logger and then discarded. Keep Einblick's own telemetry exporters pointed away
-from itself to avoid recursive exports. See [database configuration](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/configuration.md),
-[recent-log queries](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/queries.md),
-and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.10.0/docs/ingestion.md).
+from itself to avoid recursive exports. See [database configuration](https://github.com/alexfalkowski/einblick/blob/v1.25.0/docs/configuration.md),
+[log queries](https://github.com/alexfalkowski/einblick/blob/v1.25.0/docs/queries.md),
+and [telemetry ingestion](https://github.com/alexfalkowski/einblick/blob/v1.25.0/docs/ingestion.md).
 
-Einblick keeps accepted logs on the local database claim for at least 72 hours from receipt.
-It evicts a batch only after verifying the archived copy in R2. Einblick stages
-Parquet batches on the separate `2Gi` `einblick-archive` claim mounted at `/staging` and checks
-for work every 10 seconds. It publishes staged batches to R2 and removes staged files after
-verifying the uploaded objects. On startup, Einblick creates `/staging/v1` if needed and requires
-write access on the mounted workspace. Monitor free space on both claims.
-See [R2 publication and recovery](https://github.com/alexfalkowski/einblick/blob/v1.15.0/docs/operations.md#-r2-publication-and-recovery).
+Einblick keeps the current and previous UTC event days in DuckDB. It stages older days as
+daily Parquet files on the separate `2Gi` `einblick-archive` claim mounted at `/staging` and
+checks for work every 10 seconds. After publication and staging cleanup, it verifies the
+R2 object checksum before evicting the local rows. On startup, Einblick creates `/staging/v1`
+if needed and requires write access on the mounted workspace. Monitor free space on both claims.
+See [R2 publication and recovery](https://github.com/alexfalkowski/einblick/blob/v1.25.0/docs/operations.md#-r2-publication-and-recovery).
 
 The log browser has no application login. Verify edge access controls for both the browser
 and the HTTP query API before rollout.
@@ -366,7 +365,7 @@ Load checks skip Einblick until an application scenario is available.
 The [Cloudflare configuration](area/cf/cf.hjson) adds its proxied DNS record and a private `einblick`
 R2 bucket in `EEUR`, without a public custom domain. Objects expire after seven days (`168h`) by
 object age, with asynchronous deletion as described in [R2 Object Expiration](#-r2-object-expiration).
-Verify the [seven-day bucket lock](#-r2-bucket-locks) before applying app eviction. Apply the
+Verify the [seven-day bucket lock](#-r2-bucket-locks) before deploying Einblick with R2 enabled. Apply the
 Cloudflare area before the apps area using the preview and update commands above.
 Before the apps update, create `einblick-secret` in `lean` using the intended kubeconfig context
 and the R2 access key ID and secret access key files. The credentials need Object Read & Write
