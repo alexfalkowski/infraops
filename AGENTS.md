@@ -4,6 +4,13 @@
 
 Use `bin/AGENTS.md` for shared skills and cross-repository defaults.
 
+## Accepted design
+
+Read the [accepted-design index](docs/agents/accepted-design.md) and the relevant
+area files before proposing a change or recording a finding or audit entry.
+Apply each decision to its documented scope and record owner-agreed choices in
+the owning area file.
+
 ## Baseline
 
 - This repo is a Go/Pulumi infra monorepo.
@@ -37,14 +44,6 @@ Use `bin/AGENTS.md` for shared skills and cross-repository defaults.
   to fetch one known file directly. `<owner>` here is `alexfalkowski`, the same
   account this repo's own `origin` remote resolves to
   (`git@github.com:alexfalkowski/infraops.git`); sibling repos share that owner.
-- The `release(<app>): upgraded to vX.Y.Z` PRs against `area/apps/apps.hjson`
-  are opened by each app's own CircleCI pipeline (in that app's own repo), not
-  by anything in this repo. That pipeline runs the shared `alexfalkowski/release`
-  Docker image, built from `../docker/release/Dockerfile`, which installs
-  `cmd/bump` at a version pinned via `install-go-tool` rather than building it
-  fresh from this repo's current `master`. Diagnosing that automation requires
-  reading `../docker/release/Dockerfile` and `../docker/release/deploy` and the
-  app repo's `.circleci/config.yml`, not just this repo.
 
 ## Commands
 
@@ -123,30 +122,3 @@ targets and README-documented workflows before running them directly.
 - Conversion/resource pattern: `ConvertX(*v2.X) *X`, then `CreateX(ctx, *X) error`.
 - CLI tools use `internal/log.NewLogger()`.
 - `internal/config.Read` uses HJSON unmarshal into protobuf messages.
-- `internal/config.Write` preserves destination file mode and appends a trailing newline.
-
-## Intentional Assumptions
-
-- `cmd/bump` is an internal automation helper. `-v` is expected to be a semantic version supplied by automation. Its CLI behavior is verified in other testing environments; do not report missing in-repo command-level `cmd/bump` CLI tests as a test gap.
-- `cmd/format` CLI behavior is verified in other testing environments; do not report missing in-repo command-level `cmd/format` CLI tests as a test gap.
-- `area/k8s/Makefile` is for manual operator workstation runs, not CI. `CIRCLECI_K8S_TOKEN` is passed directly to Helm in that local workflow.
-- GitHub branch protection intentionally requires zero approving PR reviews because this is a solo-maintainer workflow; required status checks are the primary merge gate.
-- Apps `NetworkPolicy` resources select app pods, limit ingress to app ports, and intentionally keep egress open until per-app traffic flows are modeled. Do not tighten egress generically without checking DNS, ingress, probes, telemetry, and outbound service calls.
-- Apps env var secret references use `secret:<secretName>/<key>` and become Kubernetes `SecretKeyRef`s with Secret name `<secretName>-secret` and key `<key>`. The helper code does not pre-validate the shape; malformed references fail during Pulumi/Kubernetes application.
-- `Application.secrets` is an app-level dependency list; secret env vars reference specific keys. Keep this behavior aligned with `service.proto`.
-- `Application.resource` falls back to `"small"` for unknown values. Current small profile: cpu `125m-250m`, memory `64Mi-128Mi`, ephemeral-storage `1Gi-2Gi`.
-- Cloudflare resources require `CLOUDFLARE_ACCOUNT_ID`; `internal/cf/cf.go` reads it at package scope.
-- Apps config maps read `<namespace>/<app>.yaml` relative to the Pulumi working directory. The root Makefile runs Pulumi with `--cwd area/apps`.
-- GitHub Pages and collaborators can be enabled in the initial repository configuration. Vulnerability alerts, Pages, and collaborators depend on repository outputs so they wait for repository creation in the same Pulumi update. Live creation of an auto-initialized repository with Pages and a collaborator invitation, followed by deletion by removing its configuration and applying the update, has been verified.
-- Direct tests for `internal/config.Write` preserving file mode and appending a trailing newline are considered overkill; do not report that narrow helper behavior as a standalone test gap.
-- `make api-breaking` is currently commented out in CI for intentional protobuf field renumbering; retain the step for re-enabling after the renumbered schema reaches master. The target remains available for local comparison. Do not report a separate API generated-code freshness test gap only because CI does not run `make api-generate` plus a generated-file diff check.
-
-## CI
-
-- CircleCI setup config uses path filtering to enable area workflows.
-- The main `build` job runs `make lint`, `make scripts-lint`, `make build-bump`, `make build-format`, `make api-lint`, `make sec`, `make specs`, `make coverage`, and Codecov upload.
-- Area preview jobs run on non-`master`; update jobs run only on `master`.
-- Apps updates also run `make -C area/apps verify`, `load`, and `lint`.
-- Non-`master` workflows run `sync` after build and applicable previews.
-- `master` workflows run the release `version` job after build.
-- `wait-all` depends on build, sync, release, previews, and updates so the workflow has one final aggregate gate.
