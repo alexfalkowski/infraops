@@ -56,9 +56,9 @@ func ConvertCluster(cluster *v2.Cluster) *Cluster {
 
 // CreateCluster provisions the networking and Kubernetes cluster resources for cluster.
 //
-// It creates a VPC in fra1, then creates a Kubernetes cluster attached to that VPC. The cluster
-// uses two nodes, the Kubernetes version pinned in code, maintenance start time 23:00 on any day,
-// and DestroyAllAssociatedResources enabled.
+// It creates a VPC in fra1 and attaches a Kubernetes cluster with one worker node and the
+// standard control plane. The cluster uses the pinned Kubernetes version and a maintenance window
+// starting at 23:00 on any day. Deleting the cluster also deletes its associated resources.
 func CreateCluster(ctx *pulumi.Context, cluster *Cluster) (err error) {
 	vpc, err := createVPC(ctx, cluster)
 	if err != nil {
@@ -86,6 +86,7 @@ func createCluster(ctx *pulumi.Context, vpc *digitalocean.Vpc, cluster *Cluster)
 		},
 		Name:                          pulumi.String(cluster.Name),
 		DestroyAllAssociatedResources: inputs.Yes,
+		Ha:                            inputs.No,
 		NodePool: &digitalocean.KubernetesClusterNodePoolArgs{
 			NodeCount: pulumi.Int(1),
 			Name:      pulumi.String(cluster.Name),

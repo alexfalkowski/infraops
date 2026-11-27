@@ -2,6 +2,17 @@
 
 Part of the [accepted-design index](../accepted-design.md).
 
+## DigitalOcean control plane
+
+New Kubernetes clusters use the standard control plane to avoid the HA charge.
+The Pulumi program sets `ha` to `false` explicitly because DigitalOcean enables
+HA by default for new clusters on Kubernetes 1.36.0 and later. Switching an
+existing HA cluster to the standard control plane requires creating a
+replacement cluster and migrating workloads.
+
+[Cluster configuration](../../../internal/do/do.go) ·
+[DigitalOcean cluster creation](https://docs.digitalocean.com/products/kubernetes/how-to/create-clusters/)
+
 ## Cloudflare account
 
 Cloudflare resources require `CLOUDFLARE_ACCOUNT_ID`. The Cloudflare package
