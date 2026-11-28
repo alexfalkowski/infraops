@@ -39,7 +39,10 @@ func TestCreateCluster(t *testing.T) {
 				return nil
 			}, pulumi.WithMocks("project", "stack", stub))
 			require.NoError(t, err)
-			requireNodePoolSize(t, stub.Resources(kubernetesClusterResourceType), tt.size)
+
+			clusters := stub.Resources(kubernetesClusterResourceType)
+			requireNodePoolSize(t, clusters, tt.size)
+			require.False(t, test.Property(t, clusters[0], "ha").BoolValue(), "the cluster must explicitly select the standard control plane")
 		})
 	}
 
